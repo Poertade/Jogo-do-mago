@@ -174,6 +174,18 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** Livro aberto com o jogo correndo.
 - **Motivo:** ritmo lento e seguro para ler; evita morrer lendo na Dungeon.
 
+### D027 · 2026-11-03 · Magia de fogo: carga, custo e disparo
+
+- **Escolha:** segurar o botão esquerdo carrega por `charge_time`; soltar com a carga completa lança e só então gasta o custo (dividido pela eficiência da varinha, arredondado para cima); soltar antes cancela sem custo; depois do disparo vale o intervalo `cooldown`. Sem energia, a carga nem começa e o HUD avisa. A Lente e a varinha se excluem (decisão 6). Dano = dano do Focus × efeitos das páginas × fraqueza do alvo. O projétil sai da ponta da varinha em direção ao ponto sob a mira, leva uma luz que ilumina o caminho e testa colisão com um raio a cada quadro.
+- **Descartados:** cobrar ao começar a carga (pune quem desiste); colisão por `Area3D` (pode atravessar paredes finas em alta velocidade).
+- **Motivo:** decisão 2 aprovada (projétil com carga curta) e valores da seção 6 em `data/foci/fire_focus.tres`.
+
+### D028 · 2026-11-03 · Estado da incursão separado do conhecimento
+
+- **Escolha:** `RunState` (vida, reservas da varinha, magia) fica no autoload `Game` e é reiniciado ao morrer (M4). A varinha de aprendiz tem reserva de 30 para cada um dos seis primais, mas o HUD só mostra os aspectos que o Focus equipado gasta. O braseiro (`RechargePoint`) enche a reserva de Ignis; não há recarga fora da escola (decisão 3).
+- **Descartado:** reserva só de Ignis na varinha.
+- **Motivo:** a especificação pede "reserva de energia por aspecto primal"; outros Focus poderão usar as outras reservas sem mudar a varinha.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

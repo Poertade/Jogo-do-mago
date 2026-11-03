@@ -28,6 +28,15 @@ func test_school_values_match_the_specification() -> void:
 	assert_eq(db.research_rules.points_per_new_aspect, 1)
 	assert_eq(db.pages[&"fire_comprehension"].cost, 3)
 	assert_almost_eq(db.pages[&"fire_comprehension"].effects[0].value, 1.2, 0.0001)
+	# Varinha, Focus de Fogo e jogador (seção 6)
+	assert_eq(db.player.max_health, 100)
+	assert_eq(db.player.starting_wand.capacity[&"fire"], 30)
+	var focus := db.player.starting_focus
+	assert_eq(focus.cost[&"fire"], 5)
+	assert_eq(focus.damage, 15.0)
+	assert_eq(focus.charge_time, 0.6)
+	assert_eq(focus.cooldown, 0.4)
+	assert_eq(focus.element, &"fire")
 
 
 func _aspect(id: StringName, kind: String, parents: Array[StringName]) -> AspectData:

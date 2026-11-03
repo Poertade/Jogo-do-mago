@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FocusData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/focus_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"fire_focus"
+name_key = "FOCUS_FIRE"
+spell_type = &"projectile"
+element = &"fire"
+cost = Dictionary[StringName, int]({
+&"fire": 5
+})
+charge_time = 0.6
+cooldown = 0.4
+damage = 15.0
+projectile_speed = 12.0
+projectile_lifetime = 3.0
+light_color = Color(1, 0.54, 0.23, 1)
+light_energy = 2.5
+light_range = 6.0

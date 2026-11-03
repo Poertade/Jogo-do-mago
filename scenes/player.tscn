@@ -1,5 +1,8 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/game/wand_view.gd" id="w_script"]
+[ext_resource type="PackedScene" path="res://scenes/effects/projectile.tscn" id="w_projectile"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="w_shader"]
 [ext_resource type="Script" path="res://scripts/game/player.gd" id="1"]
 [ext_resource type="Resource" path="res://data/player/player.tres" id="2"]
 [ext_resource type="Script" path="res://scripts/game/scanner.gd" id="3"]
@@ -37,6 +40,43 @@ rings = 0
 [sub_resource type="BoxMesh" id="BoxMesh_6"]
 size = Vector3(0.016, 0.12, 0.016)
 
+[sub_resource type="ShaderMaterial" id="Mat_101"]
+render_priority = 0
+shader = ExtResource("w_shader")
+shader_parameter/albedo_color = Color(0.2902, 0.2039, 0.1412, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_102"]
+render_priority = 0
+shader = ExtResource("w_shader")
+shader_parameter/albedo_color = Color(0.6902, 0.5412, 0.2353, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_103"]
+render_priority = 0
+shader = ExtResource("w_shader")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.5412, 0.2275, 1)
+shader_parameter/emission_energy = 2.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_104"]
+top_radius = 0.007
+bottom_radius = 0.013
+height = 0.36
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_105"]
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.03
+radial_segments = 6
+rings = 0
+
+[sub_resource type="SphereMesh" id="SphereMesh_106"]
+radius = 0.02
+height = 0.04
+radial_segments = 6
+rings = 3
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1")
 stats = ExtResource("2")
@@ -73,3 +113,34 @@ material_override = SubResource("Mat_3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
 mesh = SubResource("BoxMesh_6")
 material_override = SubResource("Mat_2")
+
+[node name="WandView" type="Node3D" parent="Head/Camera3D" node_paths=PackedStringArray("player")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, -0.26, -0.42)
+script = ExtResource("w_script")
+player = NodePath("../../..")
+projectile_scene = ExtResource("w_projectile")
+
+[node name="Model" type="Node3D" parent="Head/Camera3D/WandView"]
+transform = Transform3D(0.9903, -0.1344, 0.036, 0, 0.2588, 0.9659, -0.1392, -0.9565, 0.2563, 0, 0, 0)
+
+[node name="Stick" type="MeshInstance3D" parent="Head/Camera3D/WandView/Model"]
+mesh = SubResource("CylinderMesh_104")
+material_override = SubResource("Mat_101")
+
+[node name="Ferrule" type="MeshInstance3D" parent="Head/Camera3D/WandView/Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+mesh = SubResource("CylinderMesh_105")
+material_override = SubResource("Mat_102")
+
+[node name="Tip" type="Node3D" parent="Head/Camera3D/WandView"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0255, 0.0492, -0.1817)
+
+[node name="Glow" type="MeshInstance3D" parent="Head/Camera3D/WandView/Tip"]
+mesh = SubResource("SphereMesh_106")
+material_override = SubResource("Mat_103")
+
+[node name="Light" type="OmniLight3D" parent="Head/Camera3D/WandView/Tip"]
+light_color = Color(1, 0.5412, 0.2275, 1)
+light_energy = 0.15
+omni_range = 2.5

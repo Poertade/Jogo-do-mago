@@ -4,11 +4,11 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 "Jogo do Mago" é o nome provisório; o nome escolhido para distribuir é *Catálogo do Abismo* (decisão 7).
 
-![Escaneando a vela no Salão de Estudos](docs/images/m2-escaneando.png)
+![Bola de fogo iluminando o Salão de Estudos](docs/images/m3-projetil.png)
 
 ## Estado
 
-**M2: escola e pesquisa.** O Salão de Estudos e a Sala do Portal, ligados por um corredor; a Lente Taxonômica escaneia os seis objetos da escola; o Livro de Pesquisa guarda o que foi descoberto; a Mesa de Pesquisa troca pontos pela página "Compreensão de Ignis"; tudo fica salvo entre uma sessão e outra.
+**M3: varinha e Focus de Fogo.** Além da escola e da pesquisa (M2): a varinha na mão direita lança bolas de fogo carregadas, que iluminam o caminho e gastam Ignis; o HUD mostra vida e reserva; o braseiro do Salão de Estudos recarrega a varinha.
 
 | Documento | Conteúdo |
 | --- | --- |
@@ -33,6 +33,7 @@ Os executáveis prontos (Windows, Linux, macOS) entram no fim do recorte (M5).
 | Clique | prende o mouse na janela e começa a jogar |
 | W A S D ou setas | andar |
 | Mouse | olhar |
+| Botão esquerdo (segurar e soltar) | carregar e lançar a magia de fogo |
 | Shift (segurar) | correr |
 | Espaço | pular |
 | E | interagir (por exemplo, estudar na Mesa de Pesquisa) |
@@ -46,7 +47,10 @@ Os executáveis prontos (Windows, Linux, macOS) entram no fim do recorte (M5).
 2. Cada **aspecto novo** rende 1 ponto de pesquisa. Escanear de novo não rende nada, mas mirar algo já escaneado mostra seus aspectos.
 3. Na **Mesa de Pesquisa** (E), gaste 3 pontos para estudar **Compreensão de Ignis** (+20% de dano de fogo, usado a partir do M3).
 4. O **Livro de Pesquisa** (Tab) lista aspectos, objetos escaneados e páginas estudadas.
-5. O corredor ao norte leva à **Sala do Portal** (o portal funciona a partir do M4).
+5. **Magia de fogo:** segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar. Soltar antes cancela sem gastar nada. Cada disparo gasta 5 de Ignis; a varinha guarda 30. Com a página estudada, o dano sobe de 15 para 18.
+6. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
+7. O **braseiro** (E) enche a reserva de Ignis. Fora da escola não há recarga.
+8. O corredor ao norte leva à **Sala do Portal** (o portal funciona a partir do M4).
 
 O conhecimento é gravado em `user://save.json` (JSON legível) a cada descoberta. Para começar do zero, apague esse arquivo.
 
@@ -79,7 +83,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 
   (`godot` é o caminho do executável do Godot.)
 
-Os testes cobrem: descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas, persistência (save), o gerador com semente, as opções, o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
+Os testes cobrem: custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão, descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas, persistência (save), o gerador com semente, as opções, o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
 
 ## Argumentos de desenvolvimento
 

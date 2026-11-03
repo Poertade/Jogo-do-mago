@@ -14,6 +14,8 @@ var rooms: Dictionary[StringName, RoomData] = {}
 var aspects: Dictionary[StringName, AspectData] = {}
 var scannables: Dictionary[StringName, ScannableData] = {}
 var pages: Dictionary[StringName, ResearchPageData] = {}
+var wands: Dictionary[StringName, WandData] = {}
+var foci: Dictionary[StringName, FocusData] = {}
 var errors: PackedStringArray = []
 
 
@@ -37,6 +39,12 @@ func load_all(root := DATA_ROOT) -> void:
 	for resource in _load_folder(root.path_join("research/pages")):
 		if resource is ResearchPageData:
 			add_page(resource)
+	for resource in _load_folder(root.path_join("wands")):
+		if resource is WandData:
+			_add_unique(wands, resource, "Varinha")
+	for resource in _load_folder(root.path_join("foci")):
+		if resource is FocusData:
+			_add_unique(foci, resource, "Focus")
 	validate()
 
 
@@ -95,6 +103,8 @@ func sorted_pages() -> Array[ResearchPageData]:
 func validate() -> void:
 	if player == null:
 		errors.append("Faltam os dados do jogador (data/player/player.tres).")
+	else:
+		_validate_player()
 	if research_rules == null:
 		errors.append("Faltam as regras de pesquisa (data/research/rules.tres).")
 	if settings_defaults == null:
@@ -109,6 +119,40 @@ func validate() -> void:
 		_validate_aspect_amounts("Escaneável '%s'" % scannable.id, scannable.aspects)
 	for page: ResearchPageData in pages.values():
 		_validate_page(page)
+	for wand: WandData in wands.values():
+		_validate_wand(wand)
+	for focus: FocusData in foci.values():
+		_validate_focus(focus)
+
+
+func _validate_player() -> void:
+	if player.max_health <= 0:
+		errors.append("player.tres: max_health precisa ser maior que zero.")
+	if player.starting_wand == null or player.starting_focus == null:
+		errors.append("player.tres: faltam a varinha ou o Focus iniciais.")
+		return
+	for aspect_id in player.starting_focus.cost:
+		if player.starting_wand.capacity.get(aspect_id, 0) < player.starting_focus.cost[aspect_id]:
+			errors.append("A varinha inicial não guarda %s suficiente para o Focus inicial." % aspect_id)
+
+
+func _validate_wand(wand: WandData) -> void:
+	if wand.efficiency <= 0.0:
+		errors.append("Varinha '%s': efficiency precisa ser maior que zero." % wand.id)
+	_validate_aspect_amounts("Varinha '%s'" % wand.id, wand.capacity)
+
+
+func _validate_focus(focus: FocusData) -> void:
+	var owner := "Focus '%s'" % focus.id
+	if not focus.spell_type in FocusData.SPELL_TYPES:
+		errors.append("%s: tipo de magia desconhecido '%s'." % [owner, focus.spell_type])
+	if not focus.element in aspects:
+		errors.append("%s: elemento '%s' não é um aspecto." % [owner, focus.element])
+	_validate_aspect_amounts(owner, focus.cost)
+	if focus.damage <= 0.0 or focus.charge_time < 0.0 or focus.cooldown < 0.0:
+		errors.append("%s: dano precisa ser positivo e tempos não podem ser negativos." % owner)
+	if focus.spell_type == FocusData.SPELL_PROJECTILE and (focus.projectile_speed <= 0.0 or focus.projectile_lifetime <= 0.0):
+		errors.append("%s: projétil precisa de velocidade e duração positivas." % owner)
 
 
 func _validate_settings() -> void:

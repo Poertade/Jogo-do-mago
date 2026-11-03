@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/projectile.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/effects/fire_impact.tscn" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 0.07
+height = 0.14
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_2"]
+radius = 0.13
+height = 0.26
+radial_segments = 5
+rings = 2
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.9412, 0.6902, 1)
+shader_parameter/emission_energy = 3
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.4392, 0.1255, 1)
+shader_parameter/emission_energy = 1.8
+
+[node name="Projectile" type="Node3D"]
+script = ExtResource("1")
+impact_scene = ExtResource("2")
+
+[node name="Core" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_1")
+material_override = SubResource("Mat_3")
+
+[node name="Shell" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_2")
+material_override = SubResource("Mat_4")
+
+[node name="Light" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.5412, 0.2275, 1)
+light_energy = 2.5
+omni_range = 6.0

@@ -14,3 +14,6 @@ OBJ_OLD_BONE,Osso antigo
 PAGE_FIRE_COMPREHENSION,Compreensão de {fire}
 PAGE_FIRE_COMPREHENSION_DESC,"O fogo deixa de ser mistério: o dano de {fire} aumenta 20%."
 PROMPT_RESEARCH_TABLE,Estudar na Mesa de Pesquisa
+WAND_APPRENTICE,Varinha de aprendiz
+FOCUS_FIRE,Focus de Fogo
+PROMPT_RECHARGE_FIRE,Recarregar {fire} no braseiro

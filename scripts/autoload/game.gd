@@ -1,7 +1,8 @@
 extends Node
 ## Autoload "Game": o estado do jogador que atravessa salas e mortes.
 ## - knowledge: o progresso permanente, gravado em user://save.json a cada descoberta;
-## - modifiers: os efeitos das páginas estudadas.
+## - modifiers: os efeitos das páginas estudadas;
+## - run: a incursão atual (vida, reserva da varinha), reiniciada ao morrer.
 ## Também serve de "central de avisos" entre o mundo e a interface (sinais abaixo).
 
 ## Um objeto do mundo pediu uma tela (ex.: &"research_table").
@@ -10,17 +11,26 @@ signal screen_requested(screen: StringName)
 signal scan_completed(result: ScanResult)
 ## Uma página foi estudada.
 signal page_studied(page: ResearchPageData)
+## Um aviso curto para o HUD.
+signal message_requested(text: String, color: Color)
 
 const SAVE_PATH := "user://save.json"
 
 var knowledge: Knowledge
 var modifiers := Modifiers.new()
+var run: RunState
 
 
 func _ready() -> void:
 	knowledge = _load_save()
 	knowledge.changed.connect(_on_knowledge_changed)
 	_update_modifiers()
+	run = RunState.new(Content.db.player)
+
+
+## Mostra um aviso curto no HUD.
+func message(text: String, color := Color(0.9, 0.86, 0.78)) -> void:
+	message_requested.emit(text, color)
 
 
 ## Registra um escaneamento completo e avisa a interface.

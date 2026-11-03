@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/game/recharge_point.gd" id="r_script"]
 [ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="1"]
 [ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="2"]
 
@@ -59,6 +60,9 @@ rings = 1
 size = Vector3(0.9, 1.2, 0.9)
 
 [node name="Brazier" type="Node3D"]
+script = ExtResource("r_script")
+prompt_key = "PROMPT_RECHARGE_FIRE"
+aspect = &"fire"
 
 [node name="Column" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)

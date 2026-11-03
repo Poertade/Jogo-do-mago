@@ -32,9 +32,24 @@ func place_at(marker: Node3D) -> void:
 	velocity = Vector3.ZERO
 
 
-## A mão esquerda pode erguer a Lente? (No M3: não enquanto a magia carrega.)
+## A mão esquerda pode erguer a Lente? Não enquanto a varinha carrega uma magia.
 func can_use_lens() -> bool:
-	return true
+	return not Game.run.caster.is_busy()
+
+
+## A mão direita pode carregar uma magia? Não enquanto a Lente está erguida.
+func can_cast() -> bool:
+	return not scanner.is_raised()
+
+
+## Ponto do mundo para onde a mira aponta (até `max_distance` metros), para mirar projéteis.
+func aim_point(max_distance: float) -> Vector3:
+	var from := camera.global_position
+	var to := from - camera.global_basis.z * max_distance
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.exclude = [get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.position if not hit.is_empty() else to
 
 
 func _unhandled_input(event: InputEvent) -> void:

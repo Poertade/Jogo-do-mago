@@ -37,3 +37,11 @@ func _apply_atmosphere(data: RoomData) -> void:
 	RenderingServer.global_shader_parameter_set(&"ps1_fog_color", data.fog_color)
 	RenderingServer.global_shader_parameter_set(&"ps1_fog_near", data.fog_near)
 	RenderingServer.global_shader_parameter_set(&"ps1_fog_far", data.fog_far)
+
+
+## Coloca um nó (projétil, efeito) na sala atual: ele some junto quando a sala for trocada.
+func spawn(node: Node3D) -> void:
+	if current_room != null:
+		current_room.add_child(node)
+	else:
+		add_child(node)

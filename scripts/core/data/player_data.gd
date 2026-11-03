@@ -1,8 +1,16 @@
 class_name PlayerData
 extends Resource
-## Valores de movimento do jogador. O arquivo fica em data/player/player.tres.
-## Os valores padrão aqui são zero de propósito: os valores reais ficam sempre no arquivo de dados.
+## Valores do jogador: vida, equipamento inicial e movimento. O arquivo fica em
+## data/player/player.tres. Os valores padrão aqui são zero de propósito: os valores reais
+## ficam sempre no arquivo de dados.
 
+## Vida máxima (e vida no começo de cada incursão).
+@export var max_health: int = 0
+## Varinha e Focus com que o jogador começa.
+@export var starting_wand: WandData
+@export var starting_focus: FocusData
+
+@export_group("Movimento")
 ## Velocidade andando, em metros por segundo.
 @export var walk_speed: float = 0.0
 ## Velocidade correndo (segurando Shift), em metros por segundo.
