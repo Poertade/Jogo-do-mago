@@ -14,4 +14,5 @@ A fonte da interface é a fonte padrão do Godot.
 | Item | Origem |
 | --- | --- |
 | Texturas de `assets/textures/` | geradas por `tools/generate_textures.gd`, deste projeto |
+| Sons de `assets/sounds/` | sintetizados por `tools/generate_sounds.gd`, deste projeto |
 | Shaders PS1 (`scripts/render/`) | escritos para este projeto, a partir das técnicas conhecidas do PS1 (vertex snapping, mapeamento afim, dithering ordenado de Bayer) |

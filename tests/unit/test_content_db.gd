@@ -11,8 +11,10 @@ func test_real_content_loads_without_errors() -> void:
 	assert_gt(db.presets.size(), 0)
 	assert_has(db.rooms, &"test_room")
 	assert_has(db.rooms, &"school")
-	assert_eq(db.aspects.size(), 6, "Seis aspectos primais")
-	assert_eq(db.scannables.size(), 6, "Seis objetos escaneáveis na escola")
+	# Conteúdo novo é bem-vindo (README, "Como estender"): aqui só se exige o da especificação.
+	for aspect_id in [&"fire", &"water", &"earth", &"air", &"order", &"entropy"]:
+		assert_has(db.aspects, aspect_id, "Aspecto primal da especificação")
+		assert_false(db.aspects[aspect_id].is_compound())
 	assert_has(db.pages, &"fire_comprehension")
 	assert_not_null(db.research_rules)
 
@@ -39,12 +41,17 @@ func test_school_values_match_the_specification() -> void:
 	assert_eq(focus.element, &"fire")
 	# Inimigo (seção 6)
 	var beadle := db.enemies[&"bone_beadle"]
-	assert_eq(beadle.max_health, 40.0)
+	assert_eq(beadle.max_health, 50.0, "Ajustado no M5 (D034): a página de pesquisa precisa fazer diferença")
 	assert_eq(beadle.damage, 10.0)
 	assert_eq(beadle.weaknesses[&"fire"], 1.5)
 	assert_false(beadle.aspects.is_empty(), "O inimigo pode ser escaneado")
 	assert_eq(db.find_scannable(&"bone_beadle"), beadle)
 	assert_has(db.rooms, &"stone_chamber")
+	# Sons: todo evento do banco aponta para um som
+	assert_not_null(db.sound_bank)
+	for event in [&"spell_cast", &"fire_impact", &"scan_complete", &"enemy_hurt", &"player_hurt", &"portal"]:
+		assert_not_null(db.sound_bank.sounds.get(event), "Som do evento %s" % event)
+	assert_not_null(db.rooms[&"school"].ambience)
 
 
 func test_enemy_cannot_reuse_object_id() -> void:
@@ -129,3 +136,20 @@ func test_missing_default_preset_is_reported() -> void:
 		if "nao_existe" in message:
 			found = true
 	assert_true(found, "Deveria avisar do filtro padrão inexistente")
+
+
+func test_research_page_saves_a_shot_against_the_enemy() -> void:
+	# Balanceamento (D034): estudar "Compreensão de Ignis" precisa ser perceptível.
+	var db := ContentDB.new()
+	db.load_all()
+	var focus := db.player.starting_focus
+	var beadle := db.enemies[&"bone_beadle"]
+	var page := db.pages[&"fire_comprehension"]
+	var base := Combat.damage_against(focus.damage, focus.element, beadle.weaknesses)
+	var studied := Combat.damage_against(focus.damage * Modifiers.from_pages([page] as Array[ResearchPageData]).damage_multiplier(focus.element),
+		focus.element, beadle.weaknesses)
+	var shots_without := ceili(beadle.max_health / base)
+	var shots_with := ceili(beadle.max_health / studied)
+	assert_lt(shots_with, shots_without, "A página deve poupar pelo menos um disparo")
+	var shots_per_reserve := db.player.starting_wand.capacity[focus.element] / focus.cost[focus.element]
+	assert_lt(shots_without, shots_per_reserve, "Sem a página ainda deve dar para vencer com uma reserva")

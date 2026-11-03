@@ -8,23 +8,31 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
-**M4: ciclo completo.** Escola → portal → Dungeon → combate → vitória ou morte → escola. O portal leva a uma câmara de pedra com um inimigo, o Bedel Descarnado, que pode ser escaneado. Vencê-lo abre a saída de volta à escola; morrer leva ao Salão de Estudos sem perder o conhecimento.
+**M5: primeiro recorte completo.** O ciclo inteiro funciona:
+
+1. Na escola, você escaneia objetos, estuda e recarrega a varinha.
+2. Atravessa o portal e enfrenta o Bedel Descarnado na Dungeon.
+3. Vencendo, volta à escola pela saída; morrendo, desperta no Salão de Estudos sem perder o conhecimento.
+
+O recorte tem sons provisórios e valores de balanceamento revisados.
 
 | Documento | Conteúdo |
 | --- | --- |
 | [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md) | especificação completa do projeto |
 | [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.md) | tecnologia, arquitetura e decisões da seção 9 |
-| [`DECISIONS.md`](DECISIONS.md) | registro de todas as decisões |
 | [`docs/REFERENCIAS-VISUAIS.md`](docs/REFERENCIAS-VISUAIS.md) | direção de arte e paleta |
+| [`DECISIONS.md`](DECISIONS.md) | registro de todas as decisões |
 | [`CREDITS.md`](CREDITS.md) | ferramentas e recursos de terceiros |
 
 ## Como executar
 
-1. Baixe o [Godot 4.7.2](https://godotengine.org/download/) (versão padrão, não a .NET). É um executável, sem instalação.
-2. Abra o Godot, clique em **Importar** e escolha o arquivo `project.godot` desta pasta. Na primeira vez ele importa as texturas e os textos, o que leva alguns segundos.
-3. Aperte **F5** para jogar.
+**Pelo editor** (para jogar e modificar):
 
-Os executáveis prontos (Windows, Linux, macOS) entram no fim do recorte (M5).
+1. Baixe o [Godot 4.7.2](https://godotengine.org/download/) (versão padrão, não a .NET). É um executável, sem instalação.
+2. Abra o Godot, clique em **Importar** e escolha o arquivo `project.godot` desta pasta. Na primeira vez ele importa texturas, sons e textos, o que leva alguns segundos.
+3. Aperte **F5**.
+
+**Como programa:** veja [Exportar executáveis](#exportar-executáveis).
 
 ## Controles
 
@@ -33,40 +41,51 @@ Os executáveis prontos (Windows, Linux, macOS) entram no fim do recorte (M5).
 | Clique | prende o mouse na janela e começa a jogar |
 | W A S D ou setas | andar |
 | Mouse | olhar |
-| Botão esquerdo (segurar e soltar) | carregar e lançar a magia de fogo |
 | Shift (segurar) | correr |
 | Espaço | pular |
-| E | interagir (por exemplo, estudar na Mesa de Pesquisa) |
+| Botão esquerdo (segurar e soltar) | carregar e lançar a magia de fogo |
 | Botão direito (segurar) | escanear com a Lente Taxonômica |
+| E | interagir (estudar, recarregar, ler, atravessar o portal, sair) |
 | Tab | Livro de Pesquisa |
 | Esc | pausa e opções; fecha qualquer tela |
 
-## Como se joga (até aqui)
+## Como se joga
 
+**Pesquisa (escola):**
 1. Você começa no **Salão de Estudos**. Mire um objeto (vela, jarro, vaso, pena, livro de registros, osso) e **segure o botão direito**: a Lente sobe e a barra enche em 1,5 s.
 2. Cada **aspecto novo** rende 1 ponto de pesquisa. Escanear de novo não rende nada, mas mirar algo já escaneado mostra seus aspectos.
-3. Na **Mesa de Pesquisa** (E), gaste 3 pontos para estudar **Compreensão de Ignis** (+20% de dano de fogo, usado a partir do M3).
-4. O **Livro de Pesquisa** (Tab) lista aspectos, objetos escaneados e páginas estudadas.
-5. **Magia de fogo:** segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar. Soltar antes cancela sem gastar nada. Cada disparo gasta 5 de Ignis; a varinha guarda 30. Com a página estudada, o dano sobe de 15 para 18.
-6. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
-7. O **braseiro** (E) enche a reserva de Ignis. Fora da escola não há recarga.
+3. Na **Mesa de Pesquisa** (E), gaste 3 pontos para estudar **Compreensão de Ignis**: +20% de dano de fogo, para sempre.
+4. O **Livro de Pesquisa** (Tab) lista aspectos, alvos escaneados e páginas estudadas.
+
+**Magia:**
+5. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a bola de fogo. Soltar antes cancela sem gastar nada.
+6. Cada disparo gasta 5 de Ignis, e a varinha guarda 30. O **braseiro** (E) enche a reserva; fora da escola não há recarga.
+7. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
+
+**Dungeon:**
 8. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
-9. **Portal** (E): leva à câmara de pedra, onde o **Bedel Descarnado** espera. Ele é lento, persegue quando vê você e prepara o golpe com o braço erguido: recue para esquivar. É fraco a fogo: dois disparos o derrubam. Escaneie-o antes, se tiver coragem.
-10. Vencer abre a grade ao norte: **Voltar à escola** (E) leva de volta à Sala do Portal, com a vida restaurada. A reserva de Ignis só volta no braseiro.
-11. Se a vida chegar a zero, você desperta no Salão de Estudos com vida e Ignis cheios; o conhecimento (aspectos, escaneamentos, páginas) continua.
+9. O **portal** (E) leva à câmara de pedra, onde o **Bedel Descarnado** espera.
+   - Ele é lento e persegue quando vê você.
+   - Antes de golpear, ergue o braço com um sopro: recue para esquivar.
+   - É fraco a fogo: três disparos o derrubam, ou dois com a página estudada.
+   - Também pode ser escaneado.
+10. Vencer abre a grade ao norte. **Voltar à escola** (E) leva à Sala do Portal e restaura a vida; a reserva de Ignis só volta no braseiro.
+11. Se a vida chegar a zero, você desperta no Salão de Estudos com vida e Ignis cheios. O conhecimento (aspectos, escaneamentos, páginas) continua.
 
-O conhecimento é gravado em `user://save.json` (JSON legível) a cada descoberta. Para começar do zero, apague esse arquivo.
+O conhecimento é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
+- **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
+- **Linux:** `~/.local/share/godot/app_userdata/Jogo do Mago`
 
-## Opções gráficas
+## Opções
 
 No menu de pausa, **Opções**:
 
-- **Filtro visual:** *Crocante* (todos os efeitos, 240 linhas) ou *Limpo* (sem tremor, sem deformação, sem cor limitada, 480 linhas). Mexer em um efeito sozinho muda o filtro para *Personalizado*.
+- **Filtro visual:** *Crocante* (todos os efeitos, 240 linhas) ou *Limpo* (sem tremor, sem deformação, sem cor limitada, 480 linhas). Mexer num efeito sozinho muda o filtro para *Personalizado*.
 - **Resolução interna:** altura da imagem em que o mundo é desenhado antes de ser ampliado (180, 240, 360 ou 480 linhas).
 - **Efeitos**, cada um com liga/desliga: vértices trêmulos (vertex snapping), texturas deformadas (mapeamento afim), névoa, cor limitada e dithering.
-- **Sensibilidade do mouse.**
+- **Sensibilidade do mouse** e **volume**.
 
-As opções ficam gravadas em `user://settings.cfg`. No Windows, a pasta `user://` é `%APPDATA%\Godot\app_userdata\Jogo do Mago`; no Linux, `~/.local/share/godot/app_userdata/Jogo do Mago`.
+As opções ficam em `user://settings.cfg`.
 
 | Crocante | Limpo |
 | --- | --- |
@@ -77,68 +96,180 @@ As opções ficam gravadas em `user://settings.cfg`. No Windows, a pasta `user:/
 A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bitwes/Gut), sem abrir o jogo.
 
 - **No editor:** painel **GUT**, na parte de baixo, botão **Run All**.
-- **No terminal**, a partir desta pasta:
+- **No terminal**, a partir desta pasta (`godot` é o caminho do executável do Godot):
 
   ```sh
-  godot --headless --path . --import            # só na primeira vez, ou depois de mudar arquivos fora do editor
+  godot --headless --path . --import            # na primeira vez, ou depois de mudar arquivos fora do editor
   godot --headless --path . -s addons/gut/gut_cmdln.gd
   ```
 
-  (`godot` é o caminho do executável do Godot.)
+**O que os testes cobrem:**
+- **Pesquisa:** descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas.
+- **Magia:** custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
+- **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
+- **Sistema:** persistência (save), gerador com semente, opções.
+- **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
+- **Arquitetura:** a regra de camadas.
 
-Os testes cobrem: IA do inimigo (estados, esquiva, intervalo, reação ao dano, morte), custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão, descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas, persistência (save), o gerador com semente, as opções, o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
+## Ferramentas
 
-## Argumentos de desenvolvimento
-
-Depois de `--` na linha de comando:
-
-```sh
-godot --path . -- --seed=123                  # semente do gerador aleatório (impressa ao abrir o jogo)
-godot --path . -- --room=stone_chamber        # sala inicial (school é o padrão; test_room é a sala do M1)
-godot --path . -- --screenshot=captura.png    # tira uma captura depois de 30 quadros e fecha
-```
+| Comando | O que faz |
+| --- | --- |
+| `godot --headless --path . -s tools/balance_report.gd` | relatório de balanceamento: disparos por reserva, acertos para derrubar cada inimigo (com e sem páginas), golpes para derrubar o jogador, pontos de pesquisa |
+| `godot --headless --path . -s tools/generate_textures.gd` | gera de novo as texturas provisórias |
+| `godot --headless --path . -s tools/generate_sounds.gd` | gera de novo os sons provisórios |
+| `godot --path . -- --seed=123` | escolhe a semente do gerador aleatório (impressa ao abrir o jogo) |
+| `godot --path . -- --room=stone_chamber` | começa direto numa sala (`school` é o padrão; `test_room` é a sala do M1) |
+| `godot --path . -- --screenshot=captura.png` | tira uma captura depois de 30 quadros e fecha |
 
 ## Como o projeto está organizado
 
 ```text
-data/              conteúdo do jogo, um arquivo .tres por item (editável no inspetor)
+data/              conteúdo do jogo, um arquivo .tres por item (editável no inspetor do Godot)
   aspects/         aspectos (primais; compostos têm dois pais)
   scannables/      objetos escaneáveis e seus aspectos
+  enemies/         inimigos (também escaneáveis)
+  wands/  foci/    varinhas e Focus
   research/        regras de escaneamento e pontos (rules.tres) e páginas (pages/)
-  player/          valores do jogador
-  rooms/           salas: identificador, cena e atmosfera (névoa, luz ambiente)
+  player/          vida, equipamento inicial e movimento do jogador
+  rooms/           salas: identificador, cena, atmosfera e som de ambiente
   settings/        opções padrão e filtros visuais (presets/)
+  audio/           banco de sons: qual arquivo toca em cada evento
 locales/           textos: ui.csv (interface), content.csv (conteúdo), names.csv (nomes de outras obras)
-scenes/            cenas: main, player, salas (rooms/), objetos (props/) e interface (ui/)
+scenes/            cenas: main, player, salas (rooms/), objetos (props/), inimigos, efeitos e interface (ui/)
 scripts/
-  core/            lógica pura, testável sem abrir o jogo (conhecimento, pesquisa, save, opções…)
-  autoload/        globais: Content (dados), Settings (opções) e Game (conhecimento e save)
-  game/            jogador, Lente, mundo, salas, objetos, blocos de greybox, luzes
+  core/            lógica pura, testável sem abrir o jogo: conhecimento, pesquisa, magia, combate, IA, save…
+  autoload/        globais: Content (dados), Settings (opções), Game (conhecimento, incursão) e Audio (sons)
+  game/            nós do mundo: jogador, Lente, varinha, projétil, inimigo, salas, portal, saída…
   render/          shaders PS1 e a tela de baixa resolução
-  ui/              HUD e menus
-assets/            texturas e materiais
+  ui/              HUD e telas (pausa, opções, Livro, Mesa, leitura)
+assets/            texturas, materiais e sons
 tests/unit/        testes do GUT
-tools/             ferramentas (gerar as texturas provisórias)
+tools/             ferramentas (texturas, sons, relatório de balanceamento)
 addons/gut/        GUT, a ferramenta de testes
 ```
 
-### Como o visual PS1 funciona
+**Regra de camadas:** `scripts/core` só tem classes `RefCounted` e `Resource`, sem nós, cena, entrada ou tela; o teste `test_core_purity.gd` garante isso. O resto do jogo usa o núcleo e reage aos sinais dele. Todo valor e todo texto ficam em `data/`, nas cenas de sala e em `locales/`, nunca fixos no código.
+
+## Como estender o jogo (sem mexer no motor)
+
+Tudo abaixo é feito no editor do Godot (ou editando os arquivos de texto) e não exige programar.
+
+**Antes de começar:**
+- **Duplicar é o caminho mais curto:** no painel **Sistema de Arquivos**, clique com o botão direito num arquivo existente → **Duplicar…**, e depois edite a cópia no **Inspetor**.
+- **Identificadores (`id`):** em inglês, sem espaços, únicos no tipo. Objetos e inimigos dividem o mesmo espaço de identificadores.
+- **Textos novos:** acrescente uma linha `CHAVE,texto` no CSV indicado. O Godot reimporta ao salvar.
+- **Para conferir:** rode os testes (painel GUT → **Run All**). O teste `test_real_content_loads_without_errors` aponta em português qualquer erro: identificador repetido, aspecto inexistente, cena faltando, valor zerado. Ao abrir o jogo, os mesmos erros aparecem no painel **Saída**.
+
+### Adicionar um aspecto
+
+1. Duplique `data/aspects/fire.tres` como, por exemplo, `data/aspects/light.tres`.
+2. No Inspetor, preencha:
+
+   | Campo | Valor |
+   | --- | --- |
+   | `id` | `light` |
+   | `name_key` | `ASPECT_LIGHT` |
+   | `meaning_key` | `ASPECT_LIGHT_MEANING` |
+   | `color` | a cor do aspecto |
+   | `kind` | `primal` (básico) ou `compound` (composto) |
+   | `parents` | os dois aspectos pais, se composto (ex.: `fire` e `air`) |
+
+3. Em `locales/names.csv`, acrescente o nome: `ASPECT_LIGHT,Lux`. Em `locales/content.csv`, o significado: `ASPECT_LIGHT_MEANING,luz`.
+4. Para que ele apareça no jogo, coloque-o nos aspectos de um objeto ou inimigo (próximas seções). Escaneá-lo rende pontos como qualquer aspecto novo.
+5. Rode os testes.
+
+### Adicionar um objeto escaneável
+
+1. Duplique `data/scannables/candle.tres` (ex.: `lantern.tres`). Preencha `id` (`lantern`), `name_key` (`OBJ_LANTERN`) e `aspects` (aspecto → quantidade, ex.: `light` = 2, `fire` = 1).
+2. Em `locales/content.csv`: `OBJ_LANTERN,Lanterna`.
+3. Para colocá-lo numa sala, duplique `scenes/props/candle.tscn` e, no nó raiz, troque `data` pelo novo `.tres`. Ajuste as malhas como quiser, mantendo uma `CollisionShape3D` (é ela que recebe a mira). Depois arraste a cena para a sala.
+
+### Adicionar um inimigo
+
+1. Duplique `data/enemies/bone_beadle.tres` (ex.: `ash_wraith.tres`) e preencha:
+
+   | Grupo | Campos |
+   | --- | --- |
+   | Identificação | `id` (`ash_wraith`), `name_key` (`ENEMY_ASH_WRAITH`) |
+   | Escaneamento | `aspects`: o que a Lente revela |
+   | Combate | `max_health`, `damage`, `weaknesses` (elemento → multiplicador, ex.: `water` = 2.0) |
+   | Comportamento | `move_speed`, `sight_range`, `attack_range`, `attack_windup`, `attack_cooldown`, `hurt_stun` |
+   | Aparência | `scene_path` (pode ser a mesma cena do Bedel) |
+
+2. Em `locales/content.csv`: `ENEMY_ASH_WRAITH,Espectro de Cinzas`.
+3. Para colocá-lo numa sala, abra a cena da sala (ex.: `scenes/rooms/stone_chamber.tscn`):
+   - Adicione um `Marker3D`, anexe o script `scripts/game/enemy_spawn.gd` e, em `enemy`, escolha o novo `.tres`.
+   - A seta azul indica para onde ele começa olhando.
+   - A sala conta os inimigos sozinha: a saída só abre quando todos caem.
+4. **Aparência própria (opcional):** duplique `scenes/enemies/bone_beadle.tscn` e mude as malhas. Mantenha o script `Enemy` na raiz e os nós `Model`, `Model/Robe`, `Model/ArmPivot` e `Model/Eyes`, usados pelas animações. Aponte `scene_path` para a cópia.
+5. Rode os testes e `tools/balance_report.gd`, que mostra quantos disparos o novo inimigo aguenta.
+
+### Adicionar um Focus
+
+1. Duplique `data/foci/fire_focus.tres`. Mude `id`, `name_key`, `element`, `cost`, `charge_time`, `cooldown`, `damage` e os valores do projétil (velocidade, duração, cor e força da luz).
+2. Para equipá-lo, abra `data/player/player.tres` e troque `starting_focus`. Neste recorte não há troca de Focus durante o jogo.
+3. O HUD passa a mostrar a reserva dos aspectos que o novo Focus gasta. A varinha precisa guardar esses aspectos (`capacity` em `data/wands/`).
+
+O único `spell_type` existente é `projectile`. Um tipo novo de magia (cone, raio…) é código novo no motor.
+
+### Adicionar uma varinha
+
+Duplique `data/wands/apprentice_wand.tres`, ajuste `capacity` (reserva máxima por aspecto) e `efficiency` (o custo é dividido por ela) e equipe-a em `data/player/player.tres` (`starting_wand`).
+
+### Adicionar uma página de pesquisa
+
+1. Duplique `data/research/pages/fire_comprehension.tres`. Preencha `id`, `name_key`, `description_key` e `cost`.
+2. Preencha os requisitos: `required_pages` (outras páginas) e `required_aspects`. É isso que forma a árvore de pesquisa.
+3. Preencha `effects`. Hoje existe o efeito `damage_multiplier`: `element` e `value`, por exemplo 1.2 para +20%.
+4. Textos em `locales/content.csv`. Nos textos, `{fire}` vira o nome do aspecto. A Mesa de Pesquisa lista a página sozinha.
+
+### Adicionar uma sala da Dungeon
+
+1. Duplique `scenes/rooms/stone_chamber.tscn` (ou crie uma cena com raiz `Node3D` e o script `scripts/game/room.gd`) e monte a sala:
+
+   | Elemento | Como montar |
+   | --- | --- |
+   | Paredes, chão, teto | nós `StaticBody3D` com o script `scripts/game/greybox_block.gd`; ajuste `size` e escolha um material de `assets/materials/`. A malha e a colisão se refazem sozinhas. |
+   | Luzes | `OmniLight3D`; o script `flicker_light.gd` faz tremular |
+   | Entradas | `Marker3D` com `entrance_point.gd` e um `id` (ex.: `from_portal`) |
+   | Inimigos | `Marker3D` com `enemy_spawn.gd` |
+   | Saída | `Node3D` com `exit_point.gd`: destino em `target_room` e `target_entrance`; `requires_clear` para só abrir depois da vitória; `barrier` aponta para a grade que afunda |
+
+2. Crie o recurso da sala: duplique `data/rooms/stone_chamber.tres`, mude `id` e `scene_path`, e ajuste a atmosfera (cor e distâncias da névoa, luz ambiente) e o som de `ambience`.
+3. Ligue a sala ao portal: abra `scenes/rooms/school.tscn`, selecione `PortalRoom/Portal` e mude `target_room` e `target_entrance`.
+4. Teste direto: `godot --path . -- --room=<id da sala>`.
+
+### Trocar textos, nomes, sons e texturas
+
+- **Textos:** `locales/ui.csv` (interface) e `locales/content.csv` (conteúdo).
+- **Nomes que remetem a outras obras:** só em `locales/names.csv`. Para uma versão distribuída, troque pelos nomes próprios da decisão 7 (Lume, Maré, Barro, Sopro, Prumo, Ruína; "Foco" no lugar de "Focus").
+- **Sons:** substitua o arquivo em `assets/sounds/` mantendo o nome, ou aponte o evento para outro arquivo em `data/audio/sound_bank.tres`, onde também fica o volume de cada som. Sons que repetem precisam de **Loop Mode: Forward** na aba Importar.
+- **Texturas:** substitua o PNG em `assets/textures/` mantendo o nome. Texturas novas já entram sem mipmaps e sem compressão (padrão do projeto). Mantenha-as pequenas (32×32 ou 64×64) para o visual PS1.
+
+## Exportar executáveis
+
+1. No Godot: **Editor → Gerenciar Modelos de Exportação → Baixar e Instalar** (uma vez).
+2. **Projeto → Exportar…**: os perfis *Windows Desktop* e *Linux* já estão configurados, sem os testes, as ferramentas e os documentos. Escolha um e clique em **Exportar Projeto**.
+
+Pelo terminal:
+
+```sh
+godot --headless --path . --export-release "Windows Desktop" export/windows/JogoDoMago.exe
+godot --headless --path . --export-release "Linux" export/linux/JogoDoMago.x86_64
+```
+
+O executável já leva o jogo dentro (um arquivo só). A pasta `export/` fica fora do git.
+
+## Como o visual PS1 funciona
 
 - O mundo 3D é desenhado num `SubViewport` pequeno (por exemplo, 427×240), e a `GameScreen` o amplia para a janela sem filtragem: os pixels ficam grandes e nítidos.
-- `scripts/render/ps1.gdshader` é o material de todas as superfícies. Ele faz o **vertex snapping** (prende os vértices a uma grade de pixels), o **mapeamento afim** (interpola a textura sem correção de perspectiva) e a **névoa** por distância. A iluminação é calculada por vértice, como no PS1.
-- `scripts/render/ps1_post.gdshader` reduz as cores a 5 bits por canal e aplica o **dithering** com uma matriz de Bayer 4×4.
-- Os efeitos são ligados e desligados por parâmetros globais de shader (Projeto > Configurações do Projeto > Shader Globals), que o menu de opções altera.
+- `scripts/render/ps1.gdshader` é o material de todas as superfícies. Ele faz:
+  - o **vertex snapping**, que prende os vértices a uma grade de pixels;
+  - o **mapeamento afim**, que interpola a textura sem correção de perspectiva;
+  - a **névoa** por distância;
+  - o **brilho próprio** de chamas, cristais e portal.
 
-### Montar uma sala no editor
-
-1. Crie uma cena com um `Node3D` raiz e o script `scripts/game/room.gd`.
-2. Adicione blocos: nó `StaticBody3D` com o script `scripts/game/greybox_block.gd`. No inspetor, ajuste `size` e escolha um material de `assets/materials/`. A malha e a colisão se ajustam sozinhas.
-3. Adicione luzes (`OmniLight3D`; para tremular, use o script `scripts/game/flicker_light.gd`).
-4. Adicione pelo menos um `Marker3D` com o script `scripts/game/entrance_point.gd` (`id = default`): é onde o jogador aparece, olhando para a seta azul.
-5. Em `data/rooms/`, crie um recurso `RoomData` com o identificador, a cena e a atmosfera.
-
-O guia completo para adicionar aspectos, Focus, inimigos e salas entra no M5.
-
-### Texturas provisórias
-
-As texturas de `assets/textures/` são geradas por código (`tools/generate_textures.gd`), com semente fixa. Para trocá-las por arte própria, substitua o PNG mantendo o nome. Em texturas novas, desative mipmaps e compressão na aba **Importar** (o padrão do projeto já faz isso).
+  A iluminação é calculada por vértice, como no PS1.
+- `scripts/render/ps1_post.gdshader` reduz as cores a 5 bits por canal, aplica o **dithering** com uma matriz de Bayer 4×4 e faz a transição entre salas, que dissolve os pixels na ordem da mesma matriz.
+- Os efeitos são ligados e desligados por parâmetros globais de shader (**Projeto → Configurações do Projeto → Shader Globals**), que o menu de opções altera.

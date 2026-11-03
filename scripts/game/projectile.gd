@@ -59,6 +59,7 @@ static func _find_damageable(node: Node) -> Node:
 
 
 func _explode() -> void:
+	Audio.play_at(&"fire_impact", global_position, get_parent())
 	if impact_scene != null:
 		var impact: Node3D = impact_scene.instantiate()
 		get_parent().add_child(impact)

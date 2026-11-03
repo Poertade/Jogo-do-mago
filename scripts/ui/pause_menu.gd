@@ -2,6 +2,9 @@ class_name PauseMenu
 extends MenuLayer
 ## Menu de pausa (Esc): continuar, opções e sair.
 
+## O jogador pediu para fechar o jogo (quem fecha é a cena principal).
+signal quit_requested
+
 @onready var main_panel: Control = %MainPanel
 @onready var options_menu: OptionsMenu = %OptionsMenu
 @onready var resume_button: Button = %ResumeButton
@@ -13,7 +16,7 @@ func _ready() -> void:
 	super._ready()
 	resume_button.pressed.connect(close)
 	options_button.pressed.connect(_show_options)
-	quit_button.pressed.connect(get_tree().quit)
+	quit_button.pressed.connect(quit_requested.emit)
 	options_menu.back_pressed.connect(_show_main)
 
 

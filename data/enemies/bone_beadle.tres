@@ -12,7 +12,7 @@ aspects = Dictionary[StringName, int]({
 &"order": 1
 })
 scene_path = "res://scenes/enemies/bone_beadle.tscn"
-max_health = 40.0
+max_health = 50.0
 damage = 10.0
 weaknesses = Dictionary[StringName, float]({
 &"fire": 1.5

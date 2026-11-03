@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="SoundBank" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/sound_bank.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/spell_charge.wav" id="s0"]
+[ext_resource type="AudioStream" path="res://assets/sounds/spell_cast.wav" id="s1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/fire_impact.wav" id="s2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/no_energy.wav" id="s3"]
+[ext_resource type="AudioStream" path="res://assets/sounds/scan_hum.wav" id="s4"]
+[ext_resource type="AudioStream" path="res://assets/sounds/scan_complete.wav" id="s5"]
+[ext_resource type="AudioStream" path="res://assets/sounds/page_studied.wav" id="s6"]
+[ext_resource type="AudioStream" path="res://assets/sounds/recharge.wav" id="s7"]
+[ext_resource type="AudioStream" path="res://assets/sounds/portal.wav" id="s8"]
+[ext_resource type="AudioStream" path="res://assets/sounds/player_hurt.wav" id="s9"]
+[ext_resource type="AudioStream" path="res://assets/sounds/player_death.wav" id="s10"]
+[ext_resource type="AudioStream" path="res://assets/sounds/enemy_alert.wav" id="s11"]
+[ext_resource type="AudioStream" path="res://assets/sounds/enemy_swing.wav" id="s12"]
+[ext_resource type="AudioStream" path="res://assets/sounds/enemy_hurt.wav" id="s13"]
+[ext_resource type="AudioStream" path="res://assets/sounds/enemy_death.wav" id="s14"]
+
+[resource]
+script = ExtResource("1")
+sounds = Dictionary[StringName, AudioStream]({
+&"spell_charge": ExtResource("s0"),
+&"spell_cast": ExtResource("s1"),
+&"fire_impact": ExtResource("s2"),
+&"no_energy": ExtResource("s3"),
+&"scan_hum": ExtResource("s4"),
+&"scan_complete": ExtResource("s5"),
+&"page_studied": ExtResource("s6"),
+&"recharge": ExtResource("s7"),
+&"portal": ExtResource("s8"),
+&"player_hurt": ExtResource("s9"),
+&"player_death": ExtResource("s10"),
+&"enemy_alert": ExtResource("s11"),
+&"enemy_swing": ExtResource("s12"),
+&"enemy_hurt": ExtResource("s13"),
+&"enemy_death": ExtResource("s14")
+})
+volumes_db = Dictionary[StringName, float]({
+&"spell_charge": -6.0,
+&"spell_cast": -3.0,
+&"fire_impact": -4.0,
+&"no_energy": 0.0,
+&"scan_hum": -8.0,
+&"scan_complete": -2.0,
+&"page_studied": 0.0,
+&"recharge": -2.0,
+&"portal": -2.0,
+&"player_hurt": -3.0,
+&"player_death": 0.0,
+&"enemy_alert": 0.0,
+&"enemy_swing": -4.0,
+&"enemy_hurt": -2.0,
+&"enemy_death": -2.0
+})

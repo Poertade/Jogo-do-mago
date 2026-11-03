@@ -15,6 +15,7 @@ extends Node3D
 @onready var tip_glow: MeshInstance3D = $Tip/Glow
 
 var _shake_time := 0.0
+var _charge_sound: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -28,9 +29,14 @@ func _physics_process(delta: float) -> void:
 	var playing := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 	if playing and Input.is_action_just_pressed("cast") and player.can_cast():
 		var failure := caster.start_charge()
-		if failure == SpellCaster.Failure.NO_ENERGY:
+		if failure == SpellCaster.Failure.NONE:
+			_charge_sound = Audio.play(&"spell_charge")
+		elif failure == SpellCaster.Failure.NO_ENERGY:
+			Audio.play(&"no_energy")
 			Game.message(Text.tr_key("UI_MSG_NO_ENERGY") % Text.aspect_name(caster.focus.element))
 	if caster.is_busy() and (not Input.is_action_pressed("cast") or not playing):
+		if is_instance_valid(_charge_sound):
+			_charge_sound.stop()
 		if caster.release() and playing:
 			_fire(caster)
 	_update_tip(caster.charge_ratio())
@@ -48,6 +54,7 @@ func _fire(caster: SpellCaster) -> void:
 	var ignore: Array[RID] = [player.get_rid()]
 	projectile.setup(caster.focus, direction, caster.damage(Game.modifiers), ignore)
 	position = rest_position + recoil
+	Audio.play(&"spell_cast")
 
 
 ## A ponta brilha mais conforme a carga.

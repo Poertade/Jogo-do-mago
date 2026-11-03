@@ -1,7 +1,7 @@
 # Instruções para o Claude Code
 
 - A especificação do projeto está em `docs/ESPECIFICACAO.md`; a proposta aprovada, em `docs/PROPOSTA-M0.md`. Leia as duas antes de começar um marco.
-- Trabalhe por marcos (seção 10 da especificação). Não avance de marco sem a aprovação do usuário nas decisões de que ele depende (`DECISIONS.md`, seção "Pendentes"). Exceção: o usuário autorizou seguir do M2 ao M5 sem aprovação intermediária (D020); depois do M5, volte a pedir aprovação.
+- Trabalhe por marcos (seção 10 da especificação). Não avance de marco sem a aprovação do usuário nas decisões de que ele depende (`DECISIONS.md`, seção "Pendentes"). O usuário autorizou seguir do M2 ao M5 sem aprovação intermediária (D020); o recorte (M0–M5) está completo, e qualquer trabalho além dele precisa de aprovação.
 - Direção de arte: `docs/REFERENCIAS-VISUAIS.md`.
 - Registre toda decisão em `DECISIONS.md`: data, escolha, alternativa descartada e motivo. Dependência nova só com justificativa ali.
 - Motor: Godot 4.7.2, GDScript com tipos, renderizador Compatibility.
@@ -29,4 +29,13 @@ xvfb-run -a -s "-screen 0 1280x720x24" $G --rendering-driver opengl3 --resolutio
   --path . -- --screenshot=/caminho/captura.png                   # captura de tela (OpenGL por software)
 ```
 
-Para testes de jogabilidade, um script `extends SceneTree` rodado com `-s` pode instanciar `scenes/main.tscn`, simular ações com `Input.action_press` e salvar capturas com `root.get_texture().get_image()`. Os autoloads (Content, Settings) são carregados também nesse modo.
+Exportar (os modelos de exportação ficam em `~/.local/share/godot/export_templates/4.7.2.stable/`; se faltarem, baixe `Godot_v4.7.2-stable_export_templates.tpz` do mesmo lugar e extraia só `linux_release.x86_64` e `windows_release_x86_64.exe`):
+
+```sh
+$G --headless --path . --export-release "Linux" export/linux/JogoDoMago.x86_64
+$G --headless --path . --export-release "Windows Desktop" export/windows/JogoDoMago.exe
+```
+
+Ferramentas: `tools/balance_report.gd` (números de balanceamento), `tools/generate_textures.gd` e `tools/generate_sounds.gd`.
+
+Para testes de jogabilidade, um script `extends SceneTree` rodado com `-s` pode instanciar `scenes/main.tscn`, simular ações com `Input.action_press` e salvar capturas com `root.get_texture().get_image()`. Os autoloads (Content, Settings, Game, Audio) são carregados também nesse modo, mas o script de teste compila antes deles: não use tipos do projeto que dependem de autoloads (ex.: `Player`) nas anotações do script de teste; acesse autoloads com `root.get_node("Game")`.

@@ -1,6 +1,6 @@
 class_name GameSettings
 extends RefCounted
-## Opções escolhidas pelo jogador: efeitos PS1, resolução interna e sensibilidade do mouse.
+## Opções escolhidas pelo jogador: efeitos PS1, resolução interna, sensibilidade do mouse e volume.
 ## Não sabe desenhar nada: só guarda os valores, aplica filtros e lê/grava num ConfigFile.
 ## Quem aplica os valores na tela é o autoload Settings e a GameScreen.
 
@@ -21,6 +21,8 @@ var color_limit := true
 var dithering := true
 var internal_height := 240
 var mouse_sensitivity := 0.15
+## Volume geral, de 0 a 1.
+var master_volume := 1.0
 
 var _defaults: SettingsDefaults
 var _presets: Array[GraphicsPreset] = []
@@ -31,6 +33,7 @@ func _init(defaults: SettingsDefaults, presets: Array[GraphicsPreset]) -> void:
 	_defaults = defaults
 	_presets = presets
 	mouse_sensitivity = defaults.mouse_sensitivity
+	master_volume = defaults.master_volume
 	var preset := find_preset(defaults.default_preset_id)
 	if preset != null:
 		apply_preset(preset)
@@ -71,6 +74,11 @@ func set_mouse_sensitivity(value: float) -> void:
 	mouse_sensitivity = clampf(value, _defaults.mouse_sensitivity_min, _defaults.mouse_sensitivity_max)
 
 
+## Muda o volume geral (de 0 a 1).
+func set_master_volume(value: float) -> void:
+	master_volume = clampf(value, 0.0, 1.0)
+
+
 ## Quantos níveis de cor por canal o pós-processamento usa (2 elevado aos bits).
 func color_levels() -> int:
 	return 1 << _defaults.color_depth_bits
@@ -83,6 +91,7 @@ func save_to(config: ConfigFile) -> void:
 		config.set_value("graphics", String(effect), get(effect))
 	config.set_value("graphics", "internal_height", internal_height)
 	config.set_value("controls", "mouse_sensitivity", mouse_sensitivity)
+	config.set_value("audio", "master_volume", master_volume)
 
 
 ## Lê as opções de um ConfigFile. Valores ausentes ou inválidos mantêm o valor atual.
@@ -97,6 +106,9 @@ func load_from(config: ConfigFile) -> void:
 	var sensitivity = config.get_value("controls", "mouse_sensitivity", mouse_sensitivity)
 	if sensitivity is float or sensitivity is int:
 		set_mouse_sensitivity(float(sensitivity))
+	var volume = config.get_value("audio", "master_volume", master_volume)
+	if volume is float or volume is int:
+		set_master_volume(float(volume))
 	preset_id = _matching_preset_id()
 
 

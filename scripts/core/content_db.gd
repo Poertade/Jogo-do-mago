@@ -9,6 +9,7 @@ const DATA_ROOT := "res://data"
 var player: PlayerData
 var settings_defaults: SettingsDefaults
 var research_rules: ResearchRules
+var sound_bank: SoundBank
 var presets: Array[GraphicsPreset] = []
 var rooms: Dictionary[StringName, RoomData] = {}
 var aspects: Dictionary[StringName, AspectData] = {}
@@ -25,6 +26,7 @@ func load_all(root := DATA_ROOT) -> void:
 	player = _load_single(root.path_join("player/player.tres")) as PlayerData
 	settings_defaults = _load_single(root.path_join("settings/defaults.tres")) as SettingsDefaults
 	research_rules = _load_single(root.path_join("research/rules.tres")) as ResearchRules
+	sound_bank = _load_single(root.path_join("audio/sound_bank.tres")) as SoundBank
 	for resource in _load_folder(root.path_join("settings/presets")):
 		if resource is GraphicsPreset:
 			presets.append(resource)
@@ -126,6 +128,8 @@ func validate() -> void:
 		_validate_player()
 	if research_rules == null:
 		errors.append("Faltam as regras de pesquisa (data/research/rules.tres).")
+	if sound_bank == null:
+		errors.append("Falta o banco de sons (data/audio/sound_bank.tres).")
 	if settings_defaults == null:
 		errors.append("Faltam as opções padrão (data/settings/defaults.tres).")
 	else:

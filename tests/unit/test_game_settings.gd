@@ -9,11 +9,12 @@ var clean: GraphicsPreset
 func before_each() -> void:
 	defaults = SettingsDefaults.new()
 	defaults.default_preset_id = &"crunchy"
-	defaults.internal_heights = PackedInt32Array([180, 240, 480])
+	defaults.internal_heights = [180, 240, 480] as Array[int]
 	defaults.mouse_sensitivity = 0.2
 	defaults.mouse_sensitivity_min = 0.1
 	defaults.mouse_sensitivity_max = 0.5
 	defaults.color_depth_bits = 5
+	defaults.master_volume = 0.8
 
 	crunchy = GraphicsPreset.new()
 	crunchy.id = &"crunchy"
@@ -116,3 +117,22 @@ func test_load_ignores_invalid_values() -> void:
 	assert_eq(settings.internal_height, 240)
 	assert_eq(settings.mouse_sensitivity, 0.2)
 	assert_eq(settings.preset_id, &"crunchy")
+
+
+func test_volume_starts_from_defaults_and_is_clamped() -> void:
+	var settings := _new_settings()
+	assert_eq(settings.master_volume, 0.8)
+	settings.set_master_volume(1.7)
+	assert_eq(settings.master_volume, 1.0)
+	settings.set_master_volume(-1.0)
+	assert_eq(settings.master_volume, 0.0)
+
+
+func test_volume_is_saved_and_loaded() -> void:
+	var saved := _new_settings()
+	saved.set_master_volume(0.35)
+	var config := ConfigFile.new()
+	saved.save_to(config)
+	var loaded := _new_settings()
+	loaded.load_from(config)
+	assert_almost_eq(loaded.master_volume, 0.35, 0.0001)

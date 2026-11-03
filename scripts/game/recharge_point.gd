@@ -14,4 +14,5 @@ func interact(_player: Node3D) -> void:
 		Game.message(Text.tr_key("UI_MSG_ALREADY_FULL") % aspect_name)
 		return
 	wand.refill(aspect)
+	Audio.play(&"recharge")
 	Game.message(Text.tr_key("UI_MSG_RECHARGED") % aspect_name, Content.db.aspects[aspect].color)

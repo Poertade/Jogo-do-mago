@@ -1,6 +1,6 @@
 class_name OptionsMenu
 extends Control
-## Menu de opções: filtro visual, resolução interna, cada efeito PS1 e sensibilidade do mouse.
+## Menu de opções: filtro visual, resolução interna, cada efeito PS1, sensibilidade do mouse e volume.
 ## Lê e altera Settings.current; cada mudança é aplicada na hora e gravada.
 
 signal back_pressed
@@ -8,6 +8,7 @@ signal back_pressed
 @onready var preset_option: OptionButton = %PresetOption
 @onready var resolution_option: OptionButton = %ResolutionOption
 @onready var sensitivity_slider: HSlider = %SensitivitySlider
+@onready var volume_slider: HSlider = %VolumeSlider
 @onready var back_button: Button = %BackButton
 ## Um botão de liga/desliga para cada efeito, na mesma ordem de GameSettings.EFFECTS.
 @onready var effect_checks: Dictionary[StringName, CheckButton] = {
@@ -27,6 +28,7 @@ func _ready() -> void:
 	preset_option.item_selected.connect(_on_preset_selected)
 	resolution_option.item_selected.connect(_on_resolution_selected)
 	sensitivity_slider.value_changed.connect(_on_sensitivity_changed)
+	volume_slider.value_changed.connect(_on_volume_changed)
 	back_button.pressed.connect(back_pressed.emit)
 	for effect in effect_checks:
 		effect_checks[effect].toggled.connect(_on_effect_toggled.bind(effect))
@@ -59,6 +61,9 @@ func _fill_lists() -> void:
 	sensitivity_slider.min_value = defaults.mouse_sensitivity_min
 	sensitivity_slider.max_value = defaults.mouse_sensitivity_max
 	sensitivity_slider.step = 0.01
+	volume_slider.min_value = 0.0
+	volume_slider.max_value = 1.0
+	volume_slider.step = 0.05
 
 
 ## Mostra nos controles os valores atuais das opções.
@@ -72,6 +77,7 @@ func refresh() -> void:
 	# Dithering só faz sentido com a cor limitada.
 	effect_checks[&"dithering"].disabled = not settings.color_limit
 	sensitivity_slider.value = settings.mouse_sensitivity
+	volume_slider.value = settings.master_volume
 	_refreshing = false
 
 
@@ -106,6 +112,12 @@ func _on_effect_toggled(enabled: bool, effect: StringName) -> void:
 func _on_sensitivity_changed(value: float) -> void:
 	if not _refreshing:
 		Settings.current.set_mouse_sensitivity(value)
+		_changed()
+
+
+func _on_volume_changed(value: float) -> void:
+	if not _refreshing:
+		Settings.current.set_master_volume(value)
 		_changed()
 
 

@@ -45,6 +45,9 @@ func _ready() -> void:
 	Game.note_requested.connect(note_screen.show_note)
 	Game.travel_requested.connect(_on_travel_requested)
 	Game.player_died.connect(_on_player_died)
+	pause_menu.quit_requested.connect(quit_game)
+	# Fechar a janela passa por quit_game(), para parar os sons antes de sair.
+	get_tree().auto_accept_quit = false
 
 	world.load_room(_arg_value(args, "--room=", start_room), _arg_value(args, "--entrance=", start_entrance))
 
@@ -56,6 +59,7 @@ func _ready() -> void:
 func _apply_settings() -> void:
 	game_screen.apply_settings(Settings.current, Content.db.settings_defaults)
 	player.mouse_sensitivity = Settings.current.mouse_sensitivity
+	Audio.set_master_volume(Settings.current.master_volume)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -121,6 +125,19 @@ func _transition(color: Color, change: Callable) -> void:
 	_transitioning = false
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		quit_game()
+
+
+## Fecha o jogo: para os sons e espera um instante (o áudio roda em outra thread),
+## para nada ficar tocando na saída.
+func quit_game() -> void:
+	Audio.stop_all()
+	await get_tree().create_timer(0.15, true).timeout
+	get_tree().quit()
+
+
 func _capture_mouse() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -138,4 +155,4 @@ func _take_screenshot_and_quit(path: String) -> void:
 	var image := get_viewport().get_texture().get_image()
 	var error := image.save_png(path)
 	print("Captura salva em %s (erro %d)" % [path, error])
-	get_tree().quit()
+	quit_game()

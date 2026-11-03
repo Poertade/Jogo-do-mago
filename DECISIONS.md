@@ -217,6 +217,51 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** introdução em tela cheia.
 - **Motivo:** a especificação pede só texto mínimo neste marco.
 
+### D033 · 2026-11-03 · Sons provisórios gerados por código
+
+- **Escolha:**
+  - **Geração:** `tools/generate_sounds.gd` sintetiza 17 sons (ondas e ruído, WAV mono 22 kHz, 16 bits, com o som abafado do PS1), com semente fixa.
+  - **Dados:** `data/audio/sound_bank.tres` liga cada evento do jogo a um arquivo e a um volume. Cada sala tem um som de ambiente em `RoomData.ambience` (estalos de braseiro na escola; vento, zumbido e gotas na Dungeon), em vez de música, como pede a especificação.
+  - **Reprodução:** o autoload `Audio` toca sons sem posição (interface, jogador) e sons 3D (impacto, inimigo).
+  - **Aviso de golpe:** o sopro do golpe do inimigo toca no início da preparação, servindo de aviso para esquivar.
+  - **Opções:** volume geral no menu.
+- **Descartados:** sons de bancos livres (exigiriam curadoria e créditos agora); música constante.
+- **Motivo:** especificação M5 ("sons provisórios") e seção 4 ("sons de ambiente em vez de música constante").
+
+### D034 · 2026-11-03 · Balanceamento: vida do Bedel de 40 para 50
+
+- **Escolha:** a vida do Bedel Descarnado subiu de 40 (tabela da seção 6) para 50. Os outros valores da tabela ficam como estão.
+  - **Sem a página:** 3 acertos de 22,5.
+  - **Com "Compreensão de Ignis":** 2 acertos de 27.
+  - **Reserva:** a varinha (6 disparos) ainda dá folga para errar.
+  - **Confirmação:** um teste e o novo `tools/balance_report.gd` garantem essa relação; a diferença foi confirmada rodando o jogo.
+- **Descartado:** manter 40, com o qual o inimigo cai com 2 acertos com ou sem a página e o benefício da pesquisa fica invisível (a especificação pede um benefício "permanente e perceptível").
+- **Motivo:** M5 pede ajuste de balanceamento; todos os valores seguem nos dados.
+
+### D035 · 2026-11-03 · Exportação para Windows e Linux
+
+- **Escolha:** `export_presets.cfg` com os perfis *Windows Desktop* e *Linux* (x86_64). O pacote do jogo vai embutido no executável. Ficam de fora os testes, as ferramentas, a documentação e o GUT. Os dois executáveis foram gerados e o de Linux foi conferido rodando aqui.
+- **Descartado:** macOS por enquanto: exige assinatura e notarização para abrir sem alertas, e o sistema do usuário ainda não foi informado (pergunta 10).
+- **Motivo:** o usuário pediu um programa de desktop; Windows e Linux cobrem a maioria dos computadores.
+
+### D036 · 2026-11-03 · Lista de resoluções como `Array[int]`
+
+- **Escolha:** `SettingsDefaults.internal_heights` passou de `PackedInt32Array` para `Array[int]`.
+- **Descartado:** manter `PackedInt32Array`.
+- **Motivo:** no executável exportado a lista chegava vazia, porque o valor se perdia na conversão dos recursos de texto para binário. O erro só apareceu ao rodar a exportação; os demais campos (dicionários e listas tipadas) passaram.
+
+### D037 · 2026-11-03 · Fechar o jogo para os sons primeiro
+
+- **Escolha:** fechar pelo menu ou pela janela passa por `Main.quit_game()`, que para todos os sons e espera 0,15 s antes de sair.
+- **Descartado:** fechar no mesmo quadro.
+- **Motivo:** com um som de ambiente tocando, a saída imediata deixava o som "preso" na memória (aviso de vazamento ao sair).
+
+### D038 · 2026-11-03 · Testes de conteúdo aceitam conteúdo novo
+
+- **Escolha:** o teste do conteúdo exige os seis primais e os seis objetos da especificação, mas não proíbe conteúdo a mais.
+- **Descartado:** contar exatamente 6 aspectos e 6 objetos.
+- **Motivo:** o guia "Como estender" manda rodar os testes depois de adicionar conteúdo. Seguindo o guia numa cópia do projeto (aspecto composto "Lux", objeto "Lanterna", inimigo "Espectro de Cinzas" na câmara de pedra), tudo funcionou, mas a contagem exata falhava sem motivo real.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

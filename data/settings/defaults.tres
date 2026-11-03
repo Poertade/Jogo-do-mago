@@ -5,9 +5,10 @@
 [resource]
 script = ExtResource("1")
 default_preset_id = &"crunchy"
-internal_heights = PackedInt32Array(180, 240, 360, 480)
+internal_heights = Array[int]([180, 240, 360, 480])
 mouse_sensitivity = 0.15
 mouse_sensitivity_min = 0.03
 mouse_sensitivity_max = 0.6
+master_volume = 0.8
 color_depth_bits = 5
 vertex_snap_pixel_size = 1.0

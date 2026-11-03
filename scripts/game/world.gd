@@ -22,6 +22,7 @@ func load_room(room_id: StringName, entrance_id: StringName = &"default") -> voi
 	current_room_data = data
 	add_child(current_room)
 	_apply_atmosphere(data)
+	Audio.set_ambience(data.ambience)
 	var entrance := current_room.get_entrance(entrance_id)
 	if entrance != null:
 		player.place_at(entrance)

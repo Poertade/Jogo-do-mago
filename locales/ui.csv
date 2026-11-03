@@ -50,3 +50,4 @@ UI_HEALTH,Vida
 UI_MSG_NO_ENERGY,Sem %s na varinha
 UI_MSG_RECHARGED,Reserva de %s cheia
 UI_MSG_ALREADY_FULL,A reserva de %s já está cheia
+UI_OPT_VOLUME,Volume

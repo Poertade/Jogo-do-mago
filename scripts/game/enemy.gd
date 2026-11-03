@@ -41,6 +41,7 @@ func take_damage(amount: float, element: StringName) -> void:
 	if not health.is_dead():
 		brain.on_damaged()
 		_flash()
+		Audio.play_at(&"enemy_hurt", global_position + Vector3.UP, get_parent())
 
 
 func _physics_process(delta: float) -> void:
@@ -54,7 +55,9 @@ func _physics_process(delta: float) -> void:
 	var to_player := _player.global_position - global_position
 	to_player.y = 0.0
 	var distance := to_player.length()
+	var previous := brain.state
 	brain.update(delta, distance, _can_see_player())
+	_play_state_sounds(previous, brain.state)
 
 	var move := Vector3.ZERO
 	if brain.wants_to_move() and distance > data.attack_range * 0.8:
@@ -87,11 +90,22 @@ func _on_died() -> void:
 	brain.on_died()
 	$CollisionShape3D.set_deferred("disabled", true)
 	eyes.visible = false
+	Audio.play_at(&"enemy_death", global_position + Vector3.UP, get_parent())
 	# Desmorona: tomba para trás e afunda um pouco.
 	var tween := create_tween().set_parallel()
 	tween.tween_property(model, "rotation:x", deg_to_rad(80.0), 0.6).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(model, "position:y", -0.5, 0.6)
 	died.emit()
+
+
+## Gemido ao notar o jogador; sopro ao começar o golpe (o aviso para esquivar).
+func _play_state_sounds(previous: EnemyBrain.State, current: EnemyBrain.State) -> void:
+	if previous == current:
+		return
+	if previous == EnemyBrain.State.IDLE and current == EnemyBrain.State.CHASE:
+		Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
+	elif current == EnemyBrain.State.ATTACK:
+		Audio.play_at(&"enemy_swing", global_position + Vector3.UP, get_parent())
 
 
 ## Clarão branco rápido ao tomar dano.

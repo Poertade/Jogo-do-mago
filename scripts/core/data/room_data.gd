@@ -19,3 +19,7 @@ extends Resource
 ## Luz ambiente: ilumina tudo por igual, sem direção.
 @export var ambient_color: Color = Color.BLACK
 @export var ambient_energy: float = 0.0
+
+@export_group("Som")
+## Som de ambiente que toca em repetição na sala (vazio: silêncio).
+@export var ambience: AudioStream

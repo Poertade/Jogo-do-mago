@@ -10,6 +10,7 @@ extends Node3D
 @export var raised_position := Vector3(-0.1, -0.07, -0.3)
 
 var progress: ScanProgress
+var _hum: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -28,6 +29,16 @@ func _physics_process(delta: float) -> void:
 	var target_id: StringName = target.id if target != null else &""
 	if progress.update(target_id, is_raised(), delta):
 		Game.complete_scan(target)
+	_update_hum(progress.is_active() and not progress.completed)
 	# A lente desliza até a posição desejada (suavização exponencial).
 	var goal := raised_position if is_raised() else rest_position
 	position = position.lerp(goal, 1.0 - exp(-14.0 * delta))
+
+
+## Zumbido da Lente enquanto a barra enche.
+func _update_hum(scanning: bool) -> void:
+	if scanning and not is_instance_valid(_hum):
+		_hum = Audio.play(&"scan_hum")
+	elif not scanning and is_instance_valid(_hum):
+		_hum.queue_free()
+		_hum = null
