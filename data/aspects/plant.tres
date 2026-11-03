@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_3sdax"]
+
+[resource]
+script = ExtResource("1_3sdax")
+id = &"plant"
+name_key = "ASPECT_PLANT"
+meaning_key = "ASPECT_PLANT_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"earth", &"life"])
+color = Color(0.29803923, 0.7529412, 0.29803923, 1)

@@ -4,16 +4,21 @@ extends RefCounted
 ## O arquivo é user://save.json; quem lê e grava o arquivo é o autoload Game.
 
 ## Versão do formato. Ao mudar o formato, aumente e trate a versão antiga em _migrate().
-const FORMAT_VERSION := 1
+## 1: pontos de pesquisa num único total (até o M5).
+## 2: pontos de pesquisa por aspecto (pesquisa no estilo do Thaumcraft 4).
+const FORMAT_VERSION := 2
 
 
 static func to_dict(knowledge: Knowledge) -> Dictionary:
+	var points := {}
+	for aspect_id in knowledge.aspect_points:
+		points[String(aspect_id)] = knowledge.aspect_points[aspect_id]
 	return {
 		"format_version": FORMAT_VERSION,
 		"knowledge": {
 			"discovered_aspects": _to_strings(knowledge.discovered_aspects),
+			"aspect_points": points,
 			"scanned_targets": _to_strings(knowledge.scanned_targets),
-			"research_points": knowledge.research_points,
 			"studied_pages": _to_strings(knowledge.studied_pages),
 		},
 	}
@@ -44,13 +49,28 @@ static func from_dict(data: Dictionary) -> Knowledge:
 	knowledge.discovered_aspects = _to_names(saved.get("discovered_aspects", []))
 	knowledge.scanned_targets = _to_names(saved.get("scanned_targets", []))
 	knowledge.studied_pages = _to_names(saved.get("studied_pages", []))
-	var points = saved.get("research_points", 0)
-	knowledge.research_points = maxi(int(points), 0) if (points is float or points is int) else 0
+	var points = saved.get("aspect_points", {})
+	if points is Dictionary:
+		for key in points:
+			var value = points[key]
+			if key is String and (value is float or value is int) and int(value) > 0:
+				knowledge.aspect_points[StringName(key)] = int(value)
 	return knowledge
 
 
-## Atualiza saves de versões antigas para o formato atual. (Ainda só existe a versão 1.)
-static func _migrate(data: Dictionary, _from_version: int) -> Dictionary:
+## Atualiza saves de versões antigas para o formato atual.
+static func _migrate(data: Dictionary, from_version: int) -> Dictionary:
+	if from_version < 2:
+		# A versão 1 tinha um total único de pontos, que não tem como ser dividido entre
+		# aspectos: ele é descartado. Os escaneamentos antigos também são esquecidos, para que
+		# os objetos voltem a render pontos por aspecto. Aspectos e páginas são mantidos.
+		var old: Dictionary = data.get("knowledge", {}) if data.get("knowledge") is Dictionary else {}
+		data = {"format_version": 2, "knowledge": {
+			"discovered_aspects": old.get("discovered_aspects", []),
+			"aspect_points": {},
+			"scanned_targets": [],
+			"studied_pages": old.get("studied_pages", []),
+		}}
 	return data
 
 

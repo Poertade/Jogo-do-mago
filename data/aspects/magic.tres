@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_xr7tp"]
+
+[resource]
+script = ExtResource("1_xr7tp")
+id = &"magic"
+name_key = "ASPECT_MAGIC"
+meaning_key = "ASPECT_MAGIC_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"void", &"energy"])
+color = Color(0.7607843, 0.3529412, 0.9411765, 1)

@@ -25,7 +25,6 @@ UI_ASPECT_AMOUNT,%s %d
 UI_MSG_SCANNED,Escaneado: %s
 UI_MSG_ALREADY_SCANNED,%s já está no Livro de Pesquisa
 UI_MSG_NEW_ASPECT,Novo aspecto: %s
-UI_MSG_POINTS,+%d ponto(s) de pesquisa
 UI_MSG_PAGE_STUDIED,Página estudada: %s
 UI_BOOK_TITLE,Livro de Pesquisa
 UI_BOOK_ASPECTS,Aspectos descobertos
@@ -51,3 +50,18 @@ UI_MSG_NO_ENERGY,Sem %s na varinha
 UI_MSG_RECHARGED,Reserva de %s cheia
 UI_MSG_ALREADY_FULL,A reserva de %s já está cheia
 UI_OPT_VOLUME,Volume
+UI_SCAN_NEEDS_RESEARCH,Conhecimento insuficiente: descubra o que falta na Mesa de Pesquisa
+UI_MSG_SCAN_BLOCKED,%s: conhecimento insuficiente (%d aspecto(s) desconhecido(s))
+UI_MSG_ASPECT_POINTS,+%d %s
+UI_MSG_COMPOUND_DISCOVERED,Aspecto descoberto: %s
+UI_BOOK_POINTS_COLUMN,pontos
+UI_BOOK_DISCOVERED_COUNT,Aspectos: %d de %d
+UI_TABLE_POINTS,Seus pontos
+UI_TABLE_COMBINE,Combinar aspectos
+UI_TABLE_PAGES,Páginas
+UI_TABLE_COMBINE_HINT,Cada combinação gasta %d ponto(s) de cada aspecto e rende %d do resultado.
+UI_COMBINE,Combinar
+UI_COMBINE_UNKNOWN,?
+UI_COMBINE_NOTHING,(descubra mais aspectos primais escaneando)
+UI_STUDY_COST,Custo: %s
+UI_NO_POINTS_YET,(nenhum ponto ainda)

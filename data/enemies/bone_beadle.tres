@@ -4,13 +4,6 @@
 
 [resource]
 script = ExtResource("1")
-id = &"bone_beadle"
-name_key = "ENEMY_BONE_BEADLE"
-aspects = Dictionary[StringName, int]({
-&"entropy": 3,
-&"earth": 1,
-&"order": 1
-})
 scene_path = "res://scenes/enemies/bone_beadle.tscn"
 max_health = 50.0
 damage = 10.0
@@ -23,3 +16,11 @@ attack_range = 1.6
 attack_windup = 0.7
 attack_cooldown = 1.5
 hurt_stun = 0.35
+id = &"bone_beadle"
+name_key = "ENEMY_BONE_BEADLE"
+aspects = Dictionary[StringName, int]({
+&"death": 1,
+&"earth": 1,
+&"entropy": 2,
+&"undead": 2
+})

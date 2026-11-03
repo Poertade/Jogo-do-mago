@@ -126,7 +126,7 @@ func _recharge() -> PackedFloat32Array:
 		var t := float(i) / RATE
 		lp = lerpf(lp, rng.randf_range(-1.0, 1.0), lerpf(0.03, 0.4, t / 0.8))
 		var crackle := rng.randf_range(-1.0, 1.0) if rng.randf() < 0.004 else 0.0
-		out[i] = (lp * 0.8 + crackle * 0.6) * _env(t, 0.3, 0.8)
+		out[i] = (lp * 0.8 + crackle * 0.15) * _env(t, 0.3, 0.8)
 	return out
 
 
@@ -225,8 +225,8 @@ func _ambience_school() -> PackedFloat32Array:
 	for i in out.size():
 		var t := float(i) / RATE
 		out[i] = sin(TAU * 55.0 * t) * 0.06 + sin(TAU * 82.5 * t) * 0.03
-	for crackle in 40:
-		_add_click(out, rng.randf_range(0.0, 3.95), rng.randf_range(0.003, 0.01), rng.randf_range(0.1, 0.35))
+	for crackle in 24:
+		_add_click(out, rng.randf_range(0.0, 3.95), rng.randf_range(0.003, 0.008), rng.randf_range(0.015, 0.05))
 	return out
 
 

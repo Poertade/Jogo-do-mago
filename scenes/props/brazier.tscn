@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Resource" path="res://data/scannables/vis_node.tres" id="scan_vis_node"]
 [ext_resource type="Script" path="res://scripts/game/recharge_point.gd" id="r_script"]
 [ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="1"]
 [ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="2"]
@@ -61,6 +62,7 @@ size = Vector3(0.9, 1.2, 0.9)
 
 [node name="Brazier" type="Node3D"]
 script = ExtResource("r_script")
+scannable = ExtResource("scan_vis_node")
 prompt_key = "PROMPT_RECHARGE_FIRE"
 aspect = &"fire"
 

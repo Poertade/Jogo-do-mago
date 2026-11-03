@@ -35,8 +35,8 @@ func _physics_process(delta: float) -> void:
 			Audio.play(&"no_energy")
 			Game.message(Text.tr_key("UI_MSG_NO_ENERGY") % Text.aspect_name(caster.focus.element))
 	if caster.is_busy() and (not Input.is_action_pressed("cast") or not playing):
-		if is_instance_valid(_charge_sound):
-			_charge_sound.stop()
+		Audio.fade_out(_charge_sound)
+		_charge_sound = null
 		if caster.release() and playing:
 			_fire(caster)
 	_update_tip(caster.charge_ratio())

@@ -6,5 +6,6 @@
 script = ExtResource("1_rlkf3")
 scan_duration = 1.5
 scan_range = 6.0
-points_per_new_aspect = 1
-points_per_new_target = 0
+points_per_amount = 2
+combine_cost = 1
+combine_yield = 1

@@ -16,6 +16,9 @@ extends StaticBody3D
 	set(value):
 		material = value
 		_rebuild()
+## O que a Lente revela ao escanear este bloco (data/scannables/). Vazio: a busca sobe para o
+## objeto de que o bloco faz parte (por exemplo, a mesa).
+@export var scannable: ScannableData
 ## Divisões da malha por metro.
 @export_range(0.25, 4.0, 0.25) var subdivisions_per_meter := 1.0:
 	set(value):
@@ -51,6 +54,10 @@ func _rebuild() -> void:
 	var shape := BoxShape3D.new()
 	shape.size = size
 	_collision.shape = shape
+
+
+func get_scannable() -> ScannableData:
+	return scannable
 
 
 ## Quantos cortes extras um lado de `length` metros recebe.

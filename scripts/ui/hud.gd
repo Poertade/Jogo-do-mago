@@ -33,6 +33,7 @@ func _ready() -> void:
 	Game.player_damaged.connect(_on_player_damaged)
 	_build_stats()
 	Game.page_studied.connect(func(page): show_message(tr("UI_MSG_PAGE_STUDIED") % Text.expand(page.name_key)))
+	Game.aspect_combined.connect(_on_aspect_combined)
 
 
 func _process(_delta: float) -> void:
@@ -115,14 +116,18 @@ func _update_prompt(playing: bool) -> void:
 		prompt_label.text = Text.expand(key)
 
 
-## Mostra o nome e os aspectos do alvo (ou "???" se ainda não foi escaneado).
+## Mostra o nome e os aspectos do alvo. Antes do escaneamento: "???". Se a Lente já tentou e
+## faltou conhecimento: os aspectos conhecidos e "?" nos compostos ainda não descobertos.
 func _update_scan(playing: bool) -> void:
 	var target := player.aimed_scannable
 	scan_panel.visible = playing and target != null
 	if target == null:
 		return
 	if Game.knowledge.has_scanned(target.id):
-		target_label.text = "[center]%s\n%s[/center]" % [tr(target.name_key), Text.aspect_amounts_bbcode(target.aspects)]
+		target_label.text = "[center]%s\n%s[/center]" % [Text.target_name(target), Text.aspect_amounts_bbcode(target.aspects)]
+	elif target.id in Game.analyzed_targets:
+		target_label.text = "[center]%s\n%s\n[color=#c08060]%s[/color][/center]" % [
+			Text.target_name(target), _partial_aspects(target), tr("UI_SCAN_NEEDS_RESEARCH")]
 	else:
 		target_label.text = "[center]%s\n[color=#8a8a8a]%s[/color][/center]" % [tr("UI_SCAN_UNKNOWN"), tr("UI_SCAN_HINT")]
 	var progress := player.scanner.progress
@@ -130,16 +135,33 @@ func _update_scan(playing: bool) -> void:
 	scan_bar.value = progress.ratio()
 
 
+## Aspectos do alvo: os já descobertos com nome e quantidade; os compostos que faltam, como "?".
+func _partial_aspects(target: ScannableData) -> String:
+	var parts: PackedStringArray = []
+	for aspect_id: StringName in target.aspects:
+		var aspect: AspectData = Content.db.aspects.get(aspect_id)
+		if aspect != null and aspect.is_compound() and not Game.knowledge.knows_aspect(aspect_id):
+			parts.append("[color=#8a8a8a]?[/color]")
+		else:
+			parts.append(Text.aspect_bbcode(aspect_id, tr("UI_ASPECT_AMOUNT") % [Text.aspect_name(aspect_id), target.aspects[aspect_id]]))
+	return "  ".join(parts)
+
+
 func _on_scan_completed(result: ScanResult) -> void:
-	var target_name := tr(result.target.name_key)
+	var target_name := Text.target_name(result.target)
+	if result.blocked:
+		show_message(tr("UI_MSG_SCAN_BLOCKED") % [target_name, result.missing.size()], Color(0.85, 0.55, 0.4))
+		return
 	if not result.discovered_something():
 		show_message(tr("UI_MSG_ALREADY_SCANNED") % target_name)
 		return
 	show_message(tr("UI_MSG_SCANNED") % target_name)
 	for aspect_id in result.new_aspects:
 		show_message(tr("UI_MSG_NEW_ASPECT") % Text.aspect_name(aspect_id), Content.db.aspects[aspect_id].color)
-	if result.points > 0:
-		show_message(tr("UI_MSG_POINTS") % result.points)
+	for aspect_id in result.points:
+		if result.points[aspect_id] > 0:
+			show_message(tr("UI_MSG_ASPECT_POINTS") % [result.points[aspect_id], Text.aspect_name(aspect_id)],
+				Content.db.aspects[aspect_id].color.lerp(Color.WHITE, 0.3))
 
 
 ## Tela fica vermelha por um instante quando o jogador apanha.
@@ -161,3 +183,8 @@ func show_message(text: String, color := Color(0.9, 0.86, 0.78)) -> void:
 	tween.tween_interval(MESSAGE_SECONDS)
 	tween.tween_property(label, "modulate:a", 0.0, 0.6)
 	tween.tween_callback(label.queue_free)
+
+
+func _on_aspect_combined(compound: AspectData, discovered: bool) -> void:
+	if discovered:
+		show_message(tr("UI_MSG_COMPOUND_DISCOVERED") % Text.aspect_name(compound.id), compound.color)

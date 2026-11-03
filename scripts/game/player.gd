@@ -11,6 +11,9 @@ var mouse_sensitivity := 0.15
 
 ## O que está na mira, atualizado a cada quadro de física.
 var aimed_interactable: Interactable
+
+## Objeto sendo usado com E seguro (ex.: o Nódulo de Vis), ou null.
+var _holding: Interactable
 var aimed_scannable: ScannableData
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -66,9 +69,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	_move(delta)
 	_update_aim()
-	if Input.is_action_just_pressed("interact") and aimed_interactable != null \
-			and aimed_interactable.is_available():
-		aimed_interactable.interact(self)
+	_update_interaction(delta)
 
 
 func _move(delta: float) -> void:
@@ -85,6 +86,25 @@ func _move(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, target.x, stats.acceleration * delta)
 	velocity.z = move_toward(velocity.z, target.z, stats.acceleration * delta)
 	move_and_slide()
+
+
+## E aperta (interact) ou, nos objetos de segurar, age enquanto está seguro (hold).
+func _update_interaction(delta: float) -> void:
+	var target := aimed_interactable if aimed_interactable != null and aimed_interactable.is_available() else null
+	var holding_key := Input.is_action_pressed("interact") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+	if _holding != null and not is_instance_valid(_holding):
+		_holding = null
+	if _holding != null and (not holding_key or target != _holding):
+		_holding.release_hold()
+		_holding = null
+	if target == null:
+		return
+	if target.hold_to_use:
+		if holding_key:
+			_holding = target
+			target.hold(self, delta)
+	elif Input.is_action_just_pressed("interact"):
+		target.interact(self)
 
 
 ## Lança um raio do centro da câmera e guarda o que ele atinge primeiro.

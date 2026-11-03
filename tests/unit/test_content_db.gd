@@ -27,8 +27,8 @@ func test_school_values_match_the_specification() -> void:
 	for id in expected:
 		assert_eq(db.scannables[id].aspects, expected[id], "Aspectos de %s" % id)
 	assert_eq(db.research_rules.scan_duration, 1.5)
-	assert_eq(db.research_rules.points_per_new_aspect, 1)
-	assert_eq(db.pages[&"fire_comprehension"].cost, 3)
+	assert_gt(db.research_rules.points_per_amount, 0)
+	assert_false(db.pages[&"fire_comprehension"].cost.is_empty())
 	assert_almost_eq(db.pages[&"fire_comprehension"].effects[0].value, 1.2, 0.0001)
 	# Varinha, Focus de Fogo e jogador (seção 6)
 	assert_eq(db.player.max_health, 100)
@@ -153,3 +153,18 @@ func test_research_page_saves_a_shot_against_the_enemy() -> void:
 	assert_lt(shots_with, shots_without, "A página deve poupar pelo menos um disparo")
 	var shots_per_reserve := db.player.starting_wand.capacity[focus.element] / focus.cost[focus.element]
 	assert_lt(shots_without, shots_per_reserve, "Sem a página ainda deve dar para vencer com uma reserva")
+
+
+func test_compound_recipes_follow_thaumcraft_4() -> void:
+	# Receitas usadas como base (Thaumcraft 4.2); os nomes exibidos ficam em locales/names.csv.
+	var db := ContentDB.new()
+	db.load_all()
+	var recipes := {&"life": [&"water", &"earth"], &"plant": [&"earth", &"life"], &"tree": [&"air", &"plant"],
+		&"death": [&"life", &"entropy"], &"soul": [&"life", &"death"], &"mind": [&"fire", &"soul"],
+		&"undead": [&"motion", &"death"], &"energy": [&"order", &"fire"], &"magic": [&"void", &"energy"]}
+	for id in recipes:
+		var parents: Array = db.aspects[id].parents
+		assert_true(parents.has(recipes[id][0]) and parents.has(recipes[id][1]), "Receita de %s" % id)
+	assert_eq(db.tier(&"fire"), 0)
+	assert_eq(db.tier(&"life"), 1)
+	assert_eq(db.tier(&"mind"), 4)

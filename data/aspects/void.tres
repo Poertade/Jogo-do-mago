@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_lrd5r"]
+
+[resource]
+script = ExtResource("1_lrd5r")
+id = &"void"
+name_key = "ASPECT_VOID"
+meaning_key = "ASPECT_VOID_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"air", &"entropy"])
+color = Color(0.5411765, 0.5411765, 0.627451, 1)

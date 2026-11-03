@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Resource" path="res://data/scannables/portal.tres" id="scan_portal"]
 [ext_resource type="Script" path="res://scripts/game/portal.gd" id="p_script"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="1"]
 [ext_resource type="Material" path="res://assets/materials/stone_wall.tres" id="2"]
@@ -28,6 +29,7 @@ size = Vector3(2.4, 3.6, 0.2)
 
 [node name="Portal" type="Node3D"]
 script = ExtResource("p_script")
+scannable = ExtResource("scan_portal")
 prompt_key = "PROMPT_PORTAL"
 target_room = &"stone_chamber"
 target_entrance = &"from_portal"

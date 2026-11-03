@@ -15,7 +15,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_bank = Content.db.sound_bank
 	_ambience = AudioStreamPlayer.new()
-	_ambience.volume_db = -4.0
+	_ambience.volume_db = -8.0
 	add_child(_ambience)
 	Game.scan_completed.connect(_on_scan_completed)
 	Game.page_studied.connect(func(_page): play(&"page_studied"))
@@ -50,6 +50,15 @@ func play_at(event: StringName, position: Vector3, parent: Node) -> void:
 	player.global_position = position
 	player.finished.connect(player.queue_free)
 	player.play()
+
+
+## Abaixa o som até sumir e então o apaga. Cortar um som de uma vez faz um estalo.
+func fade_out(player: AudioStreamPlayer, seconds := 0.08) -> void:
+	if not is_instance_valid(player):
+		return
+	var tween := player.create_tween()
+	tween.tween_property(player, "volume_db", -60.0, seconds)
+	tween.tween_callback(player.queue_free)
 
 
 ## Começa o som de ambiente da sala (ou silencia, se `stream` for null).

@@ -5,6 +5,7 @@
 
 [sub_resource type="Resource" id="Resource_0m72d"]
 script = ExtResource("1_a0738")
+type = &"damage_multiplier"
 element = &"fire"
 value = 1.2
 
@@ -13,6 +14,9 @@ script = ExtResource("2_6ntp5")
 id = &"fire_comprehension"
 name_key = "PAGE_FIRE_COMPREHENSION"
 description_key = "PAGE_FIRE_COMPREHENSION_DESC"
-cost = 3
-required_aspects = Array[StringName]([&"fire"])
+cost = Dictionary[StringName, int]({
+&"energy": 2,
+&"fire": 4
+})
+required_aspects = Array[StringName]([&"fire", &"energy"])
 effects = Array[ExtResource("1_a0738")]([SubResource("Resource_0m72d")])

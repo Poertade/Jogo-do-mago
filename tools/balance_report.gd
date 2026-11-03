@@ -39,15 +39,18 @@ func _initialize() -> void:
 		print("Velocidade: inimigo %.1f m/s, jogador andando %.1f m/s e correndo %.1f m/s" % [
 			enemy.move_speed, player.walk_speed, player.run_speed])
 
-	var available := 0
-	var aspects_seen: Dictionary = {}
-	for scannable: ScannableData in db.scannables.values():
-		for aspect_id in scannable.aspects:
-			aspects_seen[aspect_id] = true
-	available = aspects_seen.size() * db.research_rules.points_per_new_aspect + db.scannables.size() * db.research_rules.points_per_new_target
-	var total_cost := 0
-	for page: ResearchPageData in db.pages.values():
-		total_cost += page.cost
+	# Pesquisa: pontos que cada aspecto rende escaneando tudo uma vez (só os valores dos objetos;
+	# a ordem de descoberta e as combinações ficam por conta do jogador).
+	var rules := db.research_rules
+	var totals: Dictionary = {}
+	for target: ScannableData in db.scannables.values() + db.enemies.values():
+		for aspect_id in target.aspects:
+			totals[aspect_id] = totals.get(aspect_id, 0) + target.aspects[aspect_id] * rules.points_per_amount
 	print("\n=== Pesquisa ===")
-	print("Pontos disponíveis só na escola: %d | Custo de todas as páginas: %d" % [available, total_cost])
+	print("Aspectos: %d (%d compostos) | Escaneáveis: %d | %d ponto(s) por unidade de aspecto" % [
+		db.aspects.size(), db.compounds_by_tier().size(), db.scannables.size() + db.enemies.size(), rules.points_per_amount])
+	for aspect_id in totals:
+		print("  %s: %d pontos escaneando tudo (nível %d)" % [aspect_id, totals[aspect_id], db.tier(aspect_id)])
+	for page: ResearchPageData in db.pages.values():
+		print("Página %s custa %s" % [page.id, page.cost])
 	quit()

@@ -58,22 +58,22 @@ shader_parameter/emission_color = Color(1, 0.5412, 0.2275, 1)
 shader_parameter/emission_energy = 2.5
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_104"]
-top_radius = 0.007
-bottom_radius = 0.013
-height = 0.36
+top_radius = 0.016
+bottom_radius = 0.022
+height = 0.4
 radial_segments = 6
 rings = 1
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_105"]
-top_radius = 0.016
-bottom_radius = 0.016
-height = 0.03
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.04
 radial_segments = 6
 rings = 0
 
 [sub_resource type="SphereMesh" id="SphereMesh_106"]
-radius = 0.02
-height = 0.04
+radius = 0.032
+height = 0.064
 radial_segments = 6
 rings = 3
 
@@ -128,13 +128,18 @@ transform = Transform3D(0.9903, -0.1344, 0.036, 0, 0.2588, 0.9659, -0.1392, -0.9
 mesh = SubResource("CylinderMesh_104")
 material_override = SubResource("Mat_101")
 
-[node name="Ferrule" type="MeshInstance3D" parent="Head/Camera3D/WandView/Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+[node name="CapTip" type="MeshInstance3D" parent="Head/Camera3D/WandView/Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0)
+mesh = SubResource("CylinderMesh_105")
+material_override = SubResource("Mat_102")
+
+[node name="CapBase" type="MeshInstance3D" parent="Head/Camera3D/WandView/Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19, 0)
 mesh = SubResource("CylinderMesh_105")
 material_override = SubResource("Mat_102")
 
 [node name="Tip" type="Node3D" parent="Head/Camera3D/WandView"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0255, 0.0492, -0.1817)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0316, 0.0608, -0.2248)
 
 [node name="Glow" type="MeshInstance3D" parent="Head/Camera3D/WandView/Tip"]
 mesh = SubResource("SphereMesh_106")

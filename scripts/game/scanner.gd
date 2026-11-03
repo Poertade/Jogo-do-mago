@@ -40,5 +40,5 @@ func _update_hum(scanning: bool) -> void:
 	if scanning and not is_instance_valid(_hum):
 		_hum = Audio.play(&"scan_hum")
 	elif not scanning and is_instance_valid(_hum):
-		_hum.queue_free()
+		Audio.fade_out(_hum)
 		_hum = null

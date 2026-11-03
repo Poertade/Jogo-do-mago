@@ -11,6 +11,8 @@ signal screen_requested(screen: StringName)
 signal scan_completed(result: ScanResult)
 ## Uma página foi estudada.
 signal page_studied(page: ResearchPageData)
+## Dois aspectos foram combinados na Mesa (`discovered`: o composto era novo).
+signal aspect_combined(compound: AspectData, discovered: bool)
 ## Um aviso curto para o HUD.
 signal message_requested(text: String, color: Color)
 ## Um portal ou saída pediu para ir a outra sala.
@@ -56,11 +58,27 @@ func message(text: String, color := Color(0.9, 0.86, 0.78)) -> void:
 	message_requested.emit(text, color)
 
 
+## Alvos que a Lente analisou sem conseguir escanear (por falta de um aspecto composto) nesta
+## sessão: o HUD mostra a composição deles, com "?" no que falta descobrir.
+var analyzed_targets: Dictionary[StringName, bool] = {}
+
+
 ## Registra um escaneamento completo e avisa a interface.
 func complete_scan(target: ScannableData) -> ScanResult:
-	var result := knowledge.register_scan(target, Content.db.research_rules)
+	var result := knowledge.register_scan(target, Content.db.aspects, Content.db.research_rules)
+	if result.blocked:
+		analyzed_targets[target.id] = true
 	scan_completed.emit(result)
 	return result
+
+
+## Combina os pais de um aspecto composto na Mesa de Pesquisa.
+func combine(compound: AspectData) -> bool:
+	var was_known := knowledge.knows_aspect(compound.id)
+	if not knowledge.combine(compound, Content.db.research_rules):
+		return false
+	aspect_combined.emit(compound, not was_known)
+	return true
 
 
 ## Estuda uma página, se possível, e avisa a interface.

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_ob1i0"]
+
+[resource]
+script = ExtResource("1_ob1i0")
+id = &"cold_crystal"
+name_key = "OBJ_COLD_CRYSTAL"
+aspects = Dictionary[StringName, int]({
+&"crystal": 2,
+&"light": 1
+})

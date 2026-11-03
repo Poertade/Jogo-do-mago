@@ -7,7 +7,7 @@ const DAMAGE_MULTIPLIER := &"damage_multiplier"
 const TYPES: Array[StringName] = [DAMAGE_MULTIPLIER]
 
 ## Tipo do efeito. "damage_multiplier": multiplica o dano de um elemento.
-@export var type: StringName = DAMAGE_MULTIPLIER
+@export var type: StringName
 ## Elemento afetado (ex.: fire).
 @export var element: StringName
 ## Valor do efeito (ex.: 1.2 = +20%).

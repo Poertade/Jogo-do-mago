@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_bxgro"]
+
+[resource]
+script = ExtResource("1_bxgro")
+id = &"carved_stone"
+name_key = "OBJ_CARVED_STONE"
+aspects = Dictionary[StringName, int]({
+&"earth": 2,
+&"order": 1
+})

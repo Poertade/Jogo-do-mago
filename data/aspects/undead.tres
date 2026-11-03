@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_mmasp"]
+
+[resource]
+script = ExtResource("1_mmasp")
+id = &"undead"
+name_key = "ASPECT_UNDEAD"
+meaning_key = "ASPECT_UNDEAD_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"motion", &"death"])
+color = Color(0.3529412, 0.4392157, 0.28235295, 1)

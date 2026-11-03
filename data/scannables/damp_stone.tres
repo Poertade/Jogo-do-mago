@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_txt78"]
+
+[resource]
+script = ExtResource("1_txt78")
+id = &"damp_stone"
+name_key = "OBJ_DAMP_STONE"
+aspects = Dictionary[StringName, int]({
+&"earth": 2,
+&"water": 1
+})

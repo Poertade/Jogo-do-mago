@@ -11,10 +11,14 @@ func get_scannable() -> ScannableData:
 	return data
 
 
-## Procura em `node` ou nos seus pais algo escaneável (objeto ou criatura).
+## Procura em `node` ou nos seus pais algo escaneável (objeto ou criatura). Um bloco sem
+## dados de escaneamento (por exemplo, a perna de uma mesa) deixa a busca subir até o objeto
+## inteiro (a Mesa de Pesquisa).
 static func find_on(node: Node) -> ScannableData:
 	while node != null:
 		if node.has_method(&"get_scannable"):
-			return node.get_scannable()
+			var data: ScannableData = node.get_scannable()
+			if data != null:
+				return data
 		node = node.get_parent()
 	return null

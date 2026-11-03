@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_co02n"]
+
+[resource]
+script = ExtResource("1_co02n")
+id = &"wind_chime"
+name_key = "OBJ_WIND_CHIME"
+aspects = Dictionary[StringName, int]({
+&"air": 3,
+&"order": 1
+})

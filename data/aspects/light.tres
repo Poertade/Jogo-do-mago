@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_awape"]
+
+[resource]
+script = ExtResource("1_awape")
+id = &"light"
+name_key = "ASPECT_LIGHT"
+meaning_key = "ASPECT_LIGHT_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"air", &"fire"])
+color = Color(1, 0.9490196, 0.627451, 1)

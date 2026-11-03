@@ -1,0 +1,123 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/wind_chime.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+[ext_resource type="Script" path="res://scripts/game/sway.gd" id="4"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.2275, 0.1882, 0.1569, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.6902, 0.5412, 0.2353, 1)
+shader_parameter/emission_color = Color(0.6902, 0.5412, 0.2353, 1)
+shader_parameter/emission_energy = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(0.008, 1.5, 0.008)
+
+[sub_resource type="TorusMesh" id="TorusMesh_4"]
+inner_radius = 0.09
+outer_radius = 0.11
+rings = 10
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.22
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.4
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.28
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.46
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_9"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.34
+radial_segments = 5
+rings = 0
+
+[sub_resource type="SphereMesh" id="SphereMesh_10"]
+radius = 0.03
+height = 0.06
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxShape3D" id="Box_11"]
+size = Vector3(0.34, 0.5, 0.34)
+
+[node name="WindChime" type="StaticBody3D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="String" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="Swing" type="Node3D" parent="."]
+script = ExtResource("4")
+
+[node name="Ring" type="MeshInstance3D" parent="Swing"]
+mesh = SubResource("TorusMesh_4")
+material_override = SubResource("Mat_2")
+
+[node name="Tube1" type="MeshInstance3D" parent="Swing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, -0.15, 0)
+mesh = SubResource("CylinderMesh_5")
+material_override = SubResource("Mat_2")
+
+[node name="Tube2" type="MeshInstance3D" parent="Swing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0309, -0.24, 0.0951)
+mesh = SubResource("CylinderMesh_6")
+material_override = SubResource("Mat_2")
+
+[node name="Tube3" type="MeshInstance3D" parent="Swing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0809, -0.18, 0.0588)
+mesh = SubResource("CylinderMesh_7")
+material_override = SubResource("Mat_2")
+
+[node name="Tube4" type="MeshInstance3D" parent="Swing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0809, -0.27, -0.0588)
+mesh = SubResource("CylinderMesh_8")
+material_override = SubResource("Mat_2")
+
+[node name="Tube5" type="MeshInstance3D" parent="Swing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0309, -0.21, -0.0951)
+mesh = SubResource("CylinderMesh_9")
+material_override = SubResource("Mat_2")
+
+[node name="Clapper" type="MeshInstance3D" parent="Swing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = SubResource("SphereMesh_10")
+material_override = SubResource("Mat_2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+shape = SubResource("Box_11")

@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Resource" path="res://data/scannables/bronze_plaque.tres" id="scan_bronze_plaque"]
 [ext_resource type="Script" path="res://scripts/game/plaque.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
 [ext_resource type="Material" path="res://assets/materials/stone_wall.tres" id="3"]
@@ -17,6 +18,7 @@ size = Vector3(0.46, 0.03, 0.32)
 
 [node name="Plaque" type="Node3D"]
 script = ExtResource("1")
+scannable = ExtResource("scan_bronze_plaque")
 prompt_key = "PROMPT_READ"
 title_key = "NOTE_PORTAL_TITLE"
 body_key = "NOTE_PORTAL_BODY"
@@ -28,6 +30,6 @@ size = Vector3(0.5, 1, 0.35)
 material = ExtResource("3")
 
 [node name="Plate" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 1.08, 0.02)
+transform = Transform3D(1, 0, 0, 0, 0.8192, -0.5736, 0, 0.5736, 0.8192, 0, 1.08, 0.02)
 mesh = SubResource("BoxMesh_2")
 material_override = SubResource("Mat_1")

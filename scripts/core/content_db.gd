@@ -110,12 +110,51 @@ func pages_by_id(ids: Array[StringName]) -> Array[ResearchPageData]:
 	return result
 
 
-## Páginas em ordem de custo, para a Mesa de Pesquisa.
+## Páginas em ordem de custo total, para a Mesa de Pesquisa.
 func sorted_pages() -> Array[ResearchPageData]:
 	var result: Array[ResearchPageData] = []
 	result.assign(pages.values())
-	result.sort_custom(func(a, b): return a.cost < b.cost or (a.cost == b.cost and a.id < b.id))
+	result.sort_custom(_page_before)
 	return result
+
+
+func _page_before(a: ResearchPageData, b: ResearchPageData) -> bool:
+	var cost_a := _total(a.cost)
+	var cost_b := _total(b.cost)
+	return cost_a < cost_b or (cost_a == cost_b and a.id < b.id)
+
+
+## "Nível" de um aspecto: 0 para primais; para compostos, 1 + o maior nível dos pais.
+func tier(aspect_id: StringName) -> int:
+	var aspect: AspectData = aspects.get(aspect_id)
+	if aspect == null or not aspect.is_compound():
+		return 0
+	var highest := 0
+	for parent in aspect.parents:
+		if parent != aspect_id:
+			highest = maxi(highest, tier(parent))
+	return highest + 1
+
+
+## Aspectos compostos em ordem de nível (primeiro os mais simples), para a Mesa de Pesquisa.
+func compounds_by_tier() -> Array[AspectData]:
+	var result: Array[AspectData] = []
+	for aspect: AspectData in aspects.values():
+		if aspect.is_compound():
+			result.append(aspect)
+	result.sort_custom(_aspect_before)
+	return result
+
+
+func _aspect_before(a: AspectData, b: AspectData) -> bool:
+	return tier(a.id) < tier(b.id) or (tier(a.id) == tier(b.id) and a.id < b.id)
+
+
+static func _total(amounts: Dictionary) -> int:
+	var total := 0
+	for key in amounts:
+		total += amounts[key]
+	return total
 
 
 # --- Verificação ---
@@ -128,6 +167,9 @@ func validate() -> void:
 		_validate_player()
 	if research_rules == null:
 		errors.append("Faltam as regras de pesquisa (data/research/rules.tres).")
+	elif research_rules.scan_duration <= 0.0 or research_rules.points_per_amount <= 0 \
+			or research_rules.combine_cost <= 0 or research_rules.combine_yield <= 0:
+		errors.append("rules.tres: tempos, pontos e custos de combinação precisam ser maiores que zero.")
 	if sound_bank == null:
 		errors.append("Falta o banco de sons (data/audio/sound_bank.tres).")
 	if settings_defaults == null:
@@ -239,17 +281,17 @@ func _validate_aspect_amounts(owner: String, amounts: Dictionary) -> void:
 
 
 func _validate_page(page: ResearchPageData) -> void:
-	if page.cost < 0:
-		errors.append("Página '%s': custo negativo." % page.id)
+	var owner := "Página '%s'" % page.id
+	_validate_aspect_amounts(owner, page.cost)
 	for required in page.required_pages:
 		if not required in pages:
-			errors.append("Página '%s': página exigida '%s' não existe." % [page.id, required])
+			errors.append("%s: página exigida '%s' não existe." % [owner, required])
 	for required in page.required_aspects:
 		if not required in aspects:
-			errors.append("Página '%s': aspecto exigido '%s' não existe." % [page.id, required])
+			errors.append("%s: aspecto exigido '%s' não existe." % [owner, required])
 	for effect in page.effects:
 		if effect == null or not effect.type in PageEffect.TYPES:
-			errors.append("Página '%s': efeito de tipo desconhecido." % page.id)
+			errors.append("%s: efeito de tipo desconhecido." % owner)
 
 
 # --- Leitura de arquivos ---

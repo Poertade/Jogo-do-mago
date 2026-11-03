@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/game/scannable_group.gd" id="group_script"]
+[ext_resource type="Resource" path="res://data/scannables/bookshelf.tres" id="scan_bookshelf"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="1"]
 [ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="2"]
 [ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
@@ -143,6 +145,8 @@ size = Vector3(0.1877, 0.3767, 0.304)
 size = Vector3(0.0868, 0.3622, 0.2559)
 
 [node name="Bookshelf" type="Node3D"]
+script = ExtResource("group_script")
+data = ExtResource("scan_bookshelf")
 
 [node name="SideL" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.2, 0)

@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Resource" path="res://data/scannables/research_table.tres" id="scan_research_table"]
 [ext_resource type="Script" path="res://scripts/game/research_table.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
 [ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="3"]
@@ -25,6 +26,7 @@ rings = 0
 
 [node name="ResearchTable" type="Node3D"]
 script = ExtResource("1")
+scannable = ExtResource("scan_research_table")
 prompt_key = "PROMPT_RESEARCH_TABLE"
 
 [node name="Top" type="StaticBody3D" parent="."]

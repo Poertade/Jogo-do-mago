@@ -12,7 +12,7 @@ OBJ_FEATHER,Pena de escrever
 OBJ_LEDGER,Livro de registros
 OBJ_OLD_BONE,Osso antigo
 PAGE_FIRE_COMPREHENSION,Compreensão de {fire}
-PAGE_FIRE_COMPREHENSION_DESC,"O fogo deixa de ser mistério: o dano de {fire} aumenta 20%."
+PAGE_FIRE_COMPREHENSION_DESC,"Entender como {fire} se alimenta de {energy}: o dano de {fire} aumenta 20%."
 PROMPT_RESEARCH_TABLE,Estudar na Mesa de Pesquisa
 WAND_APPRENTICE,Varinha de aprendiz
 FOCUS_FIRE,Focus de Fogo
@@ -25,3 +25,40 @@ PROMPT_READ,Ler
 NOTE_PORTAL_TITLE,"Placa de bronze, gasta pelo tempo"
 NOTE_PORTAL_BODY,"Sob este colégio jazem as ruínas da Primeira Escola, engolida pela terra com seus mestres, alunos e livros. Este portal é a única passagem estável até elas.\n\nLá embaixo, o saber apodrecido ganhou corpo, e os antigos alunos ainda vagam pelos corredores.\n\nO portal está ancorado ao Salão de Estudos: quem cair lá embaixo desperta aqui em cima, trazendo apenas o que aprendeu. Estude. Catalogue. Volte."
 MSG_AWAKEN,"Você desperta no Salão de Estudos. O corpo dói, mas as anotações continuam com você."
+ASPECT_LIGHT_MEANING,luz
+ASPECT_MOTION_MEANING,movimento
+ASPECT_VOID_MEANING,vazio
+ASPECT_ENERGY_MEANING,energia
+ASPECT_LIFE_MEANING,vida
+ASPECT_CRYSTAL_MEANING,cristal
+ASPECT_PLANT_MEANING,planta
+ASPECT_DEATH_MEANING,morte
+ASPECT_MAGIC_MEANING,magia
+ASPECT_METAL_MEANING,metal
+ASPECT_TREE_MEANING,árvore
+ASPECT_SOUL_MEANING,espírito
+ASPECT_UNDEAD_MEANING,morto-vivo
+ASPECT_MIND_MEANING,conhecimento
+ASPECT_TRAVEL_MEANING,jornada
+OBJ_CARVED_STONE,Pedra lavrada
+OBJ_STONE_SLABS,Lajes de pedra
+OBJ_WORN_RUG,Tapete gasto
+OBJ_WIND_CHIME,Carrilhão de vento
+OBJ_PLANKS,Tábuas de madeira
+OBJ_DARK_TIMBER,Madeira escura
+OBJ_BOOKSHELF,Estante de livros
+OBJ_RESEARCH_TABLE,Mesa de Pesquisa
+OBJ_VIS_NODE,{TERM_NODE}
+OBJ_SCONCE,Arandela
+OBJ_MOON_WINDOW,Janela de luar
+OBJ_PORTAL,Portal
+OBJ_COLD_CRYSTAL,Cristal frio
+OBJ_BRONZE_PLAQUE,Placa de bronze
+OBJ_DAMP_STONE,Pedra úmida
+OBJ_RUBBLE,Entulho
+OBJ_ROTTEN_DESK,Carteira podre
+OBJ_IRON_BARS,Grade de ferro
+OBJ_TORCH,Tocha
+OBJ_ARRIVAL_GLYPH,Círculo de chegada
+OBJ_PALE_LIGHT,Luz pálida
+PROMPT_DRAIN_VIS,Segure para drenar {TERM_VIS} de {fire}

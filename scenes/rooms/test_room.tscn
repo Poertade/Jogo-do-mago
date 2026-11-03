@@ -1,5 +1,9 @@
 [gd_scene format=3]
 
+[ext_resource type="Resource" path="res://data/scannables/stone_slabs.tres" id="scan_stone_slabs"]
+[ext_resource type="Resource" path="res://data/scannables/carved_stone.tres" id="scan_carved_stone"]
+[ext_resource type="Resource" path="res://data/scannables/planks.tres" id="scan_planks"]
+[ext_resource type="Resource" path="res://data/scannables/torch.tres" id="scan_torch"]
 [ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
 [ext_resource type="Material" path="res://assets/materials/stone_floor.tres" id="2"]
 [ext_resource type="Material" path="res://assets/materials/stone_ceiling.tres" id="3"]
@@ -19,108 +23,126 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 script = ExtResource("6")
 size = Vector3(13, 0.2, 13)
 material = ExtResource("2")
+scannable = ExtResource("scan_stone_slabs")
 
 [node name="Ceiling" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
 script = ExtResource("6")
 size = Vector3(13, 0.2, 13)
 material = ExtResource("3")
+scannable = ExtResource("scan_stone_slabs")
 
 [node name="WallNorth" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, -6.2)
 script = ExtResource("6")
 size = Vector3(13, 3.5, 0.4)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="WallSouth" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 6.2)
 script = ExtResource("6")
 size = Vector3(13, 3.5, 0.4)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="WallWest" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 1.75, 0)
 script = ExtResource("6")
 size = Vector3(0.4, 3.5, 12)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="WallEast" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 1.75, 0)
 script = ExtResource("6")
 size = Vector3(0.4, 3.5, 12)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="Pillar1" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.75, -1.5)
 script = ExtResource("6")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="Pillar2" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.75, -1.5)
 script = ExtResource("6")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="Pillar3" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.75, 2)
 script = ExtResource("6")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="Pillar4" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.75, 2)
 script = ExtResource("6")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="Platform" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.5, -4.25)
 script = ExtResource("6")
 size = Vector3(3, 1, 3.5)
 material = ExtResource("2")
+scannable = ExtResource("scan_stone_slabs")
 
 [node name="Ramp" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 0.9487, -0.3162, 0, 0.3162, 0.9487, 5.25, 0.4051, -1.0316)
 script = ExtResource("6")
 size = Vector3(1.5, 0.2, 3.172)
 material = ExtResource("5")
+scannable = ExtResource("scan_planks")
 
 [node name="Pedestal" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1.45, -5)
 script = ExtResource("6")
 size = Vector3(0.5, 0.9, 0.5)
 material = ExtResource("4")
+scannable = ExtResource("scan_carved_stone")
 
 [node name="Crate1" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.4, 4.3)
 script = ExtResource("6")
 size = Vector3(0.8, 0.8, 0.8)
 material = ExtResource("5")
+scannable = ExtResource("scan_planks")
 
 [node name="Crate2" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 0.4, 4.8)
 script = ExtResource("6")
 size = Vector3(0.8, 0.8, 0.8)
 material = ExtResource("5")
+scannable = ExtResource("scan_planks")
 
 [node name="Crate3" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 1.2, 4.6)
 script = ExtResource("6")
 size = Vector3(0.8, 0.8, 0.8)
 material = ExtResource("5")
+scannable = ExtResource("scan_planks")
 
 [node name="TorchWest" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 1.9, -2)
 script = ExtResource("6")
 size = Vector3(0.15, 0.5, 0.15)
 material = ExtResource("5")
+scannable = ExtResource("scan_torch")
 
 [node name="TorchEast" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 1.9, 2)
 script = ExtResource("6")
 size = Vector3(0.15, 0.5, 0.15)
 material = ExtResource("5")
+scannable = ExtResource("scan_torch")
 
 [node name="Lights" type="Node3D" parent="."]
 

@@ -1,5 +1,13 @@
 [gd_scene format=3]
 
+[ext_resource type="Resource" path="res://data/scannables/pale_light.tres" id="scan_pale_light"]
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="scannable_prop"]
+[ext_resource type="Resource" path="res://data/scannables/arrival_glyph.tres" id="scan_arrival_glyph"]
+[ext_resource type="Resource" path="res://data/scannables/damp_stone.tres" id="scan_damp_stone"]
+[ext_resource type="Resource" path="res://data/scannables/rubble.tres" id="scan_rubble"]
+[ext_resource type="Resource" path="res://data/scannables/rotten_desk.tres" id="scan_rotten_desk"]
+[ext_resource type="Resource" path="res://data/scannables/iron_bars.tres" id="scan_iron_bars"]
+[ext_resource type="Resource" path="res://data/scannables/torch.tres" id="scan_torch"]
 [ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
 [ext_resource type="Material" path="res://assets/materials/dungeon_floor.tres" id="3"]
@@ -56,6 +64,9 @@ shader_parameter/emission_energy = 0.7
 [sub_resource type="BoxMesh" id="BoxMesh_9"]
 size = Vector3(1.6, 0.02, 1.6)
 
+[sub_resource type="BoxShape3D" id="Shape_ArrivalGlyph"]
+size = Vector3(1.6, 0.06, 1.6)
+
 [node name="StoneChamber" type="Node3D"]
 script = ExtResource("1")
 
@@ -66,132 +77,154 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 script = ExtResource("2")
 size = Vector3(10.8, 0.2, 12.8)
 material = ExtResource("3")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="Ceiling" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
 script = ExtResource("2")
 size = Vector3(10.8, 0.2, 12.8)
 material = ExtResource("4")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="WallWest" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 1.75, 0)
 script = ExtResource("2")
 size = Vector3(0.4, 3.5, 12.8)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="WallEast" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.75, 0)
 script = ExtResource("2")
 size = Vector3(0.4, 3.5, 12.8)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="WallSouth" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 6.2)
 script = ExtResource("2")
 size = Vector3(10.8, 3.5, 0.4)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="WallNorthLeft" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 1.75, -6.2)
 script = ExtResource("2")
 size = Vector3(4.4, 3.5, 0.4)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="WallNorthRight" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.75, -6.2)
 script = ExtResource("2")
 size = Vector3(4.4, 3.5, 0.4)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="WallNorthLintel" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05, -6.2)
 script = ExtResource("2")
 size = Vector3(2, 0.9, 0.4)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="PassageFloor" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -7.4)
 script = ExtResource("2")
 size = Vector3(2, 0.2, 2)
 material = ExtResource("3")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="PassageBack" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -8.6)
 script = ExtResource("2")
 size = Vector3(2.8, 2.8, 0.4)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="PassageLeft" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1.4, -7.4)
 script = ExtResource("2")
 size = Vector3(0.4, 2.8, 2)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="PassageRight" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.4, -7.4)
 script = ExtResource("2")
 size = Vector3(0.4, 2.8, 2)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="PassageTop" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -7.4)
 script = ExtResource("2")
 size = Vector3(2.8, 0.2, 2)
 material = ExtResource("4")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="Pillar1" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 1.75, -2)
 script = ExtResource("2")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="Pillar2" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 1.75, -2)
 script = ExtResource("2")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="Pillar3" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 1.75, 2.6)
 script = ExtResource("2")
 size = Vector3(0.6, 3.5, 0.6)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="BrokenPillar" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.9945, -0.1045, 0, 0.1045, 0.9945, 0, 0, 0, 1, 2.6, 0.55, 2.6)
 script = ExtResource("2")
 size = Vector3(0.6, 1.1, 0.6)
 material = ExtResource("5")
+scannable = ExtResource("scan_damp_stone")
 
 [node name="Rubble1" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.8576, -0.1205, 0.5, 0.1392, 0.9903, 0, -0.4951, 0.0696, 0.866, 3.3, 0.17, 3.4)
 script = ExtResource("2")
 size = Vector3(0.7, 0.35, 0.5)
 material = ExtResource("5")
+scannable = ExtResource("scan_rubble")
 
 [node name="Rubble2" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.9254, 0.1632, -0.342, -0.1736, 0.9848, 0, 0.3368, 0.0594, 0.9397, 2, 0.12, 3.6)
 script = ExtResource("2")
 size = Vector3(0.4, 0.25, 0.4)
 material = ExtResource("5")
+scannable = ExtResource("scan_rubble")
 
 [node name="Rubble3" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.9659, 0, 0.2588, 0, 1, 0, -0.2588, 0, 0.9659, -4.2, 0.15, -4.8)
 script = ExtResource("2")
 size = Vector3(0.9, 0.3, 0.6)
 material = ExtResource("5")
+scannable = ExtResource("scan_rubble")
 
 [node name="OldDesk" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.342, 0, 0.9397, 0, 1, 0, -0.9397, 0, 0.342, -3.8, 0.35, 0.4)
 script = ExtResource("2")
 size = Vector3(1.4, 0.7, 0.6)
 material = ExtResource("6")
+scannable = ExtResource("scan_rotten_desk")
 
 [node name="OldDeskFallen" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.9397, 0.3368, 0.0594, 0, 0.1736, -0.9848, -0.342, 0.9254, 0.1632, 3.9, 0.35, -0.8)
 script = ExtResource("2")
 size = Vector3(1.4, 0.6, 0.7)
 material = ExtResource("6")
+scannable = ExtResource("scan_rotten_desk")
 
 [node name="Exit" type="Node3D" parent="."]
 
@@ -203,6 +236,7 @@ locked_prompt_key = "PROMPT_EXIT_LOCKED"
 target_room = &"school"
 target_entrance = &"from_dungeon"
 requires_clear = true
+scannable = ExtResource("scan_pale_light")
 barrier = NodePath("Bars")
 
 [node name="Bars" type="Node3D" parent="Exit/ExitPoint"]
@@ -212,36 +246,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.3, 0)
 script = ExtResource("2")
 size = Vector3(0.08, 2.6, 0.08)
 material = ExtResource("5")
+scannable = ExtResource("scan_iron_bars")
 
 [node name="Bar2" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 1.3, 0)
 script = ExtResource("2")
 size = Vector3(0.08, 2.6, 0.08)
 material = ExtResource("5")
+scannable = ExtResource("scan_iron_bars")
 
 [node name="Bar3" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 script = ExtResource("2")
 size = Vector3(0.08, 2.6, 0.08)
 material = ExtResource("5")
+scannable = ExtResource("scan_iron_bars")
 
 [node name="Bar4" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1.3, 0)
 script = ExtResource("2")
 size = Vector3(0.08, 2.6, 0.08)
 material = ExtResource("5")
+scannable = ExtResource("scan_iron_bars")
 
 [node name="Bar5" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.3, 0)
 script = ExtResource("2")
 size = Vector3(0.08, 2.6, 0.08)
 material = ExtResource("5")
+scannable = ExtResource("scan_iron_bars")
 
 [node name="BarCross" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 script = ExtResource("2")
 size = Vector3(2, 0.08, 0.08)
 material = ExtResource("5")
+scannable = ExtResource("scan_iron_bars")
 
 [node name="Doorway" type="StaticBody3D" parent="Exit/ExitPoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -1)
@@ -269,6 +309,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.85, 1.9, -3)
 script = ExtResource("2")
 size = Vector3(0.12, 0.4, 0.12)
 material = ExtResource("6")
+scannable = ExtResource("scan_torch")
 
 [node name="TorchFlame1" type="MeshInstance3D" parent="Lights"]
 transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, -4.85, 2.17, -3)
@@ -289,6 +330,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1.9, 1.5)
 script = ExtResource("2")
 size = Vector3(0.12, 0.4, 0.12)
 material = ExtResource("6")
+scannable = ExtResource("scan_torch")
 
 [node name="TorchFlame2" type="MeshInstance3D" parent="Lights"]
 transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 4.85, 2.17, 1.5)
@@ -304,10 +346,19 @@ omni_attenuation = 1.2
 script = ExtResource("9")
 flicker_amount = 0.3
 
-[node name="ArrivalGlyph" type="MeshInstance3D" parent="Lights"]
+[node name="ArrivalGlyph" type="StaticBody3D" parent="Lights"]
 transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.01, 4.6)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("scannable_prop")
+data = ExtResource("scan_arrival_glyph")
+
+[node name="Mesh" type="MeshInstance3D" parent="Lights/ArrivalGlyph"]
 mesh = SubResource("BoxMesh_9")
 material_override = SubResource("Mat_8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lights/ArrivalGlyph"]
+shape = SubResource("Shape_ArrivalGlyph")
 
 [node name="ArrivalLight" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 4.6)

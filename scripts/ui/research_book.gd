@@ -10,22 +10,29 @@ extends MenuLayer
 
 func _on_opened() -> void:
 	var knowledge := Game.knowledge
-	points_label.text = tr("UI_RESEARCH_POINTS") % knowledge.research_points
+	points_label.text = tr("UI_BOOK_DISCOVERED_COUNT") % [knowledge.discovered_aspects.size(), Content.db.aspects.size()]
 
+	# Aspectos: primeiro os primais, depois os compostos por nível, com pontos e receita.
 	_clear(aspects_list)
+	var ordered: Array[StringName] = []
 	for aspect_id in knowledge.discovered_aspects:
+		ordered.append(aspect_id)
+	ordered.sort_custom(func(a, b): return Content.db.tier(a) < Content.db.tier(b))
+	for aspect_id in ordered:
 		var aspect: AspectData = Content.db.aspects.get(aspect_id)
 		if aspect == null:
 			continue
-		var kind := tr("UI_ASPECT_KIND_COMPOUND") if aspect.is_compound() else tr("UI_ASPECT_KIND_PRIMAL")
-		_add_line(aspects_list, "%s  [color=#8a8a8a](%s, %s)[/color]" % [
-			Text.aspect_bbcode(aspect_id, Text.aspect_name(aspect_id)), tr(aspect.meaning_key), kind])
+		var line := "%s  [color=#c8b070]%d[/color]  [color=#8a8a8a](%s)[/color]" % [
+			Text.aspect_bbcode(aspect_id, Text.aspect_name(aspect_id)), knowledge.points(aspect_id), tr(aspect.meaning_key)]
+		if aspect.is_compound():
+			line += "\n   [color=#8a8a8a]= %s + %s[/color]" % [Text.aspect_name(aspect.parents[0]), Text.aspect_name(aspect.parents[1])]
+		_add_line(aspects_list, line)
 
 	_clear(scanned_list)
 	for target_id in knowledge.scanned_targets:
 		var target := Content.db.find_scannable(target_id)
 		if target != null:
-			_add_line(scanned_list, "%s\n   %s" % [tr(target.name_key), Text.aspect_amounts_bbcode(target.aspects)])
+			_add_line(scanned_list, "%s\n   %s" % [Text.target_name(target), Text.aspect_amounts_bbcode(target.aspects)])
 
 	_clear(pages_list)
 	for page in Content.db.pages_by_id(knowledge.studied_pages):
