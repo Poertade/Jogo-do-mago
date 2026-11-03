@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BookData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/book_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"beadle_log"
+name_key = "BOOK_BEADLE_LOG"
+text_key = "BOOK_BEADLE_LOG_TEXT"
+zone = &"school"

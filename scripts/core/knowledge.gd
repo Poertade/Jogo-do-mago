@@ -13,8 +13,10 @@ extends RefCounted
 ##   não rende nada.
 ## - Páginas de pesquisa são estudadas resolvendo a nota delas (ResearchNote): escrever um
 ##   aspecto num hexágono gasta pontos dele; apagar devolve.
-## - Alguns compostos têm receita escondida (`needs_recipe`): só se combinam depois de ler,
-##   na escola, o livro que a ensina.
+## - Para combinar um composto na Mesa, é preciso conhecer a receita dele. As receitas dos
+##   compostos mais simples (`free_recipes`) já vêm sabidas; as outras se aprendem lendo, na
+##   escola, os livros achados na Dungeon: cada livro ensina uma receita sorteada entre as que o
+##   jogador ainda não conhece. Quem já descobriu um aspecto conhece a receita dele.
 
 ## Emitido a cada mudança (quem grava o save escuta este sinal).
 signal changed
@@ -30,9 +32,11 @@ var scanned_targets: Array[StringName] = []
 var studied_pages: Array[StringName] = []
 ## Notas em andamento: página → {célula (Vector2i): aspecto escrito}.
 var notes: Dictionary[StringName, Dictionary] = {}
-## Livros já lidos e as receitas escondidas que eles ensinaram.
+## Livros já lidos e as receitas que eles ensinaram.
 var books_read: Array[StringName] = []
 var learned_recipes: Array[StringName] = []
+## Receitas que já vêm sabidas (definidas pelo jogo ao carregar; não vão para o save).
+var free_recipes: Array[StringName] = []
 
 
 func knows_aspect(aspect_id: StringName) -> bool:
@@ -44,23 +48,46 @@ func points(aspect_id: StringName) -> int:
 
 
 func knows_recipe(aspect_id: StringName) -> bool:
-	return aspect_id in learned_recipes
+	return aspect_id in learned_recipes or aspect_id in free_recipes or knows_aspect(aspect_id)
 
 
 func has_read(book_id: StringName) -> bool:
 	return book_id in books_read
 
 
-## Lê um livro: aprende as receitas dele. Devolve as receitas novas (vazio se já tinha lido).
-func read_book(book: BookData) -> Array[StringName]:
-	var learned: Array[StringName] = []
-	if has_read(book.id):
-		return learned
-	books_read.append(book.id)
-	for aspect_id in book.teaches:
-		if not knows_recipe(aspect_id):
-			learned_recipes.append(aspect_id)
-			learned.append(aspect_id)
+## Compostos cuja receita o jogador ainda não conhece (em ordem de identificador).
+## `aspects`: a tabela de todos os aspectos do jogo (ContentDB.aspects).
+func unknown_recipes(aspects: Dictionary) -> Array[StringName]:
+	var result: Array[StringName] = []
+	for aspect: AspectData in aspects.values():
+		if aspect.is_compound() and not knows_recipe(aspect.id):
+			result.append(aspect.id)
+	result.sort_custom(ContentDB.by_name)
+	return result
+
+
+## Escolhe a receita que um livro ensina: uma das que o jogador não conhece, de preferência uma
+## que ele já possa fazer (os dois pais descobertos); senão, uma de pais com receita conhecida;
+## senão, qualquer uma. `roll` (de 0 a 1) faz o sorteio. Vazio se ele já conhece todas.
+func pick_recipe_to_learn(aspects: Dictionary, roll: float) -> StringName:
+	var unknown := unknown_recipes(aspects)
+	if unknown.is_empty():
+		return &""
+	var ready := unknown.filter(func(id): return aspects[id].parents.all(func(p): return knows_aspect(p)))
+	var close := unknown.filter(func(id): return aspects[id].parents.all(
+		func(p): return knows_aspect(p) or knows_recipe(p) or not aspects.has(p) or not aspects[p].is_compound()))
+	var pool: Array = ready if not ready.is_empty() else (close if not close.is_empty() else unknown)
+	return pool[mini(int(clampf(roll, 0.0, 0.999) * pool.size()), pool.size() - 1)]
+
+
+## Lê um livro: aprende uma receita sorteada entre as que o jogador ainda não conhece.
+## Devolve o composto aprendido (vazio se não havia mais nada a aprender).
+func read_book(book: BookData, aspects: Dictionary, roll: float) -> StringName:
+	if not has_read(book.id):
+		books_read.append(book.id)
+	var learned := pick_recipe_to_learn(aspects, roll)
+	if learned != &"":
+		learned_recipes.append(learned)
 	changed.emit()
 	return learned
 
@@ -111,7 +138,7 @@ func register_scan(target: ScannableData, aspects: Dictionary, rules: ResearchRu
 func check_combine(compound: AspectData, rules: ResearchRules) -> CombineCheck:
 	if not compound.is_compound() or compound.parents.size() != 2:
 		return CombineCheck.NOT_COMPOUND
-	if compound.needs_recipe and not knows_recipe(compound.id):
+	if not knows_recipe(compound.id):
 		return CombineCheck.UNKNOWN_RECIPE
 	for parent in compound.parents:
 		if not knows_aspect(parent):

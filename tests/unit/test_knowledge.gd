@@ -48,8 +48,17 @@ func _page(id: StringName, required_pages: Array[StringName] = []) -> ResearchPa
 	return page
 
 
-func _knowing(ids: Array[StringName], amount := 5) -> Knowledge:
+## Conhecimento com todas as receitas destes testes sabidas (as receitas têm testes próprios).
+func _new() -> Knowledge:
 	var knowledge := Knowledge.new()
+	for aspect: AspectData in aspects.values():
+		if aspect.is_compound():
+			knowledge.free_recipes.append(aspect.id)
+	return knowledge
+
+
+func _knowing(ids: Array[StringName], amount := 5) -> Knowledge:
+	var knowledge := _new()
 	for id in ids:
 		knowledge.discovered_aspects.append(id)
 		knowledge.aspect_points[id] = amount
@@ -57,7 +66,7 @@ func _knowing(ids: Array[StringName], amount := 5) -> Knowledge:
 
 
 func test_first_scan_discovers_primals_and_gives_points_per_amount() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	var result := knowledge.register_scan(_target(&"candle", {&"fire": 3}), aspects, rules)
 	assert_false(result.blocked)
 	assert_true(result.new_target)
@@ -68,7 +77,7 @@ func test_first_scan_discovers_primals_and_gives_points_per_amount() -> void:
 
 
 func test_scanning_again_gives_nothing() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	var candle := _target(&"candle", {&"fire": 3})
 	knowledge.register_scan(candle, aspects, rules)
 	var again := knowledge.register_scan(candle, aspects, rules)
@@ -78,7 +87,7 @@ func test_scanning_again_gives_nothing() -> void:
 
 
 func test_unknown_compound_blocks_the_scan() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	var sprout := _target(&"sprout", {&"plant": 1, &"earth": 1})
 	var result := knowledge.register_scan(sprout, aspects, rules)
 	assert_true(result.blocked, "Herba não descoberta: conhecimento insuficiente")
@@ -89,7 +98,7 @@ func test_unknown_compound_blocks_the_scan() -> void:
 
 
 func test_combining_discovers_compound_and_spends_parents() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	knowledge.register_scan(_target(&"jug", {&"water": 2}), aspects, rules)
 	knowledge.register_scan(_target(&"pot", {&"earth": 2}), aspects, rules)
 	var life: AspectData = aspects[&"life"]
@@ -102,7 +111,7 @@ func test_combining_discovers_compound_and_spends_parents() -> void:
 
 
 func test_combining_needs_known_parents_and_points() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	var life: AspectData = aspects[&"life"]
 	assert_eq(knowledge.check_combine(life, rules), Knowledge.CombineCheck.UNKNOWN_PARENT)
 	knowledge.discovered_aspects.append_array([&"water", &"earth"])
@@ -112,7 +121,7 @@ func test_combining_needs_known_parents_and_points() -> void:
 
 
 func test_after_discovering_compound_the_scan_works() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	knowledge.register_scan(_target(&"jug", {&"water": 2}), aspects, rules)
 	knowledge.register_scan(_target(&"pot", {&"earth": 2}), aspects, rules)
 	var sprout := _target(&"sprout", {&"plant": 1, &"earth": 1})
@@ -125,7 +134,7 @@ func test_after_discovering_compound_the_scan_works() -> void:
 
 
 func test_changed_is_emitted_on_scan_and_combine_only() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	watch_signals(knowledge)
 	var jug := _target(&"jug", {&"water": 2})
 	knowledge.register_scan(jug, aspects, rules)
@@ -177,7 +186,7 @@ func test_study_needs_the_note_complete() -> void:
 
 
 func test_study_needs_known_note_aspects_and_pages() -> void:
-	var knowledge := Knowledge.new()
+	var knowledge := _new()
 	assert_eq(knowledge.check_study(_page(&"a"), aspects), Knowledge.StudyCheck.MISSING_ASPECT)
 	knowledge = _knowing([&"water", &"plant"])
 	assert_eq(knowledge.check_study(_page(&"b", [&"a"]), aspects), Knowledge.StudyCheck.MISSING_PAGE)

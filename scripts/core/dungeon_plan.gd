@@ -22,8 +22,8 @@ static func generate(rules: DungeonRules, rooms_by_slot: Dictionary, new_seed: i
 	for step in rules.steps:
 		var pool: Array[StringName] = []
 		pool.assign(rooms_by_slot.get(slot_key(step.zone, step.kind), []))
-		# Ordem fixa: o sorteio não pode depender da ordem em que os arquivos foram lidos.
-		pool.sort()
+		# Ordem fixa (alfabética): o sorteio não pode depender da ordem em que os arquivos foram lidos.
+		pool.sort_custom(ContentDB.by_name)
 		# Os números do corredor são sorteados sempre, para não mudar o resto da incursão.
 		var drop := rng.range_float(step.drop_min, step.drop_max)
 		# A rampa não passa de uns 25 graus: corredor pelo menos 2,2 vezes mais comprido que a descida.

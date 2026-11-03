@@ -516,7 +516,7 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** potes espalhados que se drenam como Nódulos; potes fixos de guardar Vis na escola (as outras duas opções da pergunta).
 - **Motivo:** escolha do usuário. Também resolve o orçamento: o caminho de 7 salas pede uns 39 disparos, e só a varinha e a fonte não bastam.
 
-### D064 · 2026-11-03 · Livros perdidos e receitas escondidas
+### D064 · 2026-11-03 · Livros perdidos e receitas escondidas (a parte das receitas foi refeita na D067)
 
 - **Escolha:**
   - **Aspectos novos:** Tenebrae (Vacuos + Lux), Limus (Victus + Aqua), Vitium (Praecantatio + Perditio) e Alienis (Vacuos + Tenebrae), as receitas do Thaumcraft 4. Todos com `needs_recipe`: a Mesa só combina os pais depois de ler o livro que ensina a receita.
@@ -557,6 +557,20 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Desvio local entre inimigos (avoidance):** mais custo; eles raramente se amontoam.
   - **Ataques à distância:** comportamento novo, fica para depois.
 - **Motivo:** pedido do usuário: "os inimigos dão pouco dano e são meio burrinhos, tente fazê-los dar a volta em obstáculos".
+
+### D067 · 2026-11-03 · Livros ensinam uma receita que o jogador não tem (refaz parte da D064)
+
+- **Escolha:** o usuário escolheu "receita sorteada, de qualquer composto".
+  - **Receitas:** todo composto precisa da receita para ser combinado na Mesa. As dos compostos de nível 1 (dois primais) já vêm sabidas (`free_recipe_tier` = 1). Quem já descobriu um aspecto conhece a receita dele, o que vale para os saves antigos.
+  - **Livros:** não têm receita fixa. Ao ser lido, o livro ensina uma receita sorteada entre as que o jogador ainda não conhece, de preferência uma que ele já possa fazer. São 13 a aprender.
+  - **Mesa:** sem a receita, mostra "×" e não diz se o par forma algo, como se não formasse nada.
+  - **Livro de Pesquisa:** lista as receitas conhecidas ainda por fazer.
+  - **Aparecimento:** cada região mostra um livro por incursão enquanto houver receitas a aprender; os títulos se repetem (dois por região).
+  - **Ordem dos sorteios:** os identificadores são ordenados por texto. Ordenar `StringName` direto não segue o alfabeto e podia mudar o sorteio com semente de uma execução para outra.
+- **Descartado:**
+  - **Livros fixos com receitas de 4 aspectos (D064):** o usuário explicou que não era isso.
+  - **Mesa que revela combinações por tentativa:** tiraria o valor dos livros.
+- **Motivo:** pedido do usuário ("quero que eles ensinem uma receita que você não tem"). A pesquisa agora depende das incursões: cada livro trazido vivo abre um composto novo.
 
 ## Pendentes (aguardando o usuário)
 

@@ -96,14 +96,17 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 1. Você começa no **Salão de Estudos**. Tudo pode ser escaneado: objetos, paredes, piso, estantes, a janela, o portal, o inimigo. Mire e **segure o botão direito**: a Lente sobe e a barra enche em 1,5 s.
 2. O primeiro escaneamento de cada coisa rende **pontos de pesquisa de cada aspecto** dela: 2 por unidade, então a vela (Ignis 3) rende 6 de Ignis. Escanear de novo não rende nada, mas mirar algo já escaneado mostra seus aspectos.
 3. Aspectos **primais** (Ignis, Aqua, Terra, Aer, Ordo, Perditio) são descobertos escaneando. Os seis objetos iniciais da escola só têm primais.
-4. Aspectos **compostos** só se descobrem na **Mesa de Pesquisa** (E), combinando os dois pais. Por exemplo, Aqua + Terra dá Victus, e cada combinação gasta 1 ponto de cada pai e rende 1 do composto. Quem tem um composto ainda desconhecido não pode ser escaneado: a Lente avisa "conhecimento insuficiente" e mostra "?" no que falta. Para as tábuas do piso (Arbor), por exemplo, é preciso descobrir Victus, depois Herba, depois Arbor.
+4. Aspectos **compostos** só se descobrem na **Mesa de Pesquisa** (E), combinando os dois pais. Por exemplo, Aqua + Terra dá Victus, e cada combinação gasta 1 ponto de cada pai e rende 1 do composto. Quem tem um composto ainda desconhecido não pode ser escaneado: a Lente avisa "conhecimento insuficiente" e mostra "?" no que falta.
+   - **Receitas:** para combinar, você precisa conhecer a receita do composto. As dos compostos simples, feitos de dois primais (Victus, Lux, Potentia, Motus, Vacuos, Vitreus, Gelum), já vêm sabidas.
+   - **Livros:** as outras receitas vêm dos livros achados na Dungeon (item 14).
+   - **Por exemplo,** para as tábuas do piso (Arbor) é preciso descobrir Victus, depois achar as receitas de Herba e de Arbor.
 5. **A Mesa**, no estilo do Thaumcraft 4:
    - **À esquerda**, a grade com os aspectos que você conhece e quantos pontos tem de cada. Clique num para escolhê-lo.
-   - **Combinar:** com um aspecto escolhido, clique num dos dois espaços de baixo para colocá-lo (botão direito esvazia). O terceiro espaço mostra o resultado ("?" se ainda não foi descoberto, "×" se os dois não formam nada). **Combinar** gasta os pontos.
+   - **Combinar:** com um aspecto escolhido, clique num dos dois espaços de baixo para colocá-lo (botão direito esvazia). O terceiro espaço mostra o resultado: o ícone, ou "?" se você conhece a receita mas ainda não fez o composto. Se você não conhece receita com os dois, mostra "×": a Mesa não revela combinações por tentativa. **Combinar** gasta os pontos.
    - **À direita**, no pergaminho, a **nota de pesquisa** da página escolhida (abas no alto): uma grade de hexágonos com alguns aspectos já marcados. Escolha um aspecto e clique num círculo vazio para escrevê-lo (1 ponto dele); o botão direito apaga e devolve o ponto.
    - Dois vizinhos **se ligam** (linha roxa) quando um é parte do outro: Ignis liga com Potentia (Ordo + Ignis) e com Lux (Aer + Ignis), mas Ignis não liga com Ignis nem com Ordo. Quando todos os aspectos marcados estão ligados, a página é estudada na hora e a solução fica no pergaminho.
 6. **Compreensão de Ignis** marca Ignis, Potentia e Lux: descubra Potentia e Lux na Mesa, ligue os três e o dano de fogo sobe 20%, para sempre.
-7. O **Livro de Pesquisa** (Tab) lista aspectos (com ícone, pontos e receita), alvos escaneados e páginas estudadas.
+7. O **Livro de Pesquisa** (Tab) lista aspectos (com ícone, pontos e receita), as **receitas que você conhece mas ainda não fez**, alvos escaneados, páginas estudadas e livros lidos.
 
 **Magia:**
 8. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a magia do Focus encaixado. Soltar antes cancela sem gastar nada.
@@ -137,9 +140,10 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    - **Potes selados** aparecem pelas salas (E para pegar); o que não couber no cinto fica no pote.
    - Ao morrer, o conteúdo dos potes se perde.
 14. **Livros perdidos:** cada região esconde um livro (com brilho dourado). Pegue-o com E; ele só pode ser lido no **atril** do Salão de Estudos, na escola.
-   - Os livros ensinam receitas de aspectos estranhos (Tenebrae, Limus, Vitium, Alienis). Sem a receita, a Mesa não deixa combinar os pais deles.
-   - Esses aspectos estão nas coisas das grutas e do Avesso. Sem eles, essas coisas não podem ser escaneadas.
-   - Quem morre antes de voltar à escola perde os livros que carregava; eles voltam a aparecer em outra incursão.
+   - **Receita sorteada:** o livro não tem receita fixa. Ao ser lido, ensina uma receita sorteada entre as que você **ainda não tem**, de preferência uma que você já possa fazer (com os dois pais descobertos). A receita aparece no fim do texto e fica no Livro de Pesquisa.
+   - **São 13 receitas a aprender,** inclusive as dos aspectos estranhos das profundezas (Tenebrae, Limus, Vitium, Alienis), que estão nas coisas das grutas e do Avesso.
+   - **Fim dos livros:** quando não há mais o que aprender, os livros deixam de aparecer.
+   - **Morte:** quem morre antes de voltar à escola perde os livros que carregava.
 15. **Inimigos:**
 
    | Inimigo | Comportamento | Fogo | Escaneável depois de descobrir |
@@ -195,7 +199,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala.
 - **Scripts:** todo script do jogo e das ferramentas compila.
 - **Incursão:** sorteio das salas por região e tipo, com semente (mesma semente, mesmo roteiro; sem repetir sala), planta contínua (salas em fila, corredores que descem, em que sala fica cada ponto), morte que encerra a incursão, convenção das cenas de sala.
-- **Potes e livros:** guardar e despejar Vis nos potes, receitas escondidas e livros, save com livros e receitas.
+- **Potes e livros:** guardar e despejar Vis nos potes; receitas necessárias para combinar (as simples já vêm sabidas); livro que ensina uma receita sorteada que o jogador não tem, de preferência uma que ele já possa fazer; save com livros e receitas.
 - **Sistema:** persistência (save), gerador com semente, opções.
 - **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
 - **Arquitetura:** a regra de camadas e os arquivos de cena (parâmetros de shader com casa decimal).
@@ -381,13 +385,14 @@ Equipe-a em `data/player/player.tres` (`starting_wand`). Ali também fica `start
 4. **Região nova:** duplique `data/dungeon/zones/caves.tres` (nome, materiais e luzes dos corredores) e use o `id` dela nas salas e nos passos.
 5. Teste direto: `godot --path . -- --room=<id da sala> --entrance=south`. Os testes conferem a porta, a saída e a passagem de toda sala sorteável, e `tools/balance_report.gd` mostra quantos inimigos e disparos cada sala pede em média.
 
-### Adicionar um livro e uma receita escondida
+### Adicionar um livro
 
-1. Crie o aspecto como de costume (veja **Adicionar um aspecto**) e ligue `needs_recipe`: a Mesa só combina os pais depois que o livro for lido.
-2. Duplique `data/books/cave_bestiary.tres`:
-   - preencha `id`, `name_key`, `text_key`, `teaches` (os aspectos que ele ensina) e `zone` (em que região ele aparece);
-   - escreva o título e o texto em `locales/content.csv`. A receita aprendida é acrescentada sozinha no fim da leitura.
-3. Cada região mostra um livro ainda não lido por incursão, num dos lugares de livro (`LootSpot` com `kind` = `book`) das salas dela.
+1. Duplique `data/books/wet_map.tres`.
+   - Preencha `id`, `name_key`, `text_key` e `zone` (em que região ele aparece).
+   - Escreva o título e o texto em `locales/content.csv`.
+   - O livro não tem receita fixa: ao ser lido, ensina uma das que o jogador ainda não conhece, que aparece no fim do texto.
+2. Cada região mostra um livro por incursão (um título sorteado entre os dela), num dos lugares de livro (`LootSpot` com `kind` = `book`) das salas dela, enquanto houver receitas a aprender.
+3. Quais receitas já vêm sabidas: `free_recipe_tier` em `data/research/rules.tres` (1 = compostos feitos de dois primais). Um aspecto composto novo entra sozinho na lista das receitas a aprender.
 
 ### Trocar textos, nomes, sons e texturas
 

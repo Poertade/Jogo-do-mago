@@ -63,7 +63,7 @@ func _fill_aspects() -> void:
 		child.queue_free()
 	var ordered: Array[StringName] = []
 	ordered.assign(Game.knowledge.discovered_aspects)
-	ordered.sort_custom(func(a, b): return Content.db.tier(a) < Content.db.tier(b) or (Content.db.tier(a) == Content.db.tier(b) and a < b))
+	ordered.sort_custom(func(a, b): return Content.db.tier(a) < Content.db.tier(b) or (Content.db.tier(a) == Content.db.tier(b) and String(a) < String(b)))
 	for aspect_id in ordered:
 		var cell := AspectCell.new()
 		cell.aspect_id = aspect_id
@@ -119,9 +119,10 @@ func _update_combination() -> void:
 	combine_button.disabled = true
 	if slot_a.aspect_id == &"" or slot_b.aspect_id == &"":
 		combine_info.text = tr("UI_TABLE_COMBINE_HINT") % [rules.combine_cost, rules.combine_yield]
-	elif compound == null:
+	elif compound == null or not Game.knowledge.knows_recipe(compound.id):
+		# Sem a receita, a Mesa não diz se o par forma algo: as receitas vêm dos livros.
 		result_cell.placeholder = "×"
-		combine_info.text = tr("UI_COMBINE_NOTHING_HERE")
+		combine_info.text = tr("UI_COMBINE_UNKNOWN_PAIR")
 	else:
 		if Game.knowledge.knows_aspect(compound.id):
 			result_cell.aspect_id = compound.id

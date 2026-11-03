@@ -7,5 +7,4 @@ script = ExtResource("1")
 id = &"shadow_treatise"
 name_key = "BOOK_SHADOW_TREATISE"
 text_key = "BOOK_SHADOW_TREATISE_TEXT"
-teaches = Array[StringName]([&"darkness"])
 zone = &"school"

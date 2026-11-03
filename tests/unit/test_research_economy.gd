@@ -12,9 +12,10 @@ func before_each() -> void:
 	db = ContentDB.new()
 	db.load_all()
 	knowledge = Knowledge.new()
-	# Os livros das receitas escondidas são achados na Dungeon: aqui, todos já foram lidos.
-	for book: BookData in db.books.values():
-		knowledge.read_book(book)
+	# As receitas vêm dos livros achados na Dungeon: aqui, como se todas já tivessem sido lidas.
+	for aspect: AspectData in db.aspects.values():
+		if aspect.is_compound():
+			knowledge.free_recipes.append(aspect.id)
 
 
 ## Garante 1 ponto do aspecto (e que ele seja conhecido), combinando o que for preciso.

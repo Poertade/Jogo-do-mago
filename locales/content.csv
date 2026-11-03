@@ -82,13 +82,13 @@ ASPECT_SLIME_MEANING,gosma
 ASPECT_TAINT_MEANING,corrupção
 ASPECT_ELDRITCH_MEANING,o estranho
 BOOK_SHADOW_TREATISE,Tratado das Sombras
-BOOK_SHADOW_TREATISE_TEXT,"Escrito por um mestre da Primeira Escola, em tinta que ainda escurece a página. Explica que a sombra não é só falta de luz: é {void} que aprendeu a imitar {light}."
+BOOK_SHADOW_TREATISE_TEXT,"Escrito por um mestre da Primeira Escola, em tinta que ainda escurece a página. As margens estão cheias de misturas riscadas e refeitas; uma delas, sublinhada três vezes, ainda funciona."
 BOOK_CAVE_BESTIARY,Bestiário das Grutas
-BOOK_CAVE_BESTIARY_TEXT,"Caderno de campo de um aluno que desceu às grutas para catalogar o que vivia lá. Nas últimas páginas, o traço treme."
+BOOK_CAVE_BESTIARY_TEXT,"Caderno de campo de um aluno que desceu às grutas para catalogar o que vivia lá. Entre desenhos de bichos que não deviam existir, ele anotou como as coisas das grutas se formam."
 BOOK_ARCHIVIST_DIARY,Diário do Arquivista
-BOOK_ARCHIVIST_DIARY_TEXT,"""Guardei tudo o que a escola quis esquecer. Cada livro proibido que escondi aqui embaixo apodrecia um pouco a magia em volta."""
+BOOK_ARCHIVIST_DIARY_TEXT,"""Guardei tudo o que a escola quis esquecer."" Entre queixas e listas de livros proibidos, o Arquivista copiou uma receita que não quis perder."
 BOOK_INVERTED_FRAGMENTS,Fragmentos do Avesso
-BOOK_INVERTED_FRAGMENTS_TEXT,"Folhas soltas, escritas de trás para a frente e de cabeça para baixo. Lidas num espelho, descrevem um lugar onde as coisas existem do lado errado."
+BOOK_INVERTED_FRAGMENTS_TEXT,"Folhas soltas, escritas de trás para a frente e de cabeça para baixo. Lidas num espelho, descrevem um lugar onde as coisas existem do lado errado, e como uma delas é feita."
 OBJ_CAVE_ROCK,Rocha da gruta
 OBJ_STALAGMITE,Estalagmite
 OBJ_GLOW_FUNGUS,Fungo luminoso
@@ -106,3 +106,7 @@ ZONE_ABYSS,O Avesso
 PROMPT_TAKE_JAR,Pegar o pote selado
 PROMPT_TAKE_BOOK,Pegar o livro
 PROMPT_READ_BOOKS,Ler os livros trazidos
+BOOK_BEADLE_LOG,Caderno de um Bedel
+BOOK_BEADLE_LOG_TEXT,"Rondas, nomes de alunos castigados e, no fim, a receita que um deles usava para sair do quarto escondido. O bedel anotou tudo."
+BOOK_WET_MAP,Mapa Molhado
+BOOK_WET_MAP_TEXT,"Um mapa das grutas, borrado pela água. No verso, alguém escreveu como se faz uma coisa que só existe lá embaixo."

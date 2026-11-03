@@ -15,5 +15,8 @@ extends Resource
 @export var combine_cost: int = 0
 ## Pontos do aspecto composto ganhos a cada combinação.
 @export var combine_yield: int = 0
+## Compostos até este nível (1 = feitos de dois primais) já vêm com a receita sabida; os
+## outros precisam de um livro achado na Dungeon.
+@export var free_recipe_tier: int = 0
 ## Pontos do aspecto gastos para escrevê-lo num hexágono da nota de pesquisa (apagar devolve).
 @export var note_write_cost: int = 0

@@ -46,6 +46,8 @@ var rng := GameRng.new(0)
 
 func _ready() -> void:
 	knowledge = _load_save()
+	# As receitas dos compostos simples já vêm sabidas (não vão para o save).
+	knowledge.free_recipes = Content.db.free_recipes()
 	knowledge.changed.connect(_on_knowledge_changed)
 	_update_modifiers()
 	run = RunState.new(Content.db.player)
@@ -155,16 +157,19 @@ func take_book(book: BookData) -> void:
 		message(Text.tr_key("UI_MSG_BOOK_TAKEN") % Text.tr_key(book.name_key), Color(0.95, 0.85, 0.6))
 
 
-## Lê o próximo livro trazido: aprende as receitas e mostra o texto (com elas no fim).
+## Lê o próximo livro trazido: aprende uma receita sorteada entre as que o jogador ainda não
+## conhece e mostra o texto do livro, com a receita no fim.
 func read_next_book() -> void:
 	if run.carried_books.is_empty():
 		return
 	var book: BookData = run.carried_books.pop_front()
-	var learned := knowledge.read_book(book)
-	var body := Text.expand(book.text_key)
-	for aspect_id in learned:
-		var aspect: AspectData = Content.db.aspects[aspect_id]
-		body += "\n\n" + Text.tr_key("UI_RECIPE_LEARNED") % [Text.aspect_name(aspect_id),
+	var learned := knowledge.read_book(book, Content.db.aspects, rng.next_float())
+	var body := Text.expand(book.text_key) + "\n\n"
+	if learned == &"":
+		body += Text.tr_key("UI_BOOK_NOTHING_NEW")
+	else:
+		var aspect: AspectData = Content.db.aspects[learned]
+		body += Text.tr_key("UI_RECIPE_LEARNED") % [Text.aspect_name(learned),
 			Text.aspect_name(aspect.parents[0]), Text.aspect_name(aspect.parents[1])]
 	text_requested.emit(Text.tr_key(book.name_key), body)
 

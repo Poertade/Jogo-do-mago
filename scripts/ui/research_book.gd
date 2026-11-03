@@ -35,6 +35,17 @@ func _on_opened() -> void:
 				Text.aspect_icon_bbcode(aspect.parents[1]), Text.aspect_name(aspect.parents[1])]
 		_add_line(aspects_list, line)
 
+	# Receitas que o jogador conhece de compostos que ainda não fez (para saber o que combinar).
+	var pending: PackedStringArray = []
+	for aspect: AspectData in Content.db.aspects.values():
+		if aspect.is_compound() and not knowledge.knows_aspect(aspect.id) and knowledge.knows_recipe(aspect.id):
+			pending.append("%s%s = %s + %s" % [Text.aspect_icon_bbcode(aspect.id), Text.aspect_bbcode(aspect.id, Text.aspect_name(aspect.id), true),
+				Text.aspect_name(aspect.parents[0]), Text.aspect_name(aspect.parents[1])])
+	if not pending.is_empty():
+		_add_line(aspects_list, "[color=%s]%s[/color]" % [POINTS_COLOR, tr("UI_BOOK_RECIPES")])
+		for line in pending:
+			_add_line(aspects_list, line)
+
 	_clear(scanned_list)
 	for target_id in knowledge.scanned_targets:
 		var target := Content.db.find_scannable(target_id)

@@ -124,12 +124,29 @@ func rooms_by_slot() -> Dictionary:
 	return result
 
 
-## Os livros que ensinam a receita do aspecto.
-func books_teaching(aspect_id: StringName) -> Array[BookData]:
+## Ordem alfabética de identificadores. (Ordenar StringName direto não segue o alfabeto: a
+## ordem pode mudar de uma execução para outra, e o sorteio com semente deixaria de se repetir.)
+static func by_name(a: StringName, b: StringName) -> bool:
+	return String(a) < String(b)
+
+
+## Compostos cuja receita já vem sabida (até o nível `free_recipe_tier` das regras).
+func free_recipes() -> Array[StringName]:
+	var result: Array[StringName] = []
+	for aspect: AspectData in aspects.values():
+		if aspect.is_compound() and tier(aspect.id) <= research_rules.free_recipe_tier:
+			result.append(aspect.id)
+	result.sort_custom(by_name)
+	return result
+
+
+## Os livros que podem aparecer na região.
+func books_in(zone: StringName) -> Array[BookData]:
 	var result: Array[BookData] = []
 	for book: BookData in books.values():
-		if aspect_id in book.teaches:
+		if book.zone == zone:
 			result.append(book)
+	result.sort_custom(func(a, b): return String(a.id) < String(b.id))
 	return result
 
 
@@ -153,7 +170,7 @@ func sorted_pages() -> Array[ResearchPageData]:
 func _page_before(a: ResearchPageData, b: ResearchPageData) -> bool:
 	var size_a := a.note_aspects.size() * 10 + a.note_radius
 	var size_b := b.note_aspects.size() * 10 + b.note_radius
-	return size_a < size_b or (size_a == size_b and a.id < b.id)
+	return size_a < size_b or (size_a == size_b and String(a.id) < String(b.id))
 
 
 ## O aspecto composto formado por `a` e `b` (em qualquer ordem), ou null.
@@ -188,7 +205,7 @@ func compounds_by_tier() -> Array[AspectData]:
 
 
 func _aspect_before(a: AspectData, b: AspectData) -> bool:
-	return tier(a.id) < tier(b.id) or (tier(a.id) == tier(b.id) and a.id < b.id)
+	return tier(a.id) < tier(b.id) or (tier(a.id) == tier(b.id) and String(a.id) < String(b.id))
 
 
 static func _total(amounts: Dictionary) -> int:
@@ -381,13 +398,10 @@ func _validate_dungeon() -> void:
 	for book: BookData in books.values():
 		if not book.zone in zones:
 			errors.append("Livro '%s': a região '%s' não existe." % [book.id, book.zone])
-		for aspect_id in book.teaches:
-			var aspect: AspectData = aspects.get(aspect_id)
-			if aspect == null or not aspect.needs_recipe:
-				errors.append("Livro '%s': ensina '%s', que não é um aspecto com receita escondida." % [book.id, aspect_id])
-	for aspect: AspectData in aspects.values():
-		if aspect.needs_recipe and books_teaching(aspect.id).is_empty():
-			errors.append("Aspecto '%s' tem receita escondida, mas nenhum livro a ensina." % aspect.id)
+	for step in rules.steps:
+		if step != null and books_in(step.zone).is_empty():
+			errors.append("Região '%s': nenhum livro pode aparecer nela (data/books/, campo zone)." % step.zone)
+			break
 
 
 func _validate_aspect(aspect: AspectData) -> void:

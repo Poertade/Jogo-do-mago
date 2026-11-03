@@ -46,26 +46,58 @@ func test_pour_picks_a_jar_the_focus_uses() -> void:
 	assert_eq(belt.jars[1].aspect, &"", "Pote vazio fica livre para outro aspecto")
 
 
-func test_recipe_is_needed_to_combine_hidden_aspects() -> void:
+## Aspectos de teste: Aqua e Terra (primais), Victus = Aqua + Terra, Herba = Terra + Victus.
+func _aspects() -> Dictionary:
+	var result := {}
+	for spec in [["water", []], ["earth", []], ["life", ["water", "earth"]], ["plant", ["earth", "life"]]]:
+		var aspect := AspectData.new()
+		aspect.id = StringName(spec[0])
+		aspect.kind = "compound" if not spec[1].is_empty() else "primal"
+		aspect.parents.assign(spec[1].map(func(p): return StringName(p)))
+		result[aspect.id] = aspect
+	return result
+
+
+func test_combining_needs_the_recipe() -> void:
 	var rules := ResearchRules.new()
 	rules.combine_cost = 1
 	rules.combine_yield = 1
-	var shadow := AspectData.new()
-	shadow.id = &"darkness"
-	shadow.kind = "compound"
-	shadow.parents = [&"void", &"light"] as Array[StringName]
-	shadow.needs_recipe = true
+	var aspects := _aspects()
 	var knowledge := Knowledge.new()
-	knowledge.discovered_aspects.append_array([&"void", &"light"])
-	knowledge.aspect_points = {&"void": 3, &"light": 3} as Dictionary[StringName, int]
-	assert_eq(knowledge.check_combine(shadow, rules), Knowledge.CombineCheck.UNKNOWN_RECIPE)
+	knowledge.discovered_aspects.append_array([&"water", &"earth"])
+	knowledge.aspect_points = {&"water": 3, &"earth": 3} as Dictionary[StringName, int]
+	assert_eq(knowledge.check_combine(aspects[&"life"], rules), Knowledge.CombineCheck.UNKNOWN_RECIPE)
+	knowledge.free_recipes = [&"life"] as Array[StringName]
+	assert_eq(knowledge.check_combine(aspects[&"life"], rules), Knowledge.CombineCheck.OK, "Receita simples já vem sabida")
+	assert_true(knowledge.combine(aspects[&"life"], rules))
+	knowledge.free_recipes.clear()
+	assert_true(knowledge.knows_recipe(&"life"), "Quem descobriu o aspecto conhece a receita")
+
+
+func test_book_teaches_a_recipe_you_do_not_have() -> void:
+	var aspects := _aspects()
 	var book := BookData.new()
-	book.id = &"treatise"
-	book.teaches = [&"darkness"] as Array[StringName]
-	assert_eq(knowledge.read_book(book), [&"darkness"] as Array[StringName])
-	assert_true(knowledge.has_read(&"treatise"))
-	assert_eq(knowledge.check_combine(shadow, rules), Knowledge.CombineCheck.OK)
-	assert_eq(knowledge.read_book(book).size(), 0, "Ler de novo não ensina nada novo")
+	book.id = &"notes"
+	var knowledge := Knowledge.new()
+	assert_eq(knowledge.unknown_recipes(aspects), [&"life", &"plant"] as Array[StringName])
+	var first := knowledge.read_book(book, aspects, 0.0)
+	assert_true(first in [&"life", &"plant"])
+	assert_true(knowledge.knows_recipe(first))
+	var second := knowledge.read_book(book, aspects, 0.99)
+	assert_ne(second, first, "O segundo livro ensina outra receita")
+	assert_eq(knowledge.read_book(book, aspects, 0.5), &"", "Sem receitas novas, nada a aprender")
+	assert_eq(knowledge.books_read, [&"notes"] as Array[StringName])
+
+
+func test_book_prefers_a_recipe_you_can_make_now() -> void:
+	var aspects := _aspects()
+	var knowledge := Knowledge.new()
+	knowledge.discovered_aspects.append_array([&"water", &"earth"])
+	# Victus dá para fazer já (pais descobertos); Herba precisa de Victus antes.
+	for roll in [0.0, 0.5, 0.99]:
+		var copy := Knowledge.new()
+		copy.discovered_aspects = knowledge.discovered_aspects.duplicate()
+		assert_eq(copy.read_book(BookData.new(), aspects, roll), &"life")
 
 
 func test_books_and_recipes_survive_the_save() -> void:
@@ -79,11 +111,12 @@ func test_books_and_recipes_survive_the_save() -> void:
 	assert_eq(old.learned_recipes.size(), 0, "Saves antigos começam sem receitas")
 
 
-func test_real_books_teach_every_hidden_recipe() -> void:
+func test_simple_recipes_are_free_and_every_zone_has_books() -> void:
 	var db := ContentDB.new()
 	db.load_all()
 	assert_eq(db.errors.size(), 0, "\n".join(db.errors))
-	var hidden := db.aspects.values().filter(func(a): return a.needs_recipe)
-	assert_gt(hidden.size(), 0)
-	for aspect: AspectData in hidden:
-		assert_false(db.books_teaching(aspect.id).is_empty(), "Nenhum livro ensina %s" % aspect.id)
+	var free := db.free_recipes()
+	assert_true(&"energy" in free and &"light" in free, "Compostos de dois primais já vêm sabidos")
+	assert_false(&"tree" in free, "Arbor precisa de livro")
+	for step in db.dungeon_rules.steps:
+		assert_false(db.books_in(step.zone).is_empty(), "Região %s sem livros" % step.zone)

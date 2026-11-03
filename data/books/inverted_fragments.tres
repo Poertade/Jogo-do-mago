@@ -7,5 +7,4 @@ script = ExtResource("1")
 id = &"inverted_fragments"
 name_key = "BOOK_INVERTED_FRAGMENTS"
 text_key = "BOOK_INVERTED_FRAGMENTS_TEXT"
-teaches = Array[StringName]([&"eldritch"])
 zone = &"abyss"

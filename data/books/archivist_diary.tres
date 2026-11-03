@@ -7,5 +7,4 @@ script = ExtResource("1")
 id = &"archivist_diary"
 name_key = "BOOK_ARCHIVIST_DIARY"
 text_key = "BOOK_ARCHIVIST_DIARY_TEXT"
-teaches = Array[StringName]([&"taint"])
 zone = &"abyss"

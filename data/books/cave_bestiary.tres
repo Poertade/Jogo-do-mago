@@ -7,5 +7,4 @@ script = ExtResource("1")
 id = &"cave_bestiary"
 name_key = "BOOK_CAVE_BESTIARY"
 text_key = "BOOK_CAVE_BESTIARY_TEXT"
-teaches = Array[StringName]([&"slime"])
 zone = &"caves"

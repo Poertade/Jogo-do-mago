@@ -35,10 +35,8 @@ func reset() -> void:
 	leave_dungeon()
 
 
-## Guarda um livro achado (até ser lido na escola). Devolve false se já estava com ele.
+## Guarda um livro achado (até ser lido na escola).
 func carry_book(book: BookData) -> bool:
-	if book in carried_books:
-		return false
 	carried_books.append(book)
 	return true
 

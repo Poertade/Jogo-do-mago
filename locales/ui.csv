@@ -86,3 +86,6 @@ UI_RECIPE_LEARNED,Receita aprendida: %s = %s + %s
 UI_MSG_JARS_FILLING,O Vis que sobra vai para os potes
 UI_COMBINE_NEEDS_BOOK,Receita desconhecida: ache o livro que a ensina.
 UI_BOOK_BOOKS,Livros lidos
+UI_COMBINE_UNKNOWN_PAIR,Você não conhece receita com estes dois. Receitas novas vêm dos livros da Dungeon.
+UI_BOOK_NOTHING_NEW,Você já conhece todas as receitas que este livro poderia ensinar.
+UI_BOOK_RECIPES,Receitas por fazer

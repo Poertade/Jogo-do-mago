@@ -12,4 +12,3 @@ kind = "compound"
 parents = Array[StringName]([&"void", &"darkness"])
 color = Color(0.62, 0.48, 0.95, 1)
 icon = ExtResource("2")
-needs_recipe = true

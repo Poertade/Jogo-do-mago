@@ -19,9 +19,7 @@ extends Resource
 @export var color: Color = Color.WHITE
 ## Ícone (16x16) mostrado na Mesa de Pesquisa e no Livro (assets/icons/aspects/).
 @export var icon: Texture2D
-## Receita escondida: a Mesa só combina os pais depois que o jogador ler o livro que a ensina
-## (data/books/). Vale para os aspectos estranhos das profundezas.
-@export var needs_recipe := false
+
 
 
 func is_compound() -> bool:

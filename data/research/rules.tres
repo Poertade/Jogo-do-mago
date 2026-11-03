@@ -9,4 +9,5 @@ scan_range = 6.0
 points_per_amount = 2
 combine_cost = 1
 combine_yield = 1
+free_recipe_tier = 1
 note_write_cost = 1

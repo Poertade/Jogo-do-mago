@@ -172,8 +172,8 @@ func _set_up_exit(room: Room, last: bool) -> void:
 			passage.free()
 
 
-## Um livro ainda não lido por região (num dos lugares de livro das salas dela) e potes
-## selados nos lugares de pote, com a chance de cada um.
+## Um livro por região (num dos lugares de livro das salas dela), enquanto houver receitas
+## que o jogador ainda não conhece, e potes selados nos lugares de pote, com a chance de cada um.
 func _place_loot() -> void:
 	var rng := GameRng.new(hash([plan.seed_value, "achados"]))
 	var book_spots: Dictionary = {}
@@ -190,25 +190,19 @@ func _place_loot() -> void:
 				jar.set(&"aspect", spot.jar_aspects[rng.range_int(0, spot.jar_aspects.size() - 1)])
 				jar.set(&"amount", rng.range_int(spot.jar_amount_min, spot.jar_amount_max))
 				spot.add_child(jar)
+	# Cada livro ensina uma receita: não adianta haver mais livros que receitas a aprender.
+	var to_learn := Game.knowledge.unknown_recipes(Content.db.aspects).size() - Game.run.carried_books.size()
 	for zone: StringName in book_spots:
-		var book := _unread_book(zone)
-		if book == null:
+		var titles := Content.db.books_in(zone)
+		if to_learn <= 0 or titles.is_empty():
 			continue
+		to_learn -= 1
+		var book := titles[rng.range_int(0, titles.size() - 1)]
 		var spots: Array = book_spots[zone]
 		var spot: LootSpot = spots[rng.range_int(0, spots.size() - 1)]
 		var pickup: Node3D = (load(BOOK_SCENE) as PackedScene).instantiate()
 		pickup.set(&"book", book)
 		spot.add_child(pickup)
-
-
-## Um livro da região que o jogador ainda não leu nem carrega (o de menor identificador).
-func _unread_book(zone: StringName) -> BookData:
-	var candidates: Array[BookData] = []
-	for book: BookData in Content.db.books.values():
-		if book.zone == zone and not Game.knowledge.has_read(book.id) and not book in Game.run.carried_books:
-			candidates.append(book)
-	candidates.sort_custom(func(a, b): return a.id < b.id)
-	return candidates[0] if not candidates.is_empty() else null
 
 
 # --- Navegação ----------------------------------------------------------------------
