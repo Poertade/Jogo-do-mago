@@ -1,7 +1,8 @@
 class_name Enemy
 extends CharacterBody3D
 ## Inimigo corpo a corpo. A decisão (parado, perseguindo, atacando, reação ao dano, morte)
-## fica em EnemyBrain (scripts/core); aqui ficam o movimento, a visão, as animações e o dano.
+## fica em EnemyBrain (scripts/core); o corpo e as animações ficam no EnemyRig (nó "Rig");
+## aqui ficam o movimento, a visão, o dano e os sons.
 ## Pode ser escaneado pela Lente (get_scannable) e recebe dano (take_damage).
 
 signal died
@@ -13,12 +14,8 @@ var health: Health
 var brain: EnemyBrain
 var _player: Node3D
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
-var _walk_time := 0.0
 
-@onready var model: Node3D = $Model
-@onready var arm: Node3D = $Model/ArmPivot
-@onready var eyes: Node3D = $Model/Eyes
-@onready var flash_material: ShaderMaterial = $Model/Robe.material_override
+@onready var rig: EnemyRig = $Rig
 
 
 func _ready() -> void:
@@ -40,7 +37,7 @@ func take_damage(amount: float, element: StringName) -> void:
 	health.take_damage(Combat.damage_against(amount, element, data.weaknesses))
 	if not health.is_dead():
 		brain.on_damaged()
-		_flash()
+		rig.play_hurt()
 		Audio.play_at(&"enemy_hurt", global_position + Vector3.UP, get_parent())
 
 
@@ -58,6 +55,9 @@ func _physics_process(delta: float) -> void:
 	var previous := brain.state
 	brain.update(delta, distance, _can_see_player())
 	_play_state_sounds(previous, brain.state)
+	if previous == EnemyBrain.State.ATTACK and brain.state != EnemyBrain.State.ATTACK \
+			and brain.state != EnemyBrain.State.HURT:
+		rig.play_strike()
 
 	var move := Vector3.ZERO
 	if brain.wants_to_move() and distance > data.attack_range * 0.8:
@@ -69,7 +69,8 @@ func _physics_process(delta: float) -> void:
 		var target_yaw := atan2(-to_player.x, -to_player.z)
 		rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-6.0 * delta))
 	move_and_slide()
-	_animate(delta, move.length() > 0.0)
+	var alert := brain.state != EnemyBrain.State.IDLE
+	rig.update_pose(delta, Vector2(velocity.x, velocity.z).length(), data.move_speed, brain.windup_ratio(), alert)
 
 
 ## Enxerga o jogador se nada bloqueia a linha entre os olhos dele e a cabeça do jogador.
@@ -78,6 +79,8 @@ func _can_see_player() -> bool:
 	var to := _player.global_position + Vector3.UP * 1.5
 	var query := PhysicsRayQueryParameters3D.create(from, to)
 	query.exclude = [get_rid()]
+	# Só paredes e corpos (camada 1); decorações escaneáveis (camada 2) não tapam a visão.
+	query.collision_mask = 1
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	return hit.is_empty() or hit.collider == _player
 
@@ -89,12 +92,8 @@ func _on_attack_landed() -> void:
 func _on_died() -> void:
 	brain.on_died()
 	$CollisionShape3D.set_deferred("disabled", true)
-	eyes.visible = false
+	rig.play_death()
 	Audio.play_at(&"enemy_death", global_position + Vector3.UP, get_parent())
-	# Desmorona: tomba para trás e afunda um pouco.
-	var tween := create_tween().set_parallel()
-	tween.tween_property(model, "rotation:x", deg_to_rad(80.0), 0.6).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(model, "position:y", -0.5, 0.6)
 	died.emit()
 
 
@@ -106,20 +105,3 @@ func _play_state_sounds(previous: EnemyBrain.State, current: EnemyBrain.State) -
 		Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
 	elif current == EnemyBrain.State.ATTACK:
 		Audio.play_at(&"enemy_swing", global_position + Vector3.UP, get_parent())
-
-
-## Clarão branco rápido ao tomar dano.
-func _flash() -> void:
-	var tween := create_tween()
-	tween.tween_method(func(v: float): flash_material.set_shader_parameter(&"emission_energy", v), 1.2, 0.0, 0.25)
-
-
-## Balanço ao andar e braço erguido na preparação do golpe.
-func _animate(delta: float, walking: bool) -> void:
-	if walking:
-		_walk_time += delta * 6.0
-	model.position.y = absf(sin(_walk_time)) * 0.05 if walking else move_toward(model.position.y, 0.0, delta)
-	model.rotation.z = sin(_walk_time) * 0.06 if walking else 0.0
-	var raise := brain.windup_ratio()
-	arm.rotation.x = lerpf(0.0, deg_to_rad(-150.0), raise) if brain.state == EnemyBrain.State.ATTACK else \
-		move_toward(arm.rotation.x, 0.0, delta * 12.0)

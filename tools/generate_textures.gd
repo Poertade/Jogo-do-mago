@@ -17,6 +17,10 @@ func _initialize() -> void:
 	_save(_wood_floor(), "wood_floor.png")
 	_save(_rug(), "rug.png")
 	_save(_portal_swirl(), "portal_swirl.png")
+	_save(_bone(), "bone.png")
+	_save(_robe(), "robe.png")
+	_save(_skull_face(), "skull_face.png")
+	_save(_iron(), "iron.png")
 	quit()
 
 
@@ -139,6 +143,134 @@ func _portal_swirl() -> Image:
 			var color := violet.lerp(teal, wave * 0.5 + 0.5)
 			color = color.darkened(rng.randf_range(0.0, 0.25))
 			image.set_pixel(x, y, color)
+	return image
+
+
+## Osso: marfim encardido com veios, rachaduras e pontas mais escuras (as juntas).
+func _bone() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 707
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var base := Color(0.76, 0.72, 0.6)
+	for y in SIZE:
+		for x in SIZE:
+			var streak := 0.05 * sin(x * 1.3 + sin(y * 0.4) * 2.0)
+			var color := base.darkened(0.08 - streak)
+			if y < 3 or y > SIZE - 4:
+				color = color.darkened(0.3)
+			image.set_pixel(x, y, _noise(color, rng, 0.04))
+	# Rachaduras: linhas tortas e escuras.
+	for crack in 4:
+		var x := rng.randi_range(2, SIZE - 3)
+		var y := rng.randi_range(0, SIZE - 12)
+		for step in rng.randi_range(6, 12):
+			image.set_pixel(x, y, Color(0.3, 0.26, 0.2))
+			y += 1
+			x = clampi(x + rng.randi_range(-1, 1), 0, SIZE - 1)
+			if y >= SIZE:
+				break
+	return image
+
+
+## Manto do bedel (32x64, com transparência): pano quase preto com dobras verticais, uma faixa
+## de acabamento gasta no alto, manchas e furos, e a barra rasgada em pontas irregulares.
+func _robe() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 808
+	var height := SIZE * 2
+	var image := Image.create_empty(SIZE, height, false, Image.FORMAT_RGBA8)
+	var base := Color(0.12, 0.13, 0.12)
+	var trim := Color(0.32, 0.12, 0.16)
+	# Altura da barra rasgada em cada coluna: pontas compridas e curtas alternadas.
+	var hem: Array[int] = []
+	for x in SIZE:
+		hem.append(height - rng.randi_range(2, 14) if x % 3 != 0 else height - rng.randi_range(0, 4))
+	for y in height:
+		for x in SIZE:
+			var fold := 0.06 * sin(x * 0.8 + sin(y * 0.15) * 1.5)
+			var color := base.lightened(maxf(fold, 0.0)).darkened(maxf(-fold, 0.0))
+			if y >= 4 and y < 7:
+				color = trim.darkened(rng.randf_range(0.0, 0.3))
+			if rng.randf() < 0.02:
+				color = color.darkened(0.4)
+			color = _noise(color, rng, 0.03)
+			var alpha := 1.0
+			if y >= hem[x]:
+				alpha = 0.0
+			# Alguns furos no meio do pano.
+			for hole in [Vector2(9, 40), Vector2(24, 30), Vector2(17, 50)]:
+				if Vector2(x, y).distance_to(hole) < 1.6:
+					alpha = 0.0
+			image.set_pixel(x, y, Color(color, alpha))
+	return image
+
+
+## Rosto de caveira (com transparência): crânio alongado, órbitas fundas e inclinadas sob a
+## sobrancelha, maçãs do rosto afundadas, cavidade do nariz e dentes tortos, com falhas.
+## Vai num quadrado na frente da cabeça; os olhos que brilham ficam dentro das órbitas.
+func _skull_face() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 909
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+	var bone := Color(0.74, 0.7, 0.58)
+	var missing_teeth := [12, 19]
+	for y in SIZE:
+		for x in SIZE:
+			var p := Vector2(x + 0.5, y + 0.5)
+			# Contorno: crânio oval em cima, maxilar estreito embaixo.
+			var inside := false
+			if y < 19:
+				inside = Vector2((p.x - 16) / 12.5, (p.y - 12) / 12.0).length() < 1.0
+			else:
+				inside = absf(p.x - 16) < 9.5 - (y - 19) * 0.5
+			if not inside:
+				image.set_pixel(x, y, Color(0, 0, 0, 0))
+				continue
+			var color := bone.darkened(clampf((p - Vector2(16, 10)).length() / 34.0, 0.0, 0.4))
+			# Órbitas: ovais inclinadas (canto de dentro mais alto), com sombra em volta.
+			for side in [-1.0, 1.0]:
+				var center := Vector2(16 + side * 5.5, 14.5)
+				var local := p - center
+				local.y += local.x * side * 0.35
+				var d := Vector2(local.x / 3.4, local.y / 2.6).length()
+				if d < 1.0:
+					color = Color(0.02, 0.02, 0.02)
+				elif d < 1.6:
+					color = color.darkened(0.5 * (1.6 - d) / 0.6 + 0.15)
+			# Sobrancelha (borda superior das órbitas) e maçãs do rosto afundadas.
+			if y >= 10 and y <= 11 and absf(p.x - 16) > 2 and absf(p.x - 16) < 10:
+				color = color.lightened(0.1)
+			if y >= 18 and y <= 22 and absf(p.x - 16) > 6:
+				color = color.darkened(0.35)
+			# Nariz: dois buracos que se encontram.
+			if y >= 18 and y <= 22 and absf(p.x - 16) < (22.5 - y) * 0.5 + 0.4:
+				color = Color(0.04, 0.03, 0.03)
+			# Dentes: blocos claros desiguais; dois faltando.
+			if y >= 24 and y <= 27:
+				var tooth := x / 2
+				if x % 2 == 0 or tooth in missing_teeth:
+					color = Color(0.08, 0.06, 0.05)
+				else:
+					color = Color(0.82, 0.78, 0.62).darkened(0.1 * (tooth % 3))
+					if y == 27 and tooth % 2 == 0:
+						color = Color(0.08, 0.06, 0.05)
+			if y >= 28:
+				color = color.darkened(0.3)
+			image.set_pixel(x, y, Color(_noise(color, rng, 0.04), 1.0))
+	return image
+
+
+## Ferro escuro com pontos de ferrugem (chaves, ponteira do bastão).
+func _iron() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1010
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	for y in SIZE:
+		for x in SIZE:
+			var color := Color(0.28, 0.28, 0.3)
+			if rng.randf() < 0.12:
+				color = Color(0.36, 0.2, 0.1)
+			image.set_pixel(x, y, _noise(color, rng, 0.05))
 	return image
 
 
