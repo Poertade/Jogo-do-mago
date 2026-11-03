@@ -8,6 +8,9 @@ extends Interactable
 
 ## Aspecto do nódulo: dá a cor e diz para qual recipiente da varinha o Vis vai.
 @export var aspect: StringName = &"fire"
+## Outros aspectos que o nódulo também dá, drenados junto (como nos nódulos do Thaumcraft, que
+## guardam vários aspectos). Ex.: o nódulo de Aqua da escola também dá Ordo.
+@export var other_aspects: Array[StringName] = []
 ## Quanto Vis o nódulo tem (-1: não acaba, como o da escola). Ao esgotar, ele se apaga.
 @export var vis_amount := -1
 ## Pontos de reserva drenados por segundo enquanto E está seguro.
@@ -37,6 +40,14 @@ func _ready() -> void:
 	var color: Color = Content.db.aspects[aspect].color
 	glow_material.set_shader_parameter(&"emission_color", color)
 	orb_material.set_shader_parameter(&"emission_color", color.lightened(0.25))
+	# Com outros aspectos, parte das bolinhas fica na cor deles.
+	var all := _aspects()
+	for i in orbs.get_child_count():
+		var orb_aspect := all[i % all.size()]
+		if orb_aspect != aspect:
+			var material := orb_material.duplicate() as ShaderMaterial
+			material.set_shader_parameter(&"emission_color", Content.db.aspects[orb_aspect].color.lightened(0.25))
+			(orbs.get_child(i) as MeshInstance3D).material_override = material
 	light.light_color = color
 	# Bolinhas que voam até a varinha: uma malha e um material para todas.
 	_spark_mesh = SphereMesh.new()
@@ -52,26 +63,27 @@ func hold(player: Node3D, delta: float) -> void:
 	if not _draining:
 		_draining = true
 		_drained_total = 0
-		if wand.is_full(aspect):
+		if _all_full(wand):
 			_say_full(wand, "UI_MSG_ALREADY_FULL")
 		else:
 			_sound = Audio.play(&"recharge")
-	if wand.is_full(aspect):
+	if _all_full(wand):
 		return
 	_drain_buffer += drain_rate * delta
 	var whole := floori(_drain_buffer)
 	if whole > 0:
 		_drain_buffer -= whole
-		if vis_amount >= 0:
-			whole = mini(whole, vis_amount)
-		var added := wand.add(aspect, whole)
+		var added := 0
+		for drained in _aspects():
+			var amount := whole if vis_amount < 0 else mini(whole, vis_amount - added)
+			added += wand.add(drained, amount)
 		_drained_total += added
 		if vis_amount >= 0:
 			vis_amount -= added
 			if vis_amount <= 0:
 				_go_out()
 				return
-		if wand.is_full(aspect):
+		if _all_full(wand):
 			_say_full(wand, "UI_MSG_RECHARGED")
 	_spark_buffer += sparks_per_second * delta
 	while _spark_buffer >= 1.0:
@@ -82,10 +94,28 @@ func hold(player: Node3D, delta: float) -> void:
 ## Avisa que não cabe mais nada: o recipiente do aspecto está cheio, ou a varinha toda está
 ## (o limite total).
 func _say_full(wand: WandState, aspect_key: String) -> void:
-	if wand.reserve(aspect) >= wand.aspect_capacity():
-		Game.message(Text.tr_key(aspect_key) % Text.aspect_name(aspect), Content.db.aspects[aspect].color)
+	if not wand.is_total_full():
+		var names: PackedStringArray = []
+		for drained in _aspects():
+			names.append(Text.aspect_name(drained))
+		Game.message(Text.tr_key(aspect_key) % " / ".join(names), Content.db.aspects[aspect].color)
 	else:
 		Game.message(Text.tr_key("UI_MSG_WAND_FULL") % wand.total_capacity())
+
+
+## O aspecto principal e os outros.
+func _aspects() -> Array[StringName]:
+	var result: Array[StringName] = [aspect]
+	result.append_array(other_aspects)
+	return result
+
+
+## Nenhum dos aspectos do nódulo cabe mais na varinha?
+func _all_full(wand: WandState) -> bool:
+	for drained in _aspects():
+		if not wand.is_full(drained):
+			return false
+	return true
 
 
 func is_available() -> bool:

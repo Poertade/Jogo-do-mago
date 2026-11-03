@@ -69,3 +69,11 @@ OBJ_BONE_PILE,Pilha de ossos
 OBJ_INK_POOL,Poça de tinta
 OBJ_SOUL_LANTERN,Lamparina de almas
 OBJ_ROTTEN_BUNK,Beliche apodrecido
+ASPECT_COLD_MEANING,frio
+FOCUS_FROST,Focus de Gelo
+PAGE_FROST_FOCUS,Focus de {cold}
+PAGE_FROST_FOCUS_DESC,"Prender o {cold} das ruínas num Focus: um projétil de gelo que gasta {water} e {order} e deixa o alvo lento. Q troca de Focus."
+OBJ_HOARFROST,Geada
+ENEMY_ARCHIVIST,O Arquivista
+MSG_ARCHIVIST_ENRAGED,O Arquivista bate o tomo no chão: os aprendizes acordam!
+PROMPT_EXIT_FINAL,Voltar à escola

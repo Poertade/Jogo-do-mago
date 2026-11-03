@@ -8,5 +8,6 @@ id = &"vis_node_water"
 name_key = "OBJ_VIS_NODE"
 aspects = Dictionary[StringName, int]({
 &"magic": 2,
+&"order": 2,
 &"water": 4
 })

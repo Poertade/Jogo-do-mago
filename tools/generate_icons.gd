@@ -4,6 +4,8 @@ extends SceneTree
 ## Rodar a partir da pasta do projeto:
 ##   godot --headless --path . -s tools/generate_icons.gd
 ## Para trocar um ícone por um desenho próprio, substitua o PNG mantendo o nome.
+## Aspecto novo: o .tres aponta para um ícone que ainda não existe e não carrega. Copie qualquer
+## PNG de assets/icons/aspects/ com o nome novo, rode --import e depois esta ferramenta.
 
 const SIZE := 16
 const OUTPUT_DIR := "res://assets/icons/aspects"
@@ -18,6 +20,9 @@ func _initialize() -> void:
 		if not file_name.ends_with(".tres"):
 			continue
 		var aspect: AspectData = load("res://data/aspects/" + file_name)
+		if aspect == null:
+			push_warning("Não carregou %s (ícone faltando? veja o comentário no topo)." % file_name)
+			continue
 		_image = Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGBA8)
 		_color = aspect.color
 		if has_method("_glyph_" + aspect.id):
@@ -148,6 +153,15 @@ func _glyph_mind() -> void:
 				_image.set_pixel(x, y, _color)
 	_clear_disc(8, 8, 2.7)
 	_disc(8, 8, 1.4, _color.darkened(0.5))
+
+func _glyph_cold() -> void:
+	# Floco de neve: seis braços finos saindo do centro, com uma ponta em cada um.
+	for i in 6:
+		var a := PI / 2 + i * PI / 3
+		var d := Vector2(cos(a), sin(a))
+		# Centro no meio de um pixel, para os braços verticais terem 1 pixel de largura.
+		_line(Vector2(7.5, 7.5), Vector2(7.5, 7.5) + d * 6.0, 0.5)
+		_disc(7.5 + d.x * 6.0, 7.5 + d.y * 6.0, 1.1)
 
 func _glyph_travel() -> void:
 	# Trilha tracejada em curva, terminando numa seta: a jornada.

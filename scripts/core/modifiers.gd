@@ -4,6 +4,8 @@ extends RefCounted
 ## Efeitos do mesmo tipo e elemento se multiplicam (duas páginas de +20% = ×1,44).
 
 var _damage_multipliers: Dictionary[StringName, float] = {}
+## Focus liberados pelas páginas, na ordem em que as páginas foram estudadas.
+var unlocked_foci: Array[FocusData] = []
 
 
 static func from_pages(pages: Array[ResearchPageData]) -> Modifiers:
@@ -22,3 +24,5 @@ func damage_multiplier(element: StringName) -> float:
 func _add(effect: PageEffect) -> void:
 	if effect.type == PageEffect.DAMAGE_MULTIPLIER:
 		_damage_multipliers[effect.element] = damage_multiplier(effect.element) * effect.value
+	elif effect.type == PageEffect.UNLOCK_FOCUS and effect.focus != null and not effect.focus in unlocked_foci:
+		unlocked_foci.append(effect.focus)

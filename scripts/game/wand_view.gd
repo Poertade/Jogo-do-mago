@@ -27,6 +27,8 @@ func _physics_process(delta: float) -> void:
 	var caster := Game.run.caster
 	caster.update(delta)
 	var playing := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+	if playing and Input.is_action_just_pressed("switch_focus") and not caster.is_busy():
+		Game.cycle_focus()
 	if playing and Input.is_action_just_pressed("cast") and player.can_cast():
 		var failure := caster.start_charge()
 		if failure == SpellCaster.Failure.NONE:
@@ -60,8 +62,11 @@ func _fire(caster: SpellCaster) -> void:
 	Audio.play(&"spell_cast")
 
 
-## A ponta brilha mais conforme a carga.
+## A ponta brilha mais conforme a carga, na cor do Focus encaixado.
 func _update_tip(charge: float) -> void:
+	var color := Game.run.caster.focus.light_color
+	tip_light.light_color = color
+	(tip_glow.material_override as ShaderMaterial).set_shader_parameter(&"emission_color", color)
 	tip_light.light_energy = lerpf(0.15, 1.6, charge)
 	tip_glow.scale = Vector3.ONE * lerpf(0.6, 1.4, charge)
 

@@ -117,6 +117,20 @@ func play_strike() -> void:
 	_strike_time = 0.3
 
 
+## Fúria: os olhos brilham o dobro e o corpo fica mais curvado, como quem vai avançar.
+func play_enrage() -> void:
+	super.play_enrage()
+	var glow := eyes.get_node_or_null("Glow") as OmniLight3D
+	if glow != null:
+		glow.light_energy *= 2.5
+		glow.omni_range *= 1.5
+	for eye in eyes.get_children():
+		if eye is MeshInstance3D:
+			var material := (eye as MeshInstance3D).material_override as ShaderMaterial
+			material.set_shader_parameter(&"emission_energy", 6.0)
+	hunch_degrees += 8.0
+
+
 ## Tranco e clarão branco ao tomar dano.
 func play_hurt() -> void:
 	super.play_hurt()
@@ -125,6 +139,7 @@ func play_hurt() -> void:
 
 ## Desmorona: os joelhos cedem, o tronco dobra, a cabeça tomba e o corpo cai num monte.
 func play_death() -> void:
+	super.play_death()
 	_dead = true
 	eyes.visible = false
 	var tween := create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)

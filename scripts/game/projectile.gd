@@ -13,6 +13,9 @@ var damage := 0.0
 var element: StringName
 var lifetime := 0.0
 var exclude: Array[RID] = []
+var color := Color.WHITE
+var slow_factor := 1.0
+var slow_seconds := 0.0
 
 @onready var light: OmniLight3D = $Light
 
@@ -27,6 +30,18 @@ func setup(focus: FocusData, direction: Vector3, damage_amount: float, ignore: A
 	$Light.light_color = focus.light_color
 	$Light.light_energy = focus.light_energy
 	$Light.omni_range = focus.light_range
+	color = focus.light_color
+	slow_factor = focus.slow_factor
+	slow_seconds = focus.slow_seconds
+	# O brilho do projétil tem a cor do Focus (laranja no fogo, azul-claro no gelo).
+	_tint($Core, focus.light_color.lightened(0.6))
+	_tint($Shell, focus.light_color)
+
+
+func _tint(mesh: MeshInstance3D, tint: Color) -> void:
+	var material := (mesh.material_override as ShaderMaterial).duplicate() as ShaderMaterial
+	material.set_shader_parameter(&"emission_color", tint)
+	mesh.material_override = material
 
 
 func _physics_process(delta: float) -> void:
@@ -46,6 +61,8 @@ func _physics_process(delta: float) -> void:
 	var target := _find_damageable(hit.collider)
 	if target != null:
 		target.take_damage(damage, element)
+		if slow_seconds > 0.0 and target.has_method(&"apply_slow"):
+			target.apply_slow(slow_factor, slow_seconds)
 	_explode()
 
 
@@ -62,6 +79,7 @@ func _explode() -> void:
 	Audio.play_at(&"fire_impact", global_position, get_parent())
 	if impact_scene != null:
 		var impact: Node3D = impact_scene.instantiate()
+		impact.set(&"color", color)
 		get_parent().add_child(impact)
 		impact.global_position = global_position
 	queue_free()

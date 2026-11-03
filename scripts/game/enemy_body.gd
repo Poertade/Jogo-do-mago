@@ -8,8 +8,14 @@ extends Node3D
 ## Quadros de animação por segundo (o PS1 animava "aos trancos").
 @export var animation_fps := 12.0
 
+## Cor da geada que cobre o corpo quando o inimigo está lento (Focus de Gelo).
+const FROST_COLOR := Color(0.55, 0.8, 1.0)
+const FROST_ENERGY := 0.45
+
 ## Materiais que piscam em branco ao tomar dano (os que não brilham sozinhos).
 var _flash_materials: Array[ShaderMaterial] = []
+var _flash := 0.0
+var _frost := 0.0
 
 
 func _ready() -> void:
@@ -38,10 +44,28 @@ func play_hurt() -> void:
 
 
 func play_death() -> void:
-	pass
+	set_frost(0.0)
+
+
+## Fúria (chefes): a base só pisca; os corpos acrescentam o que quiserem (olhos mais fortes).
+func play_enrage() -> void:
+	play_hurt()
+
+
+## Geada sobre o corpo (0 = nada, 1 = coberto), enquanto o inimigo está lento.
+func set_frost(amount: float) -> void:
+	_frost = amount
+	_update_glow()
 
 
 func _set_flash(value: float) -> void:
+	_flash = value
+	_update_glow()
+
+
+## O clarão do dano (branco) vale mais que a geada (azul) enquanto estiver mais forte.
+func _update_glow() -> void:
+	var frost := _frost * FROST_ENERGY
 	for material in _flash_materials:
-		material.set_shader_parameter(&"emission_color", Color.WHITE)
-		material.set_shader_parameter(&"emission_energy", value)
+		material.set_shader_parameter(&"emission_color", Color.WHITE if _flash >= frost else FROST_COLOR)
+		material.set_shader_parameter(&"emission_energy", maxf(_flash, frost))

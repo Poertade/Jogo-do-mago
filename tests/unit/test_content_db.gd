@@ -34,7 +34,7 @@ func test_school_values_match_the_specification() -> void:
 	assert_eq(db.player.max_health, 100)
 	assert_eq(db.player.starting_wand.capacity, 30, "Limite total de Vis (pedido do usuário, D051)")
 	assert_eq(db.player.starting_wand.aspect_capacity, 10, "Limite de cada recipiente (D051)")
-	assert_eq(db.player.starting_vis, {&"fire": 10} as Dictionary[StringName, int])
+	assert_eq(db.player.starting_vis, {&"fire": 10, &"order": 10, &"water": 10} as Dictionary[StringName, int], "Os recipientes dos dois Focus (D059)")
 	var focus := db.player.starting_focus
 	assert_eq(focus.cost, {&"fire": 1} as Dictionary[StringName, int], "Ajustado em D055: 10 disparos por recipiente, para a incursão de 5 salas")
 	assert_eq(focus.damage, 15.0)
@@ -171,3 +171,43 @@ func test_compound_recipes_follow_thaumcraft_4() -> void:
 	assert_eq(db.tier(&"fire"), 0)
 	assert_eq(db.tier(&"life"), 1)
 	assert_eq(db.tier(&"mind"), 4)
+
+
+func test_frost_focus_and_its_page() -> void:
+	var db := ContentDB.new()
+	db.load_all()
+	var frost: FocusData = db.foci[&"frost_focus"]
+	assert_eq(frost.element, &"cold")
+	assert_eq(frost.cost, {&"water": 1, &"order": 1} as Dictionary[StringName, int], "Gasta Aqua e Ordo (D054)")
+	assert_lt(frost.slow_factor, 1.0, "Deixa o alvo lento")
+	assert_eq(db.aspects[&"cold"].parents, [&"fire", &"entropy"] as Array[StringName], "Gelum = Ignis + Perditio (Thaumcraft 4)")
+	var unlocked := Modifiers.from_pages([db.pages[&"frost_focus"]] as Array[ResearchPageData]).unlocked_foci
+	assert_eq(unlocked, [frost] as Array[FocusData], "A página libera o Focus de Gelo")
+	assert_gt(db.enemies[&"ink_ooze"].weaknesses[&"cold"], 1.0, "O Lodo resiste a fogo, mas é fraco a frio")
+
+
+func test_boss_room_closes_the_layout() -> void:
+	var db := ContentDB.new()
+	db.load_all()
+	assert_eq(db.dungeon_rules.layout.back(), &"boss")
+	var boss: EnemyData = db.enemies[&"archivist"]
+	assert_true(boss.show_health_bar)
+	assert_eq(boss.hurt_stun, 0.0, "O chefe não é interrompido a cada disparo")
+	assert_gt(boss.enrage_at, 0.0)
+	assert_false(boss.enrage_summons.is_empty())
+
+
+func test_bad_slow_and_enrage_values_are_reported() -> void:
+	var db := ContentDB.new()
+	db.load_all()
+	db.errors.clear()
+	var focus: FocusData = db.foci[&"frost_focus"].duplicate()
+	focus.slow_factor = 0.0
+	db.foci[&"frost_focus"] = focus
+	var boss: EnemyData = db.enemies[&"archivist"].duplicate()
+	boss.enrage_at = 1.5
+	db.enemies[&"archivist"] = boss
+	db.validate()
+	var text := "\n".join(db.errors)
+	assert_string_contains(text, "slow_factor")
+	assert_string_contains(text, "enrage_at")

@@ -22,9 +22,14 @@ const MESSAGE_SECONDS := 4.0
 @onready var damage_flash: ColorRect = %DamageFlash
 @onready var vis_gauge: VisGauge = %VisGauge
 @onready var depth_label: Label = %DepthLabel
+@onready var boss_panel: Control = %BossPanel
+@onready var boss_name: Label = %BossName
+@onready var boss_bar: ProgressBar = %BossBar
 
 var _health_bar: ProgressBar
 var _health_value: Label
+## Chefe que está lutando com o jogador (barra de vida no alto da tela).
+var _boss: Node3D
 
 
 func _ready() -> void:
@@ -36,6 +41,7 @@ func _ready() -> void:
 	_build_stats()
 	Game.page_studied.connect(func(page): show_message(tr("UI_MSG_PAGE_STUDIED") % Text.expand(page.name_key)))
 	Game.aspect_combined.connect(_on_aspect_combined)
+	Game.boss_engaged.connect(_on_boss_engaged)
 
 
 func _process(_delta: float) -> void:
@@ -46,6 +52,7 @@ func _process(_delta: float) -> void:
 	_update_scan(playing)
 	_update_stats()
 	_update_depth()
+	_update_boss()
 	var charge := Game.run.caster.charge_ratio()
 	crosshair.color = Color(0.85, 0.8, 0.7, 0.8).lerp(Color(1.0, 0.55, 0.2, 1.0), charge)
 	crosshair.scale = Vector2.ONE * (1.0 + charge)
@@ -93,6 +100,20 @@ func _update_stats() -> void:
 	var focus := Game.run.caster.focus
 	var focus_aspect: AspectData = Content.db.aspects.get(focus.element)
 	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE)
+
+
+func _on_boss_engaged(enemy: Node3D) -> void:
+	_boss = enemy
+	boss_name.text = Text.expand(enemy.data.name_key)
+
+
+## A barra some quando o chefe cai ou a sala é trocada.
+func _update_boss() -> void:
+	var active: bool = is_instance_valid(_boss) and not _boss.health.is_dead()
+	boss_panel.visible = active
+	if active:
+		boss_bar.max_value = _boss.health.max_health
+		boss_bar.value = _boss.health.current
 
 
 ## Na Dungeon, mostra em que sala da incursão o jogador está.

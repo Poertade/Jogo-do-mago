@@ -75,3 +75,5 @@ UI_NOTE_DONE,Pesquisa concluída. O efeito já vale.
 UI_NOTE_MISSING_ASPECT,"A nota cita aspectos que você ainda não descobriu (""?""). Descubra-os combinando aspectos."
 UI_MSG_NODE_EMPTY,O nódulo de %s se apagou
 UI_DEPTH,Sala %d de %d
+UI_MSG_FOCUS_EQUIPPED,Na varinha: %s
+UI_MSG_FOCUS_UNLOCKED,Novo Focus: %s (Q para trocar)

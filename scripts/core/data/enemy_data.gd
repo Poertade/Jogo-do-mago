@@ -25,5 +25,18 @@ extends ScannableData
 @export var attack_windup: float = 0.0
 ## Segundos entre um golpe e o próximo.
 @export var attack_cooldown: float = 0.0
-## Segundos parado depois de tomar dano (a "reação ao dano").
+## Segundos parado depois de tomar dano (a "reação ao dano"). 0: não se abala (chefes).
 @export var hurt_stun: float = 0.0
+
+@export_group("Chefe")
+## Mostra a barra de vida no alto da tela quando o inimigo nota o jogador.
+@export var show_health_bar := false
+## Fração da vida em que o inimigo se enfurece (0 = nunca; 0,5 = na metade da vida).
+@export var enrage_at: float = 0.0
+## Enfurecido: anda e golpeia mais rápido (multiplica a velocidade e divide a preparação e o
+## intervalo dos golpes).
+@export var enrage_speed: float = 1.0
+## Inimigos que ele chama ao se enfurecer (aparecem em volta dele).
+@export var enrage_summons: Array[EnemyData] = []
+## Aviso mostrado ao se enfurecer (chave de locales/content.csv).
+@export var enrage_message_key: String

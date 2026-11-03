@@ -16,12 +16,13 @@
 [ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="14"]
 [ext_resource type="Resource" path="res://data/scannables/rotten_bunk.tres" id="15"]
 [ext_resource type="Resource" path="res://data/scannables/ink_pool.tres" id="16"]
-[ext_resource type="Resource" path="res://data/scannables/drowned_books.tres" id="17"]
-[ext_resource type="Resource" path="res://data/scannables/torch.tres" id="18"]
-[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="19"]
-[ext_resource type="Script" path="res://scripts/game/enemy_spawn.gd" id="20"]
-[ext_resource type="Resource" path="res://data/enemies/ink_ooze.tres" id="21"]
-[ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="22"]
+[ext_resource type="Resource" path="res://data/scannables/hoarfrost.tres" id="17"]
+[ext_resource type="Resource" path="res://data/scannables/drowned_books.tres" id="18"]
+[ext_resource type="Resource" path="res://data/scannables/torch.tres" id="19"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="20"]
+[ext_resource type="Script" path="res://scripts/game/enemy_spawn.gd" id="21"]
+[ext_resource type="Resource" path="res://data/enemies/ink_ooze.tres" id="22"]
+[ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="23"]
 
 [sub_resource type="BoxShape3D" id="Box_1"]
 size = Vector3(1.8, 2.6, 0.1)
@@ -91,21 +92,47 @@ size = Vector3(1.4, 0.1, 1.2)
 [sub_resource type="ShaderMaterial" id="Mat_16"]
 render_priority = 0
 shader = ExtResource("10")
-shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
-shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
-shader_parameter/emission_energy = 2.2
+shader_parameter/albedo_color = Color(0.6588, 0.7529, 0.8157, 1.0)
+shader_parameter/emission_color = Color(0.3765, 0.502, 0.6275, 1.0)
+shader_parameter/emission_energy = 0.2
 
 [sub_resource type="BoxMesh" id="BoxMesh_17"]
-size = Vector3(0.08, 0.14, 0.08)
+size = Vector3(1.2, 0.02, 0.9)
 
-[sub_resource type="ShaderMaterial" id="Mat_18"]
+[sub_resource type="BoxShape3D" id="Box_18"]
+size = Vector3(1.2, 0.1, 0.9)
+
+[sub_resource type="ShaderMaterial" id="Mat_19"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.6588, 0.7529, 0.8157, 1.0)
+shader_parameter/emission_color = Color(0.3765, 0.502, 0.6275, 1.0)
+shader_parameter/emission_energy = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_20"]
+size = Vector3(1.2, 0.02, 0.9)
+
+[sub_resource type="BoxShape3D" id="Box_21"]
+size = Vector3(1.2, 0.1, 0.9)
+
+[sub_resource type="ShaderMaterial" id="Mat_22"]
 render_priority = 0
 shader = ExtResource("10")
 shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
 shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
 shader_parameter/emission_energy = 2.2
 
-[sub_resource type="BoxMesh" id="BoxMesh_19"]
+[sub_resource type="BoxMesh" id="BoxMesh_23"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_24"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_25"]
 size = Vector3(0.08, 0.14, 0.08)
 
 [node name="FloodedDormitory" type="Node3D"]
@@ -474,31 +501,59 @@ material_override = SubResource("Mat_13")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/InkPool3"]
 shape = SubResource("Box_15")
 
+[node name="Frost1" type="StaticBody3D" parent="Props"]
+transform = Transform3D(0.866, 0.0, 0.5, 0.0, 1.0, 0.0, -0.5, 0.0, 0.866, -3.4, 0.014, -6.0)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("11")
+data = ExtResource("17")
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/Frost1"]
+mesh = SubResource("BoxMesh_17")
+material_override = SubResource("Mat_16")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Frost1"]
+shape = SubResource("Box_18")
+
+[node name="Frost2" type="StaticBody3D" parent="Props"]
+transform = Transform3D(0.5, 0.0, 0.866, 0.0, 1.0, 0.0, -0.866, 0.0, 0.5, 3.6, 0.014, 5.4)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("11")
+data = ExtResource("17")
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/Frost2"]
+mesh = SubResource("BoxMesh_20")
+material_override = SubResource("Mat_19")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Frost2"]
+shape = SubResource("Box_21")
+
 [node name="Books1" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, 0.9397, -3.6, 0.17, 5.6)
 script = ExtResource("2")
 size = Vector3(0.6, 0.35, 0.45)
 material = ExtResource("14")
-scannable = ExtResource("17")
+scannable = ExtResource("18")
 
 [node name="Books2" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.766, 0.0, 0.6428, 0.0, 1.0, 0.0, -0.6428, 0.0, 0.766, 3.5, 0.17, -6.2)
 script = ExtResource("2")
 size = Vector3(0.6, 0.35, 0.45)
 material = ExtResource("14")
-scannable = ExtResource("17")
+scannable = ExtResource("18")
 
 [node name="Torch1Holder" type="StaticBody3D" parent="Lights"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.4, 1.9, -2.7)
 script = ExtResource("2")
 size = Vector3(0.12, 0.4, 0.12)
 material = ExtResource("14")
-scannable = ExtResource("18")
+scannable = ExtResource("19")
 
 [node name="Torch1Flame" type="MeshInstance3D" parent="Lights"]
 transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, -4.4, 2.17, -2.7)
-mesh = SubResource("BoxMesh_17")
-material_override = SubResource("Mat_16")
+mesh = SubResource("BoxMesh_23")
+material_override = SubResource("Mat_22")
 
 [node name="Torch1" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.05, 2.3, -2.7)
@@ -506,7 +561,7 @@ light_color = Color(1.0, 0.6275, 0.3765, 1.0)
 light_energy = 1.0
 omni_range = 6.0
 omni_attenuation = 1.2
-script = ExtResource("19")
+script = ExtResource("20")
 flicker_amount = 0.3
 
 [node name="Torch2Holder" type="StaticBody3D" parent="Lights"]
@@ -514,12 +569,12 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.4, 1.9, 3
 script = ExtResource("2")
 size = Vector3(0.12, 0.4, 0.12)
 material = ExtResource("14")
-scannable = ExtResource("18")
+scannable = ExtResource("19")
 
 [node name="Torch2Flame" type="MeshInstance3D" parent="Lights"]
 transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 4.4, 2.17, 3.3)
-mesh = SubResource("BoxMesh_19")
-material_override = SubResource("Mat_18")
+mesh = SubResource("BoxMesh_25")
+material_override = SubResource("Mat_24")
 
 [node name="Torch2" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.05, 2.3, 3.3)
@@ -527,7 +582,7 @@ light_color = Color(1.0, 0.6275, 0.3765, 1.0)
 light_energy = 1.0
 omni_range = 6.0
 omni_attenuation = 1.2
-script = ExtResource("19")
+script = ExtResource("20")
 flicker_amount = 0.3
 
 [node name="PoolGlow" type="OmniLight3D" parent="Lights"]
@@ -539,11 +594,11 @@ omni_attenuation = 1.2
 
 [node name="SpawnA" type="Marker3D" parent="Markers"]
 transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.6, 0.0, -3.6)
-script = ExtResource("20")
-enemy_pool = [ExtResource("21"), ExtResource("22")]
+script = ExtResource("21")
+enemy_pool = [ExtResource("22"), ExtResource("23")]
 
 [node name="SpawnB" type="Marker3D" parent="Markers"]
 transform = Transform3D(-0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, -0.9397, -2.0, 0.0, -0.4)
-script = ExtResource("20")
-enemy_pool = [ExtResource("22")]
+script = ExtResource("21")
+enemy_pool = [ExtResource("23")]
 chance = 0.5

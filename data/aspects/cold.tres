@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/cold.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"cold"
+name_key = "ASPECT_COLD"
+meaning_key = "ASPECT_COLD_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"fire", &"entropy"])
+color = Color(0.78, 0.9, 1, 1)
+icon = ExtResource("2")

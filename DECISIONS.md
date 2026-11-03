@@ -467,6 +467,42 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** recarga lenta e contínua na Dungeon.
 - **Motivo:** D054 (um nódulo pequeno no meio do caminho). Os objetos novos trazem aspectos que a escola não tem (Mortuus, Vacuos, Spiritus), para explorar render pesquisa.
 
+### D059 · 2026-11-03 · Troca de Focus com Q, em qualquer lugar (muda o plano da D054)
+
+- **Escolha:** a tecla Q troca entre os Focus liberados, em qualquer lugar, inclusive na Dungeon; a carga em andamento se perde. Um Focus é liberado por uma página de pesquisa com o efeito `unlock_focus`.
+- **Descartado:** trocar só na escola, como estava na proposta da D054.
+- **Motivo:** com recipientes separados (D051), o Vis de Aqua e Ordo só serve se o jogador puder usar o gelo na mesma incursão em que usa o fogo. Trocando só na escola, cada incursão teria um Focus e metade da varinha ficaria parada. Alguns inimigos também pedem um Focus específico: o Lodo de Tinta resiste a fogo e é fraco a frio. É o mesmo jeito do Thaumcraft, em que o Focus se troca a qualquer hora.
+
+### D060 · 2026-11-03 · Gelum e o Focus de Gelo
+
+- **Escolha:**
+  - **Gelum (frio):** aspecto composto novo, Ignis + Perditio, a receita do Thaumcraft 4. Ícone de floco de neve.
+  - **Focus de Gelo:** projétil de frio com 11 de dano, gasta 1 de Aqua e 1 de Ordo e deixa o alvo a 45% da velocidade por 3 s. Lento, o inimigo anda, prepara o golpe e se anima mais devagar, coberto de geada azul.
+  - **A página:** *Focus de Gelum* tem nota de raio 2 com Gelum, Aqua e Vacuos. Gelum e Vacuos rendem pontos na Dungeon (geada, poças de tinta).
+  - **Vis inicial:** 10 de Ignis, 10 de Aqua e 10 de Ordo, os recipientes dos dois Focus.
+  - **Escola:** ganhou um Nódulo de Aqua que também dá Ordo. Um Nódulo pode ter outros aspectos (`other_aspects`), como os do Thaumcraft.
+- **Descartado:**
+  - **Gelo que congela o alvo de vez:** contra o chefe seria fácil demais.
+  - **Um Nódulo de Ordo separado:** encheria a escola de nódulos.
+- **Motivo:** D054. O gelo dá outro jeito de lutar (controlar a distância) e usa os outros recipientes da varinha.
+
+### D061 · 2026-11-03 · O Arquivista, chefe do Grande Arquivo
+
+- **Escolha:**
+  - **O chefe:** o mesmo esqueleto humanoide, 1,55× maior, com mitra, lanterna de almas e um tomo de ferro. Tem 130 de vida e 18 de dano por golpe, e o frio o fere 30% mais.
+  - **Não se abala:** com `hurt_stun` = 0, os disparos não interrompem o golpe; sem isso, disparar a cada segundo o travaria para sempre.
+  - **Fúria** (`enrage_at` = 0,5): fica 40% mais rápido e chama dois Aprendizes Esquecidos.
+  - **Barra de vida:** aparece no alto da tela quando ele nota o jogador (`show_health_bar`).
+  - **A sala:** o Grande Arquivo fecha o roteiro, e a saída dele leva à escola.
+- **Descartado:** ataques à distância e fases com padrões novos, porque pedem comportamento novo no cérebro.
+- **Motivo:** D054. Sem a página de fogo e sem o gelo, a incursão pede mais disparos do que a varinha tem (uns 25 contra 20): o chefe é o que cobra a pesquisa.
+
+### D062 · 2026-11-03 · Teste que compila todos os scripts
+
+- **Escolha:** `test_scripts_load.gd` carrega todo script de `scripts/` e `tools/`.
+- **Descartado:** confiar só nos testes de lógica.
+- **Motivo:** um erro de sintaxe no HUD passou pelos testes e só aparecia ao abrir o jogo.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

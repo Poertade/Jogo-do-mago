@@ -181,3 +181,21 @@ func test_changes_emit_a_signal() -> void:
 	assert_signal_emit_count(wand, "reserves_changed", 2)
 	wand.add(&"fire", 0)
 	assert_signal_emit_count(wand, "reserves_changed", 2, "Nada entrou: sem sinal")
+
+
+func test_equip_swaps_focus_and_cancels_the_charge() -> void:
+	var wand := WandState.new(wand_data, {&"fire": 10, &"water": 10, &"order": 10})
+	var caster := SpellCaster.new(focus, wand)
+	caster.start_charge()
+	var frost := FocusData.new()
+	frost.cost = {&"water": 1, &"order": 1} as Dictionary[StringName, int]
+	frost.charge_time = 0.5
+	caster.equip(frost)
+	assert_eq(caster.focus, frost)
+	assert_false(caster.is_busy(), "Trocar de Focus perde a carga")
+	caster.start_charge()
+	caster.update(0.5)
+	assert_true(caster.release())
+	assert_eq(wand.reserve(&"water"), 9)
+	assert_eq(wand.reserve(&"order"), 9)
+	assert_eq(wand.reserve(&"fire"), 10, "O gelo não gasta Ignis")

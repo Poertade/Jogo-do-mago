@@ -21,6 +21,8 @@ signal travel_requested(room_id: StringName, entrance_id: StringName)
 ## O jogador tomou dano / morreu.
 signal player_damaged(amount: float)
 signal player_died
+## Um chefe notou o jogador (o HUD mostra a barra de vida dele).
+signal boss_engaged(enemy: Node3D)
 ## Um texto para ler (placa, anotação), com título e corpo (chaves de tradução).
 signal note_requested(title_key: String, body_key: String)
 
@@ -115,9 +117,33 @@ func erase_from_note(page: ResearchPageData, cell: Vector2i) -> bool:
 
 ## Estuda uma página (a nota precisa estar completa) e avisa a interface.
 func study(page: ResearchPageData) -> bool:
+	var foci_before := available_foci().size()
 	if not knowledge.study(page, Content.db.aspects):
 		return false
 	page_studied.emit(page)
+	var foci := available_foci()
+	if foci.size() > foci_before:
+		message(Text.tr_key("UI_MSG_FOCUS_UNLOCKED") % Text.tr_key(foci.back().name_key), Color(0.7, 0.85, 1.0))
+	return true
+
+
+## Os Focus que o jogador pode usar: o inicial e os liberados por páginas estudadas.
+func available_foci() -> Array[FocusData]:
+	var foci: Array[FocusData] = [Content.db.player.starting_focus]
+	for focus in modifiers.unlocked_foci:
+		if not focus in foci:
+			foci.append(focus)
+	return foci
+
+
+## Troca para o próximo Focus disponível (tecla Q). Devolve false se só houver um.
+func cycle_focus() -> bool:
+	var foci := available_foci()
+	if foci.size() < 2:
+		return false
+	var index := foci.find(run.caster.focus)
+	run.caster.equip(foci[(index + 1) % foci.size()])
+	message(Text.tr_key("UI_MSG_FOCUS_EQUIPPED") % Text.tr_key(run.caster.focus.name_key))
 	return true
 
 

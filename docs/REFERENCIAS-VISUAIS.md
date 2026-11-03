@@ -80,3 +80,9 @@ Pedido do usuário depois da rodada do pergaminho: os menus estavam "destoantes,
 | Biblioteca desabada | lamparinas verde-água e um feixe pálido do alto |
 | Corredor do ossuário | tochas e lamparinas |
 | Fonte de Vis | lilás, com a cor dos Nódulos |
+
+## M7
+
+- **O Arquivista (chefe):** o esqueleto humanoide 1,55× maior, de manto escuro com faixa vinho, mitra com aro dourado e lentes. Carrega um tomo de ferro (a arma) e uma lanterna de almas verde-água, que ilumina o chão em volta dele. Os olhos são lilás e brilham o dobro quando ele se enfurece.
+- **Gelo:** azul-claro (`#9ed9ff`) no projétil, no clarão, na ponta da varinha e no orbe do HUD. A geada no inimigo lento é um brilho azul fraco por cima do corpo.
+- **Nódulo de Aqua:** núcleo azul com bolinhas azuis e brancas (Ordo).

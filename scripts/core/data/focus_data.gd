@@ -26,6 +26,12 @@ const SPELL_TYPES: Array[StringName] = [SPELL_PROJECTILE]
 ## Dano base, antes das páginas de pesquisa e das fraquezas do alvo.
 @export var damage: float = 0.0
 
+@export_group("Efeito no alvo")
+## Velocidade do alvo atingido, como fração da normal (1 = sem efeito; 0,45 = anda a 45%).
+@export var slow_factor: float = 1.0
+## Por quantos segundos o alvo fica lento.
+@export var slow_seconds: float = 0.0
+
 @export_group("Projétil")
 ## Velocidade, em metros por segundo.
 @export var projectile_speed: float = 0.0

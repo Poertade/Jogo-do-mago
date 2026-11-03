@@ -14,6 +14,15 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
+**M7: magia e pesquisa novas.**
+- **Focus de Gelo:** liberado pela página de pesquisa *Focus de Gelum*. Gasta Aqua e Ordo e deixa o alvo lento. A tecla **Q** troca de Focus.
+- **Nódulo de Aqua** na escola, que dá Aqua e Ordo.
+- **Chefe:** **O Arquivista** espera na última sala da incursão. Na metade da vida, ele se enfurece e chama dois aprendizes.
+
+| O Arquivista enfurecido, com os aprendizes que chamou | Nódulo de Aqua (com Ordo) e o orbe do Focus de Gelo no HUD |
+| --- | --- |
+| ![Chefe](docs/images/arquivista.png) | ![Nódulo de Aqua](docs/images/nodulo-de-aqua.png) |
+
 **M6: a Dungeon montada.** Cada travessia do portal começa uma **incursão** de 5 salas sorteadas (com semente) entre peças prontas: quatro salas de combate, com inimigos que variam a cada vez, e uma fonte de Vis no meio do caminho. Dois inimigos novos: o **Aprendiz Esquecido** e o **Lodo de Tinta**.
 
 | Aprendiz Esquecido, Bedel Descarnado e Lodo de Tinta | Biblioteca desabada (sala 1 de 5) |
@@ -66,6 +75,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 | Botão direito (segurar) | escanear com a Lente Taxonômica |
 | E | interagir (Mesa, ler, atravessar o portal, sair) |
 | E (segurar) | drenar Vis do Nódulo para a varinha |
+| Q | trocar de Focus (depois de liberar o Focus de Gelo) |
 | Tab | Livro de Pesquisa |
 | Esc | pausa e opções; fecha qualquer tela |
 
@@ -85,27 +95,37 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 7. O **Livro de Pesquisa** (Tab) lista aspectos (com ícone, pontos e receita), alvos escaneados e páginas estudadas.
 
 **Magia:**
-8. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a bola de fogo. Soltar antes cancela sem gastar nada.
+8. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a magia do Focus encaixado. Soltar antes cancela sem gastar nada.
+   - **Focus de Fogo** (o inicial): bola de fogo, 15 de dano, 1 de Ignis por disparo.
+   - **Focus de Gelo:** é liberado ao estudar a página *Focus de Gelum*, que liga Gelum, Aqua e Vacuos. Lança um projétil de gelo com 11 de dano, gasta 1 de Aqua e 1 de Ordo e deixa o alvo a 45% da velocidade por 3 s (andar e preparar o golpe).
+   - **Q** troca de Focus em qualquer lugar. O orbe do HUD e a ponta da varinha mudam de cor.
 9. **Vis na varinha:** um recipiente para cada primal (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com até 10, e no máximo 30 somando todos. Por exemplo: 10 de Ignis, 10 de Aqua e 10 de Perditio enchem a varinha.
    - No HUD (canto de cima), cada recipiente é um frasco em volta do orbe do Focus, com o número ao lado; embaixo, o total.
-   - Cada disparo de fogo gasta 2 de Ignis: com o recipiente cheio, são 5 disparos.
-   - No **Nódulo de Vis** do Salão (as bolinhas laranja, de Ignis), segure E: o Vis voa até a varinha e enche o recipiente de Ignis, até 10 ou até a varinha toda chegar a 30. Fora da escola não há recarga.
+   - A varinha começa cada incursão com 10 de Ignis, 10 de Aqua e 10 de Ordo: 10 disparos de fogo e 10 de gelo.
+   - No Salão há dois **Nódulos de Vis**: segure E e o Vis voa até a varinha. O laranja enche Ignis; o azul enche Aqua e Ordo (as bolinhas brancas). Cada um enche até 10 por recipiente ou até a varinha toda chegar a 30.
+   - Na Dungeon, só a fonte de Vis recarrega, e os Nódulos dela se esgotam.
 10. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
 
 **Dungeon:**
 11. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
-12. O **portal** (E) começa uma **incursão**: 5 salas sorteadas em sequência, na ordem combate, combate, descanso, combate, combate. O canto de cima à direita mostra em que sala você está.
+12. O **portal** (E) começa uma **incursão**: 5 salas sorteadas em sequência, na ordem combate, combate, descanso, combate, chefe. O canto de cima à direita mostra em que sala você está.
    - **Câmaras sorteadas:** a câmara de pedra, o dormitório alagado, a biblioteca desabada e o corredor do ossuário. Cada uma sorteia também quais inimigos aparecem.
    - **Avançar:** em cada sala, a grade ao norte só abre depois de todos os inimigos caírem. **Descer mais fundo** (E) leva à próxima sala.
-   - **Fonte de Vis:** a sala de descanso tem dois Nódulos pequenos, de Ignis e de Aqua, com 10 de Vis cada; eles se apagam quando esgotam.
-   - **Fim:** a saída da última sala leva de volta à escola.
+   - **Fonte de Vis:** a sala de descanso tem dois Nódulos pequenos: um de Ignis (10 de Vis) e um de Aqua com Ordo (14). Eles se apagam quando esgotam.
+   - **Chefe:** no Grande Arquivo espera **O Arquivista**, com a barra de vida no alto da tela.
+     - Alto e lento, golpeia forte com o tomo (18 de dano) e não se abala com os disparos.
+     - Na metade da vida, se enfurece: fica mais rápido e chama dois aprendizes.
+     - O fogo o fere normalmente; o frio, 30% a mais.
+     - Vencê-lo abre a volta à escola.
+   - **Fogo só não basta:** sem a página de fogo, uma incursão pede uns 25 disparos e a varinha dá 20 de fogo. O Focus de Gelo, ou a Compreensão de Ignis, é o que leva até o fim.
 13. **Inimigos:**
 
    | Inimigo | Comportamento | Fogo | Escaneável depois de descobrir |
    | --- | --- | --- | --- |
    | **Bedel Descarnado** | lento; antes de golpear, ergue o bastão com um sopro: recue para esquivar | fraco: 3 disparos, ou 2 com a página | Mortuus e Exanimis |
    | **Aprendiz Esquecido** | rápido e frágil; golpeia com a pena quase sem aviso | fraco: 2 disparos | Mortuus, Exanimis e Cognitio |
-   | **Lodo de Tinta** | lento, golpe forte com o braço de tinta | resiste: 4 disparos | Cognitio |
+   | **Lodo de Tinta** | lento, golpe forte com o braço de tinta | resiste: 4 disparos (gelo: 2) | Cognitio |
+   | **O Arquivista** (chefe) | ver acima | normal: 9 disparos | Cognitio, Exanimis, Spiritus e Mortuus |
 
    Na Dungeon há objetos novos para escanear (livros afogados, pilhas de ossos, poças de tinta, lamparinas de almas, beliches), com aspectos que a escola não tem, como Mortuus, Vacuos e Spiritus. Para escanear, você precisa descobrir esses aspectos na Mesa antes.
    - Antes, o portal levava sempre à câmara de pedra; agora ela é uma das câmaras sorteadas.
@@ -148,6 +168,8 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Pesquisa:** escaneamento bloqueado por composto desconhecido, pontos por aspecto, combinação na Mesa, notas de pesquisa (grade, ligações, escrever e apagar, nota completa), estudo de páginas, andamento do escaneamento, efeitos das páginas, economia da pesquisa (tudo pode ser escaneado com os pontos disponíveis).
 - **Magia:** recipientes de Vis da varinha (limite por aspecto e total), custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
+- **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala.
+- **Scripts:** todo script do jogo e das ferramentas compila.
 - **Incursão:** sorteio das salas com semente (mesma semente, mesmo roteiro; sem repetir sala), avanço e fim da incursão, morte que encerra a incursão, entrada e saída de toda sala sorteável.
 - **Sistema:** persistência (save), gerador com semente, opções.
 - **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
@@ -243,7 +265,8 @@ Tudo abaixo é feito no editor do Godot (ou editando os arquivos de texto) e nã
    | Identificação | `id` (`ash_wraith`), `name_key` (`ENEMY_ASH_WRAITH`) |
    | Escaneamento | `aspects`: o que a Lente revela |
    | Combate | `max_health`, `damage`, `weaknesses` (elemento → multiplicador, ex.: `water` = 2.0) |
-   | Comportamento | `move_speed`, `sight_range`, `attack_range`, `attack_windup`, `attack_cooldown`, `hurt_stun` |
+   | Comportamento | `move_speed`, `sight_range`, `attack_range`, `attack_windup`, `attack_cooldown`, `hurt_stun` (0 = não se abala) |
+   | Chefe (opcional) | `show_health_bar`, `enrage_at` (fração da vida em que se enfurece), `enrage_speed`, `enrage_summons` (quem ele chama) e `enrage_message_key` |
    | Aparência | `scene_path` (pode ser a mesma cena do Bedel) |
 
 2. Em `locales/content.csv`: `ENEMY_ASH_WRAITH,Espectro de Cinzas`.
@@ -274,8 +297,8 @@ Ao escanear, a busca sobe dos blocos até o primeiro nó que tenha dados.
 
 ### Adicionar um Focus
 
-1. Duplique `data/foci/fire_focus.tres`. Mude `id`, `name_key`, `element`, `cost` (Vis por disparo, por aspecto: ex.: `water` = 2, `order` = 1), `charge_time`, `cooldown`, `damage` e os valores do projétil (velocidade, duração, cor e força da luz).
-2. Para equipá-lo, abra `data/player/player.tres` e troque `starting_focus`. Neste recorte não há troca de Focus durante o jogo.
+1. Duplique `data/foci/frost_focus.tres`. Mude `id`, `name_key`, `element`, `cost` (Vis por disparo, por aspecto: ex.: `water` = 2, `order` = 1), `charge_time`, `cooldown`, `damage`, o efeito no alvo (`slow_factor` e `slow_seconds`; 1 e 0 = nenhum) e os valores do projétil (velocidade, duração, cor e força da luz). A cor da luz também pinta o projétil, o clarão, a ponta da varinha e o orbe do HUD.
+2. Para o jogador ganhar o Focus, crie uma página de pesquisa com o efeito `unlock_focus` apontando para ele (veja `data/research/pages/frost_focus.tres`). Depois de estudada, a tecla Q passa a incluí-lo. O Focus inicial fica em `starting_focus`, em `data/player/player.tres`.
 3. Cada aspecto de `cost` sai do recipiente dele na varinha. Só aspectos primais têm Vis, e a varinha precisa ter recipiente para eles e guardar pelo menos um disparo; os testes avisam se não guardar. Para o jogador começar com Vis desse aspecto, acrescente-o em `starting_vis` (`data/player/player.tres`).
 
 O único `spell_type` existente é `projectile`. Um tipo novo de magia (cone, raio…) é código novo no motor.
@@ -301,7 +324,9 @@ Equipe-a em `data/player/player.tres` (`starting_wand`). Ali também fica `start
    - `note_radius`: o tamanho da grade (1 = 7 hexágonos, 2 = 19, 3 = 37). Grade maior pede correntes mais longas, isto é, mais pontos.
    - O teste `test_research_economy.gd` resolve cada nota com os pontos do jogo e avisa se alguma for impossível.
 3. Preencha os requisitos: `required_pages` (outras páginas) e `required_aspects`. É isso que forma a árvore de pesquisa.
-4. Preencha `effects`. Hoje existe o efeito `damage_multiplier`: `element` e `value`, por exemplo 1.2 para +20%.
+4. Preencha `effects`. Há dois tipos:
+   - `damage_multiplier`: `element` e `value` (por exemplo, 1.2 para +20%);
+   - `unlock_focus`: `focus`, o Focus que a página libera.
 5. Textos em `locales/content.csv`. Nos textos, `{fire}` vira o nome do aspecto. A Mesa de Pesquisa mostra a página sozinha, numa aba nova.
 
 ### Adicionar uma sala da Dungeon

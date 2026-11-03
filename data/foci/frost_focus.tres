@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="FocusData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/focus_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"frost_focus"
+name_key = "FOCUS_FROST"
+spell_type = &"projectile"
+element = &"cold"
+cost = Dictionary[StringName, int]({
+&"order": 1,
+&"water": 1
+})
+charge_time = 0.5
+cooldown = 0.5
+damage = 11.0
+slow_factor = 0.45
+slow_seconds = 3.0
+projectile_speed = 14.0
+projectile_lifetime = 2.5
+light_color = Color(0.62, 0.85, 1, 1)
+light_energy = 2.0
+light_range = 5.0

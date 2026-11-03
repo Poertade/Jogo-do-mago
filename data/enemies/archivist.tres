@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/enemy_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+scene_path = "res://scenes/enemies/archivist.tscn"
+max_health = 130.0
+damage = 18.0
+weaknesses = Dictionary[StringName, float]({
+&"cold": 1.3
+})
+move_speed = 1.2
+sight_range = 14.0
+attack_range = 2.3
+attack_windup = 1.0
+attack_cooldown = 1.8
+hurt_stun = 0.0
+show_health_bar = true
+enrage_at = 0.5
+enrage_speed = 1.4
+enrage_summons = [ExtResource("2"), ExtResource("2")]
+enrage_message_key = "MSG_ARCHIVIST_ENRAGED"
+id = &"archivist"
+name_key = "ENEMY_ARCHIVIST"
+aspects = Dictionary[StringName, int]({
+&"death": 1,
+&"mind": 3,
+&"soul": 2,
+&"undead": 2
+})

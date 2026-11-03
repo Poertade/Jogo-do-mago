@@ -27,3 +27,15 @@ func test_fire_comprehension_gives_twenty_percent() -> void:
 func test_multipliers_stack_by_multiplication() -> void:
 	var pages: Array[ResearchPageData] = [_page_with_multiplier(&"fire", 1.2), _page_with_multiplier(&"fire", 1.2)]
 	assert_almost_eq(Modifiers.from_pages(pages).damage_multiplier(&"fire"), 1.44, 0.0001)
+
+
+func test_unlock_focus_effect_lists_the_focus_once() -> void:
+	var focus := FocusData.new()
+	var effect := PageEffect.new()
+	effect.type = PageEffect.UNLOCK_FOCUS
+	effect.focus = focus
+	var page := ResearchPageData.new()
+	page.effects = [effect] as Array[PageEffect]
+	var modifiers := Modifiers.from_pages([page, page] as Array[ResearchPageData])
+	assert_eq(modifiers.unlocked_foci, [focus] as Array[FocusData])
+	assert_eq(Modifiers.new().unlocked_foci.size(), 0)

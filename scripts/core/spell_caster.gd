@@ -53,6 +53,12 @@ func release() -> bool:
 	return true
 
 
+## Troca o Focus encaixado na varinha (a carga em andamento se perde, sem custo).
+func equip(focus_data: FocusData) -> void:
+	cancel()
+	focus = focus_data
+
+
 func cancel() -> void:
 	state = State.IDLE
 	charge_elapsed = 0.0

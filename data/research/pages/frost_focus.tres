@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ResearchPageData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/page_effect.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/core/data/research_page_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/foci/frost_focus.tres" id="3"]
+
+[sub_resource type="Resource" id="Effect_1"]
+script = ExtResource("1")
+type = &"unlock_focus"
+focus = ExtResource("3")
+
+[resource]
+script = ExtResource("2")
+id = &"frost_focus"
+name_key = "PAGE_FROST_FOCUS"
+description_key = "PAGE_FROST_FOCUS_DESC"
+note_aspects = Array[StringName]([&"cold", &"water", &"void"])
+note_radius = 2
+effects = Array[ExtResource("1")]([SubResource("Effect_1")])

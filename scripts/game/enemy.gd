@@ -13,6 +13,9 @@ signal died
 
 var health: Health
 var brain: EnemyBrain
+## Lentidão (Focus de Gelo): fração da velocidade e segundos que ainda faltam.
+var _slow_factor := 1.0
+var _slow_left := 0.0
 var _player: Node3D
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -39,12 +42,30 @@ func take_damage(amount: float, element: StringName) -> void:
 	if not health.is_dead():
 		brain.on_damaged()
 		rig.play_hurt()
+		if brain.check_enrage(health.current / health.max_health):
+			_enrage()
 		Audio.play_at(&"enemy_hurt", global_position + Vector3.UP, get_parent())
 
 
-func _physics_process(delta: float) -> void:
+## Fica lento por `seconds` segundos: anda, prepara o golpe e se anima a `factor` da velocidade.
+func apply_slow(factor: float, seconds: float) -> void:
+	if health.is_dead():
+		return
+	_slow_factor = clampf(factor, 0.05, 1.0)
+	_slow_left = maxf(_slow_left, seconds)
+	rig.set_frost(1.0)
+
+
+func _physics_process(real_delta: float) -> void:
+	# Lento: o tempo do inimigo passa mais devagar (passos, preparação do golpe, animação).
+	var delta := real_delta
+	if _slow_left > 0.0:
+		_slow_left -= real_delta
+		delta *= _slow_factor
+		if _slow_left <= 0.0:
+			rig.set_frost(0.0)
 	if not is_on_floor():
-		velocity.y -= _gravity * delta
+		velocity.y -= _gravity * real_delta
 	if brain.state == EnemyBrain.State.DEAD or _player == null:
 		velocity.x = 0.0
 		velocity.z = 0.0
@@ -62,7 +83,7 @@ func _physics_process(delta: float) -> void:
 
 	var move := Vector3.ZERO
 	if brain.wants_to_move() and distance > data.attack_range * 0.8:
-		move = to_player.normalized() * data.move_speed
+		move = to_player.normalized() * data.move_speed * brain.speed_multiplier() * (_slow_factor if _slow_left > 0.0 else 1.0)
 	velocity.x = move.x
 	velocity.z = move.z
 	if brain.state != EnemyBrain.State.IDLE and distance > 0.01:
@@ -98,10 +119,28 @@ func _on_died() -> void:
 	died.emit()
 
 
+## Fúria (chefes): avisa, brilha mais e chama ajuda, que aparece em volta dele.
+func _enrage() -> void:
+	if data.enrage_message_key != "":
+		Game.message(Text.expand(data.enrage_message_key), Color(0.9, 0.5, 0.45))
+	rig.play_enrage()
+	Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
+	var room := get_parent() as Room
+	if room == null:
+		return
+	for i in data.enrage_summons.size():
+		var angle := TAU * i / data.enrage_summons.size() + rotation.y
+		var at := global_position + Vector3(cos(angle), 0.0, sin(angle)) * 2.2
+		var summoned := room.spawn_enemy(data.enrage_summons[i], Transform3D(global_basis, at))
+		summoned.brain.on_damaged()
+
+
 ## Gemido ao notar o jogador; sopro ao começar o golpe (o aviso para esquivar).
 func _play_state_sounds(previous: EnemyBrain.State, current: EnemyBrain.State) -> void:
 	if previous == current:
 		return
+	if previous == EnemyBrain.State.IDLE and current != EnemyBrain.State.DEAD and data.show_health_bar:
+		Game.boss_engaged.emit(self)
 	if previous == EnemyBrain.State.IDLE and current == EnemyBrain.State.CHASE:
 		Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
 	elif current == EnemyBrain.State.ATTACK:

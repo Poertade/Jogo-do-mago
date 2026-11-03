@@ -79,6 +79,7 @@ func play_hurt() -> void:
 
 ## Derrete: a massa se espalha numa poça e os olhos se apagam.
 func play_death() -> void:
+	super.play_death()
 	_dead = true
 	eyes.visible = false
 	var tween := create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)

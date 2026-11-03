@@ -83,8 +83,10 @@ func _incursion_report(db: ContentDB) -> void:
 			var spawn := node as EnemySpawn
 			var pool: Array = spawn.enemy_pool if not spawn.enemy_pool.is_empty() else [spawn.enemy]
 			for enemy: EnemyData in pool:
-				var damage := Combat.damage_against(focus.damage, focus.element, enemy.weaknesses)
-				shots += spawn.chance / pool.size() * ceili(enemy.max_health / damage)
+				# O inimigo e quem ele chama na fúria (chefes).
+				for target: EnemyData in [enemy] + enemy.enrage_summons:
+					var damage := Combat.damage_against(focus.damage, focus.element, target.weaknesses)
+					shots += spawn.chance / pool.size() * ceili(target.max_health / damage)
 			enemies += spawn.chance
 		var vis := 0
 		for node in scene.find_children("*", "VisNode", true, false):
@@ -104,3 +106,7 @@ func _incursion_report(db: ContentDB) -> void:
 	var start := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(focus.cost)
 	print("Roteiro %s: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
 		db.dungeon_rules.layout, total, total * cost, start, cost])
+	# Todos os Focus: quantos disparos o Vis inicial dá a cada um (os recipientes são separados).
+	for other: FocusData in db.foci.values():
+		var casts := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(other.cost)
+		print("  Vis inicial dá %d disparo(s) de %s (custo %s)" % [casts, other.id, other.cost])

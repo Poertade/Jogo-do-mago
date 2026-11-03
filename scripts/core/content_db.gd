@@ -283,6 +283,8 @@ func _validate_focus(focus: FocusData) -> void:
 		errors.append("%s: dano precisa ser positivo e tempos não podem ser negativos." % owner)
 	if focus.spell_type == FocusData.SPELL_PROJECTILE and (focus.projectile_speed <= 0.0 or focus.projectile_lifetime <= 0.0):
 		errors.append("%s: projétil precisa de velocidade e duração positivas." % owner)
+	if focus.slow_factor <= 0.0 or focus.slow_factor > 1.0 or focus.slow_seconds < 0.0:
+		errors.append("%s: slow_factor fica entre 0 e 1 (1 = sem lentidão) e slow_seconds não pode ser negativo." % owner)
 
 
 func _validate_enemy(enemy: EnemyData) -> void:
@@ -295,6 +297,11 @@ func _validate_enemy(enemy: EnemyData) -> void:
 	for element in enemy.weaknesses:
 		if not element in aspects:
 			errors.append("%s: fraqueza a '%s', que não é um aspecto." % [owner, element])
+	if enemy.enrage_at < 0.0 or enemy.enrage_at >= 1.0 or enemy.enrage_speed <= 0.0:
+		errors.append("%s: enrage_at fica entre 0 e 1 e enrage_speed precisa ser maior que zero." % owner)
+	for summon in enemy.enrage_summons:
+		if summon == null or summon == enemy:
+			errors.append("%s: enrage_summons tem um inimigo vazio ou ele mesmo." % owner)
 
 
 func _validate_settings() -> void:
@@ -378,6 +385,8 @@ func _validate_page(page: ResearchPageData) -> void:
 	for effect in page.effects:
 		if effect == null or not effect.type in PageEffect.TYPES:
 			errors.append("%s: efeito de tipo desconhecido." % owner)
+		elif effect.type == PageEffect.UNLOCK_FOCUS and effect.focus == null:
+			errors.append("%s: o efeito unlock_focus precisa de um Focus." % owner)
 
 
 # --- Leitura de arquivos ---

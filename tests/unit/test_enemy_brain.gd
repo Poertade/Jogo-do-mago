@@ -97,3 +97,43 @@ func test_dead_stays_dead() -> void:
 	brain.update(1.0, 1.0, true)
 	assert_eq(brain.state, EnemyBrain.State.DEAD)
 	assert_false(brain.wants_to_move())
+
+
+func test_enrages_once_below_the_threshold() -> void:
+	data.enrage_at = 0.5
+	data.enrage_speed = 2.0
+	var brain := EnemyBrain.new(data)
+	assert_false(brain.check_enrage(0.8))
+	assert_eq(brain.speed_multiplier(), 1.0)
+	assert_true(brain.check_enrage(0.5), "Na metade da vida, enfurece")
+	assert_false(brain.check_enrage(0.3), "Só uma vez")
+	assert_eq(brain.speed_multiplier(), 2.0)
+
+
+func test_enraged_attacks_faster() -> void:
+	data.enrage_at = 0.5
+	data.enrage_speed = 2.0
+	var brain := EnemyBrain.new(data)
+	brain.check_enrage(0.2)
+	brain.update(0.1, 1.0, true)
+	brain.update(0.1, 1.0, true)
+	assert_eq(brain.state, EnemyBrain.State.ATTACK)
+	watch_signals(brain)
+	brain.update(0.36, 1.0, true)
+	assert_signal_emitted(brain, "attack_landed", "Preparação de 0,7 s cai para 0,35 s")
+
+
+func test_never_enrages_without_threshold() -> void:
+	var brain := EnemyBrain.new(data)
+	assert_false(brain.check_enrage(0.01))
+
+
+func test_unshakable_enemy_keeps_attacking() -> void:
+	data.hurt_stun = 0.0
+	var brain := EnemyBrain.new(data)
+	brain.on_damaged()
+	assert_eq(brain.state, EnemyBrain.State.CHASE, "Acorda com o dano")
+	brain.update(0.1, 1.0, true)
+	assert_eq(brain.state, EnemyBrain.State.ATTACK)
+	brain.on_damaged()
+	assert_eq(brain.state, EnemyBrain.State.ATTACK, "O golpe não é interrompido")

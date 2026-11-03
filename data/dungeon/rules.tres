@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-layout = Array[StringName]([&"combat", &"combat", &"rest", &"combat", &"combat"])
+layout = Array[StringName]([&"combat", &"combat", &"rest", &"combat", &"boss"])
 entrance_id = &"south"
 return_room = &"school"
 return_entrance = &"from_dungeon"

@@ -8,6 +8,9 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
 bg_color = Color(0.37, 0.83, 0.78, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.55, 0.1, 0.12, 1)
+
 [node name="Hud" type="CanvasLayer"]
 layer = 1
 script = ExtResource("1")
@@ -141,6 +144,34 @@ mouse_filter = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_1")
 max_value = 1.0
 step = 0.001
+show_percentage = false
+
+[node name="BossPanel" type="VBoxContainer" parent="Pixels/Viewport/Screen"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = 8.0
+offset_right = 110.0
+offset_bottom = 30.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="BossName" type="Label" parent="Pixels/Viewport/Screen/BossPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+auto_translate_mode = 2
+
+[node name="BossBar" type="ProgressBar" parent="Pixels/Viewport/Screen/BossPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 5)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_2")
 show_percentage = false
 
 [node name="DepthLabel" type="Label" parent="Pixels/Viewport/Screen"]

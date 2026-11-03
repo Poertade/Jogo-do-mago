@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_dungeon.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"grand_archive"
+scene_path = "res://scenes/rooms/grand_archive.tscn"
+kind = &"boss"
+fog_color = Color(0.03, 0.025, 0.04, 1)
+fog_near = 3.0
+fog_far = 18.0
+ambient_color = Color(0.3, 0.26, 0.36, 1)
+ambient_energy = 0.45
+ambience = ExtResource("2")
