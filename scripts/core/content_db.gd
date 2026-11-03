@@ -16,6 +16,7 @@ var scannables: Dictionary[StringName, ScannableData] = {}
 var pages: Dictionary[StringName, ResearchPageData] = {}
 var wands: Dictionary[StringName, WandData] = {}
 var foci: Dictionary[StringName, FocusData] = {}
+var enemies: Dictionary[StringName, EnemyData] = {}
 var errors: PackedStringArray = []
 
 
@@ -45,6 +46,9 @@ func load_all(root := DATA_ROOT) -> void:
 	for resource in _load_folder(root.path_join("foci")):
 		if resource is FocusData:
 			_add_unique(foci, resource, "Focus")
+	for resource in _load_folder(root.path_join("enemies")):
+		if resource is EnemyData:
+			add_enemy(resource)
 	validate()
 
 
@@ -64,6 +68,14 @@ func add_scannable(scannable: ScannableData) -> void:
 	_add_unique(scannables, scannable, "Escaneável")
 
 
+## Inimigos também são escaneáveis: o identificador não pode repetir o de um objeto.
+func add_enemy(enemy: EnemyData) -> void:
+	if enemy.id in scannables:
+		errors.append("Inimigo '%s' usa o identificador de um objeto escaneável." % enemy.id)
+		return
+	_add_unique(enemies, enemy, "Inimigo")
+
+
 func add_page(page: ResearchPageData) -> void:
 	_add_unique(pages, page, "Página de pesquisa")
 
@@ -79,6 +91,13 @@ func _add_unique(table: Dictionary, item: Resource, label: String) -> void:
 
 
 # --- Consultas ---
+
+## Algo escaneável (objeto ou inimigo) pelo identificador, ou null.
+func find_scannable(id: StringName) -> ScannableData:
+	if id in scannables:
+		return scannables[id]
+	return enemies.get(id)
+
 
 ## Páginas de pesquisa a partir de uma lista de identificadores (ignora os desconhecidos).
 func pages_by_id(ids: Array[StringName]) -> Array[ResearchPageData]:
@@ -123,6 +142,8 @@ func validate() -> void:
 		_validate_wand(wand)
 	for focus: FocusData in foci.values():
 		_validate_focus(focus)
+	for enemy: EnemyData in enemies.values():
+		_validate_enemy(enemy)
 
 
 func _validate_player() -> void:
@@ -153,6 +174,18 @@ func _validate_focus(focus: FocusData) -> void:
 		errors.append("%s: dano precisa ser positivo e tempos não podem ser negativos." % owner)
 	if focus.spell_type == FocusData.SPELL_PROJECTILE and (focus.projectile_speed <= 0.0 or focus.projectile_lifetime <= 0.0):
 		errors.append("%s: projétil precisa de velocidade e duração positivas." % owner)
+
+
+func _validate_enemy(enemy: EnemyData) -> void:
+	var owner := "Inimigo '%s'" % enemy.id
+	_validate_aspect_amounts(owner, enemy.aspects)
+	if enemy.scene_path.is_empty() or not ResourceLoader.exists(enemy.scene_path):
+		errors.append("%s: cena não encontrada ('%s')." % [owner, enemy.scene_path])
+	if enemy.max_health <= 0.0 or enemy.move_speed <= 0.0 or enemy.attack_range <= 0.0:
+		errors.append("%s: vida, velocidade e alcance precisam ser maiores que zero." % owner)
+	for element in enemy.weaknesses:
+		if not element in aspects:
+			errors.append("%s: fraqueza a '%s', que não é um aspecto." % [owner, element])
 
 
 func _validate_settings() -> void:

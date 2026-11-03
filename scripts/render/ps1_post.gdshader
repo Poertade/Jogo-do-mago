@@ -7,6 +7,10 @@ uniform bool color_limit = true;
 uniform bool dithering = true;
 uniform float color_levels = 32.0;                 // níveis por canal: 32 = 5 bits, como o PS1
 uniform vec2 source_size = vec2(427.0, 240.0);     // tamanho da imagem interna, em pixels
+// Transição entre salas: 0 = imagem normal, 1 = tudo na cor `fade_color`.
+// Os pixels somem na ordem da matriz de Bayer, num "dissolver" com cara de PS1.
+uniform float fade : hint_range(0.0, 1.0) = 0.0;
+uniform vec3 fade_color : source_color = vec3(0.0);
 
 // Matriz de Bayer 4x4: limiares que formam o padrão do dithering ordenado.
 const float BAYER_4X4[16] = float[](
@@ -18,15 +22,18 @@ const float BAYER_4X4[16] = float[](
 
 void fragment() {
 	vec3 color = texture(TEXTURE, UV).rgb;
+	// Pixel da imagem interna (não da tela): os padrões acompanham os pixels grandes.
+	ivec2 pixel = ivec2(floor(UV * source_size)) % 4;
+	float bayer = BAYER_4X4[pixel.y * 4 + pixel.x] / 16.0;
 	if (color_limit) {
 		float steps = color_levels - 1.0;
 		if (dithering) {
-			// Pixel da imagem interna (não da tela): o padrão acompanha os pixels grandes.
-			ivec2 pixel = ivec2(floor(UV * source_size)) % 4;
-			float threshold = BAYER_4X4[pixel.y * 4 + pixel.x] / 16.0 - 0.5;
-			color += threshold / steps;
+			color += (bayer - 0.5) / steps;
 		}
 		color = floor(color * steps + 0.5) / steps;
+	}
+	if (fade > bayer) {
+		color = fade_color;
 	}
 	COLOR = vec4(clamp(color, 0.0, 1.0), 1.0);
 }

@@ -13,6 +13,13 @@ signal scan_completed(result: ScanResult)
 signal page_studied(page: ResearchPageData)
 ## Um aviso curto para o HUD.
 signal message_requested(text: String, color: Color)
+## Um portal ou saída pediu para ir a outra sala.
+signal travel_requested(room_id: StringName, entrance_id: StringName)
+## O jogador tomou dano / morreu.
+signal player_damaged(amount: float)
+signal player_died
+## Um texto para ler (placa, anotação), com título e corpo (chaves de tradução).
+signal note_requested(title_key: String, body_key: String)
 
 const SAVE_PATH := "user://save.json"
 
@@ -26,6 +33,22 @@ func _ready() -> void:
 	knowledge.changed.connect(_on_knowledge_changed)
 	_update_modifiers()
 	run = RunState.new(Content.db.player)
+
+
+## Pede a troca de sala (quem faz a transição é a cena principal).
+func travel(room_id: StringName, entrance_id: StringName) -> void:
+	travel_requested.emit(room_id, entrance_id)
+
+
+## Aplica dano no jogador. Na vida zero, avisa a morte (uma vez).
+func damage_player(amount: float) -> void:
+	if run.health.is_dead():
+		return
+	var applied := run.health.take_damage(amount)
+	if applied > 0.0:
+		player_damaged.emit(applied)
+	if run.health.is_dead():
+		player_died.emit()
 
 
 ## Mostra um aviso curto no HUD.

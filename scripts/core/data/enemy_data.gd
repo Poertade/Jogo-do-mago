@@ -1,0 +1,29 @@
+class_name EnemyData
+extends ScannableData
+## Um tipo de inimigo. Herda de ScannableData: todo inimigo pode ser escaneado pela Lente
+## e tem aspectos. Cada inimigo é um arquivo em data/enemies/.
+## Os valores padrão aqui são zero de propósito: os valores reais ficam no arquivo de dados.
+
+## Cena com o corpo do inimigo (scenes/enemies/), que usa o script Enemy.
+@export_file("*.tscn") var scene_path: String
+
+@export_group("Combate")
+@export var max_health: float = 0.0
+## Dano de cada golpe no jogador.
+@export var damage: float = 0.0
+## Multiplicador de dano por elemento (ex.: fire = 1.5 → fogo causa 50% a mais).
+@export var weaknesses: Dictionary[StringName, float] = {}
+
+@export_group("Comportamento")
+## Velocidade perseguindo, em metros por segundo.
+@export var move_speed: float = 0.0
+## Distância em que nota o jogador (se o enxergar).
+@export var sight_range: float = 0.0
+## Distância de onde consegue golpear.
+@export var attack_range: float = 0.0
+## Segundos entre começar o golpe e ele acertar (o jogador pode se afastar).
+@export var attack_windup: float = 0.0
+## Segundos entre um golpe e o próximo.
+@export var attack_cooldown: float = 0.0
+## Segundos parado depois de tomar dano (a "reação ao dano").
+@export var hurt_stun: float = 0.0

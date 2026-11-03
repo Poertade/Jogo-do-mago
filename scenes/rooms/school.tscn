@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://scenes/props/plaque.tscn" id="plaque"]
 [ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
 [ext_resource type="Material" path="res://assets/materials/wood_floor.tres" id="3"]
@@ -415,6 +416,9 @@ light_color = Color(0.4157, 0.5412, 1, 1)
 light_energy = 0.9
 omni_range = 5
 omni_attenuation = 1.2
+
+[node name="Plaque" parent="PortalRoom" instance=ExtResource("plaque")]
+transform = Transform3D(0.8660, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660, 2.6, 0, -15.6)
 
 [node name="Entrances" type="Node3D" parent="."]
 

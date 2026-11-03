@@ -1,6 +1,7 @@
 extends Node
-## Cena principal: junta a tela do jogo (mundo 3D em baixa resolução), o HUD e as telas
-## de menu (pausa, Livro de Pesquisa, Mesa de Pesquisa).
+## Cena principal: junta a tela do jogo (mundo 3D em baixa resolução), o HUD e as telas de
+## menu. Também conduz o ciclo do jogo: viagem entre salas (portal, saída) com transição,
+## e a morte, que leva de volta ao Salão de Estudos.
 ##
 ## Argumentos de desenvolvimento, depois de "--" na linha de comando:
 ##   --seed=123             semente do gerador aleatório
@@ -8,11 +9,18 @@ extends Node
 ##   --entrance=default     entrada da sala inicial
 ##   --screenshot=foto.png  salva uma captura da janela depois de alguns quadros e fecha o jogo
 
-## Sala onde o jogo começa (identificador de data/rooms/).
+## Sala onde o jogo começa e onde o jogador renasce (identificador de data/rooms/).
 @export var start_room: StringName = &"school"
 @export var start_entrance: StringName = &"default"
+## Sala onde a vida é restaurada ao chegar (a escola é segura).
+@export var safe_room: StringName = &"school"
+## Cores e duração das transições.
+@export var travel_color := Color(0.1, 0.06, 0.18)
+@export var death_color := Color(0.25, 0.02, 0.02)
+@export var fade_seconds := 0.6
 
 var rng: GameRng
+var _transitioning := false
 
 @onready var game_viewport: SubViewport = %GameViewport
 @onready var game_screen: GameScreen = %GameScreen
@@ -21,6 +29,7 @@ var rng: GameRng
 @onready var pause_menu: PauseMenu = %PauseMenu
 @onready var research_book: ResearchBook = %ResearchBook
 @onready var research_table_screen: ResearchTableScreen = %ResearchTableScreen
+@onready var note_screen: NoteScreen = %NoteScreen
 
 
 func _ready() -> void:
@@ -30,9 +39,12 @@ func _ready() -> void:
 
 	Settings.changed.connect(_apply_settings)
 	_apply_settings()
-	for menu: MenuLayer in [pause_menu, research_book, research_table_screen]:
+	for menu: MenuLayer in [pause_menu, research_book, research_table_screen, note_screen]:
 		menu.closed.connect(_capture_mouse)
 	Game.screen_requested.connect(_on_screen_requested)
+	Game.note_requested.connect(note_screen.show_note)
+	Game.travel_requested.connect(_on_travel_requested)
+	Game.player_died.connect(_on_player_died)
 
 	world.load_room(_arg_value(args, "--room=", start_room), _arg_value(args, "--entrance=", start_entrance))
 
@@ -47,6 +59,8 @@ func _apply_settings() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _transitioning:
+		return
 	if event.is_action_pressed("pause"):
 		pause_menu.open()
 		get_viewport().set_input_as_handled()
@@ -67,6 +81,44 @@ func _on_screen_requested(screen: StringName) -> void:
 	match screen:
 		&"research_table":
 			research_table_screen.open()
+
+
+## Portal ou saída: dissolve, troca a sala e volta.
+func _on_travel_requested(room_id: StringName, entrance_id: StringName) -> void:
+	if _transitioning:
+		return
+	await _transition(travel_color, _arrive.bind(room_id, entrance_id))
+
+
+func _arrive(room_id: StringName, entrance_id: StringName) -> void:
+	world.load_room(room_id, entrance_id)
+	if room_id == safe_room:
+		Game.run.health.restore()
+
+
+## Morte: a incursão recomeça no Salão de Estudos; o conhecimento já está salvo.
+func _on_player_died() -> void:
+	if _transitioning:
+		return
+	await _transition(death_color, _respawn)
+	Game.message(Text.tr_key("MSG_AWAKEN"), Color(0.85, 0.75, 0.6))
+
+
+func _respawn() -> void:
+	Game.run.reset()
+	world.load_room(start_room, start_entrance)
+
+
+## Pausa, dissolve até a cor, executa `change` e dissolve de volta.
+func _transition(color: Color, change: Callable) -> void:
+	_transitioning = true
+	get_tree().paused = true
+	await game_screen.fade_to(1.0, color, fade_seconds).finished
+	change.call()
+	await get_tree().process_frame
+	await game_screen.fade_to(0.0, color, fade_seconds).finished
+	get_tree().paused = false
+	_transitioning = false
 
 
 func _capture_mouse() -> void:

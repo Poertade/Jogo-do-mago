@@ -17,6 +17,7 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	stretch_mode = TextureRect.STRETCH_SCALE
 	resized.connect(_update_viewport_size)
+	material.set_shader_parameter(&"fade", 0.0)
 
 
 ## Aplica as opções: efeitos dos shaders e resolução interna.
@@ -41,3 +42,13 @@ func _update_viewport_size() -> void:
 	viewport.size = internal_size
 	material.set_shader_parameter(&"source_size", Vector2(internal_size))
 	RenderingServer.global_shader_parameter_set(&"ps1_snap_grid", Vector2(internal_size) / _snap_pixel_size)
+
+
+## Transição: os pixels dissolvem até a cor `color` (fade de 0 a 1) ou voltam (de 1 a 0).
+## Funciona mesmo com o jogo pausado. Devolve o Tween, para esperar com `await tween.finished`.
+func fade_to(target: float, color: Color, seconds: float) -> Tween:
+	material.set_shader_parameter(&"fade_color", color)
+	var tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_method(func(v: float): material.set_shader_parameter(&"fade", v),
+		material.get_shader_parameter(&"fade"), target, seconds)
+	return tween

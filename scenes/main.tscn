@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://scenes/ui/note_screen.tscn" id="note"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1"]
 [ext_resource type="Shader" path="res://scripts/render/ps1_post.gdshader" id="2"]
 [ext_resource type="Script" path="res://scripts/game/world.gd" id="3"]
@@ -62,6 +63,9 @@ player = NodePath("../GameViewport/World/Player")
 unique_name_in_owner = true
 
 [node name="ResearchTableScreen" parent="." instance=ExtResource("8")]
+unique_name_in_owner = true
+
+[node name="NoteScreen" parent="." instance=ExtResource("note")]
 unique_name_in_owner = true
 
 [node name="PauseMenu" parent="." instance=ExtResource("9")]

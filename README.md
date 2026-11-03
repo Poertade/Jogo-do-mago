@@ -4,11 +4,11 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 "Jogo do Mago" é o nome provisório; o nome escolhido para distribuir é *Catálogo do Abismo* (decisão 7).
 
-![Bola de fogo iluminando o Salão de Estudos](docs/images/m3-projetil.png)
+![Combate com o Bedel Descarnado na Dungeon](docs/images/m4-combate.png)
 
 ## Estado
 
-**M3: varinha e Focus de Fogo.** Além da escola e da pesquisa (M2): a varinha na mão direita lança bolas de fogo carregadas, que iluminam o caminho e gastam Ignis; o HUD mostra vida e reserva; o braseiro do Salão de Estudos recarrega a varinha.
+**M4: ciclo completo.** Escola → portal → Dungeon → combate → vitória ou morte → escola. O portal leva a uma câmara de pedra com um inimigo, o Bedel Descarnado, que pode ser escaneado. Vencê-lo abre a saída de volta à escola; morrer leva ao Salão de Estudos sem perder o conhecimento.
 
 | Documento | Conteúdo |
 | --- | --- |
@@ -50,7 +50,10 @@ Os executáveis prontos (Windows, Linux, macOS) entram no fim do recorte (M5).
 5. **Magia de fogo:** segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar. Soltar antes cancela sem gastar nada. Cada disparo gasta 5 de Ignis; a varinha guarda 30. Com a página estudada, o dano sobe de 15 para 18.
 6. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
 7. O **braseiro** (E) enche a reserva de Ignis. Fora da escola não há recarga.
-8. O corredor ao norte leva à **Sala do Portal** (o portal funciona a partir do M4).
+8. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
+9. **Portal** (E): leva à câmara de pedra, onde o **Bedel Descarnado** espera. Ele é lento, persegue quando vê você e prepara o golpe com o braço erguido: recue para esquivar. É fraco a fogo: dois disparos o derrubam. Escaneie-o antes, se tiver coragem.
+10. Vencer abre a grade ao norte: **Voltar à escola** (E) leva de volta à Sala do Portal, com a vida restaurada. A reserva de Ignis só volta no braseiro.
+11. Se a vida chegar a zero, você desperta no Salão de Estudos com vida e Ignis cheios; o conhecimento (aspectos, escaneamentos, páginas) continua.
 
 O conhecimento é gravado em `user://save.json` (JSON legível) a cada descoberta. Para começar do zero, apague esse arquivo.
 
@@ -83,7 +86,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 
   (`godot` é o caminho do executável do Godot.)
 
-Os testes cobrem: custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão, descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas, persistência (save), o gerador com semente, as opções, o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
+Os testes cobrem: IA do inimigo (estados, esquiva, intervalo, reação ao dano, morte), custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão, descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas, persistência (save), o gerador com semente, as opções, o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
 
 ## Argumentos de desenvolvimento
 
@@ -91,7 +94,7 @@ Depois de `--` na linha de comando:
 
 ```sh
 godot --path . -- --seed=123                  # semente do gerador aleatório (impressa ao abrir o jogo)
-godot --path . -- --room=test_room            # sala inicial (school é o padrão; test_room é a sala do M1)
+godot --path . -- --room=stone_chamber        # sala inicial (school é o padrão; test_room é a sala do M1)
 godot --path . -- --screenshot=captura.png    # tira uma captura depois de 30 quadros e fecha
 ```
 

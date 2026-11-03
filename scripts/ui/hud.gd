@@ -17,6 +17,7 @@ const MESSAGE_SECONDS := 4.0
 @onready var scan_bar: ProgressBar = %ScanBar
 @onready var messages: VBoxContainer = %Messages
 @onready var stats: VBoxContainer = %Stats
+@onready var damage_flash: ColorRect = %DamageFlash
 
 ## Uma linha (barra e número) para a vida e uma para cada aspecto que o Focus gasta.
 var _health_bar: ProgressBar
@@ -29,6 +30,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Game.scan_completed.connect(_on_scan_completed)
 	Game.message_requested.connect(show_message)
+	Game.player_damaged.connect(_on_player_damaged)
 	_build_stats()
 	Game.page_studied.connect(func(page): show_message(tr("UI_MSG_PAGE_STUDIED") % Text.expand(page.name_key)))
 
@@ -103,9 +105,14 @@ func _update_stats() -> void:
 
 func _update_prompt(playing: bool) -> void:
 	var target := player.aimed_interactable
-	prompt_label.visible = playing and target != null and target.is_available()
-	if prompt_label.visible:
-		prompt_label.text = tr("UI_PROMPT_INTERACT") % Text.expand(target.prompt_key)
+	var key := target.current_prompt_key() if target != null else ""
+	prompt_label.visible = playing and key != ""
+	if not prompt_label.visible:
+		return
+	if target.is_available():
+		prompt_label.text = tr("UI_PROMPT_INTERACT") % Text.expand(key)
+	else:
+		prompt_label.text = Text.expand(key)
 
 
 ## Mostra o nome e os aspectos do alvo (ou "???" se ainda não foi escaneado).
@@ -133,6 +140,12 @@ func _on_scan_completed(result: ScanResult) -> void:
 		show_message(tr("UI_MSG_NEW_ASPECT") % Text.aspect_name(aspect_id), Content.db.aspects[aspect_id].color)
 	if result.points > 0:
 		show_message(tr("UI_MSG_POINTS") % result.points)
+
+
+## Tela fica vermelha por um instante quando o jogador apanha.
+func _on_player_damaged(_amount: float) -> void:
+	var tween := damage_flash.create_tween()
+	tween.tween_property(damage_flash, "color:a", 0.0, 0.5).from(0.45)
 
 
 ## Mostra um aviso no canto da tela, que some sozinho.

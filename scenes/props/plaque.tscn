@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/plaque.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
+[ext_resource type="Material" path="res://assets/materials/stone_wall.tres" id="3"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="4"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.4784, 0.3529, 0.1647, 1)
+shader_parameter/emission_color = Color(0.6902, 0.5412, 0.2353, 1)
+shader_parameter/emission_energy = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.46, 0.03, 0.32)
+
+[node name="Plaque" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_READ"
+title_key = "NOTE_PORTAL_TITLE"
+body_key = "NOTE_PORTAL_BODY"
+
+[node name="Pedestal" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2")
+size = Vector3(0.5, 1, 0.35)
+material = ExtResource("3")
+
+[node name="Plate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 1.08, 0.02)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")

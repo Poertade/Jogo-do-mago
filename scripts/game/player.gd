@@ -22,6 +22,8 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _ready() -> void:
 	head.position.y = stats.eye_height
+	# Inimigos encontram o jogador por este grupo.
+	add_to_group(&"player")
 
 
 ## Coloca o jogador num ponto da sala, olhando na mesma direção do marcador.

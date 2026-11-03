@@ -186,6 +186,37 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** reserva só de Ignis na varinha.
 - **Motivo:** a especificação pede "reserva de energia por aspecto primal"; outros Focus poderão usar as outras reservas sem mudar a varinha.
 
+### D029 · 2026-11-03 · IA do inimigo: cérebro no núcleo, corpo no jogo
+
+- **Escolha:**
+  - **Separação:** `EnemyBrain` (lógica pura, testada) decide o estado; o nó `Enemy` move, anima e aplica dano.
+  - **Estados:** parado → perseguindo (ao ver o jogador a até `sight_range`, por um raio de visão) → atacando (preparação de `attack_windup` com o braço erguido; o golpe só acerta se o jogador ainda estiver ao alcance, então dá para recuar e esquivar).
+  - **Reação ao dano e morte:** o dano interrompe o golpe e faz o inimigo parar por `hurt_stun`, com um clarão branco; também o desperta, se estava parado. Na morte, ele desmorona.
+  - **Movimento:** perseguição em linha reta, sem navegação.
+- **Descartados:** navegação com `NavigationAgent3D` agora (a sala é aberta, não precisa); acerto imediato ao entrar no alcance (sem chance de reação).
+- **Motivo:** especificação 5.6 (inimigo lento, três estados, reação ao dano, morte) com espaço para o combate ter leitura.
+
+### D030 · 2026-11-03 · Sala da Dungeon como módulo de marcadores e dados
+
+- **Escolha:** a câmara de pedra é uma cena com `EntrancePoint` (`from_portal`), `EnemySpawn` (aponta para um `EnemyData`) e `ExitPoint` (destino em dados, fechado por uma grade até a sala ser limpa). O `Room` cria os inimigos dos marcadores, conta os vivos e emite `cleared`. `EnemyData` herda de `ScannableData`: todo inimigo é escaneável, com o mesmo espaço de identificadores dos objetos. O portal da escola também tem o destino em dados (`stone_chamber` / `from_portal`).
+- **Descartado:** inimigos e saídas colocados direto na cena, com lógica própria por sala.
+- **Motivo:** especificação 5.6: pontos de entrada, saída e spawns definidos por dados, pensando em gerar Dungeons combinando salas.
+
+### D031 · 2026-11-03 · Viagem, morte e transição
+
+- **Escolha:**
+  - **Transição:** portal e saída pedem a viagem ao `Game`; a cena principal pausa o jogo e "dissolve" a imagem pixel a pixel na ordem da matriz de Bayer (violeta na viagem, vermelho na morte), troca a sala e dissolve de volta.
+  - **Chegada à escola:** restaura a vida (a escola é segura), mas não a reserva (só o braseiro recarrega).
+  - **Morte:** reinicia a incursão (vida e reserva cheias, sala recriada com o inimigo) e leva ao Salão de Estudos. O conhecimento não é tocado, porque já foi salvo na descoberta (decisão 4).
+- **Descartados:** corte seco entre salas; recarregar a reserva ao voltar vitorioso (tiraria o sentido do braseiro).
+- **Motivo:** especificação 5.5 e 5.7 (transição curta no estilo do jogo; estado da incursão reiniciado na morte).
+
+### D032 · 2026-11-03 · Premissa em texto mínimo
+
+- **Escolha:** a premissa "As Ruínas da Primeira Escola" (decisão 8) aparece numa placa de bronze na Sala do Portal (E para ler) e numa linha ao despertar depois da morte. Os textos ficam em `locales/content.csv`.
+- **Descartado:** introdução em tela cheia.
+- **Motivo:** a especificação pede só texto mínimo neste marco.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

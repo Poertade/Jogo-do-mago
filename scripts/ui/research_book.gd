@@ -23,7 +23,7 @@ func _on_opened() -> void:
 
 	_clear(scanned_list)
 	for target_id in knowledge.scanned_targets:
-		var target: ScannableData = Content.db.scannables.get(target_id)
+		var target := Content.db.find_scannable(target_id)
 		if target != null:
 			_add_line(scanned_list, "%s\n   %s" % [tr(target.name_key), Text.aspect_amounts_bbcode(target.aspects)])
 

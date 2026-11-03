@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/game/portal.gd" id="p_script"]
 [ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="1"]
 [ext_resource type="Material" path="res://assets/materials/stone_wall.tres" id="2"]
 [ext_resource type="Material" path="res://assets/materials/stone_floor.tres" id="3"]
@@ -26,6 +27,10 @@ subdivide_height = 4
 size = Vector3(2.4, 3.6, 0.2)
 
 [node name="Portal" type="Node3D"]
+script = ExtResource("p_script")
+prompt_key = "PROMPT_PORTAL"
+target_room = &"stone_chamber"
+target_entrance = &"from_portal"
 
 [node name="PostL" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.8, 0)

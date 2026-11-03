@@ -37,6 +37,25 @@ func test_school_values_match_the_specification() -> void:
 	assert_eq(focus.charge_time, 0.6)
 	assert_eq(focus.cooldown, 0.4)
 	assert_eq(focus.element, &"fire")
+	# Inimigo (seção 6)
+	var beadle := db.enemies[&"bone_beadle"]
+	assert_eq(beadle.max_health, 40.0)
+	assert_eq(beadle.damage, 10.0)
+	assert_eq(beadle.weaknesses[&"fire"], 1.5)
+	assert_false(beadle.aspects.is_empty(), "O inimigo pode ser escaneado")
+	assert_eq(db.find_scannable(&"bone_beadle"), beadle)
+	assert_has(db.rooms, &"stone_chamber")
+
+
+func test_enemy_cannot_reuse_object_id() -> void:
+	var db := ContentDB.new()
+	var object := ScannableData.new()
+	object.id = &"same"
+	db.add_scannable(object)
+	var enemy := EnemyData.new()
+	enemy.id = &"same"
+	db.add_enemy(enemy)
+	assert_string_contains("\n".join(db.errors), "'same'")
 
 
 func _aspect(id: StringName, kind: String, parents: Array[StringName]) -> AspectData:

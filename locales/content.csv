@@ -17,3 +17,11 @@ PROMPT_RESEARCH_TABLE,Estudar na Mesa de Pesquisa
 WAND_APPRENTICE,Varinha de aprendiz
 FOCUS_FIRE,Focus de Fogo
 PROMPT_RECHARGE_FIRE,Recarregar {fire} no braseiro
+ENEMY_BONE_BEADLE,Bedel Descarnado
+PROMPT_PORTAL,Atravessar o portal
+PROMPT_EXIT_SCHOOL,Voltar à escola
+PROMPT_EXIT_LOCKED,A grade não se move enquanto algo vive aqui
+PROMPT_READ,Ler
+NOTE_PORTAL_TITLE,"Placa de bronze, gasta pelo tempo"
+NOTE_PORTAL_BODY,"Sob este colégio jazem as ruínas da Primeira Escola, engolida pela terra com seus mestres, alunos e livros. Este portal é a única passagem estável até elas.\n\nLá embaixo, o saber apodrecido ganhou corpo, e os antigos alunos ainda vagam pelos corredores.\n\nO portal está ancorado ao Salão de Estudos: quem cair lá embaixo desperta aqui em cima, trazendo apenas o que aprendeu. Estude. Catalogue. Volte."
+MSG_AWAKEN,"Você desperta no Salão de Estudos. O corpo dói, mas as anotações continuam com você."
