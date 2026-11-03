@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_5lyyq"]
+
+[resource]
+script = ExtResource("1_5lyyq")
+id = &"fire"
+kind = "primal"
+name_key = "ASPECT_FIRE"
+meaning_key = "ASPECT_FIRE_MEANING"
+color = Color(0.8784314, 0.3764706, 0.16470589, 1)

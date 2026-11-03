@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResearchRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/research_rules.gd" id="1_rlkf3"]
+
+[resource]
+script = ExtResource("1_rlkf3")
+scan_duration = 1.5
+scan_range = 6.0
+points_per_new_aspect = 1
+points_per_new_target = 0

@@ -4,17 +4,18 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 "Jogo do Mago" é o nome provisório; o nome escolhido para distribuir é *Catálogo do Abismo* (decisão 7).
 
-![Sala de teste com o filtro Crocante](docs/images/m1-sala-de-teste.png)
+![Escaneando a vela no Salão de Estudos](docs/images/m2-escaneando.png)
 
 ## Estado
 
-**M1: esqueleto jogável.** Uma sala de teste em primeira pessoa com o visual PS1 e o menu de opções gráficas.
+**M2: escola e pesquisa.** O Salão de Estudos e a Sala do Portal, ligados por um corredor; a Lente Taxonômica escaneia os seis objetos da escola; o Livro de Pesquisa guarda o que foi descoberto; a Mesa de Pesquisa troca pontos pela página "Compreensão de Ignis"; tudo fica salvo entre uma sessão e outra.
 
 | Documento | Conteúdo |
 | --- | --- |
 | [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md) | especificação completa do projeto |
 | [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.md) | tecnologia, arquitetura e decisões da seção 9 |
 | [`DECISIONS.md`](DECISIONS.md) | registro de todas as decisões |
+| [`docs/REFERENCIAS-VISUAIS.md`](docs/REFERENCIAS-VISUAIS.md) | direção de arte e paleta |
 | [`CREDITS.md`](CREDITS.md) | ferramentas e recursos de terceiros |
 
 ## Como executar
@@ -34,7 +35,20 @@ Os executáveis prontos (Windows, Linux, macOS) entram no fim do recorte (M5).
 | Mouse | olhar |
 | Shift (segurar) | correr |
 | Espaço | pular |
-| Esc | pausa e opções (Esc de novo volta) |
+| E | interagir (por exemplo, estudar na Mesa de Pesquisa) |
+| Botão direito (segurar) | escanear com a Lente Taxonômica |
+| Tab | Livro de Pesquisa |
+| Esc | pausa e opções; fecha qualquer tela |
+
+## Como se joga (até aqui)
+
+1. Você começa no **Salão de Estudos**. Mire um objeto (vela, jarro, vaso, pena, livro de registros, osso) e **segure o botão direito**: a Lente sobe e a barra enche em 1,5 s.
+2. Cada **aspecto novo** rende 1 ponto de pesquisa. Escanear de novo não rende nada, mas mirar algo já escaneado mostra seus aspectos.
+3. Na **Mesa de Pesquisa** (E), gaste 3 pontos para estudar **Compreensão de Ignis** (+20% de dano de fogo, usado a partir do M3).
+4. O **Livro de Pesquisa** (Tab) lista aspectos, objetos escaneados e páginas estudadas.
+5. O corredor ao norte leva à **Sala do Portal** (o portal funciona a partir do M4).
+
+O conhecimento é gravado em `user://save.json` (JSON legível) a cada descoberta. Para começar do zero, apague esse arquivo.
 
 ## Opções gráficas
 
@@ -45,7 +59,7 @@ No menu de pausa, **Opções**:
 - **Efeitos**, cada um com liga/desliga: vértices trêmulos (vertex snapping), texturas deformadas (mapeamento afim), névoa, cor limitada e dithering.
 - **Sensibilidade do mouse.**
 
-As opções ficam gravadas em `user://settings.cfg`. No Windows, a pasta `user://` é `%APPDATA%\Godot\app_userdata\Jogo do Mago`.
+As opções ficam gravadas em `user://settings.cfg`. No Windows, a pasta `user://` é `%APPDATA%\Godot\app_userdata\Jogo do Mago`; no Linux, `~/.local/share/godot/app_userdata/Jogo do Mago`.
 
 | Crocante | Limpo |
 | --- | --- |
@@ -65,7 +79,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 
   (`godot` é o caminho do executável do Godot.)
 
-Os testes cobrem o gerador com semente, as opções (filtros, limites e gravação), o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
+Os testes cobrem: descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas, persistência (save), o gerador com semente, as opções, o carregamento e a verificação dos dados e a regra de camadas (`scripts/core` não pode usar cena, entrada nem tela).
 
 ## Argumentos de desenvolvimento
 
@@ -73,7 +87,7 @@ Depois de `--` na linha de comando:
 
 ```sh
 godot --path . -- --seed=123                  # semente do gerador aleatório (impressa ao abrir o jogo)
-godot --path . -- --room=test_room            # sala inicial
+godot --path . -- --room=test_room            # sala inicial (school é o padrão; test_room é a sala do M1)
 godot --path . -- --screenshot=captura.png    # tira uma captura depois de 30 quadros e fecha
 ```
 
@@ -81,15 +95,18 @@ godot --path . -- --screenshot=captura.png    # tira uma captura depois de 30 qu
 
 ```text
 data/              conteúdo do jogo, um arquivo .tres por item (editável no inspetor)
-  player/          valores de movimento do jogador
+  aspects/         aspectos (primais; compostos têm dois pais)
+  scannables/      objetos escaneáveis e seus aspectos
+  research/        regras de escaneamento e pontos (rules.tres) e páginas (pages/)
+  player/          valores do jogador
   rooms/           salas: identificador, cena e atmosfera (névoa, luz ambiente)
   settings/        opções padrão e filtros visuais (presets/)
-locales/           textos da interface (ui.csv: chave e texto em pt_BR)
-scenes/            cenas: main, player, salas (rooms/) e interface (ui/)
+locales/           textos: ui.csv (interface), content.csv (conteúdo), names.csv (nomes de outras obras)
+scenes/            cenas: main, player, salas (rooms/), objetos (props/) e interface (ui/)
 scripts/
-  core/            lógica pura, testável sem abrir o jogo (dados, opções, gerador com semente)
-  autoload/        globais: Content (dados carregados) e Settings (opções do jogador)
-  game/            jogador, mundo, salas, blocos de greybox, luzes
+  core/            lógica pura, testável sem abrir o jogo (conhecimento, pesquisa, save, opções…)
+  autoload/        globais: Content (dados), Settings (opções) e Game (conhecimento e save)
+  game/            jogador, Lente, mundo, salas, objetos, blocos de greybox, luzes
   render/          shaders PS1 e a tela de baixa resolução
   ui/              HUD e menus
 assets/            texturas e materiais

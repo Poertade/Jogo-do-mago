@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/research_table.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="3"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="4"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.6902, 0.5412, 0.2353, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_2"]
+inner_radius = 0.11
+outer_radius = 0.13
+rings = 10
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3"]
+top_radius = 0.015
+bottom_radius = 0.05
+height = 0.2
+radial_segments = 6
+rings = 0
+
+[node name="ResearchTable" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_RESEARCH_TABLE"
+
+[node name="Top" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
+script = ExtResource("2")
+size = Vector3(2.2, 0.08, 1.1)
+material = ExtResource("3")
+
+[node name="Leg1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.39, -0.45)
+script = ExtResource("2")
+size = Vector3(0.1, 0.78, 0.1)
+material = ExtResource("3")
+
+[node name="Leg2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.39, -0.45)
+script = ExtResource("2")
+size = Vector3(0.1, 0.78, 0.1)
+material = ExtResource("3")
+
+[node name="Leg3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.39, 0.45)
+script = ExtResource("2")
+size = Vector3(0.1, 0.78, 0.1)
+material = ExtResource("3")
+
+[node name="Leg4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.39, 0.45)
+script = ExtResource("2")
+size = Vector3(0.1, 0.78, 0.1)
+material = ExtResource("3")
+
+[node name="Shelf" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+script = ExtResource("2")
+size = Vector3(2, 0.05, 0.9)
+material = ExtResource("3")
+
+[node name="Astrolabe" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.05, -0.3)
+
+[node name="RingA" type="MeshInstance3D" parent="Astrolabe"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+mesh = SubResource("TorusMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="RingB" type="MeshInstance3D" parent="Astrolabe"]
+transform = Transform3D(0.425, 0.7361, 0, 0, 0, -0.85, -0.7361, 0.425, 0, 0, 0, 0)
+mesh = SubResource("TorusMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="RingC" type="MeshInstance3D" parent="Astrolabe"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+mesh = SubResource("TorusMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Stand" type="MeshInstance3D" parent="Astrolabe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
+mesh = SubResource("CylinderMesh_3")
+material_override = SubResource("Mat_1")

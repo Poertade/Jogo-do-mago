@@ -10,15 +10,15 @@ extends Resource
 
 @export_group("Efeitos")
 ## Vértices "tremem" presos a uma grade de pixels.
-@export var vertex_snap: bool = true
+@export var vertex_snap: bool = false
 ## Texturas deformam em polígonos grandes, como no PS1.
-@export var affine_mapping: bool = true
+@export var affine_mapping: bool = false
 ## Névoa que esconde o que está longe.
-@export var fog: bool = true
+@export var fog: bool = false
 ## Poucas cores por canal (o PS1 usava 5 bits).
-@export var color_limit: bool = true
+@export var color_limit: bool = false
 ## Padrão de pontos que disfarça a falta de cores. Só tem efeito com a cor limitada.
-@export var dithering: bool = true
+@export var dithering: bool = false
 
 ## Altura da imagem interna, em linhas. A largura acompanha a proporção da janela.
-@export var internal_height: int = 240
+@export var internal_height: int = 0

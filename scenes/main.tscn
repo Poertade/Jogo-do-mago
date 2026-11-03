@@ -1,17 +1,19 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/render/game_screen.gd" id="2"]
-[ext_resource type="Shader" path="res://scripts/render/ps1_post.gdshader" id="3"]
-[ext_resource type="Script" path="res://scripts/game/world.gd" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="5"]
+[ext_resource type="Shader" path="res://scripts/render/ps1_post.gdshader" id="2"]
+[ext_resource type="Script" path="res://scripts/game/world.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="4"]
+[ext_resource type="Script" path="res://scripts/render/game_screen.gd" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/research_book.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/research_table_screen.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="9"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_post"]
-shader = ExtResource("3")
+[sub_resource type="ShaderMaterial" id="PostMaterial_1"]
+shader = ExtResource("2")
 
-[sub_resource type="Environment" id="Environment_world"]
+[sub_resource type="Environment" id="Environment_2"]
 background_mode = 1
 background_color = Color(0.035, 0.04, 0.055, 1)
 ambient_light_source = 2
@@ -29,20 +31,20 @@ render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="GameViewport" node_paths=PackedStringArray("player", "world_environment")]
 unique_name_in_owner = true
-script = ExtResource("4")
+script = ExtResource("3")
 player = NodePath("Player")
 world_environment = NodePath("WorldEnvironment")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="GameViewport/World"]
-environment = SubResource("Environment_world")
+environment = SubResource("Environment_2")
 
-[node name="Player" parent="GameViewport/World" instance=ExtResource("5")]
+[node name="Player" parent="GameViewport/World" instance=ExtResource("4")]
 unique_name_in_owner = true
 
 [node name="GameScreen" type="TextureRect" parent="." node_paths=PackedStringArray("viewport")]
 unique_name_in_owner = true
 texture_filter = 1
-material = SubResource("ShaderMaterial_post")
+material = SubResource("PostMaterial_1")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -50,10 +52,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
-script = ExtResource("2")
+script = ExtResource("5")
 viewport = NodePath("../GameViewport")
 
-[node name="Hud" parent="." instance=ExtResource("6")]
+[node name="Hud" parent="." instance=ExtResource("6") node_paths=PackedStringArray("player")]
+player = NodePath("../GameViewport/World/Player")
 
-[node name="PauseMenu" parent="." instance=ExtResource("7")]
+[node name="ResearchBook" parent="." instance=ExtResource("7")]
+unique_name_in_owner = true
+
+[node name="ResearchTableScreen" parent="." instance=ExtResource("8")]
+unique_name_in_owner = true
+
+[node name="PauseMenu" parent="." instance=ExtResource("9")]
 unique_name_in_owner = true

@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/feather.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(0.24, 0.008, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.8471, 0.8314, 0.7843, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(0.3, 0.008, 0.008)
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.6588, 0.6039, 0.502, 1)
+
+[sub_resource type="BoxShape3D" id="Box_5"]
+size = Vector3(0.34, 0.12, 0.2)
+
+[node name="Feather" type="StaticBody3D"]
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="Vane" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9986, -0.0523, 0, 0.0523, 0.9986, 0, 0, 0, 1, 0.02, 0.006, 0)
+mesh = SubResource("BoxMesh_1")
+material_override = SubResource("Mat_2")
+
+[node name="Shaft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9986, -0.0523, 0, 0.0523, 0.9986, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+shape = SubResource("Box_5")

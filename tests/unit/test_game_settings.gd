@@ -17,14 +17,16 @@ func before_each() -> void:
 
 	crunchy = GraphicsPreset.new()
 	crunchy.id = &"crunchy"
+	crunchy.vertex_snap = true
+	crunchy.affine_mapping = true
+	crunchy.fog = true
+	crunchy.color_limit = true
+	crunchy.dithering = true
 	crunchy.internal_height = 240
 
 	clean = GraphicsPreset.new()
 	clean.id = &"clean"
-	clean.vertex_snap = false
-	clean.affine_mapping = false
-	clean.color_limit = false
-	clean.dithering = false
+	clean.fog = true
 	clean.internal_height = 480
 
 

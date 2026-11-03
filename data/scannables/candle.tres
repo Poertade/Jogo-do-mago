@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_vpd7j"]
+
+[resource]
+script = ExtResource("1_vpd7j")
+id = &"candle"
+name_key = "OBJ_CANDLE"
+aspects = Dictionary[StringName, int]({
+&"fire": 3
+})

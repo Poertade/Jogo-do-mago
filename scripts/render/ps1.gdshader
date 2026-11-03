@@ -20,7 +20,8 @@ global uniform float ps1_fog_far;        // metros
 
 // --- Parâmetros de cada material ---
 // Textura pequena, sem filtragem (pixels nítidos) e sem mipmaps.
-uniform sampler2D albedo_texture : source_color, filter_nearest, repeat_enable;
+// Sem textura, a superfície fica só com a cor (albedo_color).
+uniform sampler2D albedo_texture : source_color, filter_nearest, repeat_enable, hint_default_white;
 uniform vec4 albedo_color : source_color = vec4(1.0);
 // Se ligado, a textura é projetada pela posição no mundo (útil nos blocos de greybox):
 // ela se repete a cada `texture_size_m` metros, qualquer que seja o tamanho do bloco.
@@ -28,6 +29,11 @@ uniform bool world_uv = false;
 uniform float texture_size_m = 1.0;
 // Escala da UV do próprio modelo, quando world_uv está desligado.
 uniform vec2 uv_scale = vec2(1.0);
+// Deslocamento da textura por segundo (água, fogo, portal).
+uniform vec2 uv_scroll = vec2(0.0);
+// Brilho próprio, que não depende de luz (chamas, cristais, o portal).
+uniform vec4 emission_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform float emission_energy = 0.0;
 
 varying vec2 v_uv;            // UV normal (corrigida pela perspectiva)
 varying vec3 v_affine_uv;     // (UV * w, w): truque para interpolar a UV sem correção, como o PS1
@@ -58,6 +64,8 @@ void vertex() {
 		uv = world_space_uv(world_pos, world_normal) / texture_size_m;
 	}
 
+	uv += uv_scroll * TIME;
+
 	vec4 view_pos = MODELVIEW_MATRIX * vec4(VERTEX, 1.0);
 	vec4 clip = PROJECTION_MATRIX * view_pos;
 
@@ -81,7 +89,9 @@ void fragment() {
 	// Mapeamento afim: dividir (UV * w) por w depois da interpolação anula a correção
 	// de perspectiva da placa de vídeo, e a textura "escorrega" nos polígonos grandes.
 	vec2 uv = ps1_affine_mapping ? v_affine_uv.xy / v_affine_uv.z : v_uv;
-	vec4 texel = texture(albedo_texture, uv) * albedo_color;
-	ALBEDO = texel.rgb;
+	vec4 texel = texture(albedo_texture, uv);
+	ALBEDO = texel.rgb * albedo_color.rgb;
+	// O brilho próprio usa a textura, mas não a cor base: uma chama pode ter base preta e brilhar.
+	EMISSION = emission_color.rgb * texel.rgb * emission_energy;
 	FOG = vec4(srgb_to_linear(ps1_fog_color.rgb), ps1_fog ? v_fog : 0.0);
 }

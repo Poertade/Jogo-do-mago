@@ -1,0 +1,16 @@
+keys,pt_BR
+ASPECT_FIRE_MEANING,fogo
+ASPECT_WATER_MEANING,água
+ASPECT_EARTH_MEANING,terra
+ASPECT_AIR_MEANING,ar
+ASPECT_ORDER_MEANING,ordem
+ASPECT_ENTROPY_MEANING,"entropia, decadência"
+OBJ_CANDLE,Vela
+OBJ_WATER_JUG,Jarro d'água
+OBJ_SOIL_POT,Vaso com terra
+OBJ_FEATHER,Pena de escrever
+OBJ_LEDGER,Livro de registros
+OBJ_OLD_BONE,Osso antigo
+PAGE_FIRE_COMPREHENSION,Compreensão de {fire}
+PAGE_FIRE_COMPREHENSION_DESC,"O fogo deixa de ser mistério: o dano de {fire} aumenta 20%."
+PROMPT_RESEARCH_TABLE,Estudar na Mesa de Pesquisa

@@ -11,11 +11,11 @@ extends Resource
 
 @export_group("Atmosfera")
 ## Cor da névoa e do fundo.
-@export var fog_color: Color = Color(0.04, 0.045, 0.06)
+@export var fog_color: Color = Color.BLACK
 ## Distância, em metros, em que a névoa começa.
-@export var fog_near: float = 2.0
+@export var fog_near: float = 0.0
 ## Distância, em metros, em que a névoa cobre tudo.
-@export var fog_far: float = 12.0
+@export var fog_far: float = 0.0
 ## Luz ambiente: ilumina tudo por igual, sem direção.
-@export var ambient_color: Color = Color(0.25, 0.27, 0.33)
-@export var ambient_energy: float = 0.3
+@export var ambient_color: Color = Color.BLACK
+@export var ambient_energy: float = 0.0

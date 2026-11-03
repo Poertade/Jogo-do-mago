@@ -1,14 +1,15 @@
 extends Node
-## Cena principal: junta a tela do jogo (mundo 3D em baixa resolução), o HUD e o menu de pausa.
+## Cena principal: junta a tela do jogo (mundo 3D em baixa resolução), o HUD e as telas
+## de menu (pausa, Livro de Pesquisa, Mesa de Pesquisa).
 ##
 ## Argumentos de desenvolvimento, depois de "--" na linha de comando:
 ##   --seed=123             semente do gerador aleatório
-##   --room=test_room       sala inicial (padrão: start_room)
+##   --room=school          sala inicial (padrão: start_room)
 ##   --entrance=default     entrada da sala inicial
 ##   --screenshot=foto.png  salva uma captura da janela depois de alguns quadros e fecha o jogo
 
 ## Sala onde o jogo começa (identificador de data/rooms/).
-@export var start_room: StringName = &"test_room"
+@export var start_room: StringName = &"school"
 @export var start_entrance: StringName = &"default"
 
 var rng: GameRng
@@ -18,6 +19,8 @@ var rng: GameRng
 @onready var world: World = %World
 @onready var player: Player = %Player
 @onready var pause_menu: PauseMenu = %PauseMenu
+@onready var research_book: ResearchBook = %ResearchBook
+@onready var research_table_screen: ResearchTableScreen = %ResearchTableScreen
 
 
 func _ready() -> void:
@@ -27,7 +30,9 @@ func _ready() -> void:
 
 	Settings.changed.connect(_apply_settings)
 	_apply_settings()
-	pause_menu.resumed.connect(_capture_mouse)
+	for menu: MenuLayer in [pause_menu, research_book, research_table_screen]:
+		menu.closed.connect(_capture_mouse)
+	Game.screen_requested.connect(_on_screen_requested)
 
 	world.load_room(_arg_value(args, "--room=", start_room), _arg_value(args, "--entrance=", start_entrance))
 
@@ -46,12 +51,22 @@ func _unhandled_input(event: InputEvent) -> void:
 		pause_menu.open()
 		get_viewport().set_input_as_handled()
 		return
+	if event.is_action_pressed("research_book"):
+		research_book.open()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventMouseButton and event.pressed and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		_capture_mouse()
 		get_viewport().set_input_as_handled()
 		return
 	# O mundo 3D fica num SubViewport, que não recebe eventos sozinho: repassamos.
 	game_viewport.push_input(event)
+
+
+func _on_screen_requested(screen: StringName) -> void:
+	match screen:
+		&"research_table":
+			research_table_screen.open()
 
 
 func _capture_mouse() -> void:

@@ -9,3 +9,4 @@ run_speed = 5.0
 acceleration = 20.0
 jump_velocity = 4.0
 eye_height = 1.6
+interact_range = 2.5

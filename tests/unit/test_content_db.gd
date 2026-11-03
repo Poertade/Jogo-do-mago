@@ -10,6 +10,57 @@ func test_real_content_loads_without_errors() -> void:
 	assert_not_null(db.settings_defaults)
 	assert_gt(db.presets.size(), 0)
 	assert_has(db.rooms, &"test_room")
+	assert_has(db.rooms, &"school")
+	assert_eq(db.aspects.size(), 6, "Seis aspectos primais")
+	assert_eq(db.scannables.size(), 6, "Seis objetos escaneáveis na escola")
+	assert_has(db.pages, &"fire_comprehension")
+	assert_not_null(db.research_rules)
+
+
+func test_school_values_match_the_specification() -> void:
+	var db := ContentDB.new()
+	db.load_all()
+	var expected := {&"candle": {&"fire": 3}, &"water_jug": {&"water": 2}, &"soil_pot": {&"earth": 2},
+		&"feather": {&"air": 1}, &"ledger": {&"order": 2}, &"old_bone": {&"entropy": 2}}
+	for id in expected:
+		assert_eq(db.scannables[id].aspects, expected[id], "Aspectos de %s" % id)
+	assert_eq(db.research_rules.scan_duration, 1.5)
+	assert_eq(db.research_rules.points_per_new_aspect, 1)
+	assert_eq(db.pages[&"fire_comprehension"].cost, 3)
+	assert_almost_eq(db.pages[&"fire_comprehension"].effects[0].value, 1.2, 0.0001)
+
+
+func _aspect(id: StringName, kind: String, parents: Array[StringName]) -> AspectData:
+	var aspect := AspectData.new()
+	aspect.id = id
+	aspect.kind = kind
+	aspect.parents = parents
+	return aspect
+
+
+func test_compound_aspect_needs_two_existing_parents() -> void:
+	var db := ContentDB.new()
+	db.add_aspect(_aspect(&"fire", "primal", []))
+	db.add_aspect(_aspect(&"air", "primal", []))
+	db.add_aspect(_aspect(&"light", "compound", [&"fire", &"air"]))
+	db.add_aspect(_aspect(&"broken", "compound", [&"fire", &"nothing"]))
+	db.add_aspect(_aspect(&"lonely", "compound", [&"fire"]))
+	db.validate()
+	var text := "\n".join(db.errors)
+	assert_false("'light'" in text, "Composto válido não deveria dar erro")
+	assert_string_contains(text, "'nothing'")
+	assert_string_contains(text, "'lonely'")
+
+
+func test_scannable_with_unknown_aspect_is_reported() -> void:
+	var db := ContentDB.new()
+	var target := ScannableData.new()
+	target.id = &"mystery"
+	var aspects: Dictionary[StringName, int] = {&"unknown": 1}
+	target.aspects = aspects
+	db.add_scannable(target)
+	db.validate()
+	assert_string_contains("\n".join(db.errors), "'unknown'")
 
 
 func _room(id: StringName, scene_path: String) -> RoomData:

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_fenf4"]
+
+[resource]
+script = ExtResource("1_fenf4")
+id = &"order"
+kind = "primal"
+name_key = "ASPECT_ORDER"
+meaning_key = "ASPECT_ORDER_MEANING"
+color = Color(0.83137256, 0.8392157, 0.9019608, 1)

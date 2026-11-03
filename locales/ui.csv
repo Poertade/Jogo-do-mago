@@ -18,3 +18,31 @@ UI_RESOLUTION_LINES,%d linhas
 PRESET_CRUNCHY,Crocante
 PRESET_CLEAN,Limpo
 PRESET_CUSTOM,Personalizado
+UI_PROMPT_INTERACT,[E] %s
+UI_SCAN_UNKNOWN,???
+UI_SCAN_HINT,Segure o botão direito para escanear
+UI_ASPECT_AMOUNT,%s %d
+UI_MSG_SCANNED,Escaneado: %s
+UI_MSG_ALREADY_SCANNED,%s já está no Livro de Pesquisa
+UI_MSG_NEW_ASPECT,Novo aspecto: %s
+UI_MSG_POINTS,+%d ponto(s) de pesquisa
+UI_MSG_PAGE_STUDIED,Página estudada: %s
+UI_BOOK_TITLE,Livro de Pesquisa
+UI_BOOK_ASPECTS,Aspectos descobertos
+UI_BOOK_SCANNED,Escaneados
+UI_BOOK_PAGES,Páginas estudadas
+UI_BOOK_EMPTY,(nada ainda)
+UI_RESEARCH_POINTS,Pontos de pesquisa: %d
+UI_BOOK_CLOSE_HINT,Tab ou Esc para fechar
+UI_ASPECT_KIND_PRIMAL,primal
+UI_ASPECT_KIND_COMPOUND,composto
+UI_TABLE_TITLE,Mesa de Pesquisa
+UI_TABLE_CLOSE_HINT,Esc para sair
+UI_PAGE_COST,Custo: %d ponto(s)
+UI_STUDY,Estudar
+UI_STUDY_OK,Pronta para estudar
+UI_STUDY_ALREADY,Já estudada
+UI_STUDY_NO_POINTS,Faltam pontos de pesquisa
+UI_STUDY_MISSING_PAGE,Exige outra página antes
+UI_STUDY_MISSING_ASPECT,Exige descobrir: %s
+UI_CLOSE,Fechar

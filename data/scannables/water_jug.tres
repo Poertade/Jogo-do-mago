@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_n62x7"]
+
+[resource]
+script = ExtResource("1_n62x7")
+id = &"water_jug"
+name_key = "OBJ_WATER_JUG"
+aspects = Dictionary[StringName, int]({
+&"water": 2
+})

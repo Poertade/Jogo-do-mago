@@ -1,7 +1,8 @@
 # Instruções para o Claude Code
 
 - A especificação do projeto está em `docs/ESPECIFICACAO.md`; a proposta aprovada, em `docs/PROPOSTA-M0.md`. Leia as duas antes de começar um marco.
-- Trabalhe por marcos (seção 10 da especificação). Não avance de marco sem a aprovação do usuário nas decisões de que ele depende (`DECISIONS.md`, seção "Pendentes").
+- Trabalhe por marcos (seção 10 da especificação). Não avance de marco sem a aprovação do usuário nas decisões de que ele depende (`DECISIONS.md`, seção "Pendentes"). Exceção: o usuário autorizou seguir do M2 ao M5 sem aprovação intermediária (D020); depois do M5, volte a pedir aprovação.
+- Direção de arte: `docs/REFERENCIAS-VISUAIS.md`.
 - Registre toda decisão em `DECISIONS.md`: data, escolha, alternativa descartada e motivo. Dependência nova só com justificativa ali.
 - Motor: Godot 4.7.2, GDScript com tipos, renderizador Compatibility.
 - Comentários e textos em PT-BR; identificadores em inglês. Código simples de ler: o usuário vai estudar e modificar o projeto.

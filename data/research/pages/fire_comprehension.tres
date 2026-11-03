@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ResearchPageData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/page_effect.gd" id="1_a0738"]
+[ext_resource type="Script" path="res://scripts/core/data/research_page_data.gd" id="2_6ntp5"]
+
+[sub_resource type="Resource" id="Resource_0m72d"]
+script = ExtResource("1_a0738")
+element = &"fire"
+value = 1.2
+
+[resource]
+script = ExtResource("2_6ntp5")
+id = &"fire_comprehension"
+name_key = "PAGE_FIRE_COMPREHENSION"
+description_key = "PAGE_FIRE_COMPREHENSION_DESC"
+cost = 3
+required_aspects = Array[StringName]([&"fire"])
+effects = Array[ExtResource("1_a0738")]([SubResource("Resource_0m72d")])

@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/water_jug.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.5412, 0.3529, 0.2275, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2"]
+top_radius = 0.07
+bottom_radius = 0.11
+height = 0.26
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3"]
+top_radius = 0.065
+bottom_radius = 0.05
+height = 0.06
+radial_segments = 6
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4"]
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.005
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="Mat_5"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.1176, 0.2431, 0.3765, 1)
+shader_parameter/emission_color = Color(0.2275, 0.4784, 0.6902, 1)
+shader_parameter/emission_energy = 0.4
+
+[sub_resource type="BoxShape3D" id="Box_6"]
+size = Vector3(0.24, 0.34, 0.24)
+
+[node name="WaterJug" type="StaticBody3D"]
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0)
+mesh = SubResource("CylinderMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Neck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29, 0)
+mesh = SubResource("CylinderMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315, 0)
+mesh = SubResource("CylinderMesh_4")
+material_override = SubResource("Mat_5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+shape = SubResource("Box_6")

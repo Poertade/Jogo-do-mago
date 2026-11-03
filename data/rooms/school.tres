@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"school"
+scene_path = "res://scenes/rooms/school.tscn"
+fog_color = Color(0.055, 0.043, 0.039, 1)
+fog_near = 4.0
+fog_far = 18.0
+ambient_color = Color(0.29, 0.33, 0.41, 1)
+ambient_energy = 0.35

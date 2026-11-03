@@ -1,0 +1,429 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
+[ext_resource type="Material" path="res://assets/materials/wood_floor.tres" id="3"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="4"]
+[ext_resource type="Material" path="res://assets/materials/school_wall.tres" id="5"]
+[ext_resource type="Material" path="res://assets/materials/rug.tres" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/props/research_table.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/props/candle.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/props/ledger.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/props/feather.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/props/water_jug.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/props/soil_pot.tscn" id="12"]
+[ext_resource type="Material" path="res://assets/materials/stone_wall.tres" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/props/old_bone.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/props/brazier.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://scenes/props/bookshelf.tscn" id="16"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="17"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="18"]
+[ext_resource type="Material" path="res://assets/materials/stone_floor.tres" id="19"]
+[ext_resource type="Material" path="res://assets/materials/stone_ceiling.tres" id="20"]
+[ext_resource type="PackedScene" path="res://scenes/props/portal.tscn" id="21"]
+[ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="22"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.6275, 0.251, 1)
+shader_parameter/emission_energy = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.6275, 0.251, 1)
+shader_parameter/emission_energy = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_5"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.0627, 0.0941, 0.1255, 1)
+shader_parameter/emission_color = Color(0.5412, 0.6431, 0.8471, 1)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.06, 1.6, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_7"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.6275, 0.251, 1)
+shader_parameter/emission_energy = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_9"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.0627, 0.1255, 0.251, 1)
+shader_parameter/emission_color = Color(0.4157, 0.6039, 1, 1)
+shader_parameter/emission_energy = 1.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_10"]
+size = Vector3(0.25, 0.6, 0.25)
+
+[sub_resource type="ShaderMaterial" id="Mat_11"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.0627, 0.1255, 0.251, 1)
+shader_parameter/emission_color = Color(0.4157, 0.6039, 1, 1)
+shader_parameter/emission_energy = 1.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_12"]
+size = Vector3(0.25, 0.6, 0.25)
+
+[node name="School" type="Node3D"]
+script = ExtResource("1")
+
+[node name="StudyHall" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 1)
+script = ExtResource("2")
+size = Vector3(12.8, 0.2, 14.8)
+material = ExtResource("3")
+
+[node name="Ceiling" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, 1)
+script = ExtResource("2")
+size = Vector3(12.8, 0.2, 14.8)
+material = ExtResource("4")
+
+[node name="Beam1" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.35, -3)
+script = ExtResource("2")
+size = Vector3(12, 0.3, 0.3)
+material = ExtResource("4")
+
+[node name="Beam2" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.35, 1)
+script = ExtResource("2")
+size = Vector3(12, 0.3, 0.3)
+material = ExtResource("4")
+
+[node name="Beam3" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.35, 5)
+script = ExtResource("2")
+size = Vector3(12, 0.3, 0.3)
+material = ExtResource("4")
+
+[node name="WallWest" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 2.25, 1)
+script = ExtResource("2")
+size = Vector3(0.4, 4.5, 14.8)
+material = ExtResource("5")
+
+[node name="WallEast" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.25, 1)
+script = ExtResource("2")
+size = Vector3(0.4, 4.5, 14.8)
+material = ExtResource("5")
+
+[node name="WallSouth" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 8.2)
+script = ExtResource("2")
+size = Vector3(12.8, 4.5, 0.4)
+material = ExtResource("5")
+
+[node name="WallNorthLeft" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 2.25, -6.2)
+script = ExtResource("2")
+size = Vector3(5.2, 4.5, 0.4)
+material = ExtResource("5")
+
+[node name="WallNorthRight" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 2.25, -6.2)
+script = ExtResource("2")
+size = Vector3(5.2, 4.5, 0.4)
+material = ExtResource("5")
+
+[node name="WallNorthLintel" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.75, -6.2)
+script = ExtResource("2")
+size = Vector3(2.4, 1.5, 0.4)
+material = ExtResource("5")
+
+[node name="Rug" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 1.5)
+script = ExtResource("2")
+size = Vector3(4, 0.02, 6)
+material = ExtResource("6")
+
+[node name="ResearchTable" parent="StudyHall" instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Candle" parent="StudyHall" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.86, -1.7)
+
+[node name="Ledger" parent="StudyHall" instance=ExtResource("9")]
+transform = Transform3D(0.9659, 0, 0.2588, 0, 1, 0, -0.2588, 0, 0.9659, 0.35, 0.86, -1.55)
+
+[node name="Feather" parent="StudyHall" instance=ExtResource("10")]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, 0.8, 0.86, -1.25)
+
+[node name="SideTable" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 0.4, 2.5)
+script = ExtResource("2")
+size = Vector3(1, 0.8, 0.6)
+material = ExtResource("4")
+
+[node name="WaterJug" parent="StudyHall" instance=ExtResource("11")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 0.8, 2.5)
+
+[node name="SoilPot" parent="StudyHall" instance=ExtResource("12")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 0, 4)
+
+[node name="CuriosityStand" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 0.25, -3.6)
+script = ExtResource("2")
+size = Vector3(0.8, 0.5, 0.8)
+material = ExtResource("13")
+
+[node name="OldBone" parent="StudyHall" instance=ExtResource("14")]
+transform = Transform3D(0.766, 0, 0.6428, 0, 1, 0, -0.6428, 0, 0.766, 5.2, 0.5, -3.6)
+
+[node name="Brazier" parent="StudyHall" instance=ExtResource("15")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 2)
+
+[node name="BookshelfW1" parent="StudyHall" instance=ExtResource("16")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.75, 0, -4)
+
+[node name="BookshelfW2" parent="StudyHall" instance=ExtResource("16")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.75, 0, -1.6)
+
+[node name="BookshelfE1" parent="StudyHall" instance=ExtResource("16")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.75, 0, -0.2)
+
+[node name="BookshelfE2" parent="StudyHall" instance=ExtResource("16")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.75, 0, 1.8)
+
+[node name="SconceL" type="Node3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 2.4, -5.92)
+
+[node name="Holder" type="StaticBody3D" parent="StudyHall/SconceL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("4")
+
+[node name="Flame" type="MeshInstance3D" parent="StudyHall/SconceL"]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.27, 0)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Light" type="OmniLight3D" parent="StudyHall/SconceL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0.25)
+light_color = Color(1, 0.6588, 0.3765, 1)
+light_energy = 1.3
+omni_range = 6
+omni_attenuation = 1.2
+script = ExtResource("18")
+flicker_amount = 0.25
+
+[node name="SconceR" type="Node3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 2.4, -5.92)
+
+[node name="Holder" type="StaticBody3D" parent="StudyHall/SconceR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("4")
+
+[node name="Flame" type="MeshInstance3D" parent="StudyHall/SconceR"]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.27, 0)
+mesh = SubResource("BoxMesh_4")
+material_override = SubResource("Mat_3")
+
+[node name="Light" type="OmniLight3D" parent="StudyHall/SconceR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0.25)
+light_color = Color(1, 0.6588, 0.3765, 1)
+light_energy = 1.3
+omni_range = 6
+omni_attenuation = 1.2
+script = ExtResource("18")
+flicker_amount = 0.25
+
+[node name="Window" type="MeshInstance3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.98, 3, -1.6)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_5")
+
+[node name="Moonlight" type="OmniLight3D" parent="StudyHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 3, -1.6)
+light_color = Color(0.4784, 0.5647, 0.7843, 1)
+light_energy = 0.7
+omni_range = 6
+omni_attenuation = 1.2
+
+[node name="Corridor" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Corridor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -8.2)
+script = ExtResource("2")
+size = Vector3(2.8, 0.2, 4)
+material = ExtResource("19")
+
+[node name="Ceiling" type="StaticBody3D" parent="Corridor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, -8.2)
+script = ExtResource("2")
+size = Vector3(2.8, 0.2, 4)
+material = ExtResource("20")
+
+[node name="WallWest" type="StaticBody3D" parent="Corridor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1.5, -8.2)
+script = ExtResource("2")
+size = Vector3(0.4, 3, 4)
+material = ExtResource("13")
+
+[node name="WallEast" type="StaticBody3D" parent="Corridor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1.5, -8.2)
+script = ExtResource("2")
+size = Vector3(0.4, 3, 4)
+material = ExtResource("13")
+
+[node name="Sconce" type="Node3D" parent="Corridor"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 1.12, 2, -8.2)
+
+[node name="Holder" type="StaticBody3D" parent="Corridor/Sconce"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("4")
+
+[node name="Flame" type="MeshInstance3D" parent="Corridor/Sconce"]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.27, 0)
+mesh = SubResource("BoxMesh_8")
+material_override = SubResource("Mat_7")
+
+[node name="Light" type="OmniLight3D" parent="Corridor/Sconce"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0.25)
+light_color = Color(1, 0.6588, 0.3765, 1)
+light_energy = 1.3
+omni_range = 6
+omni_attenuation = 1.2
+script = ExtResource("18")
+flicker_amount = 0.25
+
+[node name="PortalRoom" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -14)
+script = ExtResource("2")
+size = Vector3(10.8, 0.2, 8.8)
+material = ExtResource("19")
+
+[node name="Ceiling" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.1, -14)
+script = ExtResource("2")
+size = Vector3(10.8, 0.2, 8.8)
+material = ExtResource("20")
+
+[node name="WallWest" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2.5, -14)
+script = ExtResource("2")
+size = Vector3(0.4, 5, 8.8)
+material = ExtResource("13")
+
+[node name="WallEast" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 2.5, -14)
+script = ExtResource("2")
+size = Vector3(0.4, 5, 8.8)
+material = ExtResource("13")
+
+[node name="WallNorth" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -18.2)
+script = ExtResource("2")
+size = Vector3(10.8, 5, 0.4)
+material = ExtResource("13")
+
+[node name="WallSouthLeft" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 2.5, -9.8)
+script = ExtResource("2")
+size = Vector3(4.2, 5, 0.4)
+material = ExtResource("13")
+
+[node name="WallSouthRight" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 2.5, -9.8)
+script = ExtResource("2")
+size = Vector3(4.2, 5, 0.4)
+material = ExtResource("13")
+
+[node name="WallSouthLintel" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -9.8)
+script = ExtResource("2")
+size = Vector3(2.4, 2, 0.4)
+material = ExtResource("13")
+
+[node name="Pillar1" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2.5, -12)
+script = ExtResource("2")
+size = Vector3(0.6, 5, 0.6)
+material = ExtResource("13")
+
+[node name="Pillar2" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.5, -12)
+script = ExtResource("2")
+size = Vector3(0.6, 5, 0.6)
+material = ExtResource("13")
+
+[node name="Pillar3" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2.5, -16)
+script = ExtResource("2")
+size = Vector3(0.6, 5, 0.6)
+material = ExtResource("13")
+
+[node name="Pillar4" type="StaticBody3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.5, -16)
+script = ExtResource("2")
+size = Vector3(0.6, 5, 0.6)
+material = ExtResource("13")
+
+[node name="Portal" parent="PortalRoom" instance=ExtResource("21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+
+[node name="Crystal1" type="MeshInstance3D" parent="PortalRoom"]
+transform = Transform3D(0.6645, -0.2418, 0.7071, 0.342, 0.9397, 0, -0.6645, 0.2418, 0.7071, -4.6, 2.6, -11.2)
+mesh = SubResource("BoxMesh_10")
+material_override = SubResource("Mat_9")
+
+[node name="CrystalLight1" type="OmniLight3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.232, 2.6, -11.2)
+light_color = Color(0.4157, 0.5412, 1, 1)
+light_energy = 0.9
+omni_range = 5
+omni_attenuation = 1.2
+
+[node name="Crystal2" type="MeshInstance3D" parent="PortalRoom"]
+transform = Transform3D(0.6645, 0.2418, 0.7071, -0.342, 0.9397, 0, -0.6645, -0.2418, 0.7071, 4.6, 2.6, -11.2)
+mesh = SubResource("BoxMesh_12")
+material_override = SubResource("Mat_11")
+
+[node name="CrystalLight2" type="OmniLight3D" parent="PortalRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.232, 2.6, -11.2)
+light_color = Color(0.4157, 0.5412, 1, 1)
+light_energy = 0.9
+omni_range = 5
+omni_attenuation = 1.2
+
+[node name="Entrances" type="Node3D" parent="."]
+
+[node name="Default" type="Marker3D" parent="Entrances"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.5)
+script = ExtResource("22")
+id = &"default"
+
+[node name="FromDungeon" type="Marker3D" parent="Entrances"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -15)
+script = ExtResource("22")
+id = &"from_dungeon"

@@ -1,0 +1,24 @@
+class_name Modifiers
+extends RefCounted
+## Soma dos efeitos permanentes das páginas estudadas.
+## Efeitos do mesmo tipo e elemento se multiplicam (duas páginas de +20% = ×1,44).
+
+var _damage_multipliers: Dictionary[StringName, float] = {}
+
+
+static func from_pages(pages: Array[ResearchPageData]) -> Modifiers:
+	var modifiers := Modifiers.new()
+	for page in pages:
+		for effect in page.effects:
+			modifiers._add(effect)
+	return modifiers
+
+
+## Multiplicador de dano do elemento (1.0 se nenhuma página o afeta).
+func damage_multiplier(element: StringName) -> float:
+	return _damage_multipliers.get(element, 1.0)
+
+
+func _add(effect: PageEffect) -> void:
+	if effect.type == PageEffect.DAMAGE_MULTIPLIER:
+		_damage_multipliers[effect.element] = damage_multiplier(effect.element) * effect.value

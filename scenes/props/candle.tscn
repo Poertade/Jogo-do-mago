@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/candle.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="4"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.015
+radial_segments = 8
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.5412, 0.4157, 0.1882, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3"]
+top_radius = 0.03
+bottom_radius = 0.032
+height = 0.16
+radial_segments = 6
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.8471, 0.8118, 0.6902, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5"]
+radius = 0.018
+height = 0.05
+radial_segments = 4
+rings = 2
+
+[sub_resource type="ShaderMaterial" id="Mat_6"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.6902, 0.3137, 1)
+shader_parameter/emission_energy = 2.5
+
+[sub_resource type="BoxShape3D" id="Box_7"]
+size = Vector3(0.14, 0.28, 0.14)
+
+[node name="Candle" type="StaticBody3D"]
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="Holder" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0075, 0)
+mesh = SubResource("CylinderMesh_1")
+material_override = SubResource("Mat_2")
+
+[node name="Wax" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.095, 0)
+mesh = SubResource("CylinderMesh_3")
+material_override = SubResource("Mat_4")
+
+[node name="Flame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("SphereMesh_5")
+material_override = SubResource("Mat_6")
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.27, 0)
+light_color = Color(1, 0.6902, 0.3765, 1)
+light_energy = 0.8
+omni_range = 3
+omni_attenuation = 1.2
+script = ExtResource("4")
+flicker_amount = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
+shape = SubResource("Box_7")

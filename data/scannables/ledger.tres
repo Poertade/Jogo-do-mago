@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_o5gnf"]
+
+[resource]
+script = ExtResource("1_o5gnf")
+id = &"ledger"
+name_key = "OBJ_LEDGER"
+aspects = Dictionary[StringName, int]({
+&"order": 2
+})

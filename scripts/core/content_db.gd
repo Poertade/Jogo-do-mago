@@ -1,15 +1,19 @@
 class_name ContentDB
 extends RefCounted
 ## Todo o conteúdo do jogo (pasta data/), carregado e verificado.
-## Os erros encontrados (identificador repetido, cena inexistente…) ficam em `errors`,
+## Os erros encontrados (identificador repetido, referência quebrada…) ficam em `errors`,
 ## com mensagens em português, para quem adiciona conteúdo saber o que corrigir.
 
 const DATA_ROOT := "res://data"
 
 var player: PlayerData
 var settings_defaults: SettingsDefaults
+var research_rules: ResearchRules
 var presets: Array[GraphicsPreset] = []
 var rooms: Dictionary[StringName, RoomData] = {}
+var aspects: Dictionary[StringName, AspectData] = {}
+var scannables: Dictionary[StringName, ScannableData] = {}
+var pages: Dictionary[StringName, ResearchPageData] = {}
 var errors: PackedStringArray = []
 
 
@@ -17,33 +21,94 @@ var errors: PackedStringArray = []
 func load_all(root := DATA_ROOT) -> void:
 	player = _load_single(root.path_join("player/player.tres")) as PlayerData
 	settings_defaults = _load_single(root.path_join("settings/defaults.tres")) as SettingsDefaults
+	research_rules = _load_single(root.path_join("research/rules.tres")) as ResearchRules
 	for resource in _load_folder(root.path_join("settings/presets")):
 		if resource is GraphicsPreset:
 			presets.append(resource)
 	for resource in _load_folder(root.path_join("rooms")):
 		if resource is RoomData:
 			add_room(resource)
+	for resource in _load_folder(root.path_join("aspects")):
+		if resource is AspectData:
+			add_aspect(resource)
+	for resource in _load_folder(root.path_join("scannables")):
+		if resource is ScannableData:
+			add_scannable(resource)
+	for resource in _load_folder(root.path_join("research/pages")):
+		if resource is ResearchPageData:
+			add_page(resource)
 	validate()
 
 
-## Registra uma sala. Também usado pelos testes, sem passar pelo disco.
-func add_room(room: RoomData) -> void:
-	if room.id in rooms:
-		errors.append("Sala com identificador repetido: '%s'." % room.id)
-		return
-	rooms[room.id] = room
+# --- Registro (também usado pelos testes, sem passar pelo disco) ---
 
+func add_room(room: RoomData) -> void:
+	_add_unique(rooms, room, "Sala")
+
+
+func add_aspect(aspect: AspectData) -> void:
+	_add_unique(aspects, aspect, "Aspecto")
+
+
+## Objetos e inimigos dividem o mesmo espaço de identificadores: o Livro de Pesquisa
+## guarda os alvos escaneados só pelo id.
+func add_scannable(scannable: ScannableData) -> void:
+	_add_unique(scannables, scannable, "Escaneável")
+
+
+func add_page(page: ResearchPageData) -> void:
+	_add_unique(pages, page, "Página de pesquisa")
+
+
+func _add_unique(table: Dictionary, item: Resource, label: String) -> void:
+	var id: StringName = item.get("id")
+	if id == &"":
+		errors.append("%s sem identificador: %s." % [label, item.resource_path])
+	elif id in table:
+		errors.append("%s com identificador repetido: '%s'." % [label, id])
+	else:
+		table[id] = item
+
+
+# --- Consultas ---
+
+## Páginas de pesquisa a partir de uma lista de identificadores (ignora os desconhecidos).
+func pages_by_id(ids: Array[StringName]) -> Array[ResearchPageData]:
+	var result: Array[ResearchPageData] = []
+	for id in ids:
+		if id in pages:
+			result.append(pages[id])
+	return result
+
+
+## Páginas em ordem de custo, para a Mesa de Pesquisa.
+func sorted_pages() -> Array[ResearchPageData]:
+	var result: Array[ResearchPageData] = []
+	result.assign(pages.values())
+	result.sort_custom(func(a, b): return a.cost < b.cost or (a.cost == b.cost and a.id < b.id))
+	return result
+
+
+# --- Verificação ---
 
 ## Verifica referências e valores. Acrescenta mensagens em `errors`.
 func validate() -> void:
 	if player == null:
 		errors.append("Faltam os dados do jogador (data/player/player.tres).")
+	if research_rules == null:
+		errors.append("Faltam as regras de pesquisa (data/research/rules.tres).")
 	if settings_defaults == null:
 		errors.append("Faltam as opções padrão (data/settings/defaults.tres).")
 	else:
 		_validate_settings()
 	for room: RoomData in rooms.values():
 		_validate_room(room)
+	for aspect: AspectData in aspects.values():
+		_validate_aspect(aspect)
+	for scannable: ScannableData in scannables.values():
+		_validate_aspect_amounts("Escaneável '%s'" % scannable.id, scannable.aspects)
+	for page: ResearchPageData in pages.values():
+		_validate_page(page)
 
 
 func _validate_settings() -> void:
@@ -63,13 +128,50 @@ func _validate_settings() -> void:
 
 
 func _validate_room(room: RoomData) -> void:
-	if room.id == &"":
-		errors.append("Sala sem identificador: %s." % room.resource_path)
 	if room.scene_path.is_empty() or not ResourceLoader.exists(room.scene_path):
 		errors.append("Sala '%s': cena não encontrada ('%s')." % [room.id, room.scene_path])
 	if room.fog_far <= room.fog_near:
 		errors.append("Sala '%s': fog_far precisa ser maior que fog_near." % room.id)
 
+
+func _validate_aspect(aspect: AspectData) -> void:
+	if aspect.is_compound():
+		if aspect.parents.size() != 2:
+			errors.append("Aspecto composto '%s' precisa de exatamente 2 pais." % aspect.id)
+		for parent in aspect.parents:
+			if not parent in aspects:
+				errors.append("Aspecto '%s': pai '%s' não existe." % [aspect.id, parent])
+			elif parent == aspect.id:
+				errors.append("Aspecto '%s' não pode ser pai de si mesmo." % aspect.id)
+	elif not aspect.parents.is_empty():
+		errors.append("Aspecto primal '%s' não pode ter pais." % aspect.id)
+
+
+func _validate_aspect_amounts(owner: String, amounts: Dictionary) -> void:
+	if amounts.is_empty():
+		errors.append("%s não tem aspectos." % owner)
+	for aspect_id in amounts:
+		if not aspect_id in aspects:
+			errors.append("%s: aspecto '%s' não existe." % [owner, aspect_id])
+		elif amounts[aspect_id] <= 0:
+			errors.append("%s: quantidade de '%s' precisa ser maior que zero." % [owner, aspect_id])
+
+
+func _validate_page(page: ResearchPageData) -> void:
+	if page.cost < 0:
+		errors.append("Página '%s': custo negativo." % page.id)
+	for required in page.required_pages:
+		if not required in pages:
+			errors.append("Página '%s': página exigida '%s' não existe." % [page.id, required])
+	for required in page.required_aspects:
+		if not required in aspects:
+			errors.append("Página '%s': aspecto exigido '%s' não existe." % [page.id, required])
+	for effect in page.effects:
+		if effect == null or not effect.type in PageEffect.TYPES:
+			errors.append("Página '%s': efeito de tipo desconhecido." % page.id)
+
+
+# --- Leitura de arquivos ---
 
 func _load_single(path: String) -> Resource:
 	if not ResourceLoader.exists(path):

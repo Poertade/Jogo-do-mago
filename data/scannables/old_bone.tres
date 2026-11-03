@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1_b7ctq"]
+
+[resource]
+script = ExtResource("1_b7ctq")
+id = &"old_bone"
+name_key = "OBJ_OLD_BONE"
+aspects = Dictionary[StringName, int]({
+&"entropy": 2
+})

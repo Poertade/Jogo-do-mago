@@ -2,10 +2,40 @@
 
 [ext_resource type="Script" path="res://scripts/game/player.gd" id="1"]
 [ext_resource type="Resource" path="res://data/player/player.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/scanner.gd" id="3"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="4"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+[sub_resource type="CapsuleShape3D" id="Capsule_1"]
 radius = 0.35
 height = 1.75
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.6902, 0.5412, 0.2353, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.102, 0.2275, 0.2275, 1)
+shader_parameter/emission_color = Color(0.3725, 0.8275, 0.7765, 1)
+shader_parameter/emission_energy = 0.5
+
+[sub_resource type="TorusMesh" id="TorusMesh_4"]
+inner_radius = 0.05
+outer_radius = 0.064
+rings = 10
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.004
+radial_segments = 10
+rings = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.016, 0.12, 0.016)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1")
@@ -13,7 +43,7 @@ stats = ExtResource("2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
-shape = SubResource("CapsuleShape3D_body")
+shape = SubResource("Capsule_1")
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
@@ -22,3 +52,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 fov = 70.0
 near = 0.05
 far = 40.0
+
+[node name="Scanner" type="Node3D" parent="Head/Camera3D" node_paths=PackedStringArray("player")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -0.4, -0.34)
+script = ExtResource("3")
+player = NodePath("../../..")
+
+[node name="Ring" type="MeshInstance3D" parent="Head/Camera3D/Scanner"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+mesh = SubResource("TorusMesh_4")
+material_override = SubResource("Mat_2")
+
+[node name="Glass" type="MeshInstance3D" parent="Head/Camera3D/Scanner"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+mesh = SubResource("CylinderMesh_5")
+material_override = SubResource("Mat_3")
+
+[node name="Handle" type="MeshInstance3D" parent="Head/Camera3D/Scanner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_2")

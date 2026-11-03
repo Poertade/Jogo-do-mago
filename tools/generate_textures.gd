@@ -14,6 +14,9 @@ func _initialize() -> void:
 	_save(_stone_floor(), "stone_floor.png")
 	_save(_stone_wall(), "stone_wall.png")
 	_save(_wood(), "wood.png")
+	_save(_wood_floor(), "wood_floor.png")
+	_save(_rug(), "rug.png")
+	_save(_portal_swirl(), "portal_swirl.png")
 	quit()
 
 
@@ -80,6 +83,61 @@ func _wood() -> Image:
 			color = _noise(color, rng, 0.04)
 			if x % 8 == 0:
 				color = color.darkened(0.6)
+			image.set_pixel(x, y, color)
+	return image
+
+
+## Piso de tábuas na horizontal, com emendas desencontradas.
+func _wood_floor() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 404
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var base := Color(0.34, 0.25, 0.17)
+	for y in SIZE:
+		var board := y / 8
+		var seam := (board * 13) % SIZE
+		var tint := 0.85 + 0.08 * (board % 3)
+		for x in SIZE:
+			var grain := 0.05 * sin(x * 0.7 + board * 3.0 + y * 0.2)
+			var color := Color(base.r * tint, base.g * tint, base.b * tint).lightened(maxf(grain, 0.0))
+			color = _noise(color, rng, 0.035)
+			if y % 8 == 0 or x == seam:
+				color = color.darkened(0.6)
+			image.set_pixel(x, y, color)
+	return image
+
+
+## Tapete gasto: borda escura e losangos vermelho-escuros.
+func _rug() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 505
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var field := Color(0.36, 0.12, 0.10)
+	var pattern := Color(0.55, 0.38, 0.18)
+	for y in SIZE:
+		for x in SIZE:
+			var color := field
+			var diamond := absi(x % 16 - 8) + absi(y % 16 - 8)
+			if diamond == 6 or diamond == 2:
+				color = pattern
+			color = _noise(color, rng, 0.05)
+			image.set_pixel(x, y, color)
+	return image
+
+
+## Redemoinho do portal: faixas onduladas violeta e verde-água (a textura desliza no shader).
+func _portal_swirl() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 606
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var violet := Color(0.45, 0.25, 0.85)
+	var teal := Color(0.25, 0.75, 0.75)
+	for y in SIZE:
+		for x in SIZE:
+			# Ondas que fecham a cada 32 pixels: a textura repete sem emenda.
+			var wave := sin((x + 4.0 * sin(y * TAU / SIZE * 2.0)) * TAU / SIZE * 3.0)
+			var color := violet.lerp(teal, wave * 0.5 + 0.5)
+			color = color.darkened(rng.randf_range(0.0, 0.25))
 			image.set_pixel(x, y, color)
 	return image
 

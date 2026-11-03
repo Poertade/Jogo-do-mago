@@ -132,6 +132,48 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** versionar `*.translation`, que são binários derivados do CSV.
 - **Motivo:** o CSV é a fonte; o editor reimporta ao abrir o projeto.
 
+### D020 · 2026-11-03 · Marcos M2 a M5 sem aprovação intermediária
+
+- **Escolha:** o usuário autorizou seguir do M2 ao M5 sem esperar aprovação entre os marcos ("pode seguir até o M5") e pesquisar na internet as referências visuais. Cada marco continua com testes, capturas, README, DECISIONS.md e commit próprio. Só paro para perguntar o que mudar o jogo, a tecnologia ou o escopo.
+- **Descartado:** aprovação a cada marco (regra da seção 11 da especificação, suspensa pelo usuário até o M5).
+- **Motivo:** pedido do usuário. A direção visual pesquisada está em [`docs/REFERENCIAS-VISUAIS.md`](docs/REFERENCIAS-VISUAIS.md).
+
+### D021 · 2026-11-03 · A escola é uma única sala de dados com duas áreas
+
+- **Escolha:** `data/rooms/school.tres` aponta para `scenes/rooms/school.tscn`, que contém o Salão de Estudos, o corredor e a Sala do Portal. O jogador anda entre elas sem carregamento. Entradas: `default` (Salão, também usada ao renascer) e `from_dungeon` (diante do portal).
+- **Descartado:** uma sala de dados para cada área, com troca de sala na porta.
+- **Motivo:** a especificação pede "uma porta ou corredor"; andar por ele é mais natural que uma tela de transição. As salas da Dungeon continuam sendo módulos separados.
+
+### D022 · 2026-11-03 · Pontos de pesquisa: 1 por aspecto novo, 0 por alvo novo
+
+- **Escolha:** `points_per_new_aspect = 1` (tabela da seção 6) e `points_per_new_target = 0`, ambos em `data/research/rules.tres`. Escanear de novo não rende nada.
+- **Descartado:** dar pontos também por alvo novo, o que somaria 12 pontos só na escola contra 3 de custo da página.
+- **Motivo:** segue a tabela e mantém a escala. O valor por alvo existe nos dados, para quando houver mais conteúdo.
+
+### D023 · 2026-11-03 · Textos em três arquivos de tradução
+
+- **Escolha:** `locales/ui.csv` (interface), `locales/content.csv` (objetos, páginas, significados) e `locales/names.csv` (só os nomes que remetem a outras obras: os seis aspectos e o termo "Focus"). Textos citam aspectos como `{fire}`, e `Text.expand()` troca pelo nome do arquivo de nomes. Assim, "Compreensão de Ignis" vira "Compreensão de Lume" só trocando `names.csv`.
+- **Descartado:** nomes de aspecto escritos dentro dos outros textos.
+- **Motivo:** decisão 7: tudo o que remete a outras obras em um único arquivo.
+
+### D024 · 2026-11-03 · Valores padrão neutros nas classes de dados
+
+- **Escolha:** as classes `Resource` de conteúdo têm padrões zerados ou vazios. Os valores reais ficam sempre nos arquivos `.tres`, e o `ContentDB` acusa valores faltando.
+- **Descartado:** padrões com os valores do jogo nos scripts.
+- **Motivo:** o Godot não grava num `.tres` o valor igual ao padrão do script. Com padrões "de jogo", o valor ficaria escondido no código, contra a regra "nada de conteúdo fixo no código".
+
+### D025 · 2026-11-03 · Escaneamento e interação pela mira
+
+- **Escolha:** a cada quadro de física, o jogador lança um raio do centro da câmera. O que ele atinge é procurado subindo pela árvore de nós: `Interactable` (E, até 2,5 m) e qualquer nó com `get_scannable()` (Lente, até 6 m). Objetos pequenos têm colisão maior que o desenho, para serem fáceis de mirar. A Lente sobe na frente da câmera com o botão direito; soltar ou mudar de alvo zera a barra. Depois de escanear, mirar o objeto mostra nome e aspectos no HUD.
+- **Descartado:** áreas de proximidade (`Area3D`) para interação.
+- **Motivo:** mirar é a mecânica central do jogo; o mesmo raio serve a escaneamento, interação e (no M3) magia.
+
+### D026 · 2026-11-03 · Telas que pausam o jogo
+
+- **Escolha:** pausa, Livro de Pesquisa (Tab) e Mesa de Pesquisa derivam de `MenuLayer`: abrem pausando o jogo e soltando o mouse; Esc fecha (Tab também fecha o Livro). O save é gravado a cada descoberta e a cada página estudada (decisão 4), em `user://save.json`. Um save inválido é copiado para `save.json.bak` e o jogo começa do zero.
+- **Descartado:** Livro aberto com o jogo correndo.
+- **Motivo:** ritmo lento e seguro para ler; evita morrer lendo na Dungeon.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |
