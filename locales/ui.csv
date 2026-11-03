@@ -1,0 +1,20 @@
+keys,pt_BR
+UI_CLICK_TO_PLAY,Clique para jogar
+UI_PAUSED,Pausado
+UI_RESUME,Continuar
+UI_OPTIONS,Opções
+UI_QUIT,Sair do jogo
+UI_BACK,Voltar
+UI_OPTIONS_TITLE,Opções
+UI_OPT_PRESET,Filtro visual
+UI_OPT_RESOLUTION,Resolução interna
+UI_OPT_VERTEX_SNAP,Vértices trêmulos (vertex snapping)
+UI_OPT_AFFINE,Texturas deformadas (mapeamento afim)
+UI_OPT_FOG,Névoa
+UI_OPT_COLOR_LIMIT,Cor limitada
+UI_OPT_DITHERING,Dithering
+UI_OPT_SENSITIVITY,Sensibilidade do mouse
+UI_RESOLUTION_LINES,%d linhas
+PRESET_CRUNCHY,Crocante
+PRESET_CLEAN,Limpo
+PRESET_CUSTOM,Personalizado

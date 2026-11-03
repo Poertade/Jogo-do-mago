@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GraphicsPreset" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/graphics_preset.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"clean"
+name_key = "PRESET_CLEAN"
+vertex_snap = false
+affine_mapping = false
+fog = true
+color_limit = false
+dithering = false
+internal_height = 480

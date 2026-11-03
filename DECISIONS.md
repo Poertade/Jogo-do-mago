@@ -63,20 +63,78 @@ Detalhes e comparações completas em [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.m
 - **Descartados:** gdUnit4 (mais recursos do que o recorte precisa) e shaders PS1 prontos de terceiros (o nosso fica menor, comentado em português e com cada efeito ligável pelas opções).
 - **Motivo:** o mínimo para o motor e os testes.
 
+### D010 · 2026-11-03 · Decisões 2 a 9 da especificação: recomendações aprovadas
+
+O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.md#c-decisões-em-aberto-seção-9-da-especificação), onde estão as alternativas descartadas e os motivos de cada uma).
+
+| Nº | Decisão | Escolha |
+| --- | --- | --- |
+| 2 | Tipo da magia de fogo | Projétil com carga curta, que ilumina o caminho; soltar antes da carga cancela sem custo |
+| 3 | Recarga fora da escola | Nenhuma; reserva finita por incursão |
+| 4 | Morte | Renasce no Salão de Estudos com vida e reserva cheias; conhecimento salvo no momento da descoberta |
+| 5 | Estudo vira poder | Árvore leve de páginas com pré-requisitos; combinação de aspectos depois |
+| 6 | Instrumento de escaneamento | Lente Taxonômica na mão esquerda; não escaneia e lança ao mesmo tempo |
+| 7 | Nomes | IDs neutros; nomes latinos durante o desenvolvimento em `locales/names.csv`; Lume, Maré, Barro, Sopro, Prumo e Ruína para distribuir; escola: Colégio do Astrolábio; jogo: Catálogo do Abismo; inimigo: Bedel Descarnado |
+| 8 | Premissa | As Ruínas da Primeira Escola |
+| 9 | Prioridade visual | Limite de luzes por sala; se preciso, cortar dithering → afim → resolução → névoa |
+
+### D011 · 2026-11-03 · Godot executado no ambiente de desenvolvimento
+
+- **Escolha:** o usuário autorizou executar o Godot 4.7.2 oficial na nuvem. Testes rodam em modo headless; capturas de tela, numa tela virtual (Xvfb) com OpenGL por software (Mesa llvmpipe). Confirmado: o renderizador Compatibility desenha, e o vertex snapping e a névoa do shader aparecem.
+- **Descartado:** escrever o código sem testá-lo aqui.
+- **Motivo:** cada marco é conferido rodando de verdade antes da entrega.
+
+### D012 · 2026-11-03 · Greybox com `GreyboxBlock` em vez de CSG (revisa D005)
+
+- **Escolha:** blocos `StaticBody3D` com o script `@tool` `GreyboxBlock`, que cria uma `BoxMesh` subdividida (cerca de 1 divisão por metro) e a colisão a partir de `size`.
+- **Descartado:** nós CSG (previstos em D005).
+- **Motivo:** CSG gera cada face como um único polígono. Com o mapeamento afim, a textura de um chão de 12 m deformaria demais, e a iluminação por vértice não teria onde variar. O bloco continua editável no editor como o CSG.
+
+### D013 · 2026-11-03 · Baixa resolução com `SubViewport` + `TextureRect`
+
+- **Escolha:** o mundo 3D é desenhado num `SubViewport` com a altura escolhida nas opções (largura conforme a proporção da janela). Uma `TextureRect` (`GameScreen`) o amplia sem filtragem e aplica o pós-processamento de cor limitada e dithering. A interface fica fora, em resolução da janela. Os eventos de entrada são repassados ao `SubViewport` com `push_input`.
+- **Descartados:** modo de estiramento `viewport` da janela inteira (deixaria os menus em 240 linhas, ilegíveis); `scaling_3d_scale` (no renderizador Compatibility amplia com filtro bilinear, borrando os pixels); `SubViewportContainer` (só reduz por fatores inteiros, sem altura exata).
+- **Motivo:** altura exata em linhas, pixels nítidos e textos legíveis.
+
+### D014 · 2026-11-03 · Efeitos PS1 por parâmetros globais de shader
+
+- **Escolha:** um único shader de superfície (`scripts/render/ps1.gdshader`) lê parâmetros globais (`ps1_vertex_snap`, `ps1_affine_mapping`, `ps1_fog`, cor e distâncias da névoa, grade do snapping). As opções e a atmosfera da sala mudam esses parâmetros, e todos os materiais mudam juntos. A névoa é calculada no shader (saída `FOG`), não pelo `Environment`. Iluminação por vértice (`render_mode vertex_lighting`).
+- **Descartados:** um parâmetro por material (o menu teria de percorrer todos os materiais); a névoa do `Environment` (não segue o cálculo por vértice e não dá para desligar por material).
+- **Motivo:** um ponto só para ligar e desligar cada efeito. Observação: parâmetros globais de cor não passam pela conversão sRGB → linear, então o shader faz essa conversão para a cor da névoa.
+
+### D015 · 2026-11-03 · Autoloads `Content` e `Settings` em `scripts/autoload/`
+
+- **Escolha:** `Content` carrega e valida `data/` uma vez (`Content.db`); `Settings` guarda as opções do jogador, grava `user://settings.cfg` e avisa mudanças pelo sinal `changed`. A lógica fica em `scripts/core` (`ContentDB`, `GameSettings`); os autoloads só fazem a ponte com o jogo.
+- **Descartado:** autoload `graphics_settings.gd` em `scripts/render/` (previsto na proposta), que misturaria opções de mouse com gráficos.
+- **Motivo:** pasta própria deixa claro o que é global.
+
+### D016 · 2026-11-03 · Arquivo de opções separado do save, com versão
+
+- **Escolha:** `user://settings.cfg` (formato `ConfigFile`, legível), com `[meta] format_version`. Valores inválidos ou fora dos limites são ignorados ao ler. Filtros visuais e limites (resoluções, sensibilidade, bits de cor) vêm de `data/settings/`.
+- **Descartado:** guardar as opções no mesmo arquivo do save de conhecimento.
+- **Motivo:** opções são por máquina; o conhecimento é do jogador (M2).
+
+### D017 · 2026-11-03 · Texturas provisórias geradas por código
+
+- **Escolha:** `tools/generate_textures.gd` gera texturas 32×32 (lajes, tijolos, madeira) com semente fixa. Os PNGs ficam no repositório e podem ser trocados por arte própria. Padrão de importação do projeto: sem mipmaps, sem compressão de vídeo.
+- **Descartado:** baixar texturas livres agora.
+- **Motivo:** a especificação permite formas e texturas geradas por código; evita depender de licenças no greybox.
+
+### D018 · 2026-11-03 · Corrida e pulo incluídos
+
+- **Escolha:** Shift corre e Espaço pula, com valores em `data/player/player.tres`.
+- **Descartado:** deixar para depois.
+- **Motivo:** a especificação pede "apenas se forem baratos": com `CharacterBody3D` são poucas linhas.
+
+### D019 · 2026-11-03 · Arquivos gerados pela importação
+
+- **Escolha:** os arquivos `.uid` e `.import` vão para o git (o Godot precisa deles para manter as referências e as opções de importação). As traduções compiladas (`*.translation`), geradas a partir de `locales/*.csv`, ficam fora do git e são recriadas pela importação.
+- **Descartado:** versionar `*.translation`, que são binários derivados do CSV.
+- **Motivo:** o CSV é a fonte; o editor reimporta ao abrir o projeto.
+
 ## Pendentes (aguardando o usuário)
 
-Recomendações completas em [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.md#c-decisões-em-aberto-seção-9-da-especificação).
-
-| Nº | Decisão | Recomendação |
+| Nº | Decisão | Estado |
 | --- | --- | --- |
-| 2 | Tipo da magia de fogo | Projétil com carga curta, que ilumina o caminho |
-| 3 | Recarga fora da escola | Nenhuma; reserva finita por incursão |
-| 4 | Morte | Salão de Estudos; conhecimento salvo no momento da descoberta |
-| 5 | Estudo vira poder | Árvore leve de páginas com pré-requisitos |
-| 6 | Instrumento de escaneamento | Lente Taxonômica na mão esquerda; não escaneia e lança ao mesmo tempo |
-| 7 | Nomes | IDs neutros; latinos durante o desenvolvimento; Lume, Maré, Barro, Sopro, Prumo e Ruína para distribuir |
-| 8 | Premissa | As Ruínas da Primeira Escola |
-| 9 | Prioridade visual | Cortar dithering → afim → resolução → névoa |
-| 10 | Computador de jogo | Aguardando: sistema, processador e vídeo |
-| 11 | Referências visuais | Aguardando imagens ou descrições; até lá, greybox |
-| 12 | Executar o Godot na nuvem | Aguardando autorização para testes e capturas de tela |
+| 10 | Computador de jogo | Aguardando sistema, processador e vídeo. Até lá: 240 linhas e todos os efeitos ligados por padrão |
+| 11 | Referências visuais | Aguardando imagens ou descrições. Até lá: greybox com o shader PS1 |

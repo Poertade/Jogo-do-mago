@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GraphicsPreset" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/graphics_preset.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"crunchy"
+name_key = "PRESET_CRUNCHY"
+vertex_snap = true
+affine_mapping = true
+fog = true
+color_limit = true
+dithering = true
+internal_height = 240

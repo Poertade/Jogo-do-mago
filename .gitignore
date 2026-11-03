@@ -1,6 +1,9 @@
-# Godot (os arquivos .import e export_presets.cfg devem ir para o git)
+# Godot (os arquivos .import, .uid e export_presets.cfg devem ir para o git)
 .godot/
 /android/
+
+# Traduções compiladas: o Godot as recria a partir de locales/*.csv
+*.translation
 
 # Executáveis exportados
 /export/
