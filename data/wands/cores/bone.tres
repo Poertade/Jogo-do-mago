@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WandCoreData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/wand_core_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"bone"
+name_key = "CORE_BONE"
+description_key = "CORE_BONE_DESC"
+tier = 1
+aspect_capacity = 12
+capacity = 36
+cost = Dictionary[StringName, int]({
+&"bone": 5,
+&"silver": 15
+})
+vis_cost = Dictionary[StringName, int]({
+&"order": 5
+})
+color = Color(0.82, 0.78, 0.66, 1)

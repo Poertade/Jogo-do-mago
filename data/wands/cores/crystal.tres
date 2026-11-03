@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WandCoreData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/wand_core_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"crystal"
+name_key = "CORE_CRYSTAL"
+description_key = "CORE_CRYSTAL_DESC"
+tier = 2
+aspect_capacity = 15
+capacity = 45
+cost = Dictionary[StringName, int]({
+&"crystal": 5,
+&"bone": 2,
+&"silver": 30
+})
+vis_cost = Dictionary[StringName, int]({
+&"order": 5,
+&"water": 5
+})
+color = Color(0.55, 0.85, 0.95, 1)

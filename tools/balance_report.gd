@@ -14,11 +14,11 @@ func _initialize() -> void:
 	# A varinha com os recipientes que o Focus usa cheios (o máximo que um nódulo enche).
 	var full := {}
 	for aspect_id in focus.cost:
-		full[aspect_id] = player.starting_wand.aspect_capacity
-	var wand := WandState.new(player.starting_wand, full)
+		full[aspect_id] = player.make_wand().aspect_capacity
+	var wand := WandState.new(player.make_wand(), full)
 	var cost := wand.effective_cost(focus.cost)
 	var shots_per_reserve := wand.casts_available(focus.cost)
-	var start_shots := WandState.new(player.starting_wand, player.starting_vis).casts_available(focus.cost)
+	var start_shots := WandState.new(player.make_wand(), player.starting_vis).casts_available(focus.cost)
 	var page_multiplier := 1.0
 	for page: ResearchPageData in db.pages.values():
 		page_multiplier *= Modifiers.from_pages([page] as Array[ResearchPageData]).damage_multiplier(focus.element)
@@ -68,14 +68,14 @@ func _initialize() -> void:
 ## prata e cacos de vidro uma incursão completa rende, em média.
 func _incursion_report(db: ContentDB) -> void:
 	var focus := db.player.starting_focus
-	var wand := WandState.new(db.player.starting_wand)
+	var wand := WandState.new(db.player.make_wand())
 	var cost := 0
 	for amount in wand.effective_cost(focus.cost).values():
 		cost += amount
 	print("\n=== Mapa da Dungeon (Focus %s, sem páginas, sem errar) ===" % focus.id)
 	var by_zone: Dictionary = {}
-	var silver := 0.0
-	var glass := 0.0
+	# Material → quanto uma incursão que limpa o mapa rende, em média.
+	var yields := {}
 	var ids: Array = db.rooms.keys()
 	ids.sort_custom(ContentDB.by_name)
 	for room_id in ids:
@@ -93,17 +93,17 @@ func _incursion_report(db: ContentDB) -> void:
 				for target: EnemyData in [enemy] + enemy.enrage_summons:
 					var damage := Combat.damage_against(focus.damage, focus.element, target.weaknesses)
 					shots += spawn.chance / pool.size() * ceili(target.max_health / damage)
-				silver += spawn.chance / pool.size() * (enemy.silver_min + enemy.silver_max) / 2.0
+				yields[&"silver"] = yields.get(&"silver", 0.0) + spawn.chance / pool.size() * (enemy.silver_min + enemy.silver_max) / 2.0
+				if enemy.material != &"" and not enemy.material_safe:
+					yields[enemy.material] = yields.get(enemy.material, 0.0) + spawn.chance / pool.size() * enemy.material_chance * enemy.material_amount
 			enemies += spawn.chance
 		for node in scene.find_children("*", "LootSpot", true, false):
 			var spot := node as LootSpot
 			var average := spot.chance * (spot.amount_min + spot.amount_max) / 2.0
-			if spot.kind == &"silver":
-				silver += average
-			elif spot.kind == &"glass":
-				glass += average
+			if spot.kind in db.items:
+				yields[spot.kind] = yields.get(spot.kind, 0.0) + average
 			elif spot.kind == &"jar":
-				glass += spot.chance * db.economy.glass_per_sealed_jar
+				yields[&"glass"] = yields.get(&"glass", 0.0) + spot.chance * db.economy.glass_per_sealed_jar
 		var vis := 0
 		for node in scene.find_children("*", "VisNode", true, false):
 			vis += maxi(node.vis_amount, 0)
@@ -114,12 +114,29 @@ func _incursion_report(db: ContentDB) -> void:
 	for zone in by_zone:
 		print("Região %s: cerca de %.0f disparos para limpar tudo" % [zone, by_zone[zone]])
 		total += by_zone[zone]
-	var start := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(focus.cost)
+	var start := WandState.new(db.player.make_wand(), db.player.starting_vis).casts_available(focus.cost)
 	print("Mapa inteiro: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
 		total, total * cost, start, cost])
-	print("Uma incursão que limpa o mapa rende, em média: %.0f de prata e %.1f cacos de vidro" % [silver, glass])
+	# O baú (um por incursão): prata e materiais sorteados.
+	var economy := db.economy
+	yields[&"silver"] = yields.get(&"silver", 0.0) + (economy.chest_silver_min + economy.chest_silver_max) / 2.0
+	for item_id in economy.chest_materials:
+		yields[item_id] = yields.get(item_id, 0.0) + float(economy.chest_material_count) / economy.chest_materials.size()
+	var parts: PackedStringArray = []
+	for item_id in yields:
+		parts.append("%s %.1f" % [item_id, yields[item_id]])
+	print("Uma incursão que limpa o mapa rende, em média: " + ", ".join(parts))
+	print("\n=== Peças de varinha (Bancada Arcana) ===")
+	for core: WandCoreData in db.cores.values():
+		var wand_with := WandState.new(db.player.make_wand(core), {&"fire": core.aspect_capacity})
+		print("  núcleo %s: %d por recipiente, %d no total (%d disparos de fogo com Ignis cheio); custa %s + Vis %s" % [
+			core.id, core.aspect_capacity, core.capacity, wand_with.casts_available(focus.cost), core.cost, core.vis_cost])
+	for cap: WandCapData in db.caps.values():
+		var wand_with := WandState.new(db.player.make_wand(null, cap), {&"fire": 10})
+		print("  ponteira %s: eficiência %.2f (10 de Ignis dão %d disparos de fogo); custa %s + Vis %s" % [
+			cap.id, cap.efficiency, wand_with.casts_available(focus.cost), cap.cost, cap.vis_cost])
 	print("Pote: %s no Almoxarife, ou %s + %s de Vis na bancada" % [db.economy.jar_price, db.economy.jar_materials, db.economy.jar_vis])
 	# Todos os Focus: quantos disparos o Vis inicial dá a cada um (os recipientes são separados).
 	for other: FocusData in db.foci.values():
-		var casts := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(other.cost)
+		var casts := WandState.new(db.player.make_wand(), db.player.starting_vis).casts_available(other.cost)
 		print("  Vis inicial dá %d disparo(s) de %s (custo %s)" % [casts, other.id, other.cost])

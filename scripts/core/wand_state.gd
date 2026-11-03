@@ -6,12 +6,18 @@ extends RefCounted
 ## - a soma de todos os recipientes não passa de `capacity` (ex.: 30 no total).
 ## Exemplo: com 10 por aspecto e 30 no total, cabem 10 de Ignis, 10 de Aqua e 10 de Perditio,
 ## e mais nada.
+##
+## Eficiência (dada pela ponteira): o custo de cada magia é dividido por ela, em média. Como o
+## Vis é contado em números inteiros, a economia se acumula: com eficiência 1,25, cada disparo
+## de 1 de Ignis poupa 0,2; a cada cinco, um sai de graça.
 
 ## Emitido quando algum recipiente muda (para o HUD).
 signal reserves_changed
 
 var wand: WandData
 var _reserves: Dictionary[StringName, int] = {}
+## Economia acumulada de cada aspecto (a fração de Vis já poupada que ainda não virou 1).
+var _saved: Dictionary[StringName, float] = {}
 
 
 ## `initial`: Vis com que a varinha começa (aspecto → quantidade).
@@ -55,19 +61,28 @@ func room_for(aspect_id: StringName) -> int:
 	return maxi(mini(aspect_capacity() - reserve(aspect_id), total_capacity() - total()), 0)
 
 
-## Custo real de uma magia nesta varinha: cada custo dividido pela eficiência, arredondado
-## para cima.
+## O maior custo de uma magia nesta varinha (sem economia acumulada): cada custo dividido
+## pela eficiência, arredondado para cima.
 func effective_cost(cost: Dictionary) -> Dictionary[StringName, int]:
 	var result: Dictionary[StringName, int] = {}
 	for aspect_id: StringName in cost:
-		result[aspect_id] = ceili(cost[aspect_id] / maxf(wand.efficiency, 0.01))
+		result[aspect_id] = ceili(cost[aspect_id] / maxf(wand.efficiency, 0.01) - 0.0001)
+	return result
+
+
+## Quanto a próxima magia custa agora, contando a economia acumulada.
+func cost_now(cost: Dictionary) -> Dictionary[StringName, int]:
+	var result: Dictionary[StringName, int] = {}
+	for aspect_id: StringName in cost:
+		var amount: int = cost[aspect_id]
+		result[aspect_id] = maxi(amount - floori(_saved.get(aspect_id, 0.0) + _saving(amount) + 0.0001), 0)
 	return result
 
 
 func can_pay(cost: Dictionary) -> bool:
-	var real := effective_cost(cost)
-	for aspect_id in real:
-		if reserve(aspect_id) < real[aspect_id]:
+	var now := cost_now(cost)
+	for aspect_id in now:
+		if reserve(aspect_id) < now[aspect_id]:
 			return false
 	return true
 
@@ -76,11 +91,37 @@ func can_pay(cost: Dictionary) -> bool:
 func pay(cost: Dictionary) -> bool:
 	if not can_pay(cost):
 		return false
-	var real := effective_cost(cost)
-	for aspect_id in real:
-		_reserves[aspect_id] = reserve(aspect_id) - real[aspect_id]
+	var now := cost_now(cost)
+	for aspect_id in now:
+		var amount: int = cost[aspect_id]
+		_reserves[aspect_id] = reserve(aspect_id) - now[aspect_id]
+		# O que foi poupado de verdade sai da economia; o resto (a fração) continua guardado.
+		_saved[aspect_id] = _saved.get(aspect_id, 0.0) + _saving(amount) - (amount - now[aspect_id])
 	reserves_changed.emit()
 	return true
+
+
+## Quanto Vis a eficiência poupa num custo de `amount` (pode ser fração).
+func _saving(amount: int) -> float:
+	return amount - amount / maxf(wand.efficiency, 0.01)
+
+
+## Troca a varinha (outro núcleo ou outra ponteira), mantendo o Vis que couber nela.
+func set_wand(wand_data: WandData) -> void:
+	wand = wand_data
+	for aspect_id in _reserves.keys():
+		if not has_container(aspect_id):
+			_reserves.erase(aspect_id)
+		else:
+			_reserves[aspect_id] = mini(_reserves[aspect_id], aspect_capacity())
+	# Se a soma passar do novo limite total, tira primeiro dos recipientes mais cheios.
+	while total() > total_capacity():
+		var fullest: StringName = _reserves.keys()[0]
+		for aspect_id in _reserves:
+			if _reserves[aspect_id] > _reserves[fullest]:
+				fullest = aspect_id
+		_reserves[fullest] -= 1
+	reserves_changed.emit()
 
 
 ## Acrescenta Vis ao recipiente do aspecto, sem passar dos limites. Devolve quanto entrou.
@@ -95,6 +136,7 @@ func add(aspect_id: StringName, amount: int) -> int:
 ## Esvazia a varinha e a enche com `initial` (aspecto → quantidade), respeitando os limites.
 func reset(initial: Dictionary = {}) -> void:
 	_reserves.clear()
+	_saved.clear()
 	for aspect_id: StringName in initial:
 		var amount: int = clampi(initial[aspect_id], 0, room_for(aspect_id))
 		if amount > 0:
@@ -107,15 +149,15 @@ func is_full(aspect_id: StringName) -> bool:
 	return room_for(aspect_id) <= 0
 
 
-## Quantos disparos dá para fazer agora com este custo.
+## Quantos disparos dá para fazer agora com este custo (contando a economia da eficiência).
 func casts_available(cost: Dictionary) -> int:
-	var real := effective_cost(cost)
-	var casts := -1
-	for aspect_id in real:
-		if real[aspect_id] > 0:
-			var possible := reserve(aspect_id) / real[aspect_id]
-			casts = possible if casts < 0 else mini(casts, possible)
-	return maxi(casts, 0)
+	var copy := WandState.new(wand)
+	copy._reserves = _reserves.duplicate()
+	copy._saved = _saved.duplicate()
+	var casts := 0
+	while casts < 1000 and copy.pay(cost):
+		casts += 1
+	return casts
 
 
 ## A soma chegou ao limite total?

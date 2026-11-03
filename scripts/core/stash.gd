@@ -1,7 +1,8 @@
 class_name Stash
 extends RefCounted
 ## O que o jogador guarda na escola, para sempre (vai para o save): materiais (prata, cacos de
-## vidro…) e quantos potes de Vis ele tem. O que é achado numa incursão só entra aqui quando
+## vidro, osso…), quantos potes de Vis ele tem e as peças de varinha que já fez (núcleos e
+## ponteiras), com as que estão montadas. O que é achado numa incursão só entra aqui quando
 ## ele volta vivo (veja RunState.found); morrer não tira nada daqui.
 
 ## Emitido a cada mudança (quem grava o save escuta este sinal).
@@ -11,6 +12,12 @@ signal changed
 var items: Dictionary[StringName, int] = {}
 ## Potes de Vis que o jogador tem (vão no cinto a cada incursão).
 var jars := 0
+## Núcleos e ponteiras já feitos na Bancada Arcana (além dos iniciais) e os que estão montados
+## (vazio: o inicial).
+var cores: Array[StringName] = []
+var caps: Array[StringName] = []
+var core: StringName = &""
+var cap: StringName = &""
 
 
 func count(item_id: StringName) -> int:
@@ -59,3 +66,28 @@ func add_jar(max_jars: int) -> bool:
 	jars += 1
 	changed.emit()
 	return true
+
+
+## Guarda um núcleo novo e o monta na varinha.
+func add_core(core_id: StringName) -> void:
+	if not core_id in cores:
+		cores.append(core_id)
+	core = core_id
+	changed.emit()
+
+
+## Guarda uma ponteira nova e a monta na varinha.
+func add_cap(cap_id: StringName) -> void:
+	if not cap_id in caps:
+		caps.append(cap_id)
+	cap = cap_id
+	changed.emit()
+
+
+## Monta na varinha um núcleo (`is_core`) ou uma ponteira que o jogador já tem.
+func equip(part_id: StringName, is_core: bool) -> void:
+	if is_core:
+		core = part_id
+	else:
+		cap = part_id
+	changed.emit()

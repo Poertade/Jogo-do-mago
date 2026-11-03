@@ -165,6 +165,11 @@ func _on_died() -> void:
 	# Espólio: a prata vai direto para o que foi achado na incursão.
 	if data.silver_max > 0:
 		Game.find_item(&"silver", Game.rng.range_int(data.silver_min, data.silver_max))
+	if data.material != &"" and Game.rng.next_float() < data.material_chance:
+		if data.material_safe:
+			Game.give_relic(data)
+		else:
+			Game.find_item(data.material, data.material_amount)
 	died.emit()
 
 

@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/item_pickup.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/brass_wire.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.5, 0.3, 0.5)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.6275, 0.4784, 0.1882, 1.0)
+shader_parameter/emission_color = Color(0.3765, 0.251, 0.0627, 1.0)
+shader_parameter/emission_energy = 0.4
+
+[sub_resource type="TorusMesh" id="TorusMesh_3"]
+inner_radius = 0.06
+outer_radius = 0.11
+rings = 8
+ring_segments = 4
+
+[sub_resource type="TorusMesh" id="TorusMesh_4"]
+inner_radius = 0.06
+outer_radius = 0.1
+rings = 8
+ring_segments = 4
+
+[node name="BrassWire" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_TAKE_BRASS"
+scannable = ExtResource("2")
+item = &"brass"
+amount = 1
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.12, 0.0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_1")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.35, 0.0)
+light_color = Color(0.8784, 0.6902, 0.3765, 1.0)
+light_energy = 0.35
+omni_range = 1.8
+
+[node name="Coil" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.05, 0.0)
+mesh = SubResource("TorusMesh_3")
+material_override = SubResource("Mat_2")
+
+[node name="Coil2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9397, 0.3368, 0.0594, 0.0, 0.1736, -0.9848, -0.342, 0.9254, 0.1632, 0.02, 0.09, 0.01)
+mesh = SubResource("TorusMesh_4")
+material_override = SubResource("Mat_2")

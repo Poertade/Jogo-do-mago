@@ -24,7 +24,7 @@ var _player: PlayerData
 func _init(player: PlayerData, jar_count := 0) -> void:
 	_player = player
 	health = Health.new(player.max_health)
-	wand = WandState.new(player.starting_wand, player.starting_vis)
+	wand = WandState.new(player.make_wand(), player.starting_vis)
 	caster = SpellCaster.new(player.starting_focus, wand)
 	jars = VisJarBelt.new(jar_count, player.jar_capacity)
 

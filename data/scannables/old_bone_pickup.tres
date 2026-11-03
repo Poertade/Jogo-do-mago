@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"old_bone_pickup"
+name_key = "OBJ_OLD_BONES"
+aspects = Dictionary[StringName, int]({
+&"death": 1,
+&"earth": 2
+})

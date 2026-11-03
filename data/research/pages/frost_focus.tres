@@ -12,6 +12,7 @@ focus = ExtResource("3")
 [resource]
 script = ExtResource("2")
 id = &"frost_focus"
+order = 2
 name_key = "PAGE_FROST_FOCUS"
 description_key = "PAGE_FROST_FOCUS_DESC"
 note_aspects = Array[StringName]([&"cold", &"water", &"void"])

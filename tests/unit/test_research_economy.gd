@@ -112,3 +112,25 @@ func test_school_alone_unlocks_the_research_page() -> void:
 		if not target.id in dungeon_only:
 			knowledge.register_scan(target, db.aspects, db.research_rules)
 	_solve_note(db.pages[&"fire_comprehension"])
+
+
+## As páginas da varinha (M8) também têm solução: na ordem dos requisitos, cada nota fecha.
+func test_wand_pages_can_be_studied() -> void:
+	for round in 200:
+		if not _scan_everything_possible():
+			var discovered := false
+			for target in _all_targets():
+				if knowledge.has_scanned(target.id):
+					continue
+				for missing in knowledge.missing_aspects(target, db.aspects):
+					if _obtain_point(missing):
+						discovered = true
+						break
+				if discovered:
+					break
+			if not discovered:
+				break
+	for page_id in [&"brass_caps", &"bone_core", &"crystal_core", &"silver_caps"]:
+		var page: ResearchPageData = db.pages[page_id]
+		_solve_note(page)
+		assert_true(knowledge.study(page, db.aspects), "Estudar %s" % page_id)

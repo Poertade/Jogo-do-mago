@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WandCoreData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/wand_core_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"wood"
+name_key = "CORE_WOOD"
+description_key = "CORE_WOOD_DESC"
+tier = 0
+aspect_capacity = 10
+capacity = 30
+cost = Dictionary[StringName, int]({})
+vis_cost = Dictionary[StringName, int]({})
+color = Color(0.29, 0.2, 0.14, 1)

@@ -345,6 +345,14 @@ chance = 0.5
 amount_min = 1
 amount_max = 2
 
+[node name="CrystalSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -5.6, 0.0, 6.4)
+script = ExtResource("20")
+kind = &"crystal"
+chance = 0.5
+amount_min = 1
+amount_max = 2
+
 [node name="Stalagmite0" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.7046, 0.0591, 0.7071, -0.0774, 0.997, -0.0063, -0.7053, -0.0503, 0.7071, 5.9052, 0.6966, -5.6637)
 script = ExtResource("2")

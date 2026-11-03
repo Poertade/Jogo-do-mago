@@ -14,7 +14,17 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
-**Agora: a Dungeon de mapa fixo, no estilo do Lunacid.**
+**M8: a varinha que cresce.** A Dungeon dá materiais, e com eles você monta varinhas melhores na **Bancada Arcana** da escola, como no Thaumcraft.
+- **Núcleo** (quanto Vis cabe): madeira (10 por recipiente, 30 no total), osso (12/36) e cristal (15/45).
+- **Ponteiras** (quanto as magias custam): ferro (o normal), latão (80% do Vis) e prata (dois terços).
+- **Materiais:** osso antigo, lasca de cristal e fio de latão aparecem pelo mapa e caem dos inimigos; o **Selo do Arquivista** cai do chefe. Um **baú** por incursão guarda prata e materiais.
+- **Pesquisa:** cada peça nova é liberada por uma página na Mesa.
+
+| A Bancada Arcana | Montando as Ponteiras de Latão |
+| --- | --- |
+| ![Bancada Arcana](docs/images/bancada-arcana.png) | ![Tela da Bancada](docs/images/bancada-tela.png) |
+
+**Antes do M8: a Dungeon de mapa fixo, no estilo do Lunacid.**
 - **Mapa feito à mão:** 15 salas interligadas, sempre as mesmas (o mapa é original; só a estrutura segue o Lunacid). O **Átrio do Poço** é o centro, e de lá saem ramos que voltam a lugares já vistos.
 - **Segredos e atalhos:** grade que só abre de um lado, portão trancado com a chave achada em outro ramo, paredes falsas, um poço que cai nas grutas e uma ponte sobre um abismo.
 - **Âncoras do portal:** cristais que, uma vez tocados, deixam o portal da escola levar você até eles.
@@ -119,7 +129,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    - **Focus de Fogo** (o inicial): bola de fogo, 15 de dano, 1 de Ignis por disparo.
    - **Focus de Gelo:** é liberado ao estudar a página *Focus de Gelum*, que liga Gelum, Aqua e Vacuos. Lança um projétil de gelo com 11 de dano, gasta 1 de Aqua e 1 de Ordo e deixa o alvo a 45% da velocidade por 3 s (andar e preparar o golpe).
    - **Q** troca de Focus em qualquer lugar. O orbe do HUD e a ponta da varinha mudam de cor.
-9. **Vis na varinha:** um recipiente para cada primal (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com até 10, e no máximo 30 somando todos. Por exemplo: 10 de Ignis, 10 de Aqua e 10 de Perditio enchem a varinha.
+9. **Vis na varinha:** um recipiente para cada primal (Aer, Terra, Ignis, Aqua, Ordo, Perditio). Com o núcleo inicial, cada um guarda até 10, e no máximo 30 somando todos. Por exemplo: 10 de Ignis, 10 de Aqua e 10 de Perditio enchem a varinha. Núcleos melhores guardam mais (item 18).
    - No HUD (canto de cima), cada recipiente é um frasco em volta do orbe do Focus, com o número ao lado; embaixo, o total.
    - A varinha começa cada incursão com 10 de Ignis, 10 de Aqua e 10 de Ordo: 10 disparos de fogo e 10 de gelo.
    - No Salão há dois **Nódulos de Vis**: segure E e o Vis voa até a varinha. O laranja enche Ignis; o azul enche Aqua e Ordo (as bolinhas brancas). Cada um enche até 10 por recipiente ou até a varinha toda chegar a 30.
@@ -184,7 +194,25 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 16. Voltando à escola por uma âncora ou pela saída do Arquivo, a vida é restaurada; o Vis só volta nos Nódulos.
 17. Se a vida chegar a zero, você desperta no Salão de Estudos com a vida cheia e a varinha com o Vis inicial.
    - **Perde:** o Vis dos potes, os livros não lidos, a prata e os cacos achados na incursão.
-   - **Continua:** o conhecimento (aspectos, pontos, escaneamentos, notas, páginas, livros lidos e receitas), o mapa (atalhos e passagens abertas, chaves, âncoras e o chefe vencido), os potes e o que já estava guardado na escola.
+   - **Continua:** o conhecimento (aspectos, pontos, escaneamentos, notas, páginas, livros lidos e receitas), o mapa (atalhos e passagens abertas, chaves, âncoras e o chefe vencido), os potes, as peças da varinha e o que já estava guardado na escola.
+
+18. **A Bancada Arcana** (E), na parede oeste do Salão de Estudos, monta a varinha com um **núcleo** e um par de **ponteiras**:
+
+   | Peça | O que faz | Para fazer | Página |
+   | --- | --- | --- | --- |
+   | Núcleo de Madeira | 10 por recipiente, 30 no total | já vem com você | — |
+   | Núcleo de Osso | 12 por recipiente, 36 no total | 5 ossos antigos, 15 de prata, 5 de Ordo | *Núcleo de Osso* (Mortuus, Terra, Perditio) |
+   | Núcleo de Cristal | 15 por recipiente, 45 no total | 5 lascas de cristal, 2 ossos, 30 de prata, 5 de Ordo e 5 de Aqua | *Núcleo de Cristal* (Vitreus, Praecantatio, Terra), depois da de osso |
+   | Ponteiras de Ferro | as magias custam o normal | já vêm com você | — |
+   | Ponteiras de Latão | 80% do Vis, em média: a cada cinco disparos de 1, um sai de graça | 3 fios de latão, 10 de prata, 5 de Ignis | *Ponteiras de Latão* (Ordo, Ignis, Potentia) |
+   | Ponteiras de Prata | dois terços do Vis, em média | 40 de prata e o Selo do Arquivista, 5 de Ignis e 5 de Ordo | *Ponteiras de Prata* (Metallum, Lux, Praecantatio), depois da de latão |
+
+   - **Liberar:** cada peça nova é liberada por uma página de pesquisa, resolvida na Mesa como as outras.
+   - **Fazer:** gasta os materiais guardados na escola e o Vis da varinha (como a Bancada Arcana do Thaumcraft), e a peça já vai para a varinha.
+   - **Montar:** trocar entre peças que você já tem é de graça, na mesma tela. A haste da varinha na mão tem a cor do núcleo; as pontas, a da ponteira.
+   - **Materiais:** ossos antigos (ruínas, e caem do Bedel), fio de latão (ruínas, e cai do Aprendiz), lascas de cristal (grutas) e o **Selo do Arquivista**, que o chefe deixa ao cair e vai direto para a escola.
+   - **Baú:** um por incursão, num de quatro lugares do mapa (cripta, gruta dos fungos, fundo da Fenda, salão invertido), com prata e três materiais sorteados.
+   - O Livro de Pesquisa (Tab) mostra os materiais guardados e a varinha montada.
 
 O progresso é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
@@ -223,6 +251,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala.
 - **Scripts:** todo script do jogo e das ferramentas compila.
+- **Varinha (M8):** núcleo e ponteira montam a varinha; a economia da eficiência se acumula (com 1,25, cinco disparos de 1 custam 4); trocar de peça mantém o Vis que couber; peças guardadas no save 7; páginas que liberam peças; cada núcleo guarda mais e cada ponteira gasta menos que a anterior; todo material das peças aparece no mapa, nos inimigos ou no baú; as notas das quatro páginas novas têm solução.
 - **Mapa da Dungeon:** o que fica para sempre (passagens, chaves, âncoras, chefes); o mapa tem toda âncora e toda sala, uma chave para cada porta trancada e passagens sem identificador repetido; toda sala sabe o próprio `room_id`.
 - **Potes, prata e livros:** o jogador começa sem potes; o cinto cresce até o limite; gastar materiais é tudo ou nada; o que é achado só fica guardado ao voltar vivo, e morrer perde os achados e o Vis dos potes, mas não os potes; save formato 6 (mapa e o que fica na escola; saves antigos carregam). Receitas necessárias para combinar (as simples já vêm sabidas); livro que ensina uma receita sorteada que o jogador não tem, de preferência uma que ele já possa fazer.
 - **Sistema:** persistência (save), gerador com semente, opções.
@@ -249,15 +278,15 @@ data/              conteúdo do jogo, um arquivo .tres por item (editável no in
   aspects/         aspectos (primais; compostos têm dois pais)
   scannables/      objetos escaneáveis e seus aspectos
   enemies/         inimigos (também escaneáveis)
-  wands/  foci/    varinhas e Focus
+  foci/            Focus (a magia que sai da varinha)
   research/        regras de escaneamento e pontos (rules.tres) e páginas (pages/)
-  dungeon/         como as incursões são montadas (rules.tres: o caminho; zones/: as regiões)
   books/           livros perdidos, que ensinam receitas escondidas
   player/          vida, equipamento inicial e movimento do jogador
   rooms/           salas: identificador, nome, região, cena, atmosfera e som de ambiente
   dungeon/         o mapa (rules.tres: cena do mapa e âncoras do portal; zones/: as regiões)
-  economy/         preço e receita dos potes de Vis
-  items/           materiais (prata, cacos de vidro)
+  economy/         preço e receita dos potes de Vis, conteúdo do baú
+  items/           materiais (prata, cacos de vidro, osso, cristal, latão, o Selo do Arquivista)
+  wands/           peças de varinha: núcleos (cores/) e ponteiras (caps/)
   settings/        opções padrão e filtros visuais (presets/)
   audio/           banco de sons: qual arquivo toca em cada evento
 locales/           textos: ui.csv (interface), content.csv (conteúdo), names.csv (nomes de outras obras)
@@ -361,18 +390,25 @@ Ao escanear, a busca sobe dos blocos até o primeiro nó que tenha dados.
 
 O único `spell_type` existente é `projectile`. Um tipo novo de magia (cone, raio…) é código novo no motor.
 
-### Adicionar uma varinha
+### Adicionar um núcleo ou uma ponteira de varinha
 
-Duplique `data/wands/apprentice_wand.tres` e ajuste:
+1. Duplique `data/wands/cores/bone.tres` (núcleo) ou `data/wands/caps/brass.tres` (ponteira) e ajuste:
 
-| Campo | O que é |
-| --- | --- |
-| `aspects` | os recipientes da varinha (aspectos primais), na ordem dos frascos do HUD |
-| `aspect_capacity` | quanto cabe em cada recipiente (10) |
-| `capacity` | quanto cabe somando todos (30) |
-| `efficiency` | o custo das magias é dividido por ela |
+   | Campo | O que é |
+   | --- | --- |
+   | `id`, `name_key`, `description_key` | identificador, nome e descrição (em `locales/content.csv`) |
+   | `tier` | ordem na Bancada Arcana |
+   | `aspect_capacity`, `capacity` (núcleo) | quanto cabe em cada recipiente e somando todos |
+   | `efficiency` (ponteira) | o custo das magias é dividido por ela, em média (1,25 = 80% do Vis) |
+   | `cost` | materiais de `data/items/` gastos para fazer a peça |
+   | `vis_cost` | Vis tirado da varinha para fazer a peça (só primais) |
+   | `color` | cor da haste (núcleo) ou das pontas (ponteira) na mão |
 
-Equipe-a em `data/player/player.tres` (`starting_wand`). Ali também fica `starting_vis`: o Vis com que a varinha começa cada incursão (e volta depois da morte).
+2. Crie a página que libera a peça: duplique `data/research/pages/bone_core.tres`, troque a peça em `effects` (efeito `unlock_wand_part`), a nota (`note_aspects`, `note_radius`), os requisitos e a posição da aba (`order`).
+3. **Material novo:** duplique `data/items/bone.tres` (nome, cor e `pickup_scene`, a cena do achado) e ponha lugares com `kind` igual ao `id` dele nas salas, ou dê a um inimigo (`material`, `material_chance`, `material_amount`).
+4. Os testes conferem que a peça tem página, que os materiais dela aparecem em algum lugar e que a nota tem solução.
+
+A varinha inicial fica em `data/player/player.tres`: `wand_aspects` (os recipientes, na ordem dos frascos do HUD), `starting_core` e `starting_cap`. Ali também fica `starting_vis`: o Vis com que a varinha começa cada incursão (e volta depois da morte).
 
 ### Adicionar uma página de pesquisa
 

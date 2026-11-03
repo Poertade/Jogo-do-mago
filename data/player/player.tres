@@ -1,13 +1,16 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/player_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/wands/apprentice_wand.tres" id="2"]
+[ext_resource type="Resource" path="res://data/wands/cores/wood.tres" id="2"]
+[ext_resource type="Resource" path="res://data/wands/caps/iron.tres" id="4"]
 [ext_resource type="Resource" path="res://data/foci/fire_focus.tres" id="3"]
 
 [resource]
 script = ExtResource("1")
 max_health = 100
-starting_wand = ExtResource("2")
+wand_aspects = Array[StringName]([&"air", &"earth", &"fire", &"water", &"order", &"entropy"])
+starting_core = ExtResource("2")
+starting_cap = ExtResource("4")
 starting_focus = ExtResource("3")
 jar_slots = 4
 jar_capacity = 10

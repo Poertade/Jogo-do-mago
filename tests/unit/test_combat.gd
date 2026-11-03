@@ -29,14 +29,14 @@ func test_died_is_emitted_once() -> void:
 func test_run_reset_restores_health_and_reserve() -> void:
 	var player := PlayerData.new()
 	player.max_health = 100
-	var wand := WandData.new()
-	wand.aspects = [&"fire", &"water"] as Array[StringName]
-	wand.capacity = 30
-	wand.aspect_capacity = 10
-	wand.efficiency = 1.0
+	player.wand_aspects = [&"fire", &"water"] as Array[StringName]
+	player.starting_core = WandCoreData.new()
+	player.starting_core.capacity = 30
+	player.starting_core.aspect_capacity = 10
+	player.starting_cap = WandCapData.new()
+	player.starting_cap.efficiency = 1.0
 	var focus := FocusData.new()
 	focus.cost = {&"fire": 2} as Dictionary[StringName, int]
-	player.starting_wand = wand
 	player.starting_focus = focus
 	player.starting_vis = {&"fire": 10} as Dictionary[StringName, int]
 	var run := RunState.new(player)

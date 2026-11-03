@@ -6,8 +6,12 @@ extends Resource
 
 ## Vida máxima (e vida no começo de cada incursão).
 @export var max_health: int = 0
-## Varinha e Focus com que o jogador começa.
-@export var starting_wand: WandData
+## Aspectos que têm recipiente na varinha (os primais), na ordem dos frascos do HUD.
+@export var wand_aspects: Array[StringName] = []
+## Núcleo e ponteira com que o jogador começa (sempre disponíveis na Bancada Arcana).
+@export var starting_core: WandCoreData
+@export var starting_cap: WandCapData
+## Focus com que o jogador começa.
 @export var starting_focus: FocusData
 ## Vis na varinha no começo de cada incursão (e ao despertar depois de morrer), por aspecto.
 @export var starting_vis: Dictionary[StringName, int] = {}
@@ -29,3 +33,8 @@ extends Resource
 @export var eye_height: float = 0.0
 ## Distância máxima, em metros, para interagir (E) com mesas, portais etc.
 @export var interact_range: float = 0.0
+
+
+## A varinha montada com o núcleo e a ponteira (por padrão, os iniciais).
+func make_wand(core: WandCoreData = null, cap: WandCapData = null) -> WandData:
+	return WandData.assemble(core if core != null else starting_core, cap if cap != null else starting_cap, wand_aspects)

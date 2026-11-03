@@ -539,3 +539,17 @@ kind = &"silver"
 chance = 0.6
 amount_min = 4
 amount_max = 8
+
+[node name="BoneSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.4, 0.0, 2.0)
+script = ExtResource("19")
+kind = &"bone"
+chance = 0.5
+amount_min = 1
+amount_max = 2
+
+[node name="ChestSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.4, 0.0, 3.0)
+script = ExtResource("19")
+kind = &"chest"
+chance = 0.5

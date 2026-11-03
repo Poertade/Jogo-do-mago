@@ -36,6 +36,8 @@ signal enemy_alerted(at: Vector3)
 signal noise_made(at: Vector3, radius: float)
 ## Um chefe notou o jogador (o HUD mostra a barra de vida dele).
 signal boss_engaged(enemy: Node3D)
+## A varinha mudou (outro núcleo ou outra ponteira): a varinha na mão muda de cor.
+signal wand_changed
 ## Um texto pronto para ler (título e corpo já traduzidos), como um livro com as receitas.
 signal text_requested(title: String, body: String)
 ## Um texto para ler (placa, anotação), com título e corpo (chaves de tradução).
@@ -60,6 +62,11 @@ func _ready() -> void:
 	stash.changed.connect(save)
 	_update_modifiers()
 	run = RunState.new(Content.db.player, stash.jars)
+	_apply_wand()
+	# Saves de antes das relíquias: chefes já vencidos ainda não tinham deixado a deles.
+	for enemy: EnemyData in Content.db.enemies.values():
+		if enemy.material_safe and world.is_defeated(enemy.id):
+			give_relic(enemy)
 
 
 ## Pede a troca de sala (quem faz a transição é a cena principal).
@@ -155,10 +162,15 @@ func buy_jar() -> bool:
 
 ## Vis da varinha que falta para fabricar um pote ({aspecto: quanto falta}).
 func missing_jar_vis() -> Dictionary:
+	return missing_vis(Content.db.economy.jar_vis)
+
+
+## Vis que falta na varinha para pagar `cost` agora ({aspecto: quanto falta}).
+func missing_vis(cost: Dictionary) -> Dictionary:
 	var result := {}
-	var cost := run.wand.effective_cost(Content.db.economy.jar_vis)
-	for aspect_id in cost:
-		var lacking: int = cost[aspect_id] - run.wand.reserve(aspect_id)
+	var now := run.wand.cost_now(cost)
+	for aspect_id in now:
+		var lacking: int = now[aspect_id] - run.wand.reserve(aspect_id)
 		if lacking > 0:
 			result[aspect_id] = lacking
 	return result
@@ -173,6 +185,77 @@ func craft_jar() -> bool:
 	run.wand.pay(economy.jar_vis)
 	_gain_jar()
 	return true
+
+
+## Relíquia de um chefe (material com `material_safe`): vai direto para a escola, uma vez só.
+## A entrega fica marcada no mapa (como uma chave), para não se repetir.
+func give_relic(enemy: EnemyData) -> void:
+	if not world.take_key(StringName("relic_" + String(enemy.id))):
+		return
+	stash.add({enemy.material: enemy.material_amount})
+	var item: ItemData = Content.db.items.get(enemy.material)
+	message(Text.tr_key("UI_MSG_RELIC") % Text.tr_key(item.name_key if item != null else String(enemy.material)), Color(0.8, 0.7, 1.0))
+
+
+# --- Peças de varinha (Bancada Arcana) -------------------------------------------------
+
+## Núcleo montado na varinha agora.
+func equipped_core() -> WandCoreData:
+	var player := Content.db.player
+	var core: WandCoreData = Content.db.cores.get(stash.core)
+	return core if core != null and owns_part(core) else player.starting_core
+
+
+## Ponteira montada na varinha agora.
+func equipped_cap() -> WandCapData:
+	var player := Content.db.player
+	var cap: WandCapData = Content.db.caps.get(stash.cap)
+	return cap if cap != null and owns_part(cap) else player.starting_cap
+
+
+## O jogador já tem a peça (as iniciais vêm com ele)?
+func owns_part(part: Resource) -> bool:
+	var player := Content.db.player
+	if part == player.starting_core or part == player.starting_cap:
+		return true
+	return part.id in (stash.cores if part is WandCoreData else stash.caps)
+
+
+## Alguma página estudada liberou a peça (as iniciais estão sempre liberadas)?
+func part_unlocked(part: Resource) -> bool:
+	return owns_part(part) or part in modifiers.unlocked_parts
+
+
+## Faz uma peça na Bancada Arcana: gasta os materiais e o Vis da varinha e já a monta.
+func build_part(part: Resource) -> bool:
+	if owns_part(part) or not part_unlocked(part) or not stash.can_afford(part.cost) or not run.wand.can_pay(part.vis_cost):
+		return false
+	stash.spend(part.cost)
+	run.wand.pay(part.vis_cost)
+	if part is WandCoreData:
+		stash.add_core(part.id)
+	else:
+		stash.add_cap(part.id)
+	_apply_wand()
+	Audio.play(&"page_studied")
+	message(Text.tr_key("UI_MSG_PART_MADE") % Text.tr_key(part.name_key), Color(0.8, 0.7, 1.0))
+	return true
+
+
+## Monta na varinha uma peça que o jogador já tem.
+func equip_part(part: Resource) -> bool:
+	if not owns_part(part):
+		return false
+	stash.equip(part.id, part is WandCoreData)
+	_apply_wand()
+	Audio.play(&"recharge")
+	return true
+
+
+## Monta a varinha com o núcleo e a ponteira escolhidos (o Vis que couber continua nela).
+func _apply_wand() -> void:
+	run.wand.set_wand(Content.db.player.make_wand(equipped_core(), equipped_cap()))
+	wand_changed.emit()
 
 
 func _gain_jar() -> void:

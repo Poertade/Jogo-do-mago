@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WandCapData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/wand_cap_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"brass"
+name_key = "CAP_BRASS"
+description_key = "CAP_BRASS_DESC"
+tier = 1
+efficiency = 1.25
+cost = Dictionary[StringName, int]({
+&"brass": 3,
+&"silver": 10
+})
+vis_cost = Dictionary[StringName, int]({
+&"fire": 5
+})
+color = Color(0.78, 0.6, 0.26, 1)

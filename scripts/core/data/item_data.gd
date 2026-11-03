@@ -8,3 +8,5 @@ extends Resource
 @export var name_key: String
 ## Cor do ícone no HUD.
 @export var color: Color = Color.WHITE
+## Cena do achado na Dungeon (o que aparece num LootSpot com `kind` igual ao id do material).
+@export_file("*.tscn") var pickup_scene: String

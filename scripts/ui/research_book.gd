@@ -1,6 +1,7 @@
 class_name ResearchBook
 extends MenuLayer
-## Livro de Pesquisa (Tab): aspectos descobertos, alvos escaneados e páginas estudadas.
+## Livro de Pesquisa (Tab): aspectos descobertos, alvos escaneados, páginas estudadas e o que
+## está guardado na escola (materiais e peças de varinha).
 
 ## Cores de tinta sobre o pergaminho.
 const POINTS_COLOR := "#5c1a0a"
@@ -64,6 +65,16 @@ func _on_opened() -> void:
 				names.append(tr(book.name_key))
 		_add_line(pages_list, "[color=%s]%s[/color]
    %s" % [POINTS_COLOR, tr("UI_BOOK_BOOKS"), ", ".join(names)])
+
+	# Materiais guardados na escola e as páginas ainda abertas que pedem peças de varinha.
+	var owned := {}
+	for item_id in Content.db.items:
+		if Game.stash.count(item_id) > 0:
+			owned[item_id] = Game.stash.count(item_id)
+	if not owned.is_empty():
+		_add_line(pages_list, "[color=%s]%s[/color]\n   %s" % [POINTS_COLOR, tr("UI_BOOK_MATERIALS"), Game.items_text(owned)])
+	_add_line(pages_list, "[color=%s]%s[/color]\n   %s + %s" % [POINTS_COLOR, tr("UI_BOOK_WAND"),
+		tr(Game.equipped_core().name_key), tr(Game.equipped_cap().name_key)])
 
 	for list in [aspects_list, scanned_list, pages_list]:
 		if list.get_child_count() == 0:

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"crystal"
+name_key = "ITEM_CRYSTAL"
+color = Color(0.6, 0.85, 1.0, 1)
+pickup_scene = "res://scenes/props/crystal_shard.tscn"

@@ -7,3 +7,4 @@ script = ExtResource("1")
 id = &"silver"
 name_key = "ITEM_SILVER"
 color = Color(0.78, 0.8, 0.84, 1)
+pickup_scene = "res://scenes/props/silver_pouch.tscn"

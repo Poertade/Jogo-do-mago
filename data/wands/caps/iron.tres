@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WandCapData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/wand_cap_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"iron"
+name_key = "CAP_IRON"
+description_key = "CAP_IRON_DESC"
+tier = 0
+efficiency = 1.0
+cost = Dictionary[StringName, int]({})
+vis_cost = Dictionary[StringName, int]({})
+color = Color(0.45, 0.45, 0.48, 1)

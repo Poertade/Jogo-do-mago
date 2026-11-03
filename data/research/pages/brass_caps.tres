@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ResearchPageData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/page_effect.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/core/data/research_page_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/wands/caps/brass.tres" id="3"]
+
+[sub_resource type="Resource" id="Effect_1"]
+script = ExtResource("1")
+type = &"unlock_wand_part"
+wand_part = ExtResource("3")
+
+[resource]
+script = ExtResource("2")
+id = &"brass_caps"
+order = 3
+name_key = "PAGE_BRASS_CAPS"
+description_key = "PAGE_BRASS_CAPS_DESC"
+note_aspects = Array[StringName]([&"order", &"fire", &"energy"])
+note_radius = 2
+required_pages = Array[StringName]([])
+required_aspects = Array[StringName]([&"energy"])
+effects = Array[ExtResource("1")]([SubResource("Effect_1")])

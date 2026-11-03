@@ -621,6 +621,36 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** um arquivo separado para o mapa.
 - **Motivo:** um arquivo só, legível, como antes (D009).
 
+## M8 (aprovado pelo usuário)
+
+### D071 · 2026-11-03 · M8: a varinha que cresce
+
+- **Escolha:** o usuário aprovou o M8 ("pode ir para a M8") com as respostas recomendadas na proposta: os materiais achados se perdem ao morrer (já era a regra da D069), há um baú por incursão, e o trabalho para no fim do M8.
+  - **Peças:** a varinha é montada com um **núcleo** (`WandCoreData`, os limites de Vis) e um par de **ponteiras** (`WandCapData`, a eficiência), como as hastes e ponteiras do Thaumcraft.
+    - **Núcleos:** madeira (10/30, inicial), osso (12/36) e cristal (15/45).
+    - **Ponteiras:** ferro (1,0, inicial), latão (1,25) e prata (1,5).
+  - **Eficiência acumulada:** o Vis é contado em inteiros e as magias custam 1 ou 2, então dividir e arredondar para cima não pouparia nada. A varinha guarda a fração poupada (`WandState.cost_now`): com 1,25, a cada cinco disparos de 1, um sai de graça.
+  - **Bancada Arcana:** fica no Salão de Estudos, com uma tela para fazer e montar as peças. Fazer gasta materiais guardados na escola e Vis da varinha, como a Bancada Arcana do Thaumcraft. Trocar entre peças que você já tem é de graça. A varinha na mão muda de cor.
+  - **Pesquisa:** uma página por peça nova, com o efeito `unlock_wand_part`:
+    - **Ponteiras de Latão:** Ordo, Ignis e Potentia, todos de receita livre. É a primeira peça que dá para conseguir.
+    - **Núcleo de Osso:** Mortuus, Terra e Perditio.
+    - **Núcleo de Cristal:** Vitreus, Praecantatio e Terra; pede a de osso.
+    - **Ponteiras de Prata:** Metallum, Lux e Praecantatio; pede a de latão, em grade maior.
+    - As de osso, cristal e prata pedem receitas dos livros. As abas da Mesa ganharam ordem (`order`) e quebram linha.
+  - **Materiais** (`data/items/`, cada um com a cena do achado em `pickup_scene`):
+    - **Osso antigo:** ruínas e Bedel (50%).
+    - **Fio de latão:** ruínas e Aprendiz (35%).
+    - **Lasca de cristal:** grutas.
+    - **Selo do Arquivista:** o chefe deixa ao cair (`material_safe`) e vai direto para a escola, uma vez só. Saves em que ele já tinha caído recebem o selo ao carregar.
+  - **Baú:** um por incursão, sorteado entre quatro lugares (cripta, gruta dos fungos, fundo da Fenda, salão invertido). Tem prata e três materiais sorteados.
+  - **Ritmo:** uma incursão que limpa o mapa rende uns 6 ossos, 5 fios de latão, 6 lascas e 130 de prata. Dá para fazer uma peça a cada uma ou duas incursões.
+  - **Save formato 7:** as peças feitas e as montadas.
+- **Descartado:**
+  - **Eficiência arredondada para cima (como antes):** não pouparia nada com os custos de 1.
+  - **Varinhas inteiras como itens:** montar com peças é o que o Thaumcraft faz e dá mais combinações.
+  - **Baú guardado por um inimigo a mais:** as salas com baú já têm inimigos.
+- **Motivo:** fecha o ciclo do roguelike: as incursões rendem materiais, e os materiais viram uma varinha melhor na seguinte.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

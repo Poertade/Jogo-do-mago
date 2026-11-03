@@ -32,6 +32,13 @@ extends ScannableData
 ## Prata que o inimigo deixa ao ser derrotado (sorteada entre os dois valores).
 @export var silver_min: int = 0
 @export var silver_max: int = 0
+## Material que o inimigo pode deixar (data/items/), a chance e quanto.
+@export var material: StringName
+@export_range(0.0, 1.0) var material_chance: float = 0.0
+@export var material_amount: int = 0
+## Ligado: o material vai direto para a escola, sem risco de se perder (raridades de chefes,
+## que não voltam).
+@export var material_safe := false
 
 @export_group("Chefe")
 ## Mostra a barra de vida no alto da tela quando o inimigo nota o jogador.

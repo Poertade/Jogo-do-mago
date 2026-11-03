@@ -12,3 +12,11 @@ extends Resource
 @export var jar_vis: Dictionary[StringName, int] = {}
 ## Cacos de vidro que um pote selado da Dungeon deixa ao ser esvaziado.
 @export var glass_per_sealed_jar: int = 0
+
+@export_group("Baú")
+## Um baú aparece por incursão, num dos lugares de baú do mapa: prata entre os dois valores e
+## `chest_material_count` materiais sorteados de `chest_materials`.
+@export var chest_silver_min: int = 0
+@export var chest_silver_max: int = 0
+@export var chest_materials: Array[StringName] = []
+@export var chest_material_count: int = 0

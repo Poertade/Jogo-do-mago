@@ -12,6 +12,7 @@ value = 1.2
 [resource]
 script = ExtResource("2_6ntp5")
 id = &"fire_comprehension"
+order = 1
 name_key = "PAGE_FIRE_COMPREHENSION"
 description_key = "PAGE_FIRE_COMPREHENSION_DESC"
 note_aspects = Array[StringName]([&"fire", &"energy", &"light"])

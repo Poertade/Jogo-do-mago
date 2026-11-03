@@ -13,10 +13,7 @@ extends NavigationRegion3D
 
 const BOOK_SCENE := "res://scenes/props/lost_book.tscn"
 const JAR_SCENE := "res://scenes/props/sealed_jar.tscn"
-const ITEM_SCENES := {
-	&"silver": "res://scenes/props/silver_pouch.tscn",
-	&"glass": "res://scenes/props/glass_shards.tscn",
-}
+const CHEST_SCENE := "res://scenes/props/treasure_chest.tscn"
 
 ## As salas do mapa e a caixa (no espaço do mundo) que cada uma ocupa.
 var rooms: Array[Room] = []
@@ -85,8 +82,12 @@ func bake_navigation() -> void:
 ## ainda não conhece; nos outros lugares, potes selados, prata e cacos, com a chance de cada um.
 func _place_loot(rng: GameRng) -> void:
 	var book_spots: Dictionary = {}
+	var chest_spots: Array[LootSpot] = []
 	for node in find_children("*", "LootSpot", true, false):
 		var spot := node as LootSpot
+		if spot.kind == &"chest":
+			chest_spots.append(spot)
+			continue
 		if spot.kind == &"book":
 			var zone := _zone_of(spot)
 			if not zone in book_spots:
@@ -104,12 +105,18 @@ func _place_loot(rng: GameRng) -> void:
 			jar.set(&"aspect", spot.jar_aspects[pick])
 			jar.set(&"amount", amount)
 			spot.add_child(jar)
-		elif spot.kind in ITEM_SCENES:
-			var pickup: Node3D = (load(ITEM_SCENES[spot.kind]) as PackedScene).instantiate()
+		elif spot.kind in Content.db.items and Content.db.items[spot.kind].pickup_scene != "":
+			var pickup: Node3D = (load(Content.db.items[spot.kind].pickup_scene) as PackedScene).instantiate()
 			pickup.set(&"item", spot.kind)
 			pickup.set(&"amount", amount)
 			spot.add_child(pickup)
-	# Cada livro ensina uma receita: não adianta haver mais livros que receitas a aprender.
+	# Um baú por incursão, num dos lugares de baú do mapa.
+	if not chest_spots.is_empty():
+		var spot := chest_spots[rng.range_int(0, chest_spots.size() - 1)]
+		var chest: Node3D = (load(CHEST_SCENE) as PackedScene).instantiate()
+		chest.set(&"contents", _roll_chest(rng))
+		spot.add_child(chest)
+		# Cada livro ensina uma receita: não adianta haver mais livros que receitas a aprender.
 	var to_learn := Game.knowledge.unknown_recipes(Content.db.aspects).size() - Game.run.carried_books.size()
 	var zones: Array = book_spots.keys()
 	zones.sort_custom(ContentDB.by_name)
@@ -124,6 +131,18 @@ func _place_loot(rng: GameRng) -> void:
 		var pickup: Node3D = (load(BOOK_SCENE) as PackedScene).instantiate()
 		pickup.set(&"book", book)
 		spot.add_child(pickup)
+
+
+## O que vai no baú: prata e alguns materiais sorteados (data/economy/rules.tres).
+func _roll_chest(rng: GameRng) -> Dictionary:
+	var economy := Content.db.economy
+	var contents := {&"silver": rng.range_int(economy.chest_silver_min, economy.chest_silver_max)}
+	for i in economy.chest_material_count:
+		if economy.chest_materials.is_empty():
+			break
+		var item_id: StringName = economy.chest_materials[rng.range_int(0, economy.chest_materials.size() - 1)]
+		contents[item_id] = contents.get(item_id, 0) + 1
+	return contents
 
 
 ## Região da sala onde o nó está.

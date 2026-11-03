@@ -99,3 +99,21 @@ UI_MSG_ANCHOR_ATTUNED,Âncora sintonizada (%s): o portal da escola agora pode tr
 UI_PORTAL_TITLE,O portal
 UI_PORTAL_HINT,Para qual âncora atravessar?
 UI_PORTAL_STAY,Ficar na escola
+UI_MSG_PART_MADE,"Pronto: %s, já montado na varinha"
+UI_MSG_RELIC,%s: guardado na escola
+UI_WAND_TITLE,Bancada Arcana
+UI_WAND_CURRENT,Na varinha: %s e %s. Cabem %d de cada aspecto e %d no total; as magias custam %d%% do Vis.
+UI_WAND_CORES,Núcleos (quanto Vis cabe)
+UI_WAND_CAPS,Ponteiras (quanto as magias custam)
+UI_WAND_MATERIALS,Guardado na escola: %s
+UI_WAND_NO_MATERIALS,nada ainda
+UI_WAND_COST,Para fazer: %s
+UI_WAND_EQUIPPED,montado
+UI_WAND_EQUIP,montar
+UI_WAND_LOCKED,estude a página
+UI_WAND_BUILD,fazer
+UI_WAND_MISSING,falta %s
+UI_WAND_CORE_STATS,%d / %d
+UI_WAND_CAP_STATS,custo %d%%
+UI_BOOK_MATERIALS,Materiais guardados na escola
+UI_BOOK_WAND,Varinha montada

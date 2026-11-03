@@ -12,7 +12,8 @@ extends RefCounted
 ## 5: livros lidos e receitas aprendidas.
 ## 6: o mapa fixo da Dungeon (atalhos, chaves, âncoras, chefes) e o que fica guardado na escola
 ##    (prata, cacos de vidro, potes).
-const FORMAT_VERSION := 6
+## 7: peças de varinha feitas na Bancada Arcana (núcleos e ponteiras) e as que estão montadas.
+const FORMAT_VERSION := 7
 
 
 static func to_dict(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null) -> Dictionary:
@@ -88,6 +89,11 @@ static func stash_from_dict(data: Dictionary) -> Stash:
 		var jars = saved.get("jars", 0)
 		if jars is float or jars is int:
 			stash.jars = maxi(int(jars), 0)
+		# A versão 6 não tinha peças de varinha: os campos ficam vazios (núcleo e ponteira iniciais).
+		stash.cores = _to_names(saved.get("cores", []))
+		stash.caps = _to_names(saved.get("caps", []))
+		stash.core = StringName(saved.get("core", "")) if saved.get("core") is String else &""
+		stash.cap = StringName(saved.get("cap", "")) if saved.get("cap") is String else &""
 	return stash
 
 
@@ -105,7 +111,8 @@ static func _stash_to_dict(stash: Stash) -> Dictionary:
 	for item_id in stash.items:
 		if stash.items[item_id] > 0:
 			items[String(item_id)] = stash.items[item_id]
-	return {"items": items, "jars": stash.jars}
+	return {"items": items, "jars": stash.jars, "cores": _to_strings(stash.cores), "caps": _to_strings(stash.caps),
+		"core": String(stash.core), "cap": String(stash.cap)}
 
 
 static func from_dict(data: Dictionary) -> Knowledge:

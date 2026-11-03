@@ -14,7 +14,6 @@ OBJ_OLD_BONE,Osso antigo
 PAGE_FIRE_COMPREHENSION,Compreensão de {fire}
 PAGE_FIRE_COMPREHENSION_DESC,"Entender como {fire} se alimenta de {energy}: o dano de {fire} aumenta 20%."
 PROMPT_RESEARCH_TABLE,Estudar na Mesa de Pesquisa
-WAND_APPRENTICE,Varinha de aprendiz
 FOCUS_FIRE,Focus de Fogo
 ENEMY_BONE_BEADLE,Bedel Descarnado
 PROMPT_PORTAL,Atravessar o portal
@@ -154,3 +153,37 @@ PROMPT_WORKBENCH_CRAFT,Fabricar um pote de Vis (%s)
 PROMPT_WORKBENCH_MISSING,Pote de Vis: %s. Falta: %s
 NOTE_WELL_TITLE,Inscrição no parapeito
 NOTE_WELL_BODY,"Daqui os mestres desciam às grutas sem tocar nos degraus: bastava um passo além da borda e a água lá embaixo os recebia.\n\nQuem desce pelo poço não sobe pelo poço. O caminho de volta é a Escadaria, a oeste."
+CORE_WOOD,Núcleo de Madeira
+CORE_WOOD_DESC,"A haste de aprendiz, de madeira escura. Guarda 10 de cada aspecto e 30 no total."
+CORE_BONE,Núcleo de Osso
+CORE_BONE_DESC,"Osso antigo das ruínas, polido e selado com {order}. Guarda 12 de cada aspecto e 36 no total."
+CORE_CRYSTAL,Núcleo de Cristal
+CORE_CRYSTAL_DESC,Lascas de cristal das grutas fundidas numa haste. Guarda 15 de cada aspecto e 45 no total.
+CAP_IRON,Ponteiras de Ferro
+CAP_IRON_DESC,Ponteiras simples de ferro: as magias custam o normal.
+CAP_BRASS,Ponteiras de Latão
+CAP_BRASS_DESC,"Fio de latão enrolado nas pontas: as magias custam 80% do Vis, em média (a cada cinco disparos de 1, um sai de graça)."
+CAP_SILVER,Ponteiras de Prata
+CAP_SILVER_DESC,"Prata lavrada com o Selo do Arquivista: as magias custam dois terços do Vis, em média."
+PAGE_BRASS_CAPS,Ponteiras de Latão
+PAGE_BRASS_CAPS_DESC,Conduzir {energy} pelo metal da ponta sem desperdício: libera as Ponteiras de Latão na Bancada Arcana.
+PAGE_BONE_CORE,Núcleo de Osso
+PAGE_BONE_CORE_DESC,O osso guarda o que a {death} deixou: libera o Núcleo de Osso na Bancada Arcana.
+PAGE_CRYSTAL_CORE,Núcleo de Cristal
+PAGE_CRYSTAL_CORE_DESC,O {crystal} das grutas prende {magic} como a água prende o frio: libera o Núcleo de Cristal na Bancada Arcana.
+PAGE_SILVER_CAPS,Ponteiras de Prata
+PAGE_SILVER_CAPS_DESC,"{metal} nobre, polido até refletir {light}: libera as Ponteiras de Prata na Bancada Arcana (pedem o Selo do Arquivista)."
+ITEM_BONE,Osso antigo
+ITEM_CRYSTAL,Lasca de cristal
+ITEM_BRASS,Fio de latão
+ITEM_ARCHIVIST_SEAL,Selo do Arquivista
+OBJ_OLD_BONES,Ossos antigos
+OBJ_CRYSTAL_SHARD,Lasca de cristal
+OBJ_BRASS_WIRE,Rolo de fio de latão
+OBJ_TREASURE_CHEST,Baú
+OBJ_ARCANE_WORKBENCH,Bancada Arcana
+PROMPT_TAKE_BONE,Pegar os ossos antigos
+PROMPT_TAKE_CRYSTAL,Pegar a lasca de cristal
+PROMPT_TAKE_BRASS,Pegar o fio de latão
+PROMPT_OPEN_CHEST,Abrir o baú
+PROMPT_ARCANE_WORKBENCH,Montar a varinha na Bancada Arcana

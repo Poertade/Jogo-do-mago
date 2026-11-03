@@ -31,6 +31,7 @@ var _transitioning := false
 @onready var research_table_screen: ResearchTableScreen = %ResearchTableScreen
 @onready var note_screen: NoteScreen = %NoteScreen
 @onready var portal_screen: PortalScreen = %PortalScreen
+@onready var wand_screen: WandScreen = %WandScreen
 
 
 func _ready() -> void:
@@ -42,7 +43,7 @@ func _ready() -> void:
 
 	Settings.changed.connect(_apply_settings)
 	_apply_settings()
-	for menu: MenuLayer in [pause_menu, research_book, research_table_screen, note_screen, portal_screen]:
+	for menu: MenuLayer in [pause_menu, research_book, research_table_screen, note_screen, portal_screen, wand_screen]:
 		menu.closed.connect(_capture_mouse)
 	Game.screen_requested.connect(_on_screen_requested)
 	Game.note_requested.connect(note_screen.show_note)
@@ -92,6 +93,8 @@ func _on_screen_requested(screen: StringName) -> void:
 			research_table_screen.open()
 		&"portal":
 			portal_screen.open()
+		&"arcane_workbench":
+			wand_screen.open()
 
 
 ## Portal ou saída: dissolve, troca a sala e volta.

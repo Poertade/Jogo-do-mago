@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/treasure_chest.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/treasure_chest.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="3"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="4"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="5"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("5")
+shader_parameter/albedo_color = Color(0.2275, 0.2275, 0.251, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.06, 0.47, 0.57)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(0.06, 0.47, 0.57)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(0.92, 0.12, 0.57)
+
+[sub_resource type="ShaderMaterial" id="Mat_5"]
+render_priority = 0
+shader = ExtResource("5")
+shader_parameter/albedo_color = Color(0.6275, 0.4784, 0.1882, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.1, 0.12, 0.03)
+
+[sub_resource type="ShaderMaterial" id="Mat_7"]
+render_priority = 0
+shader = ExtResource("5")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.8157, 0.4392, 1.0)
+shader_parameter/emission_energy = 1.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+size = Vector3(0.7, 0.02, 0.4)
+
+[node name="TreasureChest" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_OPEN_CHEST"
+scannable = ExtResource("2")
+
+[node name="Box" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.225, 0.0)
+script = ExtResource("3")
+size = Vector3(0.9, 0.45, 0.55)
+material = ExtResource("4")
+scannable = ExtResource("2")
+
+[node name="BandLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.3, 0.235, 0.0)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="BandRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.3, 0.235, 0.0)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="Lid" type="Node3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.45, 0.275)
+
+[node name="LidBoard" type="MeshInstance3D" parent="Lid"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.06, -0.275)
+mesh = SubResource("BoxMesh_4")
+material_override = ExtResource("4")
+
+[node name="Lock" type="MeshInstance3D" parent="Lid"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.57)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_5")
+
+[node name="Shine" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.44, 0.0)
+mesh = SubResource("BoxMesh_8")
+material_override = SubResource("Mat_7")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.8, -0.4)
+light_color = Color(1.0, 0.8157, 0.502, 1.0)
+light_energy = 0.5
+omni_range = 2.5

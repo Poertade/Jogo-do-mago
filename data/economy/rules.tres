@@ -15,3 +15,7 @@ jar_vis = Dictionary[StringName, int]({
 &"order": 3
 })
 glass_per_sealed_jar = 1
+chest_silver_min = 8
+chest_silver_max = 16
+chest_materials = Array[StringName]([&"bone", &"crystal", &"brass", &"glass"])
+chest_material_count = 3

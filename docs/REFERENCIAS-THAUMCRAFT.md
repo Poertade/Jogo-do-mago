@@ -21,7 +21,7 @@
 | **Aspectos**: 6 primais, ~40 compostos em camadas | 6 primais + 20 compostos (receitas da versão 4.2), com Gelum, Tenebrae, Limus, Vitium e Alienis; só as receitas de nível 1 vêm sabidas, as outras vêm dos livros | parcial |
 | **Pesquisa achada no mundo** (fragmentos de conhecimento, notas em masmorras) | livros perdidos na Dungeon, lidos no atril da escola: cada um ensina uma receita sorteada que o jogador ainda não tem | feito |
 | **Potes protegidos** (guardam essentia) | potes de Vis no cinto: guardam o que sobra dos Nódulos e recarregam a varinha (R). O jogador começa sem nenhum: compra no Almoxarife ou fabrica na bancada de vidraria (D069) | adaptado |
-| **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com um recipiente por primal, limite por recipiente e limite total, e eficiência (`data/wands/`); visual com núcleo + ponteiras; mostrador de frascos no HUD | parcial (um tipo só) |
+| **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com um recipiente por primal e limite total. Núcleos (madeira, osso, cristal) dão os limites; ponteiras (ferro, latão, prata), a eficiência. Cada peça é liberada por uma página e feita na Bancada Arcana com materiais da Dungeon e Vis da varinha (`data/wands/`, D071) | adaptado |
 | **Focus**: encaixado na varinha, define a magia (Fogo, Gelo, Choque, Escavação, Portal…) | Focus de Fogo e Focus de Gelo (lentidão), trocados com Q; o de Gelo é liberado por pesquisa | dois Focus |
 | **Nódulos de aura**: esferas de Vis com aspectos; a varinha drena Vis segurando o botão; o nódulo se recarrega devagar | Nódulos de Ignis e de Aqua (com Ordo) na escola, que não acabam; na Dungeon, nódulos que se esgotam | feito (sem recarga lenta) |
 | **Vis**: a varinha guarda os seis primais (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com sua reserva; no 4, em centésimos ("centi-Vis") | um recipiente por primal (até 10) e, a pedido do usuário, um limite total (30) (D051) | feito (valores inteiros) |
@@ -31,7 +31,7 @@
 ## Ideias para próximos marcos (precisam de aprovação)
 
 1. **Mais Focus**, cada um gastando primais diferentes. O de Gelo já existe (M7). Do Thaumcraft 4 ainda faltam Choque (Aer, raio em cadeia) e Escavação (Terra/Ordo, quebra paredes frágeis e abre passagens secretas).
-2. **Núcleos e ponteiras de varinha** como dados: capacidade (núcleo) e desconto (ponteiras), montados numa bancada na escola.
+2. ~~**Núcleos e ponteiras de varinha**~~: feito no M8 (D071).
 3. **Mais aspectos compostos** e objetos que os contenham. A Dungeon pode trazer aspectos que a escola não tem, como Alienis, Tenebrae e Vitium; isso faz explorar valer pesquisa.
 4. **Notas de pesquisa mais ricas** (a versão simples já existe): tinta e penas como recurso, notas que pedem aspectos raros da Dungeon, copiar uma nota resolvida.
 5. **Nódulos na Dungeon** (raros), com reserva que se esgota e volta devagar. Hoje a decisão 3 diz "sem recarga fora da escola"; mudar isso pede aprovação.

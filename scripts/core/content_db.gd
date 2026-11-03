@@ -17,7 +17,9 @@ var rooms: Dictionary[StringName, RoomData] = {}
 var aspects: Dictionary[StringName, AspectData] = {}
 var scannables: Dictionary[StringName, ScannableData] = {}
 var pages: Dictionary[StringName, ResearchPageData] = {}
-var wands: Dictionary[StringName, WandData] = {}
+## Peças de varinha: núcleos (data/wands/cores/) e ponteiras (data/wands/caps/).
+var cores: Dictionary[StringName, WandCoreData] = {}
+var caps: Dictionary[StringName, WandCapData] = {}
 var foci: Dictionary[StringName, FocusData] = {}
 var enemies: Dictionary[StringName, EnemyData] = {}
 var books: Dictionary[StringName, BookData] = {}
@@ -49,9 +51,12 @@ func load_all(root := DATA_ROOT) -> void:
 	for resource in _load_folder(root.path_join("research/pages")):
 		if resource is ResearchPageData:
 			add_page(resource)
-	for resource in _load_folder(root.path_join("wands")):
-		if resource is WandData:
-			_add_unique(wands, resource, "Varinha")
+	for resource in _load_folder(root.path_join("wands/cores")):
+		if resource is WandCoreData:
+			_add_unique(cores, resource, "Núcleo")
+	for resource in _load_folder(root.path_join("wands/caps")):
+		if resource is WandCapData:
+			_add_unique(caps, resource, "Ponteira")
 	for resource in _load_folder(root.path_join("foci")):
 		if resource is FocusData:
 			_add_unique(foci, resource, "Focus")
@@ -161,9 +166,7 @@ func sorted_pages() -> Array[ResearchPageData]:
 
 
 func _page_before(a: ResearchPageData, b: ResearchPageData) -> bool:
-	var size_a := a.note_aspects.size() * 10 + a.note_radius
-	var size_b := b.note_aspects.size() * 10 + b.note_radius
-	return size_a < size_b or (size_a == size_b and String(a.id) < String(b.id))
+	return a.order < b.order or (a.order == b.order and String(a.id) < String(b.id))
 
 
 ## O aspecto composto formado por `a` e `b` (em qualquer ordem), ou null.
@@ -243,8 +246,8 @@ func validate() -> void:
 		_validate_aspect_amounts("Escaneável '%s'" % scannable.id, scannable.aspects)
 	for page: ResearchPageData in pages.values():
 		_validate_page(page)
-	for wand: WandData in wands.values():
-		_validate_wand(wand)
+	for part: Resource in cores.values() + caps.values():
+		_validate_part(part)
 	for focus: FocusData in foci.values():
 		_validate_focus(focus)
 	for enemy: EnemyData in enemies.values():
@@ -256,10 +259,18 @@ func _validate_player() -> void:
 		errors.append("player.tres: max_health precisa ser maior que zero.")
 	if player.jar_slots < 0 or (player.jar_slots > 0 and player.jar_capacity <= 0):
 		errors.append("player.tres: jar_slots não pode ser negativo, e com lugar para potes jar_capacity precisa ser maior que zero.")
-	if player.starting_wand == null or player.starting_focus == null:
-		errors.append("player.tres: faltam a varinha ou o Focus iniciais.")
+	if player.starting_core == null or player.starting_cap == null or player.starting_focus == null:
+		errors.append("player.tres: faltam o núcleo, a ponteira ou o Focus iniciais.")
 		return
-	var wand := player.starting_wand
+	if player.wand_aspects.is_empty():
+		errors.append("player.tres: a lista de recipientes da varinha (wand_aspects) está vazia.")
+	var repeated := {}
+	for aspect_id in player.wand_aspects:
+		if aspect_id in repeated:
+			errors.append("player.tres: recipiente de '%s' repetido em wand_aspects." % aspect_id)
+		repeated[aspect_id] = 1
+	_validate_vis_amounts("player.tres (wand_aspects)", repeated)
+	var wand := player.make_wand()
 	for aspect_id in player.starting_focus.cost.keys() + player.starting_vis.keys():
 		if not aspect_id in wand.aspects:
 			errors.append("A varinha inicial não tem recipiente de '%s' (usado pelo Focus ou por starting_vis)." % aspect_id)
@@ -281,17 +292,32 @@ func _validate_player() -> void:
 		errors.append("player.tres: a soma de starting_vis passa do limite total da varinha.")
 
 
-func _validate_wand(wand: WandData) -> void:
-	if wand.efficiency <= 0.0 or wand.capacity <= 0 or wand.aspect_capacity <= 0:
-		errors.append("Varinha '%s': capacity, aspect_capacity e efficiency precisam ser maiores que zero." % wand.id)
-	if wand.aspects.is_empty():
-		errors.append("Varinha '%s': a lista de recipientes (aspects) está vazia." % wand.id)
-	var amounts := {}
-	for aspect_id in wand.aspects:
-		if aspect_id in amounts:
-			errors.append("Varinha '%s': recipiente de '%s' repetido." % [wand.id, aspect_id])
-		amounts[aspect_id] = 1
-	_validate_vis_amounts("Varinha '%s'" % wand.id, amounts)
+## Núcleo ou ponteira de varinha: valores positivos e custos com materiais e Vis que existem.
+func _validate_part(part: Resource) -> void:
+	var owner := "Peça de varinha '%s'" % part.id
+	if part is WandCoreData and (part.capacity <= 0 or part.aspect_capacity <= 0 or part.aspect_capacity > part.capacity):
+		errors.append("%s: capacity e aspect_capacity precisam ser maiores que zero, e aspect_capacity não passa de capacity." % owner)
+	if part is WandCapData and part.efficiency <= 0.0:
+		errors.append("%s: efficiency precisa ser maior que zero." % owner)
+	for item_id in part.cost:
+		if not item_id in items:
+			errors.append("%s: o material '%s' não existe em data/items/." % [owner, item_id])
+		elif part.cost[item_id] <= 0:
+			errors.append("%s: quantidades precisam ser maiores que zero ('%s')." % [owner, item_id])
+	_validate_vis_amounts(owner + " (vis_cost)", part.vis_cost)
+	var starting: bool = player != null and (part == player.starting_core or part == player.starting_cap)
+	if not starting and part.cost.is_empty():
+		errors.append("%s: só as peças iniciais podem não ter custo." % owner)
+	if not starting and not _page_unlocks(part):
+		errors.append("%s: nenhuma página de pesquisa libera esta peça (efeito unlock_wand_part)." % owner)
+
+
+func _page_unlocks(part: Resource) -> bool:
+	for page: ResearchPageData in pages.values():
+		for effect in page.effects:
+			if effect.type == PageEffect.UNLOCK_WAND_PART and effect.wand_part == part:
+				return true
+	return false
 
 
 ## Vis só existe dos aspectos primais (como no Thaumcraft): custos e reservas usam só eles.
@@ -339,6 +365,8 @@ func _validate_enemy(enemy: EnemyData) -> void:
 			errors.append("%s: enrage_summons tem um inimigo vazio ou ele mesmo." % owner)
 	if enemy.silver_min < 0 or enemy.silver_max < enemy.silver_min:
 		errors.append("%s: silver_min não pode ser negativo nem maior que silver_max." % owner)
+	if enemy.material != &"" and (not enemy.material in items or enemy.material_amount <= 0):
+		errors.append("%s: o material '%s' não existe em data/items/, ou material_amount é zero." % [owner, enemy.material])
 
 
 func _validate_settings() -> void:
@@ -410,6 +438,9 @@ func _validate_economy() -> void:
 	for item_id in [&"silver", &"glass"]:
 		if not item_id in items:
 			errors.append("Falta o material '%s' em data/items/ (usado pelo jogo)." % item_id)
+	for item: ItemData in items.values():
+		if item.pickup_scene != "" and not ResourceLoader.exists(item.pickup_scene):
+			errors.append("Material '%s': cena do achado não encontrada ('%s')." % [item.id, item.pickup_scene])
 
 
 func _validate_aspect(aspect: AspectData) -> void:
@@ -455,6 +486,8 @@ func _validate_page(page: ResearchPageData) -> void:
 			errors.append("%s: efeito de tipo desconhecido." % owner)
 		elif effect.type == PageEffect.UNLOCK_FOCUS and effect.focus == null:
 			errors.append("%s: o efeito unlock_focus precisa de um Focus." % owner)
+		elif effect.type == PageEffect.UNLOCK_WAND_PART and not (effect.wand_part is WandCoreData or effect.wand_part is WandCapData):
+			errors.append("%s: o efeito unlock_wand_part precisa de um núcleo ou de uma ponteira." % owner)
 
 
 # --- Leitura de arquivos ---

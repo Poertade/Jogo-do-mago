@@ -7,3 +7,4 @@ script = ExtResource("1")
 id = &"glass"
 name_key = "ITEM_GLASS"
 color = Color(0.55, 0.85, 0.8, 1)
+pickup_scene = "res://scenes/props/glass_shards.tscn"

@@ -1,13 +1,10 @@
 class_name WandData
 extends Resource
-## Uma varinha: quanto Vis ela guarda e com que eficiência o gasta. Ela tem um recipiente para
-## cada aspecto (Ignis, Aqua, Perditio…), cada um com o mesmo limite, e um limite para a soma
-## de todos. Cada varinha é um arquivo em data/wands/.
-## Os valores padrão aqui são vazios de propósito: os valores reais ficam no arquivo de dados.
+## Uma varinha montada: quanto Vis ela guarda e com que eficiência o gasta. Ela tem um
+## recipiente para cada aspecto (Ignis, Aqua, Perditio…), cada um com o mesmo limite, e um
+## limite para a soma de todos. O jogo monta a varinha com um núcleo (WandCoreData, os limites)
+## e uma ponteira (WandCapData, a eficiência), veja `assemble`.
 
-@export var id: StringName
-## Chave de tradução do nome (em locales/content.csv).
-@export var name_key: String
 ## Aspectos que têm recipiente na varinha, na ordem em que o HUD mostra os frascos.
 ## Vis de um aspecto fora desta lista não entra.
 @export var aspects: Array[StringName] = []
@@ -17,3 +14,18 @@ extends Resource
 @export var aspect_capacity: int = 0
 ## Eficiência: o custo de cada magia é dividido por ela (1 = normal; 2 = gasta metade).
 @export var efficiency: float = 0.0
+## Peças de que a varinha é feita (vazias numa varinha montada à mão, como nos testes).
+@export var core: WandCoreData
+@export var cap: WandCapData
+
+
+## Monta a varinha com um núcleo e uma ponteira.
+static func assemble(core_data: WandCoreData, cap_data: WandCapData, wand_aspects: Array[StringName]) -> WandData:
+	var wand := WandData.new()
+	wand.aspects = wand_aspects.duplicate()
+	wand.capacity = core_data.capacity
+	wand.aspect_capacity = core_data.aspect_capacity
+	wand.efficiency = cap_data.efficiency
+	wand.core = core_data
+	wand.cap = cap_data
+	return wand

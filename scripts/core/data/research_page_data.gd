@@ -5,6 +5,8 @@ extends Resource
 ## Cada página é um arquivo em data/research/pages/. Os requisitos ligam as páginas numa árvore.
 
 @export var id: StringName
+## Posição da aba na Mesa de Pesquisa (as menores primeiro).
+@export var order: int = 0
 ## Chaves de tradução (em locales/content.csv). O texto pode citar aspectos como {fire}.
 @export var name_key: String
 @export var description_key: String

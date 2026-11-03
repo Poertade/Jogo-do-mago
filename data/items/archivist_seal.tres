@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"archivist_seal"
+name_key = "ITEM_ARCHIVIST_SEAL"
+color = Color(0.7, 0.45, 1.0, 1)
+pickup_scene = ""

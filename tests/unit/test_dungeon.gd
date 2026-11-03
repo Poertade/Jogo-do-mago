@@ -90,7 +90,7 @@ func test_world_and_stash_survive_the_save() -> void:
 	stash.add({&"silver": 9, &"glass": 4})
 	stash.add_jar(4)
 	var data := SaveGame.parse(SaveGame.to_json(Knowledge.new(), world, stash))
-	assert_eq(int(data["format_version"]), 6)
+	assert_eq(int(data["format_version"]), SaveGame.FORMAT_VERSION)
 	var loaded_world := SaveGame.world_from_dict(data)
 	assert_eq(loaded_world.open_passages, [&"dorm_gate"] as Array[StringName])
 	assert_eq(loaded_world.keys, [&"crypt_key"] as Array[StringName])
@@ -169,11 +169,11 @@ func _run(jar_count: int) -> RunState:
 	player.max_health = 100
 	player.jar_slots = 4
 	player.jar_capacity = 10
-	var wand := WandData.new()
-	wand.aspects = [&"fire"] as Array[StringName]
-	wand.capacity = 10
-	wand.aspect_capacity = 10
-	wand.efficiency = 1.0
-	player.starting_wand = wand
+	player.wand_aspects = [&"fire"] as Array[StringName]
+	player.starting_core = WandCoreData.new()
+	player.starting_core.capacity = 10
+	player.starting_core.aspect_capacity = 10
+	player.starting_cap = WandCapData.new()
+	player.starting_cap.efficiency = 1.0
 	player.starting_focus = FocusData.new()
 	return RunState.new(player, jar_count)

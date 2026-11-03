@@ -15,6 +15,8 @@ extends Node3D
 @onready var tip: Node3D = $Tip
 @onready var tip_light: OmniLight3D = $Tip/Light
 @onready var tip_glow: MeshInstance3D = $Tip/Glow
+@onready var stick: MeshInstance3D = $Model/Stick
+@onready var caps: Array[MeshInstance3D] = [$Model/CapTip, $Model/CapBase]
 
 var _shake_time := 0.0
 var _charge_sound: AudioStreamPlayer
@@ -23,6 +25,24 @@ var _charge_sound: AudioStreamPlayer
 func _ready() -> void:
 	position = rest_position
 	_update_tip(0.0)
+	Game.wand_changed.connect(_paint)
+	_paint()
+
+
+## A haste tem a cor do núcleo, e as pontas, a da ponteira.
+func _paint() -> void:
+	var wand := Game.run.wand.wand
+	if wand.core != null:
+		_tint(stick, wand.core.color)
+	if wand.cap != null:
+		for cap in caps:
+			_tint(cap, wand.cap.color)
+
+
+func _tint(mesh: MeshInstance3D, color: Color) -> void:
+	var material := (mesh.material_override as ShaderMaterial).duplicate() as ShaderMaterial
+	material.set_shader_parameter(&"albedo_color", color)
+	mesh.material_override = material
 
 
 func _physics_process(delta: float) -> void:
