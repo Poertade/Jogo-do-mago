@@ -8,6 +8,7 @@ func _sample() -> Knowledge:
 	knowledge.aspect_points = {&"fire": 4, &"life": 1} as Dictionary[StringName, int]
 	knowledge.scanned_targets.append_array([&"candle", &"water_jug"])
 	knowledge.studied_pages.append(&"fire_comprehension")
+	knowledge.notes[&"other_page"] = {Vector2i(1, -1): &"fire", Vector2i(0, 0): &"life"}
 	return knowledge
 
 
@@ -20,6 +21,15 @@ func test_round_trip_keeps_everything() -> void:
 	assert_eq(loaded.points(&"water"), 0)
 	assert_eq(loaded.scanned_targets, [&"candle", &"water_jug"] as Array[StringName])
 	assert_eq(loaded.studied_pages, [&"fire_comprehension"] as Array[StringName])
+	assert_eq(loaded.notes[&"other_page"][Vector2i(1, -1)], &"fire")
+	assert_eq(loaded.notes[&"other_page"][Vector2i(0, 0)], &"life")
+
+
+func test_version_2_gets_empty_notes() -> void:
+	var loaded := SaveGame.from_dict({"format_version": 2, "knowledge": {"discovered_aspects": ["fire"], "aspect_points": {"fire": 3}}})
+	assert_not_null(loaded)
+	assert_eq(loaded.points(&"fire"), 3)
+	assert_eq(loaded.notes.size(), 0)
 
 
 func test_save_is_readable_json_with_version() -> void:
@@ -51,7 +61,7 @@ func test_version_1_is_migrated() -> void:
 
 
 func test_missing_or_wrong_fields_become_defaults() -> void:
-	var loaded := SaveGame.from_dict({"format_version": 2, "knowledge": {
+	var loaded := SaveGame.from_dict({"format_version": 3, "knowledge": {
 		"discovered_aspects": ["fire", 42, "fire"], "aspect_points": {"fire": -5, "water": "x", "air": 2}}})
 	assert_not_null(loaded)
 	assert_eq(loaded.discovered_aspects, [&"fire"] as Array[StringName])

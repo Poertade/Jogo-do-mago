@@ -37,15 +37,23 @@ func _target(id: StringName, amounts: Dictionary) -> ScannableData:
 	return target
 
 
-func _page(id: StringName, cost: Dictionary, required_pages: Array[StringName] = []) -> ResearchPageData:
+## Página cuja nota (raio 1) tem Aqua e Herba em lados opostos: escrever Victus no centro liga
+## os dois (Victus = Aqua + Terra; Herba = Terra + Victus).
+func _page(id: StringName, required_pages: Array[StringName] = []) -> ResearchPageData:
 	var page := ResearchPageData.new()
 	page.id = id
-	var typed: Dictionary[StringName, int] = {}
-	for key in cost:
-		typed[key] = cost[key]
-	page.cost = typed
+	page.note_aspects = [&"water", &"plant"] as Array[StringName]
+	page.note_radius = 1
 	page.required_pages = required_pages
 	return page
+
+
+func _knowing(ids: Array[StringName], amount := 5) -> Knowledge:
+	var knowledge := Knowledge.new()
+	for id in ids:
+		knowledge.discovered_aspects.append(id)
+		knowledge.aspect_points[id] = amount
+	return knowledge
 
 
 func test_first_scan_discovers_primals_and_gives_points_per_amount() -> void:
@@ -126,21 +134,50 @@ func test_changed_is_emitted_on_scan_and_combine_only() -> void:
 	assert_signal_emit_count(knowledge, "changed", 1)
 
 
-func test_study_spends_aspect_points() -> void:
-	var knowledge := Knowledge.new()
-	knowledge.discovered_aspects.append_array([&"fire", &"life"])
-	knowledge.aspect_points = {&"fire": 6, &"life": 2} as Dictionary[StringName, int]
-	var page := _page(&"p", {&"fire": 4, &"life": 2})
-	assert_eq(knowledge.check_study(page), Knowledge.StudyCheck.OK)
-	assert_true(knowledge.study(page))
-	assert_eq(knowledge.points(&"fire"), 2)
-	assert_eq(knowledge.points(&"life"), 0)
-	assert_eq(knowledge.check_study(page), Knowledge.StudyCheck.ALREADY_STUDIED)
+func test_writing_on_the_note_spends_points_and_erasing_refunds() -> void:
+	rules.note_write_cost = 1
+	var knowledge := _knowing([&"water", &"plant", &"life"])
+	var page := _page(&"p")
+	assert_true(knowledge.write_on_note(page, Vector2i.ZERO, &"life", rules))
+	assert_eq(knowledge.points(&"life"), 4)
+	assert_false(knowledge.write_on_note(page, Vector2i.ZERO, &"water", rules), "Hexágono ocupado")
+	assert_true(knowledge.erase_from_note(page, Vector2i.ZERO, rules))
+	assert_eq(knowledge.points(&"life"), 5)
 
 
-func test_study_needs_aspects_points_and_pages() -> void:
+func test_cannot_write_on_targets_unknown_aspects_or_without_points() -> void:
+	rules.note_write_cost = 1
+	var page := _page(&"p")
+	var target_cell: Vector2i = ResearchNote.for_page(page).targets.keys()[0]
+	var knowledge := _knowing([&"water", &"plant", &"life"])
+	assert_false(knowledge.write_on_note(page, target_cell, &"life", rules), "Alvo já escrito")
+	assert_false(knowledge.write_on_note(page, Vector2i(5, 5), &"life", rules), "Fora da grade")
+	assert_false(knowledge.write_on_note(page, Vector2i.ZERO, &"fire", rules), "Aspecto desconhecido")
+	var poor := _knowing([&"life"], 0)
+	assert_false(poor.write_on_note(page, Vector2i.ZERO, &"life", rules), "Sem pontos")
+
+
+func test_study_needs_the_note_complete() -> void:
+	rules.note_write_cost = 1
+	var knowledge := _knowing([&"water", &"plant", &"life", &"earth"])
+	var page := _page(&"p")
+	assert_eq(knowledge.check_study(page, aspects), Knowledge.StudyCheck.NOTE_INCOMPLETE)
+	knowledge.write_on_note(page, Vector2i.ZERO, &"earth", rules)
+	assert_eq(knowledge.check_study(page, aspects), Knowledge.StudyCheck.NOTE_INCOMPLETE, "Terra não liga com Aqua")
+	knowledge.erase_from_note(page, Vector2i.ZERO, rules)
+	knowledge.write_on_note(page, Vector2i.ZERO, &"life", rules)
+	assert_eq(knowledge.check_study(page, aspects), Knowledge.StudyCheck.OK)
+	assert_true(knowledge.study(page, aspects))
+	assert_true(knowledge.has_studied(&"p"))
+	assert_eq(knowledge.note_for(page).aspect_at(Vector2i.ZERO), &"life", "A nota resolvida continua guardada")
+	var life_points := knowledge.points(&"life")
+	assert_false(knowledge.erase_from_note(page, Vector2i.ZERO, rules), "Nota resolvida não se apaga")
+	assert_eq(knowledge.points(&"life"), life_points, "Nem devolve pontos")
+	assert_eq(knowledge.check_study(page, aspects), Knowledge.StudyCheck.ALREADY_STUDIED)
+
+
+func test_study_needs_known_note_aspects_and_pages() -> void:
 	var knowledge := Knowledge.new()
-	assert_eq(knowledge.check_study(_page(&"a", {&"life": 1})), Knowledge.StudyCheck.MISSING_ASPECT)
-	knowledge.discovered_aspects.append(&"life")
-	assert_eq(knowledge.check_study(_page(&"a", {&"life": 1})), Knowledge.StudyCheck.NOT_ENOUGH_POINTS)
-	assert_eq(knowledge.check_study(_page(&"b", {}, [&"a"])), Knowledge.StudyCheck.MISSING_PAGE)
+	assert_eq(knowledge.check_study(_page(&"a"), aspects), Knowledge.StudyCheck.MISSING_ASPECT)
+	knowledge = _knowing([&"water", &"plant"])
+	assert_eq(knowledge.check_study(_page(&"b", [&"a"]), aspects), Knowledge.StudyCheck.MISSING_PAGE)

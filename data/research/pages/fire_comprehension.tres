@@ -14,9 +14,6 @@ script = ExtResource("2_6ntp5")
 id = &"fire_comprehension"
 name_key = "PAGE_FIRE_COMPREHENSION"
 description_key = "PAGE_FIRE_COMPREHENSION_DESC"
-cost = Dictionary[StringName, int]({
-&"energy": 2,
-&"fire": 4
-})
-required_aspects = Array[StringName]([&"fire", &"energy"])
+note_aspects = Array[StringName]([&"fire", &"energy", &"light"])
+note_radius = 2
 effects = Array[ExtResource("1_a0738")]([SubResource("Resource_0m72d")])

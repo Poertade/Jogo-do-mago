@@ -52,5 +52,5 @@ func _initialize() -> void:
 	for aspect_id in totals:
 		print("  %s: %d pontos escaneando tudo (nível %d)" % [aspect_id, totals[aspect_id], db.tier(aspect_id)])
 	for page: ResearchPageData in db.pages.values():
-		print("Página %s custa %s" % [page.id, page.cost])
+		print("Página %s: nota de raio %d com %s" % [page.id, page.note_radius, page.note_aspects])
 	quit()

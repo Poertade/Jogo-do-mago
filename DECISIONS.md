@@ -351,6 +351,40 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** tirar os estalos.
 - **Motivo:** pedido do usuário. Cortar um som no meio também gera estalo.
 
+### D046 · 2026-11-03 · Ícones dos aspectos desenhados por código
+
+- **Escolha:** um ícone 16×16 para cada aspecto (`AspectData.icon`), com símbolos originais e simples (chama, gota, montanha, raio…) na cor do aspecto, com contorno escuro. Gerados por `tools/generate_icons.gd`; qualquer PNG pode substituí-los mantendo o nome.
+- **Descartado:** copiar os ícones do Thaumcraft; só bolinhas coloridas.
+- **Motivo:** a Mesa no estilo da imagem enviada é uma grade de ícones, e os ícones do mod não podem ser usados.
+
+### D047 · 2026-11-03 · Reserva única de Vis na varinha
+
+- **Escolha:** a varinha guarda um só número de Vis (`capacity` = 30); cada Focus custa um tanto desse Vis (`cost` = 5 no Focus de Fogo); o Nódulo de Vis enche a reserva; o HUD mostra uma barra de Vis. A reserva não vai para o save: ela é da incursão.
+- **Descartado:** uma reserva por aspecto (como estava, e como nos Thaumcraft 3 e 4, em que a varinha guarda os seis primais separados).
+- **Motivo:** pedido do usuário ("uma reserva única para todos os Vis"). Se a intenção era uma varinha com os seis primais em barras separadas, a troca é pequena: `WandState` volta a ter um dicionário e o Focus volta a ter custo por aspecto.
+
+### D048 · 2026-11-03 · Notas de pesquisa no lugar do custo das páginas
+
+- **Escolha:** cada página tem uma nota de pesquisa no estilo do Thaumcraft 4: grade de hexágonos (`note_radius`), com os aspectos de `note_aspects` marcados na borda. Escrever um aspecto num hexágono vazio gasta `note_write_cost` (1) ponto dele; apagar devolve. Vizinhos se ligam quando um é pai do outro; a página é estudada quando todos os marcados estão ligados. A lógica fica em `scripts/core/research_note.gd` (testada); a tela, em `research_note_view.gd`. Compreensão de Ignis: Ignis, Potentia e Lux, raio 2.
+- **Descartado:** pagar a página direto com pontos (D039); copiar as regras de tinta e de aspectos "conectados por cor" do mod.
+- **Motivo:** pedido do usuário, com a imagem da pesquisa do mod. A nota obriga a conhecer as receitas, que é o coração da pesquisa do Thaumcraft 4.
+- **Save:** formato 3, com `research_notes` (página → {"q,r": aspecto}). Saves antigos carregam com as notas vazias.
+
+### D049 · 2026-11-03 · A nota resolvida fica guardada
+
+- **Escolha:** ao estudar a página, a nota resolvida continua no save e no pergaminho, e não pode mais ser apagada (nem devolve pontos).
+- **Descartado:** apagar a nota ao estudar.
+- **Motivo:** a página estudada mostrava a grade vazia, o que parecia um erro; ver a própria solução é a recompensa.
+
+### D050 · 2026-11-03 · Menus de pergaminho e fonte Pixelify Sans (dependência nova)
+
+- **Escolha:**
+  - **Tema:** `assets/ui/parchment_theme.tres`, aplicado à Mesa, ao Livro, à pausa, às opções e à tela de leitura. Painéis de pergaminho com borda queimada e rasgada; a Mesa tem moldura de madeira escura (variação `WoodPanel`), como a imagem enviada. Tinta marrom no texto, títulos em vermelho escuro. O HUD continua escuro, sobre o jogo.
+  - **Texturas:** geradas por `tools/generate_ui_theme.gd`. O miolo do pergaminho se repete sem emenda.
+  - **Fonte:** [Pixelify Sans](https://github.com/eifetx/Pixelify-Sans), fonte de pixels sob a licença SIL OFL 1.1. O texto da licença fica em `assets/fonts/` e vai dentro dos executáveis (`include_filter` dos perfis de exportação). Importada sem suavização.
+- **Descartado:** desenhar uma fonte própria (muito trabalho para pouco ganho); a fonte padrão do Godot (lisa, destoa do visual PS1); fontes sem licença livre.
+- **Motivo:** pedido do usuário ("menus que pareçam pergaminhos"). A OFL permite distribuir a fonte dentro do jogo, inclusive em venda, desde que a licença acompanhe.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |
@@ -358,4 +392,5 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 | 10 | Computador de jogo | Aguardando sistema, processador e vídeo. Até lá: 240 linhas e todos os efeitos ligados por padrão |
 | 11 | Referências visuais | Aguardando imagens ou descrições. Até lá: greybox com o shader PS1 |
 | — | Nomes próprios dos aspectos compostos | Para a versão distribuída (como Lume, Maré… nos primais). Até lá, nomes latinos em `locales/names.csv` |
+| — | Reserva de Vis | Feita como reserva única (D047). Se preferir seis reservas, uma por primal, como no mod, é só pedir |
 | — | Receitas do Thaumcraft | Se quiser conferir com a wiki, cole a tabela de aspectos: as receitas ficam só em `data/aspects/` |

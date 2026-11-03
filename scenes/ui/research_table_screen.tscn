@@ -1,10 +1,25 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/research_table_screen.gd" id="1"]
+[ext_resource type="Theme" path="res://assets/ui/parchment_theme.tres" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/aspect_cell.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/ui/research_table_screen.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/ui/research_note_view.gd" id="4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.09, 0.06, 0.04, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.3, 0.18, 1)
 
 [node name="ResearchTableScreen" type="CanvasLayer"]
 layer = 2
-script = ExtResource("1")
+script = ExtResource("3")
 
 [node name="Dim" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -20,115 +35,166 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1")
 
-[node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(1180, 600)
+[node name="Frame" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(1220, 680)
 layout_mode = 2
+theme_type_variation = &"WoodPanel"
 
-[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+[node name="HBox" type="HBoxContainer" parent="Center/Frame"]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 18
+theme_override_constants/separation = 14
 
-[node name="VBox" type="VBoxContainer" parent="Center/Panel/Margin"]
+[node name="Left" type="VBoxContainer" parent="Center/Frame/HBox"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="Title" type="Label" parent="Center/Frame/HBox/Left"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_type_variation = &"WoodLabel"
+theme_override_font_sizes/font_size = 26
 text = "UI_TABLE_TITLE"
 horizontal_alignment = 1
 
-[node name="PointsLabel" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="AspectsHeader" type="Label" parent="Center/Frame/HBox/Left"]
+layout_mode = 2
+theme_type_variation = &"WoodLabel"
+text = "UI_TABLE_ASPECTS"
+
+[node name="AspectsBox" type="PanelContainer" parent="Center/Frame/HBox/Left"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Frame/HBox/Left/AspectsBox"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="AspectGrid" type="GridContainer" parent="Center/Frame/HBox/Left/AspectsBox/Scroll"]
 unique_name_in_owner = true
 layout_mode = 2
-horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 6
+
+[node name="SelectedLabel" type="RichTextLabel" parent="Center/Frame/HBox/Left"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.93, 0.85, 0.68, 1)
+bbcode_enabled = true
+fit_content = true
 auto_translate_mode = 2
 
-[node name="Columns" type="HBoxContainer" parent="Center/Panel/Margin/VBox"]
+[node name="CombineHeader" type="Label" parent="Center/Frame/HBox/Left"]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 24
-
-[node name="PointsColumn" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Columns"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.6
-
-[node name="Header" type="Label" parent="Center/Panel/Margin/VBox/Columns/PointsColumn"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "UI_TABLE_POINTS"
-
-[node name="Separator" type="HSeparator" parent="Center/Panel/Margin/VBox/Columns/PointsColumn"]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Margin/VBox/Columns/PointsColumn"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="PointsList" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Columns/PointsColumn/Scroll"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
-
-[node name="CombineColumn" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Columns"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.3
-
-[node name="Header" type="Label" parent="Center/Panel/Margin/VBox/Columns/CombineColumn"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"WoodLabel"
 text = "UI_TABLE_COMBINE"
 
-[node name="Separator" type="HSeparator" parent="Center/Panel/Margin/VBox/Columns/CombineColumn"]
+[node name="CombineRow" type="HBoxContainer" parent="Center/Frame/HBox/Left"]
 layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
 
-[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Margin/VBox/Columns/CombineColumn"]
+[node name="SlotA" type="Button" parent="Center/Frame/HBox/Left/CombineRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
+script = ExtResource("2")
+framed = true
 
-[node name="CombineList" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Columns/CombineColumn/Scroll"]
+[node name="Plus" type="Label" parent="Center/Frame/HBox/Left/CombineRow"]
+layout_mode = 2
+theme_type_variation = &"WoodLabel"
+theme_override_font_sizes/font_size = 26
+text = "+"
+auto_translate_mode = 2
+
+[node name="SlotB" type="Button" parent="Center/Frame/HBox/Left/CombineRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2")
+framed = true
+
+[node name="Equals" type="Label" parent="Center/Frame/HBox/Left/CombineRow"]
+layout_mode = 2
+theme_type_variation = &"WoodLabel"
+theme_override_font_sizes/font_size = 26
+text = "="
+auto_translate_mode = 2
+
+[node name="ResultCell" type="Button" parent="Center/Frame/HBox/Left/CombineRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2")
+framed = true
+
+[node name="CombineButton" type="Button" parent="Center/Frame/HBox/Left/CombineRow"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
+size_flags_vertical = 4
+text = "UI_COMBINE"
 
-[node name="PagesColumn" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Columns"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.1
-
-[node name="Header" type="Label" parent="Center/Panel/Margin/VBox/Columns/PagesColumn"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "UI_TABLE_PAGES"
-
-[node name="Separator" type="HSeparator" parent="Center/Panel/Margin/VBox/Columns/PagesColumn"]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Margin/VBox/Columns/PagesColumn"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="PagesList" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Columns/PagesColumn/Scroll"]
+[node name="CombineInfo" type="Label" parent="Center/Frame/HBox/Left"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
+theme_type_variation = &"WoodLabel"
+theme_override_font_sizes/font_size = 15
+autowrap_mode = 3
+auto_translate_mode = 2
 
-[node name="CloseButton" type="Button" parent="Center/Panel/Margin/VBox"]
+[node name="CloseButton" type="Button" parent="Center/Frame/HBox/Left"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 custom_minimum_size = Vector2(200, 0)
 text = "UI_CLOSE"
+
+[node name="Parchment" type="PanelContainer" parent="Center/Frame/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBox" type="VBoxContainer" parent="Center/Frame/HBox/Parchment"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PageTabs" type="HBoxContainer" parent="Center/Frame/HBox/Parchment/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PageTitle" type="Label" parent="Center/Frame/HBox/Parchment/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+horizontal_alignment = 1
+auto_translate_mode = 2
+
+[node name="PageDescription" type="RichTextLabel" parent="Center/Frame/HBox/Parchment/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+auto_translate_mode = 2
+
+[node name="Separator" type="HSeparator" parent="Center/Frame/HBox/Parchment/VBox"]
+layout_mode = 2
+
+[node name="NoteView" type="Control" parent="Center/Frame/HBox/Parchment/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("4")
+
+[node name="StatusLabel" type="RichTextLabel" parent="Center/Frame/HBox/Parchment/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+fit_content = true
+auto_translate_mode = 2

@@ -11,12 +11,14 @@ extends RefCounted
 ##   insuficiente"); depois de descobri-lo na Mesa, o escaneamento funciona.
 ## - O primeiro escaneamento de um alvo rende pontos de cada aspecto dele; escanear de novo
 ##   não rende nada.
+## - Páginas de pesquisa são estudadas resolvendo a nota delas (ResearchNote): escrever um
+##   aspecto num hexágono gasta pontos dele; apagar devolve.
 
 ## Emitido a cada mudança (quem grava o save escuta este sinal).
 signal changed
 
 ## Resultado da verificação antes de estudar uma página.
-enum StudyCheck { OK, ALREADY_STUDIED, NOT_ENOUGH_POINTS, MISSING_PAGE, MISSING_ASPECT }
+enum StudyCheck { OK, ALREADY_STUDIED, NOTE_INCOMPLETE, MISSING_PAGE, MISSING_ASPECT }
 ## Resultado da verificação antes de combinar aspectos.
 enum CombineCheck { OK, NOT_COMPOUND, UNKNOWN_PARENT, NOT_ENOUGH_POINTS }
 
@@ -24,6 +26,8 @@ var discovered_aspects: Array[StringName] = []
 var aspect_points: Dictionary[StringName, int] = {}
 var scanned_targets: Array[StringName] = []
 var studied_pages: Array[StringName] = []
+## Notas em andamento: página → {célula (Vector2i): aspecto escrito}.
+var notes: Dictionary[StringName, Dictionary] = {}
 
 
 func knows_aspect(aspect_id: StringName) -> bool:
@@ -107,30 +111,65 @@ func combine(compound: AspectData, rules: ResearchRules) -> bool:
 	return true
 
 
+## A nota de pesquisa da página, com o que o jogador já escreveu nela.
+func note_for(page: ResearchPageData) -> ResearchNote:
+	var note := ResearchNote.for_page(page)
+	var written: Dictionary = notes.get(page.id, {})
+	for cell in written:
+		note.placed[cell] = written[cell]
+	return note
+
+
+## Escreve um aspecto num hexágono vazio da nota, gastando pontos dele. Devolve false se não der.
+func write_on_note(page: ResearchPageData, cell: Vector2i, aspect_id: StringName, rules: ResearchRules) -> bool:
+	if has_studied(page.id) or not knows_aspect(aspect_id) or points(aspect_id) < rules.note_write_cost:
+		return false
+	if not note_for(page).can_write(cell):
+		return false
+	aspect_points[aspect_id] = points(aspect_id) - rules.note_write_cost
+	if not page.id in notes:
+		notes[page.id] = {}
+	notes[page.id][cell] = aspect_id
+	changed.emit()
+	return true
+
+
+## Apaga um aspecto escrito pelo jogador, devolvendo os pontos. Devolve false se não havia nada
+## (ou se a página já foi estudada: a nota resolvida fica como está).
+func erase_from_note(page: ResearchPageData, cell: Vector2i, rules: ResearchRules) -> bool:
+	if has_studied(page.id):
+		return false
+	var written: Dictionary = notes.get(page.id, {})
+	if not cell in written:
+		return false
+	var aspect_id: StringName = written[cell]
+	written.erase(cell)
+	aspect_points[aspect_id] = points(aspect_id) + rules.note_write_cost
+	changed.emit()
+	return true
+
+
 ## Diz se a página pode ser estudada agora e, se não, por quê.
-func check_study(page: ResearchPageData) -> StudyCheck:
+## `aspects` é a tabela de todos os aspectos do jogo (para saber o que liga com o quê).
+func check_study(page: ResearchPageData, aspects: Dictionary) -> StudyCheck:
 	if has_studied(page.id):
 		return StudyCheck.ALREADY_STUDIED
 	for required in page.required_pages:
 		if not has_studied(required):
 			return StudyCheck.MISSING_PAGE
-	for required in page.required_aspects:
+	for required in page.required_aspects + page.note_aspects:
 		if not knows_aspect(required):
 			return StudyCheck.MISSING_ASPECT
-	for aspect_id in page.cost:
-		if not knows_aspect(aspect_id):
-			return StudyCheck.MISSING_ASPECT
-		if points(aspect_id) < page.cost[aspect_id]:
-			return StudyCheck.NOT_ENOUGH_POINTS
+	if not note_for(page).is_complete(aspects):
+		return StudyCheck.NOTE_INCOMPLETE
 	return StudyCheck.OK
 
 
-## Estuda a página, gastando os pontos. Devolve false se não for possível.
-func study(page: ResearchPageData) -> bool:
-	if check_study(page) != StudyCheck.OK:
+## Estuda a página (a nota precisa estar completa). Os aspectos escritos na nota ficam gastos;
+## a nota resolvida é guardada, para o pergaminho continuar mostrando a solução.
+func study(page: ResearchPageData, aspects: Dictionary) -> bool:
+	if check_study(page, aspects) != StudyCheck.OK:
 		return false
-	for aspect_id in page.cost:
-		aspect_points[aspect_id] = points(aspect_id) - page.cost[aspect_id]
 	studied_pages.append(page.id)
 	changed.emit()
 	return true

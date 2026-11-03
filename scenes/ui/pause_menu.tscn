@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/options_menu.tscn" id="2"]
+[ext_resource type="Theme" path="res://assets/ui/parchment_theme.tres" id="theme"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 2
@@ -21,6 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("theme")
 
 [node name="MainPanel" type="PanelContainer" parent="Center"]
 unique_name_in_owner = true
@@ -40,7 +42,7 @@ theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="Center/MainPanel/Margin/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_type_variation = &"TitleLabel"
 text = "UI_PAUSED"
 horizontal_alignment = 1
 

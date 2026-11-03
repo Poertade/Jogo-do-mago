@@ -6,13 +6,21 @@ extends RefCounted
 ## Versão do formato. Ao mudar o formato, aumente e trate a versão antiga em _migrate().
 ## 1: pontos de pesquisa num único total (até o M5).
 ## 2: pontos de pesquisa por aspecto (pesquisa no estilo do Thaumcraft 4).
-const FORMAT_VERSION := 2
+## 3: notas de pesquisa em andamento.
+const FORMAT_VERSION := 3
 
 
 static func to_dict(knowledge: Knowledge) -> Dictionary:
 	var points := {}
 	for aspect_id in knowledge.aspect_points:
 		points[String(aspect_id)] = knowledge.aspect_points[aspect_id]
+	# Notas: {"página": {"q,r": "aspecto"}}
+	var notes := {}
+	for page_id in knowledge.notes:
+		var cells := {}
+		for cell: Vector2i in knowledge.notes[page_id]:
+			cells["%d,%d" % [cell.x, cell.y]] = String(knowledge.notes[page_id][cell])
+		notes[String(page_id)] = cells
 	return {
 		"format_version": FORMAT_VERSION,
 		"knowledge": {
@@ -20,6 +28,7 @@ static func to_dict(knowledge: Knowledge) -> Dictionary:
 			"aspect_points": points,
 			"scanned_targets": _to_strings(knowledge.scanned_targets),
 			"studied_pages": _to_strings(knowledge.studied_pages),
+			"research_notes": notes,
 		},
 	}
 
@@ -55,6 +64,18 @@ static func from_dict(data: Dictionary) -> Knowledge:
 			var value = points[key]
 			if key is String and (value is float or value is int) and int(value) > 0:
 				knowledge.aspect_points[StringName(key)] = int(value)
+	var notes = saved.get("research_notes", {})
+	if notes is Dictionary:
+		for page_id in notes:
+			if not (page_id is String and notes[page_id] is Dictionary):
+				continue
+			var cells := {}
+			for key in notes[page_id]:
+				var parts: PackedStringArray = String(key).split(",")
+				var aspect = notes[page_id][key]
+				if parts.size() == 2 and parts[0].is_valid_int() and parts[1].is_valid_int() and aspect is String:
+					cells[Vector2i(parts[0].to_int(), parts[1].to_int())] = StringName(aspect)
+			knowledge.notes[StringName(page_id)] = cells
 	return knowledge
 
 
@@ -71,6 +92,7 @@ static func _migrate(data: Dictionary, from_version: int) -> Dictionary:
 			"scanned_targets": [],
 			"studied_pages": old.get("studied_pages", []),
 		}}
+	# A versão 2 não tinha notas de pesquisa: a 3 só acrescenta o campo (vazio).
 	return data
 
 

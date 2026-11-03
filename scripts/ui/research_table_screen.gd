@@ -1,153 +1,191 @@
 class_name ResearchTableScreen
 extends MenuLayer
-## Tela da Mesa de Pesquisa, no estilo do Thaumcraft 4:
-## - seus pontos de pesquisa, por aspecto;
-## - combinar dois aspectos conhecidos para descobrir (ou ganhar pontos de) um composto;
-## - estudar páginas de pesquisa, pagando com pontos de aspectos.
+## Mesa de Pesquisa, no estilo do Thaumcraft 4:
+## - à esquerda, a grade de aspectos descobertos, com os pontos de cada um;
+## - embaixo, dois espaços para combinar aspectos e descobrir (ou ganhar pontos de) compostos;
+## - à direita, no pergaminho, a nota de pesquisa da página escolhida: escolha um aspecto na
+##   grade e clique num hexágono para escrevê-lo (gasta pontos; botão direito apaga e devolve).
+##   Quando todos os aspectos marcados da nota estão ligados, a página é estudada.
 
-@onready var points_label: Label = %PointsLabel
-@onready var points_list: VBoxContainer = %PointsList
-@onready var combine_list: VBoxContainer = %CombineList
-@onready var pages_list: VBoxContainer = %PagesList
+@onready var aspect_grid: GridContainer = %AspectGrid
+@onready var selected_label: RichTextLabel = %SelectedLabel
+@onready var slot_a: AspectCell = %SlotA
+@onready var slot_b: AspectCell = %SlotB
+@onready var result_cell: AspectCell = %ResultCell
+@onready var combine_button: Button = %CombineButton
+@onready var combine_info: Label = %CombineInfo
+@onready var page_tabs: HBoxContainer = %PageTabs
+@onready var page_title: Label = %PageTitle
+@onready var page_description: RichTextLabel = %PageDescription
+@onready var note_view: ResearchNoteView = %NoteView
+@onready var status_label: RichTextLabel = %StatusLabel
 @onready var close_button: Button = %CloseButton
+
+var _selected: StringName = &""
+var _page: ResearchPageData
 
 
 func _ready() -> void:
 	super._ready()
 	close_button.pressed.connect(close)
-	Game.page_studied.connect(_on_research_changed)
-	Game.aspect_combined.connect(_on_research_changed)
-
-
-func _on_research_changed(_a = null, _b = null) -> void:
-	if visible:
-		_refresh()
+	combine_button.pressed.connect(_on_combine)
+	slot_a.gui_input.connect(_on_slot_input.bind(slot_a))
+	slot_b.gui_input.connect(_on_slot_input.bind(slot_b))
+	result_cell.disabled = true
+	note_view.cell_clicked.connect(_on_cell_clicked)
+	Game.knowledge.changed.connect(_on_knowledge_changed)
 
 
 func _on_opened() -> void:
+	if _page == null and not Content.db.pages.is_empty():
+		_page = Content.db.sorted_pages()[0]
 	_refresh()
 	close_button.grab_focus()
 
 
+func _on_knowledge_changed() -> void:
+	if visible:
+		_refresh()
+
+
 func _refresh() -> void:
-	var rules := Content.db.research_rules
-	points_label.text = tr("UI_TABLE_COMBINE_HINT") % [rules.combine_cost, rules.combine_yield]
-	_fill_points()
-	_fill_combinations()
+	_fill_aspects()
+	_update_selection()
+	_update_combination()
 	_fill_pages()
+	_update_note()
 
 
-func _clear(list: Container) -> void:
-	for child in list.get_children():
+# --- Grade de aspectos ---------------------------------------------------------
+
+func _fill_aspects() -> void:
+	for child in aspect_grid.get_children():
 		child.queue_free()
-
-
-func _rich(bbcode: String) -> RichTextLabel:
-	var label := RichTextLabel.new()
-	label.bbcode_enabled = true
-	label.fit_content = true
-	label.scroll_active = false
-	label.text = bbcode
-	return label
-
-
-## Coluna 1: pontos de cada aspecto descoberto.
-func _fill_points() -> void:
-	_clear(points_list)
 	var ordered: Array[StringName] = []
-	for aspect_id in Game.knowledge.discovered_aspects:
-		ordered.append(aspect_id)
-	ordered.sort_custom(func(a, b): return Content.db.tier(a) < Content.db.tier(b))
+	ordered.assign(Game.knowledge.discovered_aspects)
+	ordered.sort_custom(func(a, b): return Content.db.tier(a) < Content.db.tier(b) or (Content.db.tier(a) == Content.db.tier(b) and a < b))
 	for aspect_id in ordered:
-		points_list.add_child(_rich("%s  [color=#c8b070]%d[/color]" % [
-			Text.aspect_bbcode(aspect_id, Text.aspect_name(aspect_id)), Game.knowledge.points(aspect_id)]))
-	if ordered.is_empty():
-		points_list.add_child(_rich("[color=#6a6a6a]%s[/color]" % tr("UI_NO_POINTS_YET")))
+		var cell := AspectCell.new()
+		cell.aspect_id = aspect_id
+		cell.count = Game.knowledge.points(aspect_id)
+		cell.selected = aspect_id == _selected
+		cell.pressed.connect(_select.bind(aspect_id))
+		aspect_grid.add_child(cell)
 
 
-## Coluna 2: compostos cujos dois pais já foram descobertos. Os ainda desconhecidos aparecem
-## como "?" até a primeira combinação.
-func _fill_combinations() -> void:
-	_clear(combine_list)
+func _select(aspect_id: StringName) -> void:
+	_selected = aspect_id
+	for cell: AspectCell in aspect_grid.get_children():
+		cell.selected = cell.aspect_id == aspect_id
+	_update_selection()
+
+
+func _update_selection() -> void:
+	if _selected == &"":
+		selected_label.text = "[color=#c8b48a]%s[/color]" % tr("UI_TABLE_PICK_ASPECT")
+		return
+	var aspect: AspectData = Content.db.aspects.get(_selected)
+	var recipe := ""
+	if aspect.is_compound():
+		recipe = "  = %s + %s" % [Text.aspect_name(aspect.parents[0]), Text.aspect_name(aspect.parents[1])]
+	selected_label.text = "%s [color=#c8b48a](%s) — %d %s%s[/color]" % [
+		Text.aspect_bbcode(_selected, Text.aspect_name(_selected)), tr(aspect.meaning_key),
+		Game.knowledge.points(_selected), tr("UI_BOOK_POINTS_COLUMN"), recipe]
+
+
+# --- Combinação ----------------------------------------------------------------
+
+## Clique esquerdo num espaço coloca o aspecto escolhido; o direito esvazia.
+func _on_slot_input(event: InputEvent, slot: AspectCell) -> void:
+	if not (event is InputEventMouseButton and event.pressed):
+		return
+	if event.button_index == MOUSE_BUTTON_LEFT and _selected != &"":
+		slot.aspect_id = _selected
+	elif event.button_index == MOUSE_BUTTON_RIGHT:
+		slot.aspect_id = &""
+	_update_combination()
+
+
+func _update_combination() -> void:
 	var rules := Content.db.research_rules
-	for compound in Content.db.compounds_by_tier():
+	slot_a.placeholder = "+" if slot_a.aspect_id == &"" else ""
+	slot_b.placeholder = "+" if slot_b.aspect_id == &"" else ""
+	slot_a.count = Game.knowledge.points(slot_a.aspect_id) if slot_a.aspect_id != &"" else -1
+	slot_b.count = Game.knowledge.points(slot_b.aspect_id) if slot_b.aspect_id != &"" else -1
+	var compound := Content.db.compound_of(slot_a.aspect_id, slot_b.aspect_id)
+	result_cell.aspect_id = &""
+	result_cell.placeholder = ""
+	result_cell.count = -1
+	combine_button.disabled = true
+	if slot_a.aspect_id == &"" or slot_b.aspect_id == &"":
+		combine_info.text = tr("UI_TABLE_COMBINE_HINT") % [rules.combine_cost, rules.combine_yield]
+	elif compound == null:
+		result_cell.placeholder = "×"
+		combine_info.text = tr("UI_COMBINE_NOTHING_HERE")
+	else:
+		if Game.knowledge.knows_aspect(compound.id):
+			result_cell.aspect_id = compound.id
+			result_cell.count = Game.knowledge.points(compound.id)
+		else:
+			result_cell.placeholder = "?"
 		var check := Game.knowledge.check_combine(compound, rules)
-		if check == Knowledge.CombineCheck.NOT_COMPOUND or check == Knowledge.CombineCheck.UNKNOWN_PARENT:
-			continue
-		var known := Game.knowledge.knows_aspect(compound.id)
-		var result := Text.aspect_bbcode(compound.id, Text.aspect_name(compound.id)) if known else "[color=#c0c0c0]%s[/color]" % tr("UI_COMBINE_UNKNOWN")
-		var row := HBoxContainer.new()
-		var label := _rich("%s + %s → %s" % [
-			Text.aspect_bbcode(compound.parents[0], Text.aspect_name(compound.parents[0])),
-			Text.aspect_bbcode(compound.parents[1], Text.aspect_name(compound.parents[1])), result])
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(label)
-		var button := Button.new()
-		button.text = tr("UI_COMBINE")
-		button.disabled = check != Knowledge.CombineCheck.OK
-		button.pressed.connect(Game.combine.bind(compound))
-		row.add_child(button)
-		combine_list.add_child(row)
-	if combine_list.get_child_count() == 0:
-		combine_list.add_child(_rich("[color=#6a6a6a]%s[/color]" % tr("UI_COMBINE_NOTHING")))
+		combine_button.disabled = check != Knowledge.CombineCheck.OK
+		combine_info.text = tr("UI_COMBINE_READY") if check == Knowledge.CombineCheck.OK else tr("UI_STUDY_NO_POINTS")
 
 
-## Coluna 3: páginas de pesquisa.
+func _on_combine() -> void:
+	var compound := Content.db.compound_of(slot_a.aspect_id, slot_b.aspect_id)
+	if compound != null:
+		Game.combine(compound)
+
+
+# --- Nota de pesquisa ------------------------------------------------------------
+
 func _fill_pages() -> void:
-	_clear(pages_list)
+	for child in page_tabs.get_children():
+		child.queue_free()
 	for page in Content.db.sorted_pages():
-		pages_list.add_child(_page_entry(page))
+		var tab := Button.new()
+		tab.text = Text.expand(page.name_key)
+		tab.toggle_mode = true
+		tab.button_pressed = page == _page
+		tab.focus_mode = Control.FOCUS_NONE
+		tab.pressed.connect(_show_page.bind(page))
+		page_tabs.add_child(tab)
 
 
-func _page_entry(page: ResearchPageData) -> Control:
-	var box := VBoxContainer.new()
-	box.add_child(_rich("[b]%s[/b]\n%s\n[color=#a0a0a0]%s[/color]" % [
-		Text.expand(page.name_key), Text.expand(page.description_key), tr("UI_STUDY_COST") % _cost_text(page.cost)]))
-	var row := HBoxContainer.new()
-	var status := Label.new()
-	var check := Game.knowledge.check_study(page)
-	status.text = _status_text(page, check)
-	status.autowrap_mode = TextServer.AUTOWRAP_WORD
-	status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(status)
-	var button := Button.new()
-	button.text = tr("UI_STUDY")
-	button.disabled = check != Knowledge.StudyCheck.OK
-	button.pressed.connect(Game.study.bind(page))
-	row.add_child(button)
-	box.add_child(row)
-	box.add_child(HSeparator.new())
-	return box
+func _show_page(page: ResearchPageData) -> void:
+	_page = page
+	_refresh()
 
 
-## "Ignis 4, Potentia 2" com os pontos que você tem entre parênteses.
-func _cost_text(cost: Dictionary) -> String:
-	var parts: PackedStringArray = []
-	for aspect_id: StringName in cost:
-		var aspect_label := Text.aspect_name(aspect_id) if Game.knowledge.knows_aspect(aspect_id) else tr("UI_COMBINE_UNKNOWN")
-		parts.append("%s %d (%d)" % [aspect_label, cost[aspect_id], Game.knowledge.points(aspect_id)])
-	return ", ".join(parts)
-
-
-func _status_text(page: ResearchPageData, check: Knowledge.StudyCheck) -> String:
+func _update_note() -> void:
+	if _page == null:
+		return
+	page_title.text = Text.expand(_page.name_key)
+	page_description.text = Text.expand(_page.description_key)
+	var knowledge := Game.knowledge
+	var studied := knowledge.has_studied(_page.id)
+	note_view.show_note(knowledge.note_for(_page), knowledge.knows_aspect, studied)
+	var check := knowledge.check_study(_page, Content.db.aspects)
 	match check:
-		Knowledge.StudyCheck.OK:
-			return tr("UI_STUDY_OK")
 		Knowledge.StudyCheck.ALREADY_STUDIED:
-			return tr("UI_STUDY_ALREADY")
-		Knowledge.StudyCheck.NOT_ENOUGH_POINTS:
-			return tr("UI_STUDY_NO_POINTS")
-		Knowledge.StudyCheck.MISSING_PAGE:
-			return tr("UI_STUDY_MISSING_PAGE")
+			status_label.text = "[center][color=#2f6b2a]%s[/color][/center]" % tr("UI_NOTE_DONE")
 		Knowledge.StudyCheck.MISSING_ASPECT:
-			var missing: PackedStringArray = []
-			var needed: Array[StringName] = page.required_aspects.duplicate()
-			for aspect_id in page.cost:
-				if not aspect_id in needed:
-					needed.append(aspect_id)
-			for aspect_id in needed:
-				if not Game.knowledge.knows_aspect(aspect_id):
-					var aspect: AspectData = Content.db.aspects.get(aspect_id)
-					missing.append(tr("UI_COMBINE_UNKNOWN") if aspect != null and aspect.is_compound() else Text.aspect_name(aspect_id))
-			return tr("UI_STUDY_MISSING_ASPECT") % ", ".join(missing)
-	return ""
+			status_label.text = "[center]%s[/center]" % tr("UI_NOTE_MISSING_ASPECT")
+		Knowledge.StudyCheck.MISSING_PAGE:
+			status_label.text = "[center]%s[/center]" % tr("UI_STUDY_MISSING_PAGE")
+		_:
+			status_label.text = "[center]%s[/center]" % (tr("UI_NOTE_HINT") % Content.db.research_rules.note_write_cost)
+
+
+func _on_cell_clicked(cell: Vector2i, button: MouseButton) -> void:
+	if _page == null or Game.knowledge.has_studied(_page.id):
+		return
+	if button == MOUSE_BUTTON_RIGHT:
+		Game.erase_from_note(_page, cell)
+	elif button == MOUSE_BUTTON_LEFT and _selected != &"":
+		Game.write_on_note(_page, cell, _selected)
+	# Nota completa: a página é estudada na hora.
+	if Game.knowledge.check_study(_page, Content.db.aspects) == Knowledge.StudyCheck.OK:
+		Game.study(_page)

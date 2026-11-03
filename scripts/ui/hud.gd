@@ -144,7 +144,7 @@ func _partial_aspects(target: ScannableData) -> String:
 		if aspect != null and aspect.is_compound() and not Game.knowledge.knows_aspect(aspect_id):
 			parts.append("[color=#8a8a8a]?[/color]")
 		else:
-			parts.append(Text.aspect_bbcode(aspect_id, tr("UI_ASPECT_AMOUNT") % [Text.aspect_name(aspect_id), target.aspects[aspect_id]]))
+			parts.append(Text.aspect_icon_bbcode(aspect_id) + Text.aspect_bbcode(aspect_id, tr("UI_ASPECT_AMOUNT") % [Text.aspect_name(aspect_id), target.aspects[aspect_id]]))
 	return "  ".join(parts)
 
 

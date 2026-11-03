@@ -65,3 +65,10 @@ UI_COMBINE_UNKNOWN,?
 UI_COMBINE_NOTHING,(descubra mais aspectos primais escaneando)
 UI_STUDY_COST,Custo: %s
 UI_NO_POINTS_YET,(nenhum ponto ainda)
+UI_TABLE_ASPECTS,Aspectos
+UI_TABLE_PICK_ASPECT,Escolha um aspecto na grade.
+UI_COMBINE_NOTHING_HERE,Esses dois aspectos não formam nada.
+UI_COMBINE_READY,Pronto para combinar.
+UI_NOTE_HINT,"Escolha um aspecto e clique num círculo vazio para escrevê-lo (%d ponto). Vizinhos se ligam quando um é parte do outro. Ligue todos os círculos marcados. Botão direito apaga."
+UI_NOTE_DONE,Pesquisa concluída. O efeito já vale.
+UI_NOTE_MISSING_ASPECT,"A nota cita aspectos que você ainda não descobriu (""?""). Descubra-os combinando aspectos."

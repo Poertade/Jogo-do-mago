@@ -110,7 +110,7 @@ func pages_by_id(ids: Array[StringName]) -> Array[ResearchPageData]:
 	return result
 
 
-## Páginas em ordem de custo total, para a Mesa de Pesquisa.
+## Páginas em ordem de tamanho da nota, para a Mesa de Pesquisa.
 func sorted_pages() -> Array[ResearchPageData]:
 	var result: Array[ResearchPageData] = []
 	result.assign(pages.values())
@@ -119,9 +119,18 @@ func sorted_pages() -> Array[ResearchPageData]:
 
 
 func _page_before(a: ResearchPageData, b: ResearchPageData) -> bool:
-	var cost_a := _total(a.cost)
-	var cost_b := _total(b.cost)
-	return cost_a < cost_b or (cost_a == cost_b and a.id < b.id)
+	var size_a := a.note_aspects.size() * 10 + a.note_radius
+	var size_b := b.note_aspects.size() * 10 + b.note_radius
+	return size_a < size_b or (size_a == size_b and a.id < b.id)
+
+
+## O aspecto composto formado por `a` e `b` (em qualquer ordem), ou null.
+func compound_of(a: StringName, b: StringName) -> AspectData:
+	for aspect: AspectData in aspects.values():
+		if aspect.is_compound() and aspect.parents.size() == 2 \
+				and ((aspect.parents[0] == a and aspect.parents[1] == b) or (aspect.parents[0] == b and aspect.parents[1] == a)):
+			return aspect
+	return null
 
 
 ## "Nível" de um aspecto: 0 para primais; para compostos, 1 + o maior nível dos pais.
@@ -168,7 +177,7 @@ func validate() -> void:
 	if research_rules == null:
 		errors.append("Faltam as regras de pesquisa (data/research/rules.tres).")
 	elif research_rules.scan_duration <= 0.0 or research_rules.points_per_amount <= 0 \
-			or research_rules.combine_cost <= 0 or research_rules.combine_yield <= 0:
+			or research_rules.combine_cost <= 0 or research_rules.combine_yield <= 0 or research_rules.note_write_cost <= 0:
 		errors.append("rules.tres: tempos, pontos e custos de combinação precisam ser maiores que zero.")
 	if sound_bank == null:
 		errors.append("Falta o banco de sons (data/audio/sound_bank.tres).")
@@ -281,7 +290,13 @@ func _validate_aspect_amounts(owner: String, amounts: Dictionary) -> void:
 
 func _validate_page(page: ResearchPageData) -> void:
 	var owner := "Página '%s'" % page.id
-	_validate_aspect_amounts(owner, page.cost)
+	if page.note_aspects.size() < 2 or page.note_radius < 1:
+		errors.append("%s: a nota precisa de pelo menos 2 aspectos e raio 1 ou mais." % owner)
+	elif page.note_aspects.size() > page.note_radius * 6:
+		errors.append("%s: aspectos demais para a borda da nota (máximo %d)." % [owner, page.note_radius * 6])
+	for aspect_id in page.note_aspects:
+		if not aspect_id in aspects:
+			errors.append("%s: aspecto da nota '%s' não existe." % [owner, aspect_id])
 	for required in page.required_pages:
 		if not required in pages:
 			errors.append("%s: página exigida '%s' não existe." % [owner, required])

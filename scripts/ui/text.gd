@@ -31,17 +31,29 @@ static func target_name(target: ScannableData) -> String:
 	return expand(target.name_key)
 
 
-## Lista de aspectos com quantidades e cores, em BBCode (para RichTextLabel).
-## Ex.: "[color=#e0602a]Ignis 3[/color]"
-static func aspect_amounts_bbcode(amounts: Dictionary) -> String:
+## Lista de aspectos com ícone, quantidade e cor, em BBCode (para RichTextLabel).
+## Ex.: "[img=20x20]res://…/fire.png[/img] [color=#e0602a]Ignis 3[/color]"
+## `on_paper`: cores escurecidas, para ler sobre o pergaminho.
+static func aspect_amounts_bbcode(amounts: Dictionary, on_paper := false) -> String:
 	var parts: PackedStringArray = []
 	for aspect_id: StringName in amounts:
-		parts.append(aspect_bbcode(aspect_id, tr_key("UI_ASPECT_AMOUNT") % [aspect_name(aspect_id), amounts[aspect_id]]))
+		var text := tr_key("UI_ASPECT_AMOUNT") % [aspect_name(aspect_id), amounts[aspect_id]]
+		parts.append(aspect_icon_bbcode(aspect_id) + aspect_bbcode(aspect_id, text, on_paper))
 	return "  ".join(parts)
 
 
-## Um texto pintado com a cor do aspecto.
-static func aspect_bbcode(aspect_id: StringName, text: String) -> String:
+## Um texto pintado com a cor do aspecto (`on_paper`: mais escura, para o pergaminho).
+static func aspect_bbcode(aspect_id: StringName, text: String, on_paper := false) -> String:
 	var aspect: AspectData = Content.db.aspects.get(aspect_id)
 	var color := aspect.color if aspect != null else Color.WHITE
+	if on_paper:
+		color = color.darkened(0.45)
 	return "[color=#%s]%s[/color]" % [color.to_html(false), text]
+
+
+## O ícone do aspecto como imagem no texto (vazio se o aspecto não tiver ícone).
+static func aspect_icon_bbcode(aspect_id: StringName, icon_size := 20) -> String:
+	var aspect: AspectData = Content.db.aspects.get(aspect_id)
+	if aspect == null or aspect.icon == null:
+		return ""
+	return "[img=%dx%d]%s[/img] " % [icon_size, icon_size, aspect.icon.resource_path]

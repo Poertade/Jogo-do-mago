@@ -19,7 +19,7 @@ theme_override_constants/separation = 14
 
 [node name="Title" type="Label" parent="Margin/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_type_variation = &"TitleLabel"
 text = "UI_OPTIONS_TITLE"
 horizontal_alignment = 1
 

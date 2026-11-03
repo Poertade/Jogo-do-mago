@@ -69,17 +69,36 @@ func test_everything_can_eventually_be_scanned() -> void:
 			stuck.append("%s (faltam %s)" % [target.id, knowledge.missing_aspects(target, db.aspects)])
 	assert_eq(stuck, PackedStringArray(), "Alvos impossíveis de escanear com os pontos disponíveis")
 
-	# Depois de tudo, ainda dá para estudar a página.
-	var page := db.pages[&"fire_comprehension"]
-	for aspect_id in page.cost:
-		while knowledge.points(aspect_id) < page.cost[aspect_id]:
-			if knowledge.points(aspect_id) > 0 and db.aspects[aspect_id].is_compound():
-				var before := knowledge.points(aspect_id)
-				if not knowledge.combine(db.aspects[aspect_id], db.research_rules) or knowledge.points(aspect_id) == before:
-					break
-			elif not _obtain_point(aspect_id):
-				break
-	assert_eq(knowledge.check_study(page), Knowledge.StudyCheck.OK, "A página deve ser alcançável")
+	# Depois de tudo, ainda dá para resolver a nota da página e estudá-la.
+	_solve_note(db.pages[&"fire_comprehension"])
+
+
+## Resolve a nota da página como um jogador faria: descobre os aspectos dela que faltam e liga
+## os alvos com as correntes mais curtas, escrevendo (e pagando) cada aspecto.
+func _solve_note(page: ResearchPageData) -> void:
+	for aspect_id in page.note_aspects:
+		if not knowledge.knows_aspect(aspect_id):
+			assert_true(_obtain_point(aspect_id), "Descobrir %s para a nota" % aspect_id)
+	var note := knowledge.note_for(page)
+	var targets: Array = note.targets.keys()
+	for i in range(1, targets.size()):
+		note = knowledge.note_for(page)
+		var network: Array[Vector2i] = []
+		for cell in note.connected_cells(targets[0], db.aspects):
+			network.append(cell)
+		if targets[i] in network:
+			continue
+		var allowed: Array[StringName] = []
+		for aspect_id in knowledge.discovered_aspects:
+			if knowledge.points(aspect_id) > 0:
+				allowed.append(aspect_id)
+		var chain := note.find_chain(targets[i], network, allowed, db.aspects)
+		assert_false(chain.is_empty(), "Corrente até o alvo %s" % note.targets[targets[i]])
+		for cell in chain:
+			# Um aspecto pode aparecer várias vezes na corrente: combina mais pontos se faltar.
+			assert_true(_obtain_point(chain[cell]), "Pontos de %s" % chain[cell])
+			assert_true(knowledge.write_on_note(page, cell, chain[cell], db.research_rules), "Escrever %s" % chain[cell])
+	assert_eq(knowledge.check_study(page, db.aspects), Knowledge.StudyCheck.OK, "A nota deve ficar completa")
 
 
 func test_school_alone_unlocks_the_research_page() -> void:
@@ -88,16 +107,4 @@ func test_school_alone_unlocks_the_research_page() -> void:
 	for target: ScannableData in db.scannables.values():
 		if not target.id in dungeon_only:
 			knowledge.register_scan(target, db.aspects, db.research_rules)
-	var page := db.pages[&"fire_comprehension"]
-	for i in page.cost[&"energy"]:
-		assert_true(_obtain_point_fresh(&"energy"), "Potentia combinável")
-	assert_eq(knowledge.check_study(page), Knowledge.StudyCheck.OK)
-
-
-## Combina mais um ponto do composto (mesmo que já haja pontos).
-func _obtain_point_fresh(aspect_id: StringName) -> bool:
-	var aspect: AspectData = db.aspects[aspect_id]
-	for parent in aspect.parents:
-		if knowledge.points(parent) < db.research_rules.combine_cost and not _obtain_point(parent):
-			return false
-	return knowledge.combine(aspect, db.research_rules)
+	_solve_note(db.pages[&"fire_comprehension"])

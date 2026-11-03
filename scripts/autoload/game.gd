@@ -81,9 +81,19 @@ func combine(compound: AspectData) -> bool:
 	return true
 
 
-## Estuda uma página, se possível, e avisa a interface.
+## Escreve um aspecto num hexágono da nota de pesquisa da página.
+func write_on_note(page: ResearchPageData, cell: Vector2i, aspect_id: StringName) -> bool:
+	return knowledge.write_on_note(page, cell, aspect_id, Content.db.research_rules)
+
+
+## Apaga um aspecto da nota (os pontos voltam).
+func erase_from_note(page: ResearchPageData, cell: Vector2i) -> bool:
+	return knowledge.erase_from_note(page, cell, Content.db.research_rules)
+
+
+## Estuda uma página (a nota precisa estar completa) e avisa a interface.
 func study(page: ResearchPageData) -> bool:
-	if not knowledge.study(page):
+	if not knowledge.study(page, Content.db.aspects):
 		return false
 	page_studied.emit(page)
 	return true
