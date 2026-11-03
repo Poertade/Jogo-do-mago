@@ -6,12 +6,5 @@
 script = ExtResource("1")
 id = &"apprentice_wand"
 name_key = "WAND_APPRENTICE"
-capacity = Dictionary[StringName, int]({
-&"fire": 30,
-&"water": 30,
-&"earth": 30,
-&"air": 30,
-&"order": 30,
-&"entropy": 30
-})
+capacity = 30
 efficiency = 1.0

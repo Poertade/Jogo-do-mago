@@ -15,8 +15,8 @@ const SPELL_TYPES: Array[StringName] = [SPELL_PROJECTILE]
 @export var spell_type: StringName
 ## Elemento do dano (um identificador de aspecto, ex.: fire). Inimigos podem ser fracos a ele.
 @export var element: StringName
-## Custo por disparo, por aspecto (ex.: fire = 5).
-@export var cost: Dictionary[StringName, int] = {}
+## Vis gasto por disparo (da reserva única da varinha).
+@export var cost: int = 0
 
 @export_group("Tempo e dano")
 ## Segundos segurando o botão até a magia ficar pronta.

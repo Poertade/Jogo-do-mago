@@ -198,15 +198,13 @@ func _validate_player() -> void:
 	if player.starting_wand == null or player.starting_focus == null:
 		errors.append("player.tres: faltam a varinha ou o Focus iniciais.")
 		return
-	for aspect_id in player.starting_focus.cost:
-		if player.starting_wand.capacity.get(aspect_id, 0) < player.starting_focus.cost[aspect_id]:
-			errors.append("A varinha inicial não guarda %s suficiente para o Focus inicial." % aspect_id)
+	if player.starting_wand.capacity < player.starting_focus.cost:
+		errors.append("A varinha inicial não guarda Vis suficiente para um disparo do Focus inicial.")
 
 
 func _validate_wand(wand: WandData) -> void:
-	if wand.efficiency <= 0.0:
-		errors.append("Varinha '%s': efficiency precisa ser maior que zero." % wand.id)
-	_validate_aspect_amounts("Varinha '%s'" % wand.id, wand.capacity)
+	if wand.efficiency <= 0.0 or wand.capacity <= 0:
+		errors.append("Varinha '%s': capacity e efficiency precisam ser maiores que zero." % wand.id)
 
 
 func _validate_focus(focus: FocusData) -> void:
@@ -215,7 +213,8 @@ func _validate_focus(focus: FocusData) -> void:
 		errors.append("%s: tipo de magia desconhecido '%s'." % [owner, focus.spell_type])
 	if not focus.element in aspects:
 		errors.append("%s: elemento '%s' não é um aspecto." % [owner, focus.element])
-	_validate_aspect_amounts(owner, focus.cost)
+	if focus.cost <= 0:
+		errors.append("%s: o custo em Vis precisa ser maior que zero." % owner)
 	if focus.damage <= 0.0 or focus.charge_time < 0.0 or focus.cooldown < 0.0:
 		errors.append("%s: dano precisa ser positivo e tempos não podem ser negativos." % owner)
 	if focus.spell_type == FocusData.SPELL_PROJECTILE and (focus.projectile_speed <= 0.0 or focus.projectile_lifetime <= 0.0):

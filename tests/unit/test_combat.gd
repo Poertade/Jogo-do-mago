@@ -30,12 +30,10 @@ func test_run_reset_restores_health_and_reserve() -> void:
 	var player := PlayerData.new()
 	player.max_health = 100
 	var wand := WandData.new()
-	var capacity: Dictionary[StringName, int] = {&"fire": 30}
-	wand.capacity = capacity
+	wand.capacity = 30
 	wand.efficiency = 1.0
 	var focus := FocusData.new()
-	var cost: Dictionary[StringName, int] = {&"fire": 5}
-	focus.cost = cost
+	focus.cost = 5
 	player.starting_wand = wand
 	player.starting_focus = focus
 	var run := RunState.new(player)
@@ -43,4 +41,4 @@ func test_run_reset_restores_health_and_reserve() -> void:
 	run.wand.pay(focus.cost)
 	run.reset()
 	assert_eq(run.health.current, 100.0)
-	assert_eq(run.wand.reserve(&"fire"), 30)
+	assert_eq(run.wand.vis, 30)

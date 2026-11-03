@@ -1,11 +1,11 @@
 class_name VisNode
 extends Interactable
-## Nódulo de Vis (inspirado nos nódulos de aura do Thaumcraft 4): um núcleo de energia de um
-## aspecto, com bolinhas de Vis em órbita. Segure E mirando o nódulo para drenar Vis para a
-## reserva da varinha: as bolinhas voam até a ponta dela. Pela decisão 3, só há nódulos na
-## escola (fora dela, a reserva não recarrega).
+## Nódulo de Vis (inspirado nos nódulos de aura do Thaumcraft): um núcleo de energia, com
+## bolinhas de Vis em órbita. Segure E mirando o nódulo para drenar Vis para a reserva única
+## da varinha: as bolinhas voam até a ponta dela. Pela decisão 3, só há nódulos na escola
+## (fora dela, a reserva não recarrega).
 
-## Aspecto que o nódulo guarda (a cor das bolinhas vem dele).
+## Aspecto que dá a cor ao nódulo (o Vis drenado vai para a reserva única da varinha).
 @export var aspect: StringName = &"fire"
 ## Pontos de reserva drenados por segundo enquanto E está seguro.
 @export var drain_rate := 12.0
@@ -48,19 +48,19 @@ func hold(player: Node3D, delta: float) -> void:
 	if not _draining:
 		_draining = true
 		_drained_total = 0
-		if wand.is_full(aspect):
-			Game.message(Text.tr_key("UI_MSG_ALREADY_FULL") % Text.aspect_name(aspect))
+		if wand.is_full():
+			Game.message(Text.tr_key("UI_MSG_ALREADY_FULL") % Text.tr_key("TERM_VIS"))
 		else:
 			_sound = Audio.play(&"recharge")
-	if wand.is_full(aspect):
+	if wand.is_full():
 		return
 	_drain_buffer += drain_rate * delta
 	var whole := floori(_drain_buffer)
 	if whole > 0:
 		_drain_buffer -= whole
-		_drained_total += wand.add(aspect, whole)
-		if wand.is_full(aspect):
-			Game.message(Text.tr_key("UI_MSG_RECHARGED") % Text.aspect_name(aspect), Content.db.aspects[aspect].color)
+		_drained_total += wand.add(whole)
+		if wand.is_full():
+			Game.message(Text.tr_key("UI_MSG_RECHARGED") % Text.tr_key("TERM_VIS"), Content.db.aspects[aspect].color)
 	_spark_buffer += sparks_per_second * delta
 	while _spark_buffer >= 1.0:
 		_spark_buffer -= 1.0

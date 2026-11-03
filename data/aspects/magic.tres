@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/magic.png" id="1_v38hk"]
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_xr7tp"]
 
 [resource]
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_MAGIC_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"void", &"energy"])
 color = Color(0.7607843, 0.3529412, 0.9411765, 1)
+icon = ExtResource("1_v38hk")

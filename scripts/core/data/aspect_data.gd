@@ -17,6 +17,8 @@ extends Resource
 @export var parents: Array[StringName] = []
 ## Cor usada na interface (Livro de Pesquisa, HUD).
 @export var color: Color = Color.WHITE
+## Ícone (16x16) mostrado na Mesa de Pesquisa e no Livro (assets/icons/aspects/).
+@export var icon: Texture2D
 
 
 func is_compound() -> bool:

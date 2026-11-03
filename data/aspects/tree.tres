@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_0wef4"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/tree.png" id="1_rbw6a"]
 
 [resource]
 script = ExtResource("1_0wef4")
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_TREE_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"air", &"plant"])
 color = Color(0.6039216, 0.41568628, 0.19607843, 1)
+icon = ExtResource("1_rbw6a")

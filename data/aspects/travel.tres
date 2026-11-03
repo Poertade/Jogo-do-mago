@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/travel.png" id="1_gsisq"]
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_nxryi"]
 
 [resource]
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_TRAVEL_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"motion", &"earth"])
 color = Color(0.8784314, 0.41568628, 0.3137255, 1)
+icon = ExtResource("1_gsisq")

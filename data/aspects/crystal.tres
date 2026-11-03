@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_ml3q7"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/crystal.png" id="1_p4v8v"]
 
 [resource]
 script = ExtResource("1_ml3q7")
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_CRYSTAL_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"earth", &"order"])
 color = Color(0.5254902, 0.9411765, 0.9411765, 1)
+icon = ExtResource("1_p4v8v")

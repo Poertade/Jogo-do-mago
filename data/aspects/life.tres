@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_5xdxt"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/life.png" id="1_af713"]
 
 [resource]
 script = ExtResource("1_5xdxt")
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_LIFE_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"water", &"earth"])
 color = Color(0.8784314, 0.2509804, 0.3529412, 1)
+icon = ExtResource("1_af713")

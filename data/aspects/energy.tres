@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_mrmes"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/energy.png" id="1_qryw1"]
 
 [resource]
 script = ExtResource("1_mrmes")
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_ENERGY_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"order", &"fire"])
 color = Color(0.72156864, 0.9411765, 1, 1)
+icon = ExtResource("1_qryw1")

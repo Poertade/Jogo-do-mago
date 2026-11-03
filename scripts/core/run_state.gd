@@ -17,6 +17,6 @@ func _init(player: PlayerData) -> void:
 ## Começa de novo: vida e reserva cheias, magia parada.
 func reset() -> void:
 	health.restore()
-	wand.refill_all()
+	wand.refill()
 	caster.cancel()
 	caster.cooldown_left = 0.0

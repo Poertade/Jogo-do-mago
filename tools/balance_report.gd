@@ -12,16 +12,16 @@ func _initialize() -> void:
 	var player := db.player
 	var focus := player.starting_focus
 	var wand := WandState.new(player.starting_wand)
-	var cost: int = wand.effective_cost(focus.cost).get(focus.element, 0)
-	var shots_per_reserve := wand.capacity(focus.element) / maxi(cost, 1)
+	var cost: int = wand.effective_cost(focus.cost)
+	var shots_per_reserve := wand.capacity() / maxi(cost, 1)
 	var page_multiplier := 1.0
 	for page: ResearchPageData in db.pages.values():
 		page_multiplier *= Modifiers.from_pages([page] as Array[ResearchPageData]).damage_multiplier(focus.element)
 	var cycle := focus.charge_time + focus.cooldown
 
 	print("=== Jogador ===")
-	print("Vida: %d | Reserva de %s: %d | Custo por disparo: %d → %d disparos por reserva" % [
-		player.max_health, focus.element, wand.capacity(focus.element), cost, shots_per_reserve])
+	print("Vida: %d | Reserva de Vis: %d | Custo por disparo: %d → %d disparos por reserva" % [
+		player.max_health, wand.capacity(), cost, shots_per_reserve])
 	print("Ciclo de disparo: %.1f s de carga + %.1f s de intervalo = %.1f s" % [focus.charge_time, focus.cooldown, cycle])
 	print("Dano: %.1f (com todas as páginas: %.1f)" % [focus.damage, focus.damage * page_multiplier])
 

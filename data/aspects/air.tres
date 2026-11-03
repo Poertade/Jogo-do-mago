@@ -1,11 +1,12 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_5hi4r"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/air.png" id="1_mcg27"]
 
 [resource]
 script = ExtResource("1_5hi4r")
 id = &"air"
-kind = "primal"
 name_key = "ASPECT_AIR"
 meaning_key = "ASPECT_AIR_MEANING"
 color = Color(0.9019608, 0.8784314, 0.627451, 1)
+icon = ExtResource("1_mcg27")

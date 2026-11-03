@@ -60,4 +60,4 @@ OBJ_IRON_BARS,Grade de ferro
 OBJ_TORCH,Tocha
 OBJ_ARRIVAL_GLYPH,Círculo de chegada
 OBJ_PALE_LIGHT,Luz pálida
-PROMPT_DRAIN_VIS,Segure para drenar {TERM_VIS} de {fire}
+PROMPT_DRAIN_VIS,Segure para drenar {TERM_VIS}

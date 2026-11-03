@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/mind.png" id="1_5hoqp"]
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_kxv3i"]
 
 [resource]
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_MIND_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"fire", &"soul"])
 color = Color(0.9411765, 0.7058824, 0.7529412, 1)
+icon = ExtResource("1_5hoqp")

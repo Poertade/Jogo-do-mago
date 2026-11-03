@@ -1,74 +1,55 @@
 class_name WandState
 extends RefCounted
-## A varinha durante o jogo: quanto de cada aspecto ainda resta na reserva.
+## A varinha durante o jogo: quanto Vis ainda resta na reserva (única, como no Thaumcraft 3).
 
-## Emitido quando alguma reserva muda (para o HUD).
+## Emitido quando a reserva muda (para o HUD).
 signal reserves_changed
 
 var wand: WandData
-var _reserves: Dictionary[StringName, int] = {}
+var vis := 0
 
 
 func _init(wand_data: WandData) -> void:
 	wand = wand_data
-	refill_all()
+	refill()
 
 
-func capacity(aspect_id: StringName) -> int:
-	return wand.capacity.get(aspect_id, 0)
-
-
-func reserve(aspect_id: StringName) -> int:
-	return _reserves.get(aspect_id, 0)
+func capacity() -> int:
+	return wand.capacity
 
 
 ## Custo real de uma magia nesta varinha: o custo dividido pela eficiência, arredondado para cima.
-func effective_cost(cost: Dictionary) -> Dictionary[StringName, int]:
-	var result: Dictionary[StringName, int] = {}
-	for aspect_id: StringName in cost:
-		result[aspect_id] = ceili(cost[aspect_id] / maxf(wand.efficiency, 0.01))
-	return result
+func effective_cost(cost: int) -> int:
+	return ceili(cost / maxf(wand.efficiency, 0.01))
 
 
-func can_pay(cost: Dictionary) -> bool:
-	var real := effective_cost(cost)
-	for aspect_id in real:
-		if reserve(aspect_id) < real[aspect_id]:
-			return false
-	return true
+func can_pay(cost: int) -> bool:
+	return vis >= effective_cost(cost)
 
 
-## Gasta o custo da reserva. Devolve false (sem gastar nada) se não houver energia suficiente.
-func pay(cost: Dictionary) -> bool:
+## Gasta o custo da reserva. Devolve false (sem gastar nada) se não houver Vis suficiente.
+func pay(cost: int) -> bool:
 	if not can_pay(cost):
 		return false
-	var real := effective_cost(cost)
-	for aspect_id in real:
-		_reserves[aspect_id] = reserve(aspect_id) - real[aspect_id]
+	vis -= effective_cost(cost)
 	reserves_changed.emit()
 	return true
 
 
-## Acrescenta energia a uma reserva, sem passar da capacidade. Devolve quanto entrou.
-func add(aspect_id: StringName, amount: int) -> int:
-	var added := clampi(amount, 0, capacity(aspect_id) - reserve(aspect_id))
+## Acrescenta Vis, sem passar da capacidade. Devolve quanto entrou.
+func add(amount: int) -> int:
+	var added := clampi(amount, 0, capacity() - vis)
 	if added > 0:
-		_reserves[aspect_id] = reserve(aspect_id) + added
+		vis += added
 		reserves_changed.emit()
 	return added
 
 
-## Enche a reserva de um aspecto até a capacidade.
-func refill(aspect_id: StringName) -> void:
-	_reserves[aspect_id] = capacity(aspect_id)
+## Enche a reserva até a capacidade.
+func refill() -> void:
+	vis = capacity()
 	reserves_changed.emit()
 
 
-func refill_all() -> void:
-	for aspect_id in wand.capacity:
-		_reserves[aspect_id] = wand.capacity[aspect_id]
-	reserves_changed.emit()
-
-
-func is_full(aspect_id: StringName) -> bool:
-	return reserve(aspect_id) >= capacity(aspect_id)
+func is_full() -> bool:
+	return vis >= capacity()

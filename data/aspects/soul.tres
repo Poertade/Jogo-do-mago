@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="AspectData" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/soul.png" id="1_06qg0"]
 [ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1_fdpco"]
 
 [resource]
@@ -10,3 +11,4 @@ meaning_key = "ASPECT_SOUL_MEANING"
 kind = "compound"
 parents = Array[StringName]([&"life", &"death"])
 color = Color(0.9254902, 0.9254902, 0.972549, 1)
+icon = ExtResource("1_06qg0")

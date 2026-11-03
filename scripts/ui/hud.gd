@@ -19,10 +19,13 @@ const MESSAGE_SECONDS := 4.0
 @onready var stats: VBoxContainer = %Stats
 @onready var damage_flash: ColorRect = %DamageFlash
 
-## Uma linha (barra e número) para a vida e uma para cada aspecto que o Focus gasta.
+## Uma linha (barra e número) para a vida e outra para o Vis da varinha.
+const VIS_COLOR := Color(0.7, 0.55, 1.0)
+
 var _health_bar: ProgressBar
 var _health_value: Label
-var _reserve_rows: Dictionary[StringName, Array] = {}
+var _vis_bar: ProgressBar
+var _vis_value: Label
 
 
 func _ready() -> void:
@@ -52,8 +55,9 @@ func _build_stats() -> void:
 	var row := _stat_row(tr("UI_HEALTH"), Color(0.7, 0.15, 0.12))
 	_health_bar = row[0]
 	_health_value = row[1]
-	for aspect_id in Game.run.caster.focus.cost:
-		_reserve_rows[aspect_id] = _stat_row(Text.aspect_name(aspect_id), Content.db.aspects[aspect_id].color)
+	var vis_row := _stat_row(tr("TERM_VIS"), VIS_COLOR)
+	_vis_bar = vis_row[0]
+	_vis_value = vis_row[1]
 
 
 ## Cria uma linha "Nome [barra] valor" e devolve [barra, rótulo do valor].
@@ -96,12 +100,9 @@ func _update_stats() -> void:
 	_health_bar.value = health.current
 	_health_value.text = "%d/%d" % [ceili(health.current), health.max_health]
 	var wand := Game.run.wand
-	for aspect_id in _reserve_rows:
-		var bar: ProgressBar = _reserve_rows[aspect_id][0]
-		var value: Label = _reserve_rows[aspect_id][1]
-		bar.max_value = wand.capacity(aspect_id)
-		bar.value = wand.reserve(aspect_id)
-		value.text = "%d/%d" % [wand.reserve(aspect_id), wand.capacity(aspect_id)]
+	_vis_bar.max_value = wand.capacity()
+	_vis_bar.value = wand.vis
+	_vis_value.text = "%d/%d" % [wand.vis, wand.capacity()]
 
 
 func _update_prompt(playing: bool) -> void:
