@@ -1,22 +1,20 @@
 class_name RoomData
 extends Resource
-## Uma sala do jogo: identificador, cena e atmosfera.
+## Uma sala do jogo: identificador, nome, cena e atmosfera.
 ## Cada sala é um arquivo em data/rooms/. A geometria, as luzes e os pontos de entrada
-## ficam na cena (scenes/rooms/), montada no editor.
+## ficam na cena (scenes/rooms/), montada no editor. As salas da Dungeon ficam no mapa
+## (scenes/dungeon/dungeon.tscn), cada uma com o `room_id` dela.
 
 ## Identificador interno, único entre as salas. É por ele que portais e saídas apontam para a sala.
 @export var id: StringName
+## Nome mostrado no canto da tela ao entrar na sala (em locales/content.csv). Vazio: nenhum.
+@export var name_key: String
 ## Cena da sala.
 @export_file("*.tscn") var scene_path: String
-## Tipo da sala na Dungeon, para o sorteio das incursões (data/dungeon/rules.tres):
-## combat (combate), rest (descanso, com Nódulo) ou boss (chefe). Vazio: a sala não é sorteada
-## (escola, sala de teste).
-@export var kind: StringName
-## Região da Dungeon a que a sala pertence (school, caves, abyss).
+## Região da Dungeon a que a sala pertence (school, caves, abyss). Vazio: fora da Dungeon.
 @export var zone: StringName
-## Medidas internas da sala, em metros. A cena tem o centro do chão na origem, a porta de
-## entrada no meio da parede sul (z = depth / 2) e a saída no meio da parede norte
-## (z = -depth / 2). A incursão usa isso para encaixar as salas com corredores.
+## Medidas internas da sala, em metros (largura em X, profundidade em Z). A cena tem o centro
+## do chão na origem. O mapa usa isso para saber em que sala o jogador está.
 @export var width: float = 0.0
 @export var depth: float = 0.0
 @export var height: float = 0.0

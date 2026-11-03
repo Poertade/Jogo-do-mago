@@ -530,7 +530,7 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Livros que dão pontos:** não ensinariam nada novo.
 - **Motivo:** pedido do usuário. Trazer o livro vivo para a escola dá um motivo para voltar e um risco a cada sala, como os fragmentos de conhecimento que o Thaumcraft 4 espalha pelo mundo.
 
-### D065 · 2026-11-03 · Dungeon contínua, com regiões (substitui D056)
+### D065 · 2026-11-03 · Dungeon contínua, com regiões (substitui D056; o sorteio de salas foi substituído pelo mapa fixo da D068)
 
 - **Escolha:**
   - **Montagem:** o portal monta a Dungeon inteira de uma vez (`Dungeon`, em `scripts/game`). As salas sorteadas ficam em fila para o norte, ligadas por corredores retos que descem em rampa. A planta é calculada em `DungeonLayout`, em `scripts/core` (testada).
@@ -571,6 +571,55 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Livros fixos com receitas de 4 aspectos (D064):** o usuário explicou que não era isso.
   - **Mesa que revela combinações por tentativa:** tiraria o valor dos livros.
 - **Motivo:** pedido do usuário ("quero que eles ensinem uma receita que você não tem"). A pesquisa agora depende das incursões: cada livro trazido vivo abre um composto novo.
+
+### D068 · 2026-11-03 · Dungeon de mapa fixo, no estilo do Lunacid (substitui o sorteio de salas da D065)
+
+- **Escolha:** o usuário pediu uma Dungeon "parecida com o mapa do Lunacid" e escolheu "fixa, feita à mão". O mapa (`scenes/dungeon/dungeon.tscn`) é original: só a estrutura segue o Lunacid, sem copiar nomes, salas ou o mapa dele (seção 4 da especificação).
+  - **Pesquisa:** a busca funcionou, mas os sites (wikis, análises) estão bloqueados na rede deste ambiente; valeram os trechos que a busca devolve. Deles: áreas temáticas ligadas entre si, um centro (Wing's Rest) com loja, cristais de viagem e de save em cada área, caminhos labirínticos que voltam a lugares já vistos, becos sem saída, paredes secretas, portas com chave achada em outro lugar, desníveis (bordas, quedas, pontes) e nenhum mapa na tela.
+  - **O mapa:** 15 salas em três regiões, que descem da escola ao bizarro (a narrativa da D065):
+    - **Ruínas:** o **Átrio do Poço** é o centro e a chegada. Ao norte, a biblioteca; a leste, o dormitório; a oeste, a câmara de pedra e a Escadaria que desce às grutas. Biblioteca, ossuário e dormitório formam um **laço** de volta ao átrio. No fim do ramo leste fica a **Cripta**, com a chave.
+    - **Grutas:** gruta dos fungos, **lago** e **Fonte de Vis**. A **Fenda** tem uma ponte estreita sobre um abismo de 8 m; um túnel no fundo volta à gruta dos fungos.
+    - **Avesso:** depois do **portão selado**, o salão invertido, o Vestíbulo e o Grande Arquivo, com o chefe.
+  - **Peças** (em `scripts/game`, todas no mapa):
+    - **Atalho (`Gate`, `one_way`):** a grade entre o dormitório e o átrio só abre do lado do dormitório.
+    - **Porta trancada (`Gate`, `needs_key`):** o portão selado abre com a chave da cripta.
+    - **Paredes falsas (`SecretWall`):** na biblioteca e no lago. Somem ao toque (E) ou com uma magia; não mostram texto, e a Lente as revela como "parede ilusória".
+    - **Âncoras do portal (`PortalAnchor`):** no átrio, na fonte e no vestíbulo, como os cristais de viagem do Lunacid. Tocar sintoniza; depois, a âncora leva de volta à escola com o que foi achado. Com mais de uma sintonizada, o portal pergunta para onde ir.
+    - **O poço:** o buraco no meio do átrio cai no lago das grutas, uma descida rápida e só de ida.
+    - **Corredores (`CorridorPath`):** uma linha de pontos, com rampas e curvas, editável no inspetor e visível no editor.
+  - **O que fica:** passagens abertas, chaves, âncoras e o chefe vencido vão para o save (`DungeonProgress`) e valem para sempre.
+  - **O que muda a cada incursão:** inimigos (`EnemySpawn`, com a semente) e achados (`LootSpot`): livros, potes selados, prata e cacos de vidro.
+  - **Orientação:** sem mapa na tela, o canto mostra o nome da sala, e cada lugar tem um marco: o poço com brilho azul, a ponte, o salão invertido.
+  - **Grades entre salas:** saem. Só o Grande Arquivo ainda fecha a saída até o chefe cair.
+  - **Medidas:** a malha de navegação do mapa inteiro sai em cerca de 30 ms (730 polígonos). Montar o mapa e fazer a transição leva cerca de 1,4 s.
+- **Descartado:**
+  - **Sorteada com a estrutura do Lunacid:** era a recomendação; o usuário preferiu o mapa fixo.
+  - **Copiar áreas do Lunacid:** a especificação proíbe copiar os mapas dele.
+  - **Corredores criados por código na montagem (D065):** não apareciam no editor.
+- **Motivo:** pedido do usuário. Um mapa fixo deixa o jogador aprender o caminho, e os atalhos, chaves e âncoras dão progresso no mundo além do conhecimento.
+
+### D069 · 2026-11-03 · Potes comprados ou fabricados; prata e cacos de vidro
+
+- **Escolha:** o usuário escolheu "comprar e fabricar" e "os potes ficam; só o Vis se perde".
+  - **Começo:** o jogador começa sem potes. O cinto leva até 4 (`jar_slots`).
+  - **Comprar:** o **Almoxarife**, atrás de um balcão no Salão de Estudos, vende um pote por 35 de prata.
+  - **Fabricar:** a **bancada de vidraria**, do outro lado do salão, faz um pote com 4 cacos de vidro, 3 de Ignis e 3 de Ordo tirados da varinha, como a Bancada Arcana do Thaumcraft, que gasta Vis da varinha.
+  - **Os valores** ficam em `data/economy/rules.tres`; os materiais, em `data/items/`.
+  - **Prata:** os inimigos deixam prata ao cair (Bedel 2–4, Aprendiz 1–3, Lodo 1–2, Arquivista 25–35), e há bolsas de prata pelas salas.
+  - **Cacos de vidro:** aparecem em montes e ficam de cada pote selado que é esvaziado. O Vis dos potes selados vai primeiro para os potes do cinto e depois para a varinha.
+  - **Guardar:** o que é achado numa incursão só fica guardado (`Stash`) ao voltar vivo, por uma âncora ou pela saída do Arquivo. Morrer perde os achados e o Vis dos potes, mas não os potes.
+  - **HUD:** prata e cacos aparecem embaixo dos potes, somando o guardado e o achado.
+  - **Conta:** uma incursão que limpa o mapa inteiro rende, em média, uns 120 de prata e 15 cacos (`tools/balance_report.gd`): uns três potes de cada jeito. Uma incursão curta, que explora só uma parte, rende um pote.
+- **Descartado:**
+  - **Só comprar** ou **só fabricar:** as outras opções da pergunta.
+  - **Potes achados que entram no cinto:** dariam potes de graça. Agora os potes selados dão Vis e cacos.
+- **Motivo:** pedido do usuário. A prata e os cacos dão um motivo para explorar os ramos laterais e os segredos do mapa.
+
+### D070 · 2026-11-03 · Save formato 6
+
+- **Escolha:** o save guarda, além do conhecimento, o mapa (`world`: passagens abertas, chaves, âncoras e chefes vencidos) e o que fica na escola (`stash`: materiais e potes). Saves antigos carregam com o mapa fechado e sem potes.
+- **Descartado:** um arquivo separado para o mapa.
+- **Motivo:** um arquivo só, legível, como antes (D009).
 
 ## Pendentes (aguardando o usuário)
 

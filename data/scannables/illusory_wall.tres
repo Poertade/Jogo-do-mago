@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"illusory_wall"
+name_key = "OBJ_ILLUSORY_WALL"
+aspects = Dictionary[StringName, int]({
+&"earth": 1,
+&"magic": 2,
+&"void": 1
+})

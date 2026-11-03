@@ -36,6 +36,10 @@ func _initialize() -> void:
 	_save("ambience_dungeon", _ambience_dungeon(), true)
 	_save("ambience_caves", _ambience_caves(), true)
 	_save("ambience_abyss", _ambience_abyss(), true)
+	# Sons acrescentados depois (no fim, para os de cima continuarem iguais).
+	_save("gate", _gate())
+	_save("coin", _coin())
+	_save("glass", _glass())
 	quit()
 
 
@@ -294,6 +298,46 @@ func _ambience_abyss() -> PackedFloat32Array:
 
 
 # --- Ferramentas de síntese ---------------------------------------------------
+
+## Ferro arrastando e um baque no fim: grade que desce para o chão.
+func _gate() -> PackedFloat32Array:
+	var out := _silence(1.8)
+	var phase := 0.0
+	var lp := 0.0
+	for i in out.size():
+		var t := float(i) / RATE
+		phase += TAU * (55.0 + 8.0 * sin(TAU * 3.0 * t)) / RATE
+		lp = lerpf(lp, rng.randf_range(-1.0, 1.0), 0.08)
+		out[i] = (_saw(phase) * 0.25 + lp * 0.5) * _env(t, 0.1, 1.6)
+	_add_click(out, 1.55, 0.12, 0.6)
+	return out
+
+
+## Tilintar de moedas: dois toques metálicos curtos.
+func _coin() -> PackedFloat32Array:
+	var out := _silence(0.5)
+	for i in out.size():
+		var t := float(i) / RATE
+		var sample := 0.0
+		for hit in [0.0, 0.09]:
+			if t >= hit:
+				var u: float = t - hit
+				sample += (sin(TAU * 1850.0 * u) + sin(TAU * 2770.0 * u) * 0.6) * exp(-u * 18.0)
+		out[i] = sample * 0.18
+	return out
+
+
+## Vidro que se parte: estalo e tinidos agudos.
+func _glass() -> PackedFloat32Array:
+	var out := _silence(0.6)
+	for i in out.size():
+		var t := float(i) / RATE
+		var shimmer := sin(TAU * 3300.0 * t) * 0.5 + sin(TAU * 4100.0 * t) * 0.4 + sin(TAU * 2600.0 * t) * 0.3
+		out[i] = shimmer * 0.16 * exp(-t * 9.0)
+	_add_click(out, 0.0, 0.04, 0.5)
+	_add_click(out, 0.11, 0.03, 0.25)
+	return out
+
 
 func _silence(seconds: float) -> PackedFloat32Array:
 	var out := PackedFloat32Array()

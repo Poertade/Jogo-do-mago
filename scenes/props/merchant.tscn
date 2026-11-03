@@ -1,0 +1,367 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/merchant.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/merchant.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="3"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="4"]
+[ext_resource type="Resource" path="res://data/scannables/dark_timber.tres" id="5"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="6"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.102, 0.1412, 0.1882, 1.0)
+shader_parameter/emission_color = Color(0.1882, 0.251, 0.3137, 1.0)
+shader_parameter/emission_energy = 0.35
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.6275, 0.4784, 0.1882, 1.0)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4"]
+top_radius = 0.07
+bottom_radius = 0.095
+height = 0.04
+radial_segments = 7
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+top_radius = 0.07
+bottom_radius = 0.095
+height = 0.04
+radial_segments = 7
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8"]
+top_radius = 0.07
+bottom_radius = 0.095
+height = 0.04
+radial_segments = 7
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_9"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_10"]
+top_radius = 0.07
+bottom_radius = 0.095
+height = 0.04
+radial_segments = 7
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_11"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_12"]
+top_radius = 0.07
+bottom_radius = 0.095
+height = 0.04
+radial_segments = 7
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_13"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_14"]
+top_radius = 0.07
+bottom_radius = 0.095
+height = 0.04
+radial_segments = 7
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="Mat_15"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.1647, 0.1255, 0.1882, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_16"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.0196, 0.0157, 0.0235, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_17"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.8157, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="ShaderMaterial" id="Mat_18"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.5412, 0.4784, 0.4078, 1.0)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_19"]
+top_radius = 0.22
+bottom_radius = 0.4
+height = 1.6
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_20"]
+size = Vector3(0.62, 0.18, 0.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_21"]
+size = Vector3(0.36, 0.4, 0.38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_22"]
+size = Vector3(0.2, 0.16, 0.22)
+
+[sub_resource type="BoxMesh" id="BoxMesh_23"]
+size = Vector3(0.24, 0.26, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_24"]
+size = Vector3(0.04, 0.02, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_25"]
+size = Vector3(0.04, 0.02, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_26"]
+size = Vector3(0.1, 0.06, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_27"]
+size = Vector3(0.1, 0.06, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_28"]
+size = Vector3(0.16, 0.14, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_29"]
+size = Vector3(0.16, 0.14, 0.4)
+
+[sub_resource type="BoxShape3D" id="Box_30"]
+size = Vector3(0.8, 1.2, 0.6)
+
+[sub_resource type="ShaderMaterial" id="Mat_31"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.6902, 0.3765, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_32"]
+size = Vector3(0.14, 0.04, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_33"]
+size = Vector3(0.07, 0.12, 0.07)
+
+[node name="Merchant" type="Node3D" node_paths=PackedStringArray("figure")]
+script = ExtResource("1")
+scannable = ExtResource("2")
+figure = NodePath("Figure")
+
+[node name="Counter" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.475, 0.0)
+script = ExtResource("3")
+size = Vector3(2.2, 0.95, 0.6)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="CounterTop" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.99, 0.0)
+script = ExtResource("3")
+size = Vector3(2.4, 0.08, 0.75)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="Shelf" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.75, 1.05)
+script = ExtResource("3")
+size = Vector3(2.2, 0.08, 0.35)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="ShelfLow" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.25, 1.05)
+script = ExtResource("3")
+size = Vector3(2.2, 0.08, 0.35)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="ShelfSideL" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.1, 1.3, 1.05)
+script = ExtResource("3")
+size = Vector3(0.08, 1.3, 0.35)
+material = ExtResource("4")
+
+[node name="ShelfSideR" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.1, 1.3, 1.05)
+script = ExtResource("3")
+size = Vector3(0.08, 1.3, 0.35)
+material = ExtResource("4")
+
+[node name="Jar1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.8, 1.94, 1.05)
+mesh = SubResource("CylinderMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="JarLid1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.8, 2.1, 1.05)
+mesh = SubResource("CylinderMesh_4")
+material_override = SubResource("Mat_2")
+
+[node name="Jar2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.45, 1.94, 1.05)
+mesh = SubResource("CylinderMesh_5")
+material_override = SubResource("Mat_1")
+
+[node name="JarLid2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.45, 2.1, 1.05)
+mesh = SubResource("CylinderMesh_6")
+material_override = SubResource("Mat_2")
+
+[node name="Jar3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.3, 1.94, 1.05)
+mesh = SubResource("CylinderMesh_7")
+material_override = SubResource("Mat_1")
+
+[node name="JarLid3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.3, 2.1, 1.05)
+mesh = SubResource("CylinderMesh_8")
+material_override = SubResource("Mat_2")
+
+[node name="Jar4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.6, 1.44, 1.05)
+mesh = SubResource("CylinderMesh_9")
+material_override = SubResource("Mat_1")
+
+[node name="JarLid4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.6, 1.6, 1.05)
+mesh = SubResource("CylinderMesh_10")
+material_override = SubResource("Mat_2")
+
+[node name="Jar5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.44, 1.05)
+mesh = SubResource("CylinderMesh_11")
+material_override = SubResource("Mat_1")
+
+[node name="JarLid5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.6, 1.05)
+mesh = SubResource("CylinderMesh_12")
+material_override = SubResource("Mat_2")
+
+[node name="Jar6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.85, 1.44, 1.05)
+mesh = SubResource("CylinderMesh_13")
+material_override = SubResource("Mat_1")
+
+[node name="JarLid6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.85, 1.6, 1.05)
+mesh = SubResource("CylinderMesh_14")
+material_override = SubResource("Mat_2")
+
+[node name="Figure" type="Node3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.6)
+
+[node name="Robe" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.8, 0.0)
+mesh = SubResource("CylinderMesh_19")
+material_override = SubResource("Mat_15")
+
+[node name="Shoulders" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.55, 0.0)
+mesh = SubResource("BoxMesh_20")
+material_override = SubResource("Mat_15")
+
+[node name="Hood" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.8, 0.0)
+mesh = SubResource("BoxMesh_21")
+material_override = SubResource("Mat_15")
+
+[node name="HoodPeak" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9397, 0.342, 0.0, -0.342, 0.9397, 0.0, 2.02, 0.06)
+mesh = SubResource("BoxMesh_22")
+material_override = SubResource("Mat_15")
+
+[node name="Face" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.76, -0.18)
+mesh = SubResource("BoxMesh_23")
+material_override = SubResource("Mat_16")
+
+[node name="EyeL" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.05, 1.79, -0.205)
+mesh = SubResource("BoxMesh_24")
+material_override = SubResource("Mat_17")
+
+[node name="EyeR" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.05, 1.79, -0.205)
+mesh = SubResource("BoxMesh_25")
+material_override = SubResource("Mat_17")
+
+[node name="HandL" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.3, 1.06, -0.45)
+mesh = SubResource("BoxMesh_26")
+material_override = SubResource("Mat_18")
+
+[node name="HandR" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.3, 1.06, -0.45)
+mesh = SubResource("BoxMesh_27")
+material_override = SubResource("Mat_18")
+
+[node name="SleeveL" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9659, 0.2588, 0.0, -0.2588, 0.9659, -0.3, 1.1, -0.25)
+mesh = SubResource("BoxMesh_28")
+material_override = SubResource("Mat_15")
+
+[node name="SleeveR" type="MeshInstance3D" parent="Figure"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9659, 0.2588, 0.0, -0.2588, 0.9659, 0.3, 1.1, -0.25)
+mesh = SubResource("BoxMesh_29")
+material_override = SubResource("Mat_15")
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.5, 0.6)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_30")
+
+[node name="LampBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.85, 1.05, -0.1)
+mesh = SubResource("BoxMesh_32")
+material_override = SubResource("Mat_2")
+
+[node name="LampFlame" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 0.85, 1.14, -0.1)
+mesh = SubResource("BoxMesh_33")
+material_override = SubResource("Mat_31")
+
+[node name="LampLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.85, 1.4, -0.3)
+light_color = Color(1.0, 0.6902, 0.4392, 1.0)
+light_energy = 0.9
+omni_range = 4.0
+omni_attenuation = 1.2

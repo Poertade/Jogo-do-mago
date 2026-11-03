@@ -1,61 +1,16 @@
 [gd_resource type="Resource" script_class="DungeonRules" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/dungeon_rules.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/core/data/dungeon_step.gd" id="2"]
-
-[sub_resource type="Resource" id="Step_1"]
-script = ExtResource("2")
-zone = &"school"
-kind = &"combat"
-drop_min = 0.0
-drop_max = 0.5
-
-[sub_resource type="Resource" id="Step_2"]
-script = ExtResource("2")
-zone = &"school"
-kind = &"combat"
-drop_min = 0.5
-drop_max = 1.5
-
-[sub_resource type="Resource" id="Step_3"]
-script = ExtResource("2")
-zone = &"caves"
-kind = &"combat"
-drop_min = 2.5
-drop_max = 3.5
-
-[sub_resource type="Resource" id="Step_4"]
-script = ExtResource("2")
-zone = &"caves"
-kind = &"rest"
-drop_min = 1.0
-drop_max = 2.0
-
-[sub_resource type="Resource" id="Step_5"]
-script = ExtResource("2")
-zone = &"caves"
-kind = &"combat"
-drop_min = 1.5
-drop_max = 2.5
-
-[sub_resource type="Resource" id="Step_6"]
-script = ExtResource("2")
-zone = &"abyss"
-kind = &"combat"
-drop_min = 3.0
-drop_max = 4.0
-
-[sub_resource type="Resource" id="Step_7"]
-script = ExtResource("2")
-zone = &"abyss"
-kind = &"boss"
-drop_min = 1.5
-drop_max = 2.5
 
 [resource]
 script = ExtResource("1")
-steps = Array[ExtResource("2")]([SubResource("Step_1"), SubResource("Step_2"), SubResource("Step_3"), SubResource("Step_4"), SubResource("Step_5"), SubResource("Step_6"), SubResource("Step_7")])
-corridor_length_min = 5.0
-corridor_length_max = 9.0
+map_scene = "res://scenes/dungeon/dungeon.tscn"
+anchors = Array[StringName]([&"atrium", &"spring", &"vestibule"])
+anchor_names = Dictionary[StringName, String]({
+&"atrium": "ANCHOR_ATRIUM",
+&"spring": "ANCHOR_SPRING",
+&"vestibule": "ANCHOR_VESTIBULE"
+})
 return_room = &"school"
 return_entrance = &"from_dungeon"
+fall_limit = -60.0

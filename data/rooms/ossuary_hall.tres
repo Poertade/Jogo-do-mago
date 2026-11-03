@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"ossuary_hall"
+name_key = "ROOM_OSSUARY_HALL"
 scene_path = "res://scenes/rooms/ossuary_hall.tscn"
-kind = &"combat"
 zone = &"school"
 width = 6.0
 depth = 18.0

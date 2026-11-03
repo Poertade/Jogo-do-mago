@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_dungeon.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"bone_crypt"
+name_key = "ROOM_BONE_CRYPT"
+scene_path = "res://scenes/rooms/bone_crypt.tscn"
+zone = &"school"
+width = 8.0
+depth = 8.0
+height = 3.5
+fog_color = Color(0.02, 0.02, 0.03, 1)
+fog_near = 1.5
+fog_far = 10.0
+ambient_color = Color(0.18, 0.2, 0.26, 1)
+ambient_energy = 0.3
+ambience = ExtResource("2")

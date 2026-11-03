@@ -16,6 +16,9 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/enemy_swing.wav" id="s12"]
 [ext_resource type="AudioStream" path="res://assets/sounds/enemy_hurt.wav" id="s13"]
 [ext_resource type="AudioStream" path="res://assets/sounds/enemy_death.wav" id="s14"]
+[ext_resource type="AudioStream" path="res://assets/sounds/gate.wav" id="s15"]
+[ext_resource type="AudioStream" path="res://assets/sounds/coin.wav" id="s16"]
+[ext_resource type="AudioStream" path="res://assets/sounds/glass.wav" id="s17"]
 
 [resource]
 script = ExtResource("1")
@@ -34,7 +37,10 @@ sounds = Dictionary[StringName, AudioStream]({
 &"enemy_alert": ExtResource("s11"),
 &"enemy_swing": ExtResource("s12"),
 &"enemy_hurt": ExtResource("s13"),
-&"enemy_death": ExtResource("s14")
+&"enemy_death": ExtResource("s14"),
+&"gate": ExtResource("s15"),
+&"coin": ExtResource("s16"),
+&"glass": ExtResource("s17")
 })
 volumes_db = Dictionary[StringName, float]({
 &"spell_charge": -6.0,
@@ -51,5 +57,8 @@ volumes_db = Dictionary[StringName, float]({
 &"enemy_alert": 0.0,
 &"enemy_swing": -4.0,
 &"enemy_hurt": -2.0,
-&"enemy_death": -2.0
+&"enemy_death": -2.0,
+&"gate": -3.0,
+&"coin": -4.0,
+&"glass": -4.0
 })

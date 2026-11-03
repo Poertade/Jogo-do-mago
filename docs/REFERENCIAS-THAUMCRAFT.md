@@ -20,12 +20,13 @@
 | **Taumonomicon**: o livro com as pesquisas e receitas | Livro de Pesquisa (Tab) | parcial |
 | **Aspectos**: 6 primais, ~40 compostos em camadas | 6 primais + 20 compostos (receitas da versão 4.2), com Gelum, Tenebrae, Limus, Vitium e Alienis; só as receitas de nível 1 vêm sabidas, as outras vêm dos livros | parcial |
 | **Pesquisa achada no mundo** (fragmentos de conhecimento, notas em masmorras) | livros perdidos na Dungeon, lidos no atril da escola: cada um ensina uma receita sorteada que o jogador ainda não tem | feito |
-| **Potes protegidos** (guardam essentia) | potes de Vis no cinto: guardam o que sobra dos Nódulos e recarregam a varinha (R) | adaptado |
+| **Potes protegidos** (guardam essentia) | potes de Vis no cinto: guardam o que sobra dos Nódulos e recarregam a varinha (R). O jogador começa sem nenhum: compra no Almoxarife ou fabrica na bancada de vidraria (D069) | adaptado |
 | **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com um recipiente por primal, limite por recipiente e limite total, e eficiência (`data/wands/`); visual com núcleo + ponteiras; mostrador de frascos no HUD | parcial (um tipo só) |
 | **Focus**: encaixado na varinha, define a magia (Fogo, Gelo, Choque, Escavação, Portal…) | Focus de Fogo e Focus de Gelo (lentidão), trocados com Q; o de Gelo é liberado por pesquisa | dois Focus |
 | **Nódulos de aura**: esferas de Vis com aspectos; a varinha drena Vis segurando o botão; o nódulo se recarrega devagar | Nódulos de Ignis e de Aqua (com Ordo) na escola, que não acabam; na Dungeon, nódulos que se esgotam | feito (sem recarga lenta) |
 | **Vis**: a varinha guarda os seis primais (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com sua reserva; no 4, em centésimos ("centi-Vis") | um recipiente por primal (até 10) e, a pedido do usuário, um limite total (30) (D051) | feito (valores inteiros) |
-| **Pedestal de recarga / bancada arcana**: recarregam a varinha com Vis de uma rede de nódulos | — | ideia futura |
+| **Bancada arcana** (receitas que gastam Vis da varinha) | bancada de vidraria: um pote de Vis custa cacos de vidro e Ignis e Ordo da varinha (D069) | adaptado |
+| **Pedestal de recarga**: recarrega a varinha com Vis de uma rede de nódulos | — | ideia futura |
 
 ## Ideias para próximos marcos (precisam de aprovação)
 

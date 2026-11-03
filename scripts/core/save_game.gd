@@ -1,7 +1,8 @@
 class_name SaveGame
 extends RefCounted
-## Converte o conhecimento do jogador para o save (JSON legível) e de volta.
-## O arquivo é user://save.json; quem lê e grava o arquivo é o autoload Game.
+## Converte o progresso do jogador para o save (JSON legível) e de volta: o conhecimento
+## (Knowledge), o que ele mudou no mapa da Dungeon (DungeonProgress) e o que guarda na escola
+## (Stash). O arquivo é user://save.json; quem lê e grava o arquivo é o autoload Game.
 
 ## Versão do formato. Ao mudar o formato, aumente e trate a versão antiga em _migrate().
 ## 1: pontos de pesquisa num único total (até o M5).
@@ -9,10 +10,12 @@ extends RefCounted
 ## 3: notas de pesquisa em andamento.
 ## 4: páginas só contam como estudadas com a nota resolvida (as de saves antigos reabrem).
 ## 5: livros lidos e receitas aprendidas.
-const FORMAT_VERSION := 5
+## 6: o mapa fixo da Dungeon (atalhos, chaves, âncoras, chefes) e o que fica guardado na escola
+##    (prata, cacos de vidro, potes).
+const FORMAT_VERSION := 6
 
 
-static func to_dict(knowledge: Knowledge) -> Dictionary:
+static func to_dict(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null) -> Dictionary:
 	var points := {}
 	for aspect_id in knowledge.aspect_points:
 		points[String(aspect_id)] = knowledge.aspect_points[aspect_id]
@@ -34,20 +37,75 @@ static func to_dict(knowledge: Knowledge) -> Dictionary:
 			"books_read": _to_strings(knowledge.books_read),
 			"learned_recipes": _to_strings(knowledge.learned_recipes),
 		},
+		"world": _world_to_dict(world if world != null else DungeonProgress.new()),
+		"stash": _stash_to_dict(stash if stash != null else Stash.new()),
 	}
 
 
-static func to_json(knowledge: Knowledge) -> String:
-	return JSON.stringify(to_dict(knowledge), "  ")
+static func to_json(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null) -> String:
+	return JSON.stringify(to_dict(knowledge, world, stash), "  ")
 
 
-## Lê um save. Devolve null se o texto não for um save válido ou vier de uma versão mais nova.
-static func from_json(text: String) -> Knowledge:
+## Lê o texto de um save. Devolve um dicionário vazio se não for JSON de um objeto.
+static func parse(text: String) -> Dictionary:
 	# JSON.new().parse() só devolve um código de erro (parse_string registraria um erro no motor).
 	var json := JSON.new()
 	if json.parse(text) != OK or not json.data is Dictionary:
-		return null
-	return from_dict(json.data)
+		return {}
+	return json.data
+
+
+## Lê o conhecimento de um save. Devolve null se o texto não for um save válido ou vier de uma
+## versão mais nova.
+static func from_json(text: String) -> Knowledge:
+	var data := parse(text)
+	return from_dict(data) if not data.is_empty() else null
+
+
+## O mapa da Dungeon guardado no save (vazio em saves antigos, de antes do mapa fixo).
+static func world_from_dict(data: Dictionary) -> DungeonProgress:
+	var world := DungeonProgress.new()
+	var saved = data.get("world", {})
+	if saved is Dictionary:
+		world.open_passages = _to_names(saved.get("open_passages", []))
+		world.keys = _to_names(saved.get("keys", []))
+		world.anchors = _to_names(saved.get("anchors", []))
+		world.defeated = _to_names(saved.get("defeated", []))
+	return world
+
+
+## O que o jogador guarda na escola (vazio em saves antigos: começa sem potes).
+static func stash_from_dict(data: Dictionary) -> Stash:
+	var stash := Stash.new()
+	var saved = data.get("stash", {})
+	if saved is Dictionary:
+		var items = saved.get("items", {})
+		if items is Dictionary:
+			for key in items:
+				var value = items[key]
+				if key is String and (value is float or value is int) and int(value) > 0:
+					stash.items[StringName(key)] = int(value)
+		var jars = saved.get("jars", 0)
+		if jars is float or jars is int:
+			stash.jars = maxi(int(jars), 0)
+	return stash
+
+
+static func _world_to_dict(world: DungeonProgress) -> Dictionary:
+	return {
+		"open_passages": _to_strings(world.open_passages),
+		"keys": _to_strings(world.keys),
+		"anchors": _to_strings(world.anchors),
+		"defeated": _to_strings(world.defeated),
+	}
+
+
+static func _stash_to_dict(stash: Stash) -> Dictionary:
+	var items := {}
+	for item_id in stash.items:
+		if stash.items[item_id] > 0:
+			items[String(item_id)] = stash.items[item_id]
+	return {"items": items, "jars": stash.jars}
 
 
 static func from_dict(data: Dictionary) -> Knowledge:

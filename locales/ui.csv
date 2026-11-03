@@ -74,11 +74,8 @@ UI_NOTE_HINT,"Escolha um aspecto e clique num círculo vazio para escrevê-lo (%
 UI_NOTE_DONE,Pesquisa concluída. O efeito já vale.
 UI_NOTE_MISSING_ASPECT,"A nota cita aspectos que você ainda não descobriu (""?""). Descubra-os combinando aspectos."
 UI_MSG_NODE_EMPTY,O nódulo de %s se apagou
-UI_DEPTH,Sala %d de %d
 UI_MSG_FOCUS_EQUIPPED,Na varinha: %s
 UI_MSG_FOCUS_UNLOCKED,Novo Focus: %s (Q para trocar)
-UI_MSG_BELT_FULL,Não cabe mais nada no cinto de potes
-UI_MSG_JAR_TAKEN,+%d de %s nos potes
 UI_MSG_JAR_POURED,Pote despejado: +%d de Vis na varinha
 UI_MSG_NO_JAR,Nenhum pote serve agora
 UI_MSG_BOOK_TAKEN,"Livro guardado: %s (leia no atril da escola)"
@@ -89,3 +86,16 @@ UI_BOOK_BOOKS,Livros lidos
 UI_COMBINE_UNKNOWN_PAIR,Você não conhece receita com estes dois. Receitas novas vêm dos livros da Dungeon.
 UI_BOOK_NOTHING_NEW,Você já conhece todas as receitas que este livro poderia ensinar.
 UI_BOOK_RECIPES,Receitas por fazer
+UI_MSG_BELT_FULL,"Não cabe mais Vis: nem nos potes, nem na varinha"
+UI_MSG_JAR_TAKEN,+%d de %s
+UI_MSG_FOUND_ITEM,%s +%d
+UI_MSG_BANKED,Guardado na escola: %s
+UI_MSG_JAR_GAINED,Novo pote de Vis no cinto (%d de %d)
+UI_MSG_GATE_SHORTCUT,O ferrolho cede: o atalho fica aberto
+UI_MSG_GATE_KEY,"A chave gira, e o portão selado se abre"
+UI_MSG_SECRET_WALL,A parede era uma ilusão
+UI_MSG_KEY_TAKEN,Você pegou: %s
+UI_MSG_ANCHOR_ATTUNED,Âncora sintonizada (%s): o portal da escola agora pode trazer você aqui
+UI_PORTAL_TITLE,O portal
+UI_PORTAL_HINT,Para qual âncora atravessar?
+UI_PORTAL_STAY,Ficar na escola

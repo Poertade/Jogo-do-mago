@@ -1,16 +1,19 @@
 class_name DungeonRules
 extends Resource
-## Como uma incursão é montada. O arquivo fica em data/dungeon/rules.tres.
-## A Dungeon é um caminho contínuo: cada passo (`steps`) sorteia uma sala da região e do tipo
-## pedidos, e salas seguidas são ligadas por corredores que descem — das ruínas da escola às
-## grutas, e das grutas ao Avesso.
+## Como a Dungeon funciona. O arquivo fica em data/dungeon/rules.tres.
+## A Dungeon é um mapa fixo, feito à mão (scenes/dungeon/dungeon.tscn): as mesmas salas a cada
+## incursão, com inimigos e achados sorteados. O portal da escola leva a uma das âncoras que o
+## jogador já sintonizou; a primeira da lista está sempre sintonizada.
 ## Os valores padrão aqui são vazios de propósito: os valores reais ficam no arquivo de dados.
 
-## O caminho, da primeira à última sala.
-@export var steps: Array[DungeonStep] = []
-## Comprimento dos corredores entre as salas, sorteado entre os dois valores (metros).
-@export var corridor_length_min: float = 0.0
-@export var corridor_length_max: float = 0.0
-## Para onde a saída da última sala leva (sala e entrada).
+## Cena do mapa.
+@export_file("*.tscn") var map_scene: String
+## Âncoras do portal, na ordem em que aparecem no portal da escola (a primeira é a chegada).
+@export var anchors: Array[StringName] = []
+## Nome de cada âncora (chave de locales/content.csv).
+@export var anchor_names: Dictionary[StringName, String] = {}
+## Para onde se volta ao sair da Dungeon (sala e entrada).
 @export var return_room: StringName
 @export var return_entrance: StringName
+## Altura (m) abaixo da qual quem caiu para fora do mapa é trazido de volta à âncora.
+@export var fall_limit: float = 0.0

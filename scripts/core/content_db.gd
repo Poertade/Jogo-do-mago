@@ -10,6 +10,7 @@ var player: PlayerData
 var settings_defaults: SettingsDefaults
 var research_rules: ResearchRules
 var dungeon_rules: DungeonRules
+var economy: EconomyRules
 var sound_bank: SoundBank
 var presets: Array[GraphicsPreset] = []
 var rooms: Dictionary[StringName, RoomData] = {}
@@ -21,6 +22,7 @@ var foci: Dictionary[StringName, FocusData] = {}
 var enemies: Dictionary[StringName, EnemyData] = {}
 var books: Dictionary[StringName, BookData] = {}
 var zones: Dictionary[StringName, DungeonZone] = {}
+var items: Dictionary[StringName, ItemData] = {}
 var errors: PackedStringArray = []
 
 
@@ -30,6 +32,7 @@ func load_all(root := DATA_ROOT) -> void:
 	settings_defaults = _load_single(root.path_join("settings/defaults.tres")) as SettingsDefaults
 	research_rules = _load_single(root.path_join("research/rules.tres")) as ResearchRules
 	dungeon_rules = _load_single(root.path_join("dungeon/rules.tres")) as DungeonRules
+	economy = _load_single(root.path_join("economy/rules.tres")) as EconomyRules
 	sound_bank = _load_single(root.path_join("audio/sound_bank.tres")) as SoundBank
 	for resource in _load_folder(root.path_join("settings/presets")):
 		if resource is GraphicsPreset:
@@ -61,6 +64,9 @@ func load_all(root := DATA_ROOT) -> void:
 	for resource in _load_folder(root.path_join("dungeon/zones")):
 		if resource is DungeonZone:
 			_add_unique(zones, resource, "Região")
+	for resource in _load_folder(root.path_join("items")):
+		if resource is ItemData:
+			_add_unique(items, resource, "Material")
 	validate()
 
 
@@ -109,19 +115,6 @@ func find_scannable(id: StringName) -> ScannableData:
 	if id in scannables:
 		return scannables[id]
 	return enemies.get(id)
-
-
-## Salas da Dungeon por tipo (tipo → identificadores), para o sorteio das incursões.
-## Salas da Dungeon por região e tipo ("região/tipo" → identificadores), para o sorteio.
-func rooms_by_slot() -> Dictionary:
-	var result := {}
-	for room: RoomData in rooms.values():
-		if room.kind != &"":
-			var key := DungeonPlan.slot_key(room.zone, room.kind)
-			if not key in result:
-				result[key] = []
-			result[key].append(room.id)
-	return result
 
 
 ## Ordem alfabética de identificadores. (Ordenar StringName direto não segue o alfabeto: a
@@ -240,6 +233,10 @@ func validate() -> void:
 		errors.append("Faltam as regras da Dungeon (data/dungeon/rules.tres).")
 	else:
 		_validate_dungeon()
+	if economy == null:
+		errors.append("Faltam as regras dos potes e materiais (data/economy/rules.tres).")
+	else:
+		_validate_economy()
 	for aspect: AspectData in aspects.values():
 		_validate_aspect(aspect)
 	for scannable: ScannableData in scannables.values():
@@ -258,7 +255,7 @@ func _validate_player() -> void:
 	if player.max_health <= 0:
 		errors.append("player.tres: max_health precisa ser maior que zero.")
 	if player.jar_slots < 0 or (player.jar_slots > 0 and player.jar_capacity <= 0):
-		errors.append("player.tres: jar_slots não pode ser negativo, e com potes jar_capacity precisa ser maior que zero.")
+		errors.append("player.tres: jar_slots não pode ser negativo, e com lugar para potes jar_capacity precisa ser maior que zero.")
 	if player.starting_wand == null or player.starting_focus == null:
 		errors.append("player.tres: faltam a varinha ou o Focus iniciais.")
 		return
@@ -340,6 +337,8 @@ func _validate_enemy(enemy: EnemyData) -> void:
 	for summon in enemy.enrage_summons:
 		if summon == null or summon == enemy:
 			errors.append("%s: enrage_summons tem um inimigo vazio ou ele mesmo." % owner)
+	if enemy.silver_min < 0 or enemy.silver_max < enemy.silver_min:
+		errors.append("%s: silver_min não pode ser negativo nem maior que silver_max." % owner)
 
 
 func _validate_settings() -> void:
@@ -367,41 +366,50 @@ func _validate_room(room: RoomData) -> void:
 
 func _validate_dungeon() -> void:
 	var rules := dungeon_rules
-	if rules.steps.is_empty():
-		errors.append("dungeon/rules.tres: o caminho (steps) está vazio.")
-	if rules.corridor_length_min < 1.0 or rules.corridor_length_max < rules.corridor_length_min:
-		errors.append("dungeon/rules.tres: corredores precisam de pelo menos 1 m, e o máximo não pode ser menor que o mínimo.")
+	if rules.map_scene.is_empty() or not ResourceLoader.exists(rules.map_scene):
+		errors.append("dungeon/rules.tres: cena do mapa não encontrada ('%s')." % rules.map_scene)
+	if rules.anchors.is_empty():
+		errors.append("dungeon/rules.tres: a lista de âncoras está vazia (a primeira é a chegada).")
+	for anchor_id in rules.anchors:
+		if not anchor_id in rules.anchor_names:
+			errors.append("dungeon/rules.tres: a âncora '%s' não tem nome (anchor_names)." % anchor_id)
 	if not rules.return_room in rooms:
 		errors.append("dungeon/rules.tres: a sala de volta '%s' não existe." % rules.return_room)
-	var by_slot := rooms_by_slot()
-	var checked := {}
-	for step in rules.steps:
-		if step == null:
-			errors.append("dungeon/rules.tres: há um passo vazio no caminho.")
-			continue
-		if step.drop_min < 0.0 or step.drop_max < step.drop_min:
-			errors.append("dungeon/rules.tres: descida inválida no passo %s." % DungeonPlan.slot_key(step.zone, step.kind))
-		if not step.zone in zones:
-			errors.append("dungeon/rules.tres: a região '%s' não existe em data/dungeon/zones/." % step.zone)
-		var key := DungeonPlan.slot_key(step.zone, step.kind)
-		if key in checked:
-			continue
-		checked[key] = true
-		if not key in by_slot:
-			errors.append("dungeon/rules.tres: não há nenhuma sala '%s' (região/tipo) em data/rooms/." % key)
+	var used_zones: Dictionary[StringName, bool] = {}
 	for room: RoomData in rooms.values():
-		if room.kind != &"" and (room.zone == &"" or room.width <= 0.0 or room.depth <= 0.0 or room.height <= 0.0):
-			errors.append("Sala '%s': salas da Dungeon precisam de zone, width, depth e height." % room.id)
+		if room.zone == &"":
+			continue
+		used_zones[room.zone] = true
+		if not room.zone in zones:
+			errors.append("Sala '%s': a região '%s' não existe em data/dungeon/zones/." % [room.id, room.zone])
+		if room.width <= 0.0 or room.depth <= 0.0 or room.height <= 0.0:
+			errors.append("Sala '%s': salas da Dungeon precisam de width, depth e height." % room.id)
 	for zone: DungeonZone in zones.values():
 		if zone.wall_material == null or zone.floor_material == null or zone.ceiling_material == null:
 			errors.append("Região '%s': faltam materiais dos corredores." % zone.id)
 	for book: BookData in books.values():
 		if not book.zone in zones:
 			errors.append("Livro '%s': a região '%s' não existe." % [book.id, book.zone])
-	for step in rules.steps:
-		if step != null and books_in(step.zone).is_empty():
-			errors.append("Região '%s': nenhum livro pode aparecer nela (data/books/, campo zone)." % step.zone)
-			break
+	for zone_id in used_zones:
+		if books_in(zone_id).is_empty():
+			errors.append("Região '%s': nenhum livro pode aparecer nela (data/books/, campo zone)." % zone_id)
+
+
+func _validate_economy() -> void:
+	for cost in [economy.jar_price, economy.jar_materials]:
+		if cost.is_empty():
+			errors.append("economy/rules.tres: o preço e os materiais do pote não podem ficar vazios.")
+		for item_id in cost:
+			if not item_id in items:
+				errors.append("economy/rules.tres: o material '%s' não existe em data/items/." % item_id)
+			elif cost[item_id] <= 0:
+				errors.append("economy/rules.tres: quantidades precisam ser maiores que zero ('%s')." % item_id)
+	_validate_vis_amounts("economy/rules.tres (jar_vis)", economy.jar_vis)
+	if economy.glass_per_sealed_jar < 0:
+		errors.append("economy/rules.tres: glass_per_sealed_jar não pode ser negativo.")
+	for item_id in [&"silver", &"glass"]:
+		if not item_id in items:
+			errors.append("Falta o material '%s' em data/items/ (usado pelo jogo)." % item_id)
 
 
 func _validate_aspect(aspect: AspectData) -> void:

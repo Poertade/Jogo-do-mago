@@ -2,11 +2,15 @@ class_name Room
 extends Node3D
 ## Raiz de uma cena de sala (scenes/rooms/). A sala é montada no editor com GreyboxBlock,
 ## luzes e marcadores: EntrancePoint (onde o jogador aparece), EnemySpawn (onde nascem os
-## inimigos) e saídas (ExitPoint). As salas da Dungeon são sorteadas para cada incursão
-## (data/dungeon/rules.tres), e os EnemySpawn podem sortear o inimigo com o gerador `rng`.
+## inimigos), LootSpot (achados) e saídas (ExitPoint). As salas da Dungeon ficam no mapa fixo
+## (scenes/dungeon/dungeon.tscn); a cada incursão, os EnemySpawn sorteiam os inimigos com o
+## gerador `rng`.
 
 ## Todos os inimigos da sala foram derrotados.
 signal cleared
+
+## Qual sala é esta (data/rooms/): dá a atmosfera, o nome e a região.
+@export var room_id: StringName
 
 ## Gerador com a semente desta sala (definido pelo World antes de a sala entrar na árvore).
 var rng := GameRng.new(0)
@@ -40,7 +44,12 @@ func _spawn(spawn: EnemySpawn) -> void:
 	var data := spawn.pick(rng)
 	if data == null:
 		return
-	spawn_enemy(data, spawn.global_transform)
+	# Chefe já vencido numa incursão anterior: não volta.
+	if spawn.unique_id != &"" and Game.world.is_defeated(spawn.unique_id):
+		return
+	var enemy := spawn_enemy(data, spawn.global_transform)
+	if spawn.unique_id != &"":
+		enemy.died.connect(func(): Game.world.defeat(spawn.unique_id))
 
 
 ## Cria um inimigo na sala (também usado por chefes que chamam ajuda).

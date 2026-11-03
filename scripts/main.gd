@@ -30,6 +30,7 @@ var _transitioning := false
 @onready var research_book: ResearchBook = %ResearchBook
 @onready var research_table_screen: ResearchTableScreen = %ResearchTableScreen
 @onready var note_screen: NoteScreen = %NoteScreen
+@onready var portal_screen: PortalScreen = %PortalScreen
 
 
 func _ready() -> void:
@@ -41,7 +42,7 @@ func _ready() -> void:
 
 	Settings.changed.connect(_apply_settings)
 	_apply_settings()
-	for menu: MenuLayer in [pause_menu, research_book, research_table_screen, note_screen]:
+	for menu: MenuLayer in [pause_menu, research_book, research_table_screen, note_screen, portal_screen]:
 		menu.closed.connect(_capture_mouse)
 	Game.screen_requested.connect(_on_screen_requested)
 	Game.note_requested.connect(note_screen.show_note)
@@ -89,6 +90,8 @@ func _on_screen_requested(screen: StringName) -> void:
 	match screen:
 		&"research_table":
 			research_table_screen.open()
+		&"portal":
+			portal_screen.open()
 
 
 ## Portal ou saída: dissolve, troca a sala e volta.
@@ -98,18 +101,18 @@ func _on_travel_requested(room_id: StringName, entrance_id: StringName) -> void:
 	await _transition(travel_color, _arrive.bind(room_id, entrance_id))
 
 
-## Portal: dissolve, monta a Dungeon da incursão (e a malha de navegação) e volta.
-func _on_dungeon_requested(plan: DungeonPlan) -> void:
+## Portal: dissolve, monta o mapa da Dungeon (e a malha de navegação) e volta.
+func _on_dungeon_requested(incursion_seed: int, anchor_id: StringName) -> void:
 	if _transitioning:
 		return
-	await _transition(travel_color, world.load_dungeon.bind(plan))
+	await _transition(travel_color, world.load_dungeon.bind(incursion_seed, anchor_id))
 
 
 func _arrive(room_id: StringName, entrance_id: StringName) -> void:
-	if room_id == safe_room:
-		Game.run.leave_dungeon()
-		Game.run.health.restore()
 	world.load_room(room_id, entrance_id)
+	# Chegar vivo à escola guarda o que foi achado na incursão.
+	if room_id == safe_room:
+		Game.arrive_at_school()
 
 
 ## Morte: a incursão recomeça no Salão de Estudos; o conhecimento já está salvo.

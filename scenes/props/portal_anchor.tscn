@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/portal_anchor.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/portal_anchor.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="3"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="4"]
+[ext_resource type="Resource" path="res://data/scannables/carved_stone.tres" id="5"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="6"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.0392, 0.0235, 0.0784, 1.0)
+shader_parameter/emission_color = Color(0.5412, 0.3765, 1.0, 1.0)
+shader_parameter/emission_energy = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(1.6, 0.02, 1.6)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.1255, 0.0627, 0.251, 1.0)
+shader_parameter/emission_color = Color(0.6902, 0.5647, 1.0, 1.0)
+shader_parameter/emission_energy = 1.6
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("6")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.9412, 0.8784, 1.0, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.24, 0.24, 0.24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+size = Vector3(0.12, 0.12, 0.12)
+
+[sub_resource type="BoxShape3D" id="Box_8"]
+size = Vector3(0.6, 0.9, 0.6)
+
+[node name="PortalAnchor" type="Node3D"]
+script = ExtResource("1")
+scannable = ExtResource("2")
+
+[node name="Plinth" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.25, 0.0)
+script = ExtResource("3")
+size = Vector3(0.9, 0.5, 0.9)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="PlinthTop" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.56, 0.0)
+script = ExtResource("3")
+size = Vector3(1.1, 0.12, 1.1)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="Glyph" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 0.0, 0.01, 0.0)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Crystal" type="Node3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.25, 0.0)
+
+[node name="Upper" type="MeshInstance3D" parent="Crystal"]
+transform = Transform3D(0.7071, -0.7071, 0.0, 0.5, 0.5, -0.7071, 0.5, 0.5, 0.7071, 0.0, 0.16, 0.0)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_3")
+
+[node name="Lower" type="MeshInstance3D" parent="Crystal"]
+transform = Transform3D(0.8536, -0.1464, 0.5, 0.5, 0.5, -0.7071, -0.1464, 0.8536, 0.5, 0.0, -0.14, 0.0)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_3")
+
+[node name="Core" type="MeshInstance3D" parent="Crystal"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 0.0, 0.02, 0.0)
+mesh = SubResource("BoxMesh_7")
+material_override = SubResource("Mat_4")
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.25, 0.0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_8")
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.5, 0.0)
+light_color = Color(0.6275, 0.502, 1.0, 1.0)
+light_energy = 1.0
+omni_range = 5.0
+
+[node name="Arrival" type="Marker3D" parent="."]
+transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.6)

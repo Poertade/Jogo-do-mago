@@ -1,8 +1,8 @@
 class_name World
 extends Node3D
-## O mundo 3D: carrega uma sala pelo identificador (data/rooms/) ou a Dungeon inteira de uma
-## incursão (Dungeon), aplica a atmosfera da sala em que o jogador está (névoa, luz ambiente,
-## som) e coloca o jogador numa entrada.
+## O mundo 3D: carrega uma sala pelo identificador (data/rooms/) ou o mapa da Dungeon
+## (Dungeon), aplica a atmosfera da sala em que o jogador está (névoa, luz ambiente, som) e
+## coloca o jogador numa entrada ou numa âncora do portal.
 
 @export var player: Player
 @export var world_environment: WorldEnvironment
@@ -12,8 +12,9 @@ const ATMOSPHERE_BLEND := 1.2
 
 var current_room: Room
 var current_room_data: RoomData
-## A Dungeon da incursão atual (null na escola).
+## O mapa da Dungeon (null na escola) e a âncora onde o jogador chegou.
 var dungeon: Dungeon
+var _arrival: Node3D
 var _area: Node3D
 var _atmosphere_tween: Tween
 ## Névoa aplicada agora (para a transição partir dela).
@@ -40,24 +41,36 @@ func load_room(room_id: StringName, entrance_id: StringName = &"default", room_s
 	var entrance := current_room.get_entrance(entrance_id)
 	if entrance != null:
 		player.place_at(entrance)
+	Game.room_entered.emit(data)
 
 
-## Monta a Dungeon de uma incursão e põe o jogador no círculo de chegada.
-func load_dungeon(plan: DungeonPlan) -> void:
+## Monta o mapa da Dungeon (inimigos e achados sorteados com `incursion_seed`) e põe o jogador
+## na âncora `anchor_id`.
+func load_dungeon(incursion_seed: int, anchor_id: StringName) -> void:
 	_clear()
-	dungeon = Dungeon.new()
-	dungeon.name = "Dungeon"
+	var rules := Content.db.dungeon_rules
+	dungeon = (load(rules.map_scene) as PackedScene).instantiate() as Dungeon
+	dungeon.prepare(incursion_seed)
 	_area = dungeon
 	add_child(dungeon)
-	dungeon.build(plan)
-	_enter_dungeon_room(0, false)
-	player.place_at(dungeon.arrival)
+	dungeon.bake_navigation()
+	var target := dungeon.anchor(anchor_id)
+	if target == null:
+		push_error("Âncora '%s' não está no mapa; usando a primeira." % anchor_id)
+		target = dungeon.anchor(rules.anchors[0])
+	_arrival = target.arrival
+	player.place_at(_arrival)
+	var index := dungeon.room_index_at(player.global_position)
+	_enter_dungeon_room(maxi(index, 0), false)
 
 
-## Na Dungeon, acompanha em que sala o jogador está e troca a atmosfera devagar.
+## Na Dungeon, acompanha em que sala o jogador está e troca a atmosfera devagar. Quem cair para
+## fora do mapa volta para a âncora de chegada.
 func _physics_process(_delta: float) -> void:
 	if dungeon == null:
 		return
+	if player.global_position.y < Content.db.dungeon_rules.fall_limit:
+		player.place_at(_arrival)
 	var index := dungeon.room_index_at(player.global_position)
 	if index >= 0 and dungeon.rooms[index] != current_room:
 		_enter_dungeon_room(index, true)
@@ -66,8 +79,8 @@ func _physics_process(_delta: float) -> void:
 func _enter_dungeon_room(index: int, blend: bool) -> void:
 	var previous_zone := current_room_data.zone if current_room_data != null else &""
 	current_room = dungeon.rooms[index]
-	current_room_data = Content.db.rooms[dungeon.plan.rooms[index]]
-	Game.run.enter_room(index)
+	current_room_data = Content.db.rooms[current_room.room_id]
+	Game.room_entered.emit(current_room_data)
 	if blend:
 		_blend_atmosphere(current_room_data)
 	else:
@@ -82,6 +95,7 @@ func _clear() -> void:
 		_area.queue_free()
 	_area = null
 	dungeon = null
+	_arrival = null
 	current_room = null
 	current_room_data = null
 

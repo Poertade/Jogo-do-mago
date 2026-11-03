@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"underground_lake"
+name_key = "ROOM_UNDERGROUND_LAKE"
 scene_path = "res://scenes/rooms/underground_lake.tscn"
-kind = &"combat"
 zone = &"caves"
 width = 14.0
 depth = 16.0

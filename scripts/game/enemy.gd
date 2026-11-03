@@ -162,6 +162,9 @@ func _on_died() -> void:
 	$CollisionShape3D.set_deferred("disabled", true)
 	rig.play_death()
 	Audio.play_at(&"enemy_death", global_position + Vector3.UP, get_parent())
+	# Espólio: a prata vai direto para o que foi achado na incursão.
+	if data.silver_max > 0:
+		Game.find_item(&"silver", Game.rng.range_int(data.silver_min, data.silver_max))
 	died.emit()
 
 

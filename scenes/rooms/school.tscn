@@ -35,6 +35,8 @@
 [ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="22"]
 [ext_resource type="Resource" path="res://data/scannables/vis_node_water.tres" id="scan_vis_node_water"]
 [ext_resource type="PackedScene" path="res://scenes/props/reading_lectern.tscn" id="lectern"]
+[ext_resource type="PackedScene" path="res://scenes/props/merchant.tscn" id="merchant"]
+[ext_resource type="PackedScene" path="res://scenes/props/glass_workbench.tscn" id="workbench"]
 
 [sub_resource type="ShaderMaterial" id="Mat_1"]
 render_priority = 0
@@ -240,6 +242,12 @@ other_aspects = Array[StringName]([&"order"])
 
 [node name="ReadingLectern" parent="StudyHall" instance=ExtResource("lectern")]
 transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 2.4, 0, -4.2)
+
+[node name="Merchant" parent="StudyHall" instance=ExtResource("merchant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, 6.6)
+
+[node name="GlassWorkbench" parent="StudyHall" instance=ExtResource("workbench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0, 7.3)
 
 [node name="BookshelfW1" parent="StudyHall" instance=ExtResource("16")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.75, 0, -4)

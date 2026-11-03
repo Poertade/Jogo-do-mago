@@ -1,0 +1,163 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/glass_workbench.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/glass_workbench.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="3"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="4"]
+[ext_resource type="Resource" path="res://data/scannables/dark_timber.tres" id="5"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="6"]
+[ext_resource type="Resource" path="res://data/scannables/carved_stone.tres" id="7"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="8"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("8")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.502, 0.1882, 1.0)
+shader_parameter/emission_energy = 2.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.3, 0.2, 0.02)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("8")
+shader_parameter/albedo_color = Color(0.1255, 0.2275, 0.2275, 1.0)
+shader_parameter/emission_color = Color(0.4392, 0.8471, 0.7843, 1.0)
+shader_parameter/emission_energy = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_4"]
+radius = 0.13
+height = 0.26
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.04, 0.2, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.03, 0.03, 0.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7"]
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 7
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="Mat_8"]
+render_priority = 0
+shader = ExtResource("8")
+shader_parameter/albedo_color = Color(0.3529, 0.2902, 0.2275, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_9"]
+size = Vector3(0.4, 0.03, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_10"]
+size = Vector3(0.06, 0.008, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_11"]
+size = Vector3(0.06, 0.008, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_12"]
+size = Vector3(0.06, 0.008, 0.04)
+
+[node name="GlassWorkbench" type="Node3D"]
+script = ExtResource("1")
+scannable = ExtResource("2")
+
+[node name="Top" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.85, 0.0)
+script = ExtResource("3")
+size = Vector3(2.0, 0.1, 0.8)
+material = ExtResource("4")
+scannable = ExtResource("5")
+
+[node name="Leg1" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.9, 0.4, -0.32)
+script = ExtResource("3")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="Leg2" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.9, 0.4, -0.32)
+script = ExtResource("3")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="Leg3" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.9, 0.4, 0.32)
+script = ExtResource("3")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="Leg4" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.9, 0.4, 0.32)
+script = ExtResource("3")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="Furnace" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.55, 1.25, 0.05)
+script = ExtResource("3")
+size = Vector3(0.7, 0.7, 0.6)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="Chimney" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.55, 2.05, 0.15)
+script = ExtResource("3")
+size = Vector3(0.25, 0.9, 0.25)
+material = ExtResource("6")
+
+[node name="FurnaceMouth" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.55, 1.18, -0.26)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="FurnaceLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.55, 1.2, -0.7)
+light_color = Color(1.0, 0.5647, 0.251, 1.0)
+light_energy = 1.0
+omni_range = 4.0
+omni_attenuation = 1.2
+
+[node name="Flask" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.02, 0.0)
+mesh = SubResource("SphereMesh_4")
+material_override = SubResource("Mat_3")
+
+[node name="FlaskNeck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.22, 0.0)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_3")
+
+[node name="FlaskTube" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0, 0.0, 1.0, 0.342, 0.9397, 0.0, -0.9397, 0.342, 0.0, -0.36, 1.3, 0.0)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_3")
+
+[node name="HalfJar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.05, 1.04, 0.15)
+mesh = SubResource("CylinderMesh_7")
+material_override = SubResource("Mat_3")
+
+[node name="Tray" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.2, 0.915, -0.2)
+mesh = SubResource("BoxMesh_9")
+material_override = SubResource("Mat_8")
+
+[node name="Shard1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, 0.9397, -0.28, 0.935, -0.22)
+mesh = SubResource("BoxMesh_10")
+material_override = SubResource("Mat_3")
+
+[node name="Shard2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.342, 0.0, 0.9397, 0.0, 1.0, 0.0, -0.9397, 0.0, 0.342, -0.15, 0.935, -0.15)
+mesh = SubResource("BoxMesh_11")
+material_override = SubResource("Mat_3")
+
+[node name="Shard3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.342, 0.0, 0.9397, 0.0, 1.0, 0.0, -0.9397, 0.0, -0.342, -0.1, 0.935, -0.26)
+mesh = SubResource("BoxMesh_12")
+material_override = SubResource("Mat_3")

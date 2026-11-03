@@ -11,6 +11,8 @@ extends Marker3D
 @export var enemy_pool: Array[EnemyData] = []
 ## Chance de aparecer um inimigo neste ponto (1 = sempre).
 @export_range(0.0, 1.0) var chance := 1.0
+## Chefes: identificador único. Vencido uma vez, não aparece mais (vai para o save).
+@export var unique_id: StringName
 
 
 ## Sorteia o inimigo deste ponto (ou null, se não aparecer ninguém).

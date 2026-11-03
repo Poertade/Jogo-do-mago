@@ -3,7 +3,8 @@ extends Control
 ## Mostrador de Vis da varinha, no canto do HUD (inspirado no do Thaumcraft 4): no centro, o
 ## orbe do Focus equipado; em volta, em leque, um frasco para cada recipiente da varinha, cheio
 ## até onde há Vis daquele aspecto. Embaixo, o total guardado e o limite da varinha, os potes
-## do cinto (cheios até onde há Vis, na cor do aspecto) e quantos livros o jogador carrega.
+## do cinto (cheios até onde há Vis, na cor do aspecto), quantos livros o jogador carrega e os
+## materiais (prata e cacos de vidro: o guardado na escola mais o achado na incursão).
 ## Desenhado em pixels da interface (640x360); o HUD chama `show_wand` a cada quadro.
 
 ## Centro do orbe, raio do orbe e onde os frascos começam e terminam (distância do centro).
@@ -26,19 +27,22 @@ var _wand: WandState
 var _focus_color := Color.WHITE
 var _jars: VisJarBelt
 var _books := 0
+var _items: Dictionary = {}
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(110, 114)
+	custom_minimum_size = Vector2(110, 128)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 ## Atualiza o que o mostrador exibe.
-func show_wand(wand: WandState, focus_color: Color, jars: VisJarBelt = null, books := 0) -> void:
+## `items`: material → quantidade (ex.: {&"silver": 12, &"glass": 2}).
+func show_wand(wand: WandState, focus_color: Color, jars: VisJarBelt = null, books := 0, items := {}) -> void:
 	_wand = wand
 	_focus_color = focus_color
 	_jars = jars
 	_books = books
+	_items = items
 	queue_redraw()
 
 
@@ -69,6 +73,31 @@ func _draw() -> void:
 	draw_string_outline(font, total_at, total, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
 	draw_string(font, total_at, total, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
 	_draw_belt(font)
+	_draw_items(font)
+
+
+## Os materiais: um ícone na cor de cada um (moeda, caco) e a quantidade.
+func _draw_items(font: Font) -> void:
+	var x := 2.0
+	var y := 113.0
+	var ids: Array = _items.keys()
+	ids.sort_custom(ContentDB.by_name)
+	ids.reverse()  # prata primeiro, depois cacos (silver > glass)
+	for item_id in ids:
+		var item: ItemData = Content.db.items.get(item_id)
+		var color := item.color if item != null else Color.WHITE
+		if item_id == &"silver":
+			draw_circle(Vector2(x + 4, y + 5), 4.0, Color.BLACK)
+			draw_circle(Vector2(x + 4, y + 5), 3.0, color)
+			draw_rect(Rect2(x + 3, y + 3, 2, 1), color.lightened(0.5))
+		else:
+			draw_colored_polygon(PackedVector2Array([Vector2(x + 1, y + 9), Vector2(x + 3, y + 1), Vector2(x + 8, y + 3), Vector2(x + 6, y + 9)]), Color.BLACK)
+			draw_colored_polygon(PackedVector2Array([Vector2(x + 2, y + 8), Vector2(x + 3.5, y + 2), Vector2(x + 7, y + 3.5), Vector2(x + 5.5, y + 8)]), color)
+		var text := str(_items[item_id])
+		var at := Vector2(x + 11, y + 9)
+		draw_string_outline(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
+		draw_string(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
+		x += 16.0 + font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x
 
 
 ## Os potes do cinto (vidro, líquido do aspecto, tampa de latão) e os livros carregados.

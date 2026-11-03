@@ -1,11 +1,11 @@
 class_name VisJarBelt
 extends RefCounted
-## O cinto de potes de Vis: alguns potes que o jogador leva, cada um com Vis de um só aspecto.
-## São uma reserva além da varinha:
+## O cinto de potes de Vis: os potes que o jogador comprou ou fabricou na escola (Stash.jars),
+## cada um com Vis de um só aspecto. São uma reserva além da varinha:
 ## - na escola, o Vis que não cabe na varinha enquanto ele drena um Nódulo vai para os potes;
 ## - na Dungeon, a tecla R despeja um pote na varinha;
-## - potes selados achados na Dungeon entram no cinto.
-## Faz parte da incursão: ao morrer, o conteúdo se perde.
+## - o Vis dos potes selados achados na Dungeon vai para os potes do cinto.
+## Ao morrer, o conteúdo se perde, mas os potes continuam com o jogador.
 
 ## Emitido quando algum pote muda (para o HUD).
 signal changed
@@ -23,11 +23,19 @@ var capacity: int
 var jars: Array[Jar] = []
 
 
-## `slots`: quantos potes cabem no cinto; `jar_capacity`: quanto Vis cabe em cada pote.
-func _init(slots: int, jar_capacity: int) -> void:
+## `count`: quantos potes o jogador tem; `jar_capacity`: quanto Vis cabe em cada pote.
+func _init(count: int, jar_capacity: int) -> void:
 	capacity = jar_capacity
-	for i in slots:
+	set_count(count)
+
+
+## Muda quantos potes há no cinto (ao comprar ou fabricar um pote). Potes novos vêm vazios.
+func set_count(count: int) -> void:
+	while jars.size() < count:
 		jars.append(Jar.new())
+	while jars.size() > maxi(count, 0):
+		jars.pop_back()
+	changed.emit()
 
 
 ## Quanto Vis do aspecto há nos potes, somando todos.

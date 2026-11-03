@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_caves.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"chasm"
+name_key = "ROOM_CHASM"
+scene_path = "res://scenes/rooms/chasm.tscn"
+zone = &"caves"
+width = 22.0
+depth = 10.0
+height = 16.0
+fog_color = Color(0.015, 0.02, 0.03, 1)
+fog_near = 3.0
+fog_far = 22.0
+ambient_color = Color(0.2, 0.26, 0.3, 1)
+ambient_energy = 0.45
+ambience = ExtResource("2")

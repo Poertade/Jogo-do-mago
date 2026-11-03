@@ -110,3 +110,47 @@ BOOK_BEADLE_LOG,Caderno de um Bedel
 BOOK_BEADLE_LOG_TEXT,"Rondas, nomes de alunos castigados e, no fim, a receita que um deles usava para sair do quarto escondido. O bedel anotou tudo."
 BOOK_WET_MAP,Mapa Molhado
 BOOK_WET_MAP_TEXT,"Um mapa das grutas, borrado pela água. No verso, alguém escreveu como se faz uma coisa que só existe lá embaixo."
+ROOM_WELL_ATRIUM,Átrio do Poço
+ROOM_COLLAPSED_LIBRARY,Biblioteca Desabada
+ROOM_SCHOLAR_CABINET,Gabinete Escondido
+ROOM_OSSUARY_HALL,Galeria do Ossuário
+ROOM_BONE_CRYPT,Cripta dos Bedéis
+ROOM_FLOODED_DORMITORY,Dormitório Alagado
+ROOM_STONE_CHAMBER,Câmara de Pedra
+ROOM_FUNGUS_GROTTO,Gruta dos Fungos
+ROOM_UNDERGROUND_LAKE,Lago Subterrâneo
+ROOM_HIDDEN_GROTTO,Gruta Escondida
+ROOM_VIS_SPRING,Fonte de Vis
+ROOM_CHASM,A Fenda
+ROOM_INVERTED_HALL,Salão Invertido
+ROOM_ARCHIVE_VESTIBULE,Vestíbulo do Arquivo
+ROOM_GRAND_ARCHIVE,O Grande Arquivo
+ANCHOR_ATRIUM,Átrio do Poço
+ANCHOR_SPRING,Fonte de Vis
+ANCHOR_VESTIBULE,Vestíbulo do Arquivo
+ITEM_SILVER,Prata
+ITEM_GLASS,Cacos de vidro
+KEY_CRYPT,Chave da Cripta
+OBJ_SILVER_POUCH,Bolsa de prata
+OBJ_GLASS_SHARDS,Cacos de vidro
+OBJ_OLD_KEY,Chave antiga
+OBJ_PORTAL_ANCHOR,Âncora do portal
+OBJ_ILLUSORY_WALL,Parede ilusória
+OBJ_MERCHANT,O Almoxarife
+OBJ_GLASS_WORKBENCH,Bancada de vidraria
+PROMPT_TAKE_SILVER,Pegar a bolsa de prata
+PROMPT_TAKE_GLASS,Juntar os cacos de vidro
+PROMPT_TAKE_KEY,Pegar a chave
+PROMPT_GATE_OPEN,Puxar o ferrolho da grade
+PROMPT_GATE_UNLOCK,Destrancar com a chave
+PROMPT_GATE_OTHER_SIDE,A grade está trancada do outro lado
+PROMPT_GATE_NEEDS_KEY,Um portão selado. Falta a chave
+PROMPT_ANCHOR_ATTUNE,Sintonizar a âncora do portal
+PROMPT_ANCHOR_RETURN,Voltar à escola (com o que achou)
+PROMPT_MERCHANT_BUY,Comprar um pote de Vis (%s)
+PROMPT_MERCHANT_POOR,Pote de Vis: %s. Você tem %s
+PROMPT_MERCHANT_FULL,Seu cinto já está cheio de potes
+PROMPT_WORKBENCH_CRAFT,Fabricar um pote de Vis (%s)
+PROMPT_WORKBENCH_MISSING,Pote de Vis: %s. Falta: %s
+NOTE_WELL_TITLE,Inscrição no parapeito
+NOTE_WELL_BODY,"Daqui os mestres desciam às grutas sem tocar nos degraus: bastava um passo além da borda e a água lá embaixo os recebia.\n\nQuem desce pelo poço não sobe pelo poço. O caminho de volta é a Escadaria, a oeste."

@@ -6,40 +6,37 @@
 [ext_resource type="Resource" path="res://data/scannables/cave_rock.tres" id="4"]
 [ext_resource type="Material" path="res://assets/materials/cave_rock.tres" id="5"]
 [ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="6"]
-[ext_resource type="Script" path="res://scripts/game/exit_point.gd" id="7"]
-[ext_resource type="Resource" path="res://data/scannables/iron_bars.tres" id="8"]
-[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="9"]
-[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="10"]
-[ext_resource type="Resource" path="res://data/scannables/stalagmite.tres" id="11"]
-[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="12"]
-[ext_resource type="Resource" path="res://data/scannables/glow_fungus.tres" id="13"]
-[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="14"]
-[ext_resource type="Resource" path="res://data/scannables/cave_slime.tres" id="15"]
-[ext_resource type="Resource" path="res://data/scannables/dark_crevice.tres" id="16"]
-[ext_resource type="Script" path="res://scripts/game/enemy_spawn.gd" id="17"]
-[ext_resource type="Resource" path="res://data/enemies/ink_ooze.tres" id="18"]
-[ext_resource type="Resource" path="res://data/enemies/bone_beadle.tres" id="19"]
-[ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="20"]
-[ext_resource type="Script" path="res://scripts/game/loot_spot.gd" id="21"]
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="7"]
+[ext_resource type="Resource" path="res://data/scannables/glow_fungus.tres" id="8"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="9"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="10"]
+[ext_resource type="Resource" path="res://data/scannables/cave_slime.tres" id="11"]
+[ext_resource type="Resource" path="res://data/scannables/dark_crevice.tres" id="12"]
+[ext_resource type="Script" path="res://scripts/game/enemy_spawn.gd" id="13"]
+[ext_resource type="Resource" path="res://data/enemies/ink_ooze.tres" id="14"]
+[ext_resource type="Resource" path="res://data/enemies/bone_beadle.tres" id="15"]
+[ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="16"]
+[ext_resource type="Script" path="res://scripts/game/loot_spot.gd" id="17"]
+[ext_resource type="Resource" path="res://data/scannables/stalagmite.tres" id="18"]
 
-[sub_resource type="BoxShape3D" id="Box_1"]
-size = Vector3(2.2, 2.6, 0.1)
-
-[sub_resource type="ShaderMaterial" id="Mat_2"]
+[sub_resource type="ShaderMaterial" id="Mat_1"]
 render_priority = 0
-shader = ExtResource("10")
-shader_parameter/albedo_color = Color(0.0392, 0.0235, 0.0784, 1.0)
-shader_parameter/emission_color = Color(0.5412, 0.3765, 1.0, 1.0)
-shader_parameter/emission_energy = 0.8
+shader = ExtResource("9")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.3725, 0.8784, 0.6902, 1.0)
+shader_parameter/emission_energy = 1.6
 
-[sub_resource type="BoxMesh" id="BoxMesh_3"]
-size = Vector3(2.0, 2.5, 0.04)
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.5, 0.35, 0.5)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.5, 0.35, 0.5)
 
 [sub_resource type="ShaderMaterial" id="Mat_4"]
 render_priority = 0
-shader = ExtResource("10")
+shader = ExtResource("9")
 shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
-shader_parameter/emission_color = Color(0.3725, 0.8784, 0.6902, 1.0)
+shader_parameter/emission_color = Color(0.502, 0.9412, 0.6275, 1.0)
 shader_parameter/emission_energy = 1.6
 
 [sub_resource type="BoxMesh" id="BoxMesh_5"]
@@ -50,9 +47,9 @@ size = Vector3(0.5, 0.35, 0.5)
 
 [sub_resource type="ShaderMaterial" id="Mat_7"]
 render_priority = 0
-shader = ExtResource("10")
+shader = ExtResource("9")
 shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
-shader_parameter/emission_color = Color(0.502, 0.9412, 0.6275, 1.0)
+shader_parameter/emission_color = Color(0.3725, 0.8157, 0.8784, 1.0)
 shader_parameter/emission_energy = 1.6
 
 [sub_resource type="BoxMesh" id="BoxMesh_8"]
@@ -63,9 +60,9 @@ size = Vector3(0.5, 0.35, 0.5)
 
 [sub_resource type="ShaderMaterial" id="Mat_10"]
 render_priority = 0
-shader = ExtResource("10")
+shader = ExtResource("9")
 shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
-shader_parameter/emission_color = Color(0.3725, 0.8157, 0.8784, 1.0)
+shader_parameter/emission_color = Color(0.4392, 0.8784, 0.7529, 1.0)
 shader_parameter/emission_energy = 1.6
 
 [sub_resource type="BoxMesh" id="BoxMesh_11"]
@@ -76,58 +73,46 @@ size = Vector3(0.5, 0.35, 0.5)
 
 [sub_resource type="ShaderMaterial" id="Mat_13"]
 render_priority = 0
-shader = ExtResource("10")
-shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
-shader_parameter/emission_color = Color(0.4392, 0.8784, 0.7529, 1.0)
-shader_parameter/emission_energy = 1.6
+shader = ExtResource("9")
+shader_parameter/albedo_color = Color(0.102, 0.1882, 0.0627, 1.0)
+shader_parameter/emission_color = Color(0.2275, 0.4784, 0.1569, 1.0)
+shader_parameter/emission_energy = 0.4
 
 [sub_resource type="BoxMesh" id="BoxMesh_14"]
-size = Vector3(0.5, 0.35, 0.5)
+size = Vector3(2.2, 0.02, 1.4)
 
 [sub_resource type="BoxShape3D" id="Box_15"]
-size = Vector3(0.5, 0.35, 0.5)
+size = Vector3(2.2, 0.1, 1.4)
 
 [sub_resource type="ShaderMaterial" id="Mat_16"]
 render_priority = 0
-shader = ExtResource("10")
+shader = ExtResource("9")
 shader_parameter/albedo_color = Color(0.102, 0.1882, 0.0627, 1.0)
 shader_parameter/emission_color = Color(0.2275, 0.4784, 0.1569, 1.0)
 shader_parameter/emission_energy = 0.4
 
 [sub_resource type="BoxMesh" id="BoxMesh_17"]
-size = Vector3(2.2, 0.02, 1.4)
+size = Vector3(1.6, 0.02, 1.8)
 
 [sub_resource type="BoxShape3D" id="Box_18"]
-size = Vector3(2.2, 0.1, 1.4)
+size = Vector3(1.6, 0.1, 1.8)
 
 [sub_resource type="ShaderMaterial" id="Mat_19"]
 render_priority = 0
-shader = ExtResource("10")
-shader_parameter/albedo_color = Color(0.102, 0.1882, 0.0627, 1.0)
-shader_parameter/emission_color = Color(0.2275, 0.4784, 0.1569, 1.0)
-shader_parameter/emission_energy = 0.4
-
-[sub_resource type="BoxMesh" id="BoxMesh_20"]
-size = Vector3(1.6, 0.02, 1.8)
-
-[sub_resource type="BoxShape3D" id="Box_21"]
-size = Vector3(1.6, 0.1, 1.8)
-
-[sub_resource type="ShaderMaterial" id="Mat_22"]
-render_priority = 0
-shader = ExtResource("10")
+shader = ExtResource("9")
 shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
 shader_parameter/emission_color = Color(0.0627, 0.0314, 0.0941, 1.0)
 shader_parameter/emission_energy = 0.2
 
-[sub_resource type="BoxMesh" id="BoxMesh_23"]
+[sub_resource type="BoxMesh" id="BoxMesh_20"]
 size = Vector3(0.12, 2.4, 1.2)
 
-[sub_resource type="BoxShape3D" id="Box_24"]
+[sub_resource type="BoxShape3D" id="Box_21"]
 size = Vector3(0.12, 2.4, 1.2)
 
 [node name="FungusGrotto" type="Node3D"]
 script = ExtResource("1")
+room_id = &"fungus_grotto"
 
 [node name="Blocks" type="Node3D" parent="."]
 
@@ -152,300 +137,94 @@ script = ExtResource("2")
 size = Vector3(12.8, 0.2, 14.8)
 material = ExtResource("5")
 
-[node name="WallWest" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 2.5, 0.0)
-script = ExtResource("2")
-size = Vector3(0.4, 5.0, 14.8)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="WallEast" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 2.5, 0.0)
-script = ExtResource("2")
-size = Vector3(0.4, 5.0, 14.8)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="WallSouthLeft" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.8, 2.5, 7.2)
-script = ExtResource("2")
-size = Vector3(5.2, 5.0, 0.4)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="WallSouthRight" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.8, 2.5, 7.2)
-script = ExtResource("2")
-size = Vector3(5.2, 5.0, 0.4)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="WallSouthLintel" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 3.9, 7.2)
-script = ExtResource("2")
-size = Vector3(2.4, 2.2, 0.4)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="WallNorthLeft" type="StaticBody3D" parent="Blocks"]
+[node name="WallNorth0" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.8, 2.5, -7.2)
 script = ExtResource("2")
 size = Vector3(5.2, 5.0, 0.4)
 material = ExtResource("5")
 scannable = ExtResource("4")
 
-[node name="WallNorthRight" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.8, 2.5, -7.2)
-script = ExtResource("2")
-size = Vector3(5.2, 5.0, 0.4)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="WallNorthLintel" type="StaticBody3D" parent="Blocks"]
+[node name="WallNorthLintel0" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 3.9, -7.2)
 script = ExtResource("2")
 size = Vector3(2.4, 2.2, 0.4)
 material = ExtResource("5")
 scannable = ExtResource("4")
 
-[node name="SouthDoorway" type="Node3D" parent="."]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 7.0)
+[node name="WallNorthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.8, 2.5, -7.2)
+script = ExtResource("2")
+size = Vector3(5.2, 5.0, 0.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
 
-[node name="South" type="Marker3D" parent="Markers"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 5.8)
+[node name="WallSouthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.5, 7.2)
+script = ExtResource("2")
+size = Vector3(12.8, 5.0, 0.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallEast0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 2.5, -4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 5.0, 5.8)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallEastLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 3.9, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 2.2, 2.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallEastEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 2.5, 4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 5.0, 5.8)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallWest0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 2.5, -4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 5.0, 5.8)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallWestLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 3.9, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 2.2, 2.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallWestEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 2.5, 4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 5.0, 5.8)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Default" type="Marker3D" parent="Markers"]
+transform = Transform3D(0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, -4.8, 0.0, 0.0)
 script = ExtResource("6")
-id = &"south"
-
-[node name="ExitPoint" type="Node3D" parent="Exit" node_paths=PackedStringArray("barrier")]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -7.2)
-script = ExtResource("7")
-prompt_key = "PROMPT_EXIT_FINAL"
-locked_prompt_key = "PROMPT_EXIT_LOCKED"
-goes_deeper = true
-requires_clear = true
-scannable = ExtResource("8")
-barrier = NodePath("Bars")
-
-[node name="Bars" type="Node3D" parent="Exit/ExitPoint"]
-
-[node name="Bar1" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.4, 0.0)
-script = ExtResource("2")
-size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("9")
-scannable = ExtResource("8")
-
-[node name="Bar2" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.4, 0.0)
-script = ExtResource("2")
-size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("9")
-scannable = ExtResource("8")
-
-[node name="Bar3" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
-script = ExtResource("2")
-size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("9")
-scannable = ExtResource("8")
-
-[node name="Bar4" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.4, 0.0)
-script = ExtResource("2")
-size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("9")
-scannable = ExtResource("8")
-
-[node name="Bar5" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.4, 0.0)
-script = ExtResource("2")
-size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("9")
-scannable = ExtResource("8")
-
-[node name="BarCross" type="StaticBody3D" parent="Exit/ExitPoint/Bars"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.7, 0.0)
-script = ExtResource("2")
-size = Vector3(2.4, 0.08, 0.08)
-material = ExtResource("9")
-scannable = ExtResource("8")
-
-[node name="ExitPassage" type="Node3D" parent="Exit/ExitPoint"]
-
-[node name="PassageFloor" type="StaticBody3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.1, -1.2)
-script = ExtResource("2")
-size = Vector3(2.4, 0.2, 2.0)
-material = ExtResource("3")
-
-[node name="PassageBack" type="StaticBody3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, -2.4)
-script = ExtResource("2")
-size = Vector3(3.2, 2.8, 0.4)
-material = ExtResource("5")
-
-[node name="PassageLeft" type="StaticBody3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.4, 1.4, -1.2)
-script = ExtResource("2")
-size = Vector3(0.4, 2.8, 2.0)
-material = ExtResource("5")
-
-[node name="PassageRight" type="StaticBody3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.4, 1.4, -1.2)
-script = ExtResource("2")
-size = Vector3(0.4, 2.8, 2.0)
-material = ExtResource("5")
-
-[node name="PassageTop" type="StaticBody3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.9, -1.2)
-script = ExtResource("2")
-size = Vector3(3.2, 0.2, 2.0)
-material = ExtResource("5")
-
-[node name="Doorway" type="StaticBody3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.3, -1.0)
-collision_layer = 1
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Exit/ExitPoint/ExitPassage/Doorway"]
-shape = SubResource("Box_1")
-
-[node name="ReturnGlyph" type="MeshInstance3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.3, -2.15)
-mesh = SubResource("BoxMesh_3")
-material_override = SubResource("Mat_2")
-
-[node name="ReturnLight" type="OmniLight3D" parent="Exit/ExitPoint/ExitPassage"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.8, -1.6)
-light_color = Color(0.5412, 0.4392, 1.0, 1.0)
-light_energy = 0.9
-omni_range = 4.0
-omni_attenuation = 1.2
-
-[node name="Stalactite0" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7057, -0.0438, 0.7071, 0.0619, 0.9981, 0.0, -0.7057, 0.0438, 0.7071, 4.9167, 4.4741, 3.9255)
-script = ExtResource("2")
-size = Vector3(0.3, 1.0518, 0.3)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalagmite1" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.709, -0.0309, 0.7046, -0.041, 0.9955, 0.0849, -0.704, -0.0891, 0.7046, -2.4648, 0.9551, 0.131)
-script = ExtResource("2")
-size = Vector3(0.35, 1.9102, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalagmite2" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7072, -0.0084, 0.7069, -0.0098, 0.9997, 0.0217, -0.7069, -0.0223, 0.7069, -3.7393, 0.8168, 4.2942)
-script = ExtResource("2")
-size = Vector3(0.35, 1.6336, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Boulder3" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.601, 0.1019, 0.7927, 0.095, 0.9757, -0.1974, -0.7936, 0.194, 0.5767, -4.0433, 0.2514, 3.6487)
-script = ExtResource("2")
-size = Vector3(0.8171, 0.6285, 0.6285)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="Stalagmite4" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7067, -0.0241, 0.7071, 0.034, 0.9994, 0.0, -0.7067, 0.024, 0.7071, 3.3859, 0.8482, 3.7667)
-script = ExtResource("2")
-size = Vector3(0.35, 1.6964, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalagmite5" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7093, -0.0251, 0.7044, -0.0513, 0.9949, 0.0872, -0.703, -0.098, 0.7044, 4.1573, 1.0522, -1.0254)
-script = ExtResource("2")
-size = Vector3(0.35, 2.1044, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalagmite6" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.709, -0.027, 0.7047, -0.0436, 0.9957, 0.082, -0.7039, -0.0889, 0.7047, -3.6464, 0.4755, -5.1727)
-script = ExtResource("2")
-size = Vector3(0.35, 0.9511, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Boulder7" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7532, 0.018, 0.6575, 0.1631, 0.9633, -0.2132, -0.6372, 0.2678, 0.7226, -5.249, 0.3071, 3.8204)
-script = ExtResource("2")
-size = Vector3(0.9981, 0.7678, 0.7678)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="Boulder8" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.877, 0.1092, 0.4679, -0.1678, 0.9821, 0.0853, -0.4502, -0.1533, 0.8797, 3.3112, 0.456, 0.7287)
-script = ExtResource("2")
-size = Vector3(1.4819, 1.1399, 1.1399)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="Boulder9" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.3358, -0.1803, 0.9245, -0.1093, 0.9674, 0.2284, -0.9356, -0.1778, 0.3052, 4.5289, 0.2723, -4.2021)
-script = ExtResource("2")
-size = Vector3(0.8851, 0.6808, 0.6808)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
-[node name="Stalagmite10" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7031, 0.0779, 0.7068, -0.0802, 0.9963, -0.0301, -0.7065, -0.0355, 0.7068, -3.4107, 0.4917, -3.4025)
-script = ExtResource("2")
-size = Vector3(0.35, 0.9834, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalactite11" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.707, -0.0114, 0.7071, 0.0162, 0.9999, 0.0, -0.707, 0.0114, 0.7071, 5.3642, 4.2126, -5.4948)
-script = ExtResource("2")
-size = Vector3(0.3, 1.5749, 0.3)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalactite12" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7054, 0.0493, 0.7071, -0.0697, 0.9976, 0.0, -0.7054, -0.0493, 0.7071, -2.5586, 4.3791, -1.163)
-script = ExtResource("2")
-size = Vector3(0.3, 1.2418, 0.3)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalactite13" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7067, 0.0251, 0.7071, -0.0355, 0.9994, 0.0, -0.7067, -0.0251, 0.7071, -2.5677, 4.5355, -2.6589)
-script = ExtResource("2")
-size = Vector3(0.3, 0.929, 0.3)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalagmite14" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7064, -0.0375, 0.7068, 0.0256, 0.9993, 0.0275, -0.7074, -0.0014, 0.7068, -2.0674, 0.4109, -3.2039)
-script = ExtResource("2")
-size = Vector3(0.35, 0.8217, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
-
-[node name="Stalagmite15" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7086, 0.0044, 0.7055, -0.0722, 0.9952, 0.0664, -0.7019, -0.098, 0.7055, -5.2529, 1.0066, -0.179)
-script = ExtResource("2")
-size = Vector3(0.35, 2.0131, 0.35)
-material = ExtResource("5")
-scannable = ExtResource("11")
+id = &"default"
 
 [node name="Fungus1" type="StaticBody3D" parent="Props"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.2, 0.18, -4.0)
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("13")
+script = ExtResource("7")
+data = ExtResource("8")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/Fungus1"]
-mesh = SubResource("BoxMesh_5")
-material_override = SubResource("Mat_4")
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Fungus1"]
-shape = SubResource("Box_6")
+shape = SubResource("Box_3")
 
 [node name="Fungus1Light" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.2, 0.48, -4.0)
@@ -453,45 +232,45 @@ light_color = Color(0.3725, 0.8784, 0.6902, 1.0)
 light_energy = 0.9
 omni_range = 5.0
 omni_attenuation = 1.2
-script = ExtResource("14")
+script = ExtResource("10")
 flicker_amount = 0.1
 
 [node name="Fungus2" type="StaticBody3D" parent="Props"]
-transform = Transform3D(0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, 0.9397, 4.6, 0.18, 1.0)
+transform = Transform3D(0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, 0.9397, 4.6, 0.18, 3.0)
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("13")
+script = ExtResource("7")
+data = ExtResource("8")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/Fungus2"]
-mesh = SubResource("BoxMesh_8")
-material_override = SubResource("Mat_7")
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Fungus2"]
-shape = SubResource("Box_9")
+shape = SubResource("Box_6")
 
 [node name="Fungus2Light" type="OmniLight3D" parent="Lights"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.6, 0.48, 1.0)
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.6, 0.48, 3.0)
 light_color = Color(0.502, 0.9412, 0.6275, 1.0)
 light_energy = 0.9
 omni_range = 5.0
 omni_attenuation = 1.2
-script = ExtResource("14")
+script = ExtResource("10")
 flicker_amount = 0.1
 
 [node name="Fungus3" type="StaticBody3D" parent="Props"]
 transform = Transform3D(0.766, 0.0, 0.6428, 0.0, 1.0, 0.0, -0.6428, 0.0, 0.766, -3.0, 0.18, 4.4)
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("13")
+script = ExtResource("7")
+data = ExtResource("8")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/Fungus3"]
-mesh = SubResource("BoxMesh_11")
-material_override = SubResource("Mat_10")
+mesh = SubResource("BoxMesh_8")
+material_override = SubResource("Mat_7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Fungus3"]
-shape = SubResource("Box_12")
+shape = SubResource("Box_9")
 
 [node name="Fungus3Light" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.0, 0.48, 4.4)
@@ -499,22 +278,22 @@ light_color = Color(0.3725, 0.8157, 0.8784, 1.0)
 light_energy = 0.9
 omni_range = 5.0
 omni_attenuation = 1.2
-script = ExtResource("14")
+script = ExtResource("10")
 flicker_amount = 0.1
 
 [node name="Fungus4" type="StaticBody3D" parent="Props"]
 transform = Transform3D(0.5, 0.0, 0.866, 0.0, 1.0, 0.0, -0.866, 0.0, 0.5, 3.0, 0.18, -5.2)
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("13")
+script = ExtResource("7")
+data = ExtResource("8")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/Fungus4"]
-mesh = SubResource("BoxMesh_14")
-material_override = SubResource("Mat_13")
+mesh = SubResource("BoxMesh_11")
+material_override = SubResource("Mat_10")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Fungus4"]
-shape = SubResource("Box_15")
+shape = SubResource("Box_12")
 
 [node name="Fungus4Light" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.0, 0.48, -5.2)
@@ -522,70 +301,176 @@ light_color = Color(0.4392, 0.8784, 0.7529, 1.0)
 light_energy = 0.9
 omni_range = 5.0
 omni_attenuation = 1.2
-script = ExtResource("14")
+script = ExtResource("10")
 flicker_amount = 0.1
 
 [node name="Slime1" type="StaticBody3D" parent="Props"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.6, 0.012, -1.6)
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("15")
+script = ExtResource("7")
+data = ExtResource("11")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/Slime1"]
-mesh = SubResource("BoxMesh_17")
-material_override = SubResource("Mat_16")
+mesh = SubResource("BoxMesh_14")
+material_override = SubResource("Mat_13")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Slime1"]
-shape = SubResource("Box_18")
+shape = SubResource("Box_15")
 
 [node name="Slime2" type="StaticBody3D" parent="Props"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.8, 0.012, 2.2)
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("15")
+script = ExtResource("7")
+data = ExtResource("11")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/Slime2"]
+mesh = SubResource("BoxMesh_17")
+material_override = SubResource("Mat_16")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Slime2"]
+shape = SubResource("Box_18")
+
+[node name="Crevice" type="StaticBody3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.75, 1.6, -4.6)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("7")
+data = ExtResource("12")
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/Crevice"]
 mesh = SubResource("BoxMesh_20")
 material_override = SubResource("Mat_19")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Slime2"]
-shape = SubResource("Box_21")
-
-[node name="Crevice" type="StaticBody3D" parent="Props"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.75, 1.6, -2.4)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("12")
-data = ExtResource("16")
-
-[node name="Mesh" type="MeshInstance3D" parent="Props/Crevice"]
-mesh = SubResource("BoxMesh_23")
-material_override = SubResource("Mat_22")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Crevice"]
-shape = SubResource("Box_24")
+shape = SubResource("Box_21")
 
 [node name="SpawnA" type="Marker3D" parent="Markers"]
 transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, -4.0)
-script = ExtResource("17")
-enemy_pool = [ExtResource("18"), ExtResource("18"), ExtResource("19")]
+script = ExtResource("13")
+enemy_pool = [ExtResource("14"), ExtResource("14"), ExtResource("15")]
 
 [node name="SpawnB" type="Marker3D" parent="Markers"]
 transform = Transform3D(-0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, -0.9397, -2.6, 0.0, -1.0)
-script = ExtResource("17")
-enemy_pool = [ExtResource("18"), ExtResource("20")]
+script = ExtResource("13")
+enemy_pool = [ExtResource("14"), ExtResource("16")]
 chance = 0.6
 
 [node name="BookSpot" type="Marker3D" parent="Markers"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.6, 0.0, -5.6)
-script = ExtResource("21")
+script = ExtResource("17")
 kind = &"book"
 chance = 0.5
 
 [node name="JarSpot" type="Marker3D" parent="Markers"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.8, 0.0, 2.0)
-script = ExtResource("21")
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.8, 0.0, 3.0)
+script = ExtResource("17")
 kind = &"jar"
 chance = 0.6
+
+[node name="SilverSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.6, 0.0, 5.8)
+script = ExtResource("17")
+kind = &"silver"
+chance = 0.5
+amount_min = 3
+amount_max = 6
+
+[node name="Stalactite0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7057, -0.0438, 0.7071, 0.0619, 0.9981, 0.0, -0.7057, 0.0438, 0.7071, 4.9167, 4.4741, 4.1396)
+script = ExtResource("2")
+size = Vector3(0.3, 1.0518, 0.3)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Boulder1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.2448, -0.0318, 0.9691, 0.0067, 0.9995, 0.0311, -0.9696, -0.0012, 0.2449, -2.4847, 0.3699, -2.9935)
+script = ExtResource("2")
+size = Vector3(1.2022, 0.9248, 0.9248)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Stalagmite2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7109, -0.0001, 0.7033, 0.1031, 0.9892, -0.104, -0.6957, 0.1464, 0.7033, 3.5992, 0.5947, 1.8844)
+script = ExtResource("2")
+size = Vector3(0.35, 1.1894, 0.35)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Boulder3" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.3659, -0.1957, 0.9098, -0.0339, 0.9742, 0.2231, -0.93, -0.1125, 0.3499, -4.3481, 0.3209, -2.1428)
+script = ExtResource("2")
+size = Vector3(1.043, 0.8023, 0.8023)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Boulder4" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7917, 0.0486, 0.609, 0.023, 0.9938, -0.1092, -0.6105, 0.1004, 0.7856, -2.5686, 0.3451, 4.9537)
+script = ExtResource("2")
+size = Vector3(1.1217, 0.8628, 0.8628)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Boulder5" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.338, 0.2708, 0.9014, -0.129, 0.962, -0.2406, -0.9323, -0.035, 0.3601, -4.6026, 0.3331, -2.6706)
+script = ExtResource("2")
+size = Vector3(1.0827, 0.8328, 0.8328)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Stalagmite6" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7038, 0.073, 0.7066, -0.0652, 0.9971, -0.0381, -0.7074, -0.0192, 0.7066, -4.3453, 0.7408, -5.6729)
+script = ExtResource("2")
+size = Vector3(0.35, 1.4816, 0.35)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Boulder7" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.2873, 0.2528, 0.9239, -0.0662, 0.9675, -0.2441, -0.9555, 0.0089, 0.2947, 2.2194, 0.3155, -0.9192)
+script = ExtResource("2")
+size = Vector3(1.0255, 0.7889, 0.7889)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Stalagmite8" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7065, -0.0326, 0.7069, 0.0691, 0.9973, -0.0231, -0.7043, 0.0652, 0.7069, -1.9516, 0.4067, -4.1022)
+script = ExtResource("2")
+size = Vector3(0.35, 0.8134, 0.35)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Stalagmite9" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7064, 0.034, 0.7069, -0.0269, 0.9994, -0.0212, -0.7073, -0.004, 0.7069, 2.0642, 0.5701, -4.7546)
+script = ExtResource("2")
+size = Vector3(0.35, 1.1402, 0.35)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Stalactite10" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.707, 0.0141, 0.7071, -0.0199, 0.9998, 0.0, -0.707, -0.0141, 0.7071, 2.258, 4.6321, 1.0123)
+script = ExtResource("2")
+size = Vector3(0.3, 0.7357, 0.3)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Stalagmite11" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7055, -0.0696, 0.7053, 0.0269, 0.9971, 0.0715, -0.7082, -0.0314, 0.7053, -2.9189, 0.9078, -3.1508)
+script = ExtResource("2")
+size = Vector3(0.35, 1.8155, 0.35)
+material = ExtResource("5")
+scannable = ExtResource("18")
+
+[node name="Boulder12" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.4563, -0.0837, 0.8859, -0.0839, 0.9871, 0.1365, -0.8859, -0.1367, 0.4434, -3.3172, 0.5096, -4.5955)
+script = ExtResource("2")
+size = Vector3(1.656, 1.2739, 1.2739)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Stalagmite13" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7066, -0.049, 0.706, 0.0124, 0.9983, 0.0569, -0.7076, -0.0314, 0.706, 2.8564, 0.4481, -3.765)
+script = ExtResource("2")
+size = Vector3(0.35, 0.8963, 0.35)
+material = ExtResource("5")
+scannable = ExtResource("18")

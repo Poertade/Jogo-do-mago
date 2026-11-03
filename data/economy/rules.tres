@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EconomyRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/economy_rules.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+jar_price = Dictionary[StringName, int]({
+&"silver": 35
+})
+jar_materials = Dictionary[StringName, int]({
+&"glass": 4
+})
+jar_vis = Dictionary[StringName, int]({
+&"fire": 3,
+&"order": 3
+})
+glass_per_sealed_jar = 1

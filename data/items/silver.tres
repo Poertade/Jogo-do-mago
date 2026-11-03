@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"silver"
+name_key = "ITEM_SILVER"
+color = Color(0.78, 0.8, 0.84, 1)

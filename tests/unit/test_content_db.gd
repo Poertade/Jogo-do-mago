@@ -186,11 +186,10 @@ func test_frost_focus_and_its_page() -> void:
 	assert_gt(db.enemies[&"ink_ooze"].weaknesses[&"cold"], 1.0, "O Lodo resiste a fogo, mas é fraco a frio")
 
 
-func test_boss_room_closes_the_layout() -> void:
+func test_boss_lives_in_the_abyss() -> void:
 	var db := ContentDB.new()
 	db.load_all()
-	assert_eq(db.dungeon_rules.steps.back().kind, &"boss")
-	assert_eq(db.dungeon_rules.steps.back().zone, &"abyss", "O caminho termina no Avesso")
+	assert_eq(db.rooms[&"grand_archive"].zone, &"abyss", "O chefe fica no fundo do mapa, no Avesso")
 	var boss: EnemyData = db.enemies[&"archivist"]
 	assert_true(boss.show_health_bar)
 	assert_eq(boss.hurt_stun, 0.0, "O chefe não é interrompido a cada disparo")

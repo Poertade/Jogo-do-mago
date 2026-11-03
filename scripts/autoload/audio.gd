@@ -24,7 +24,7 @@ func _ready() -> void:
 	Game.player_damaged.connect(func(_amount): play(&"player_hurt"))
 	Game.player_died.connect(func(): play(&"player_death"))
 	Game.travel_requested.connect(func(_room, _entrance): play(&"portal"))
-	Game.dungeon_requested.connect(func(_plan): play(&"portal"))
+	Game.dungeon_requested.connect(func(_seed, _anchor): play(&"portal"))
 
 
 ## Toca um som "na cabeça" do jogador (sem posição no mundo).

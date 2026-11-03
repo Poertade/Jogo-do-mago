@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/key_pickup.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/old_key.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.5, 0.4, 0.5)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.3529, 0.251, 0.0627, 1.0)
+shader_parameter/emission_color = Color(0.8784, 0.6902, 0.3137, 1.0)
+shader_parameter/emission_energy = 1.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(0.04, 0.04, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(0.14, 0.035, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.14, 0.035, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.03, 0.035, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+size = Vector3(0.03, 0.035, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+size = Vector3(0.08, 0.035, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_9"]
+size = Vector3(0.05, 0.035, 0.03)
+
+[node name="OldKey" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_TAKE_KEY"
+scannable = ExtResource("2")
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.2, 0.0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_1")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Shaft" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.15, 0.0)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_2")
+
+[node name="Bow1" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.15, -0.2)
+mesh = SubResource("BoxMesh_4")
+material_override = SubResource("Mat_2")
+
+[node name="Bow2" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.15, -0.3)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_2")
+
+[node name="Bow3" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.055, 0.15, -0.25)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_2")
+
+[node name="Bow4" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.055, 0.15, -0.25)
+mesh = SubResource("BoxMesh_7")
+material_override = SubResource("Mat_2")
+
+[node name="Bit1" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.05, 0.15, 0.14)
+mesh = SubResource("BoxMesh_8")
+material_override = SubResource("Mat_2")
+
+[node name="Bit2" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.035, 0.15, 0.09)
+mesh = SubResource("BoxMesh_9")
+material_override = SubResource("Mat_2")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0)
+light_color = Color(1.0, 0.8157, 0.4392, 1.0)
+light_energy = 0.8
+omni_range = 3.0

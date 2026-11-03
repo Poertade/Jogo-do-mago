@@ -63,18 +63,24 @@ func _initialize() -> void:
 	quit()
 
 
-## Incursão: quantos inimigos e disparos cada sala sorteável pede, em média (pela chance de cada
-## EnemySpawn e pelo sorteio entre os inimigos possíveis), e quanto Vis os Nódulos dela dão.
+## Mapa da Dungeon: quantos inimigos e disparos cada sala pede, em média (pela chance de cada
+## EnemySpawn e pelo sorteio entre os inimigos possíveis), quanto Vis os Nódulos dão e quanta
+## prata e cacos de vidro uma incursão completa rende, em média.
 func _incursion_report(db: ContentDB) -> void:
 	var focus := db.player.starting_focus
 	var wand := WandState.new(db.player.starting_wand)
 	var cost := 0
 	for amount in wand.effective_cost(focus.cost).values():
 		cost += amount
-	print("\n=== Incursão (Focus %s, sem páginas, sem errar) ===" % focus.id)
-	var by_kind: Dictionary = {}
-	for room: RoomData in db.rooms.values():
-		if room.kind == &"":
+	print("\n=== Mapa da Dungeon (Focus %s, sem páginas, sem errar) ===" % focus.id)
+	var by_zone: Dictionary = {}
+	var silver := 0.0
+	var glass := 0.0
+	var ids: Array = db.rooms.keys()
+	ids.sort_custom(ContentDB.by_name)
+	for room_id in ids:
+		var room: RoomData = db.rooms[room_id]
+		if room.zone == &"":
 			continue
 		var scene: Node = (load(room.scene_path) as PackedScene).instantiate()
 		var enemies := 0.0
@@ -87,29 +93,32 @@ func _incursion_report(db: ContentDB) -> void:
 				for target: EnemyData in [enemy] + enemy.enrage_summons:
 					var damage := Combat.damage_against(focus.damage, focus.element, target.weaknesses)
 					shots += spawn.chance / pool.size() * ceili(target.max_health / damage)
+				silver += spawn.chance / pool.size() * (enemy.silver_min + enemy.silver_max) / 2.0
 			enemies += spawn.chance
+		for node in scene.find_children("*", "LootSpot", true, false):
+			var spot := node as LootSpot
+			var average := spot.chance * (spot.amount_min + spot.amount_max) / 2.0
+			if spot.kind == &"silver":
+				silver += average
+			elif spot.kind == &"glass":
+				glass += average
+			elif spot.kind == &"jar":
+				glass += spot.chance * db.economy.glass_per_sealed_jar
 		var vis := 0
 		for node in scene.find_children("*", "VisNode", true, false):
 			vis += maxi(node.vis_amount, 0)
 		scene.free()
-		var key := DungeonPlan.slot_key(room.zone, room.kind)
-		print("  %s (%s): %.1f inimigo(s), %.1f disparo(s), %d de Vis nos Nódulos" % [room.id, key, enemies, shots, vis])
-		if not key in by_kind:
-			by_kind[key] = []
-		by_kind[key].append(shots)
+		print("  %s (%s): %.1f inimigo(s), %.1f disparo(s), %d de Vis nos Nódulos" % [room.id, room.zone, enemies, shots, vis])
+		by_zone[room.zone] = by_zone.get(room.zone, 0.0) + shots
 	var total := 0.0
-	var path: PackedStringArray = []
-	for step in db.dungeon_rules.steps:
-		var key := DungeonPlan.slot_key(step.zone, step.kind)
-		path.append(key)
-		var list: Array = by_kind.get(key, [0.0])
-		var average := 0.0
-		for value in list:
-			average += value
-		total += average / list.size()
+	for zone in by_zone:
+		print("Região %s: cerca de %.0f disparos para limpar tudo" % [zone, by_zone[zone]])
+		total += by_zone[zone]
 	var start := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(focus.cost)
-	print("Caminho %s: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
-		", ".join(path), total, total * cost, start, cost])
+	print("Mapa inteiro: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
+		total, total * cost, start, cost])
+	print("Uma incursão que limpa o mapa rende, em média: %.0f de prata e %.1f cacos de vidro" % [silver, glass])
+	print("Pote: %s no Almoxarife, ou %s + %s de Vis na bancada" % [db.economy.jar_price, db.economy.jar_materials, db.economy.jar_vis])
 	# Todos os Focus: quantos disparos o Vis inicial dá a cada um (os recipientes são separados).
 	for other: FocusData in db.foci.values():
 		var casts := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(other.cost)

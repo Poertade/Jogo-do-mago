@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"fungus_grotto"
+name_key = "ROOM_FUNGUS_GROTTO"
 scene_path = "res://scenes/rooms/fungus_grotto.tscn"
-kind = &"combat"
 zone = &"caves"
 width = 12.0
 depth = 14.0

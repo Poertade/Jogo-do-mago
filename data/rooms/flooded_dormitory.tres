@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"flooded_dormitory"
+name_key = "ROOM_FLOODED_DORMITORY"
 scene_path = "res://scenes/rooms/flooded_dormitory.tscn"
-kind = &"combat"
 zone = &"school"
 width = 9.0
 depth = 14.0

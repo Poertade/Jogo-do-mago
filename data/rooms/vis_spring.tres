@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"vis_spring"
+name_key = "ROOM_VIS_SPRING"
 scene_path = "res://scenes/rooms/vis_spring.tscn"
-kind = &"rest"
 zone = &"caves"
 width = 9.0
 depth = 10.0

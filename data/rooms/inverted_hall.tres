@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"inverted_hall"
+name_key = "ROOM_INVERTED_HALL"
 scene_path = "res://scenes/rooms/inverted_hall.tscn"
-kind = &"combat"
 zone = &"abyss"
 width = 12.0
 depth = 16.0

@@ -1,0 +1,205 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
+[ext_resource type="Material" path="res://assets/materials/cave_floor.tres" id="3"]
+[ext_resource type="Resource" path="res://data/scannables/cave_rock.tres" id="4"]
+[ext_resource type="Material" path="res://assets/materials/cave_rock.tres" id="5"]
+[ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/game/scannable_prop.gd" id="7"]
+[ext_resource type="Resource" path="res://data/scannables/cold_crystal.tres" id="8"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="9"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/game/loot_spot.gd" id="11"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("9")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.502, 0.7529, 1.0, 1.0)
+shader_parameter/emission_energy = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.25, 0.9, 0.25)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.25, 0.9, 0.25)
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("9")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.502, 0.7529, 1.0, 1.0)
+shader_parameter/emission_energy = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.25, 0.9, 0.25)
+
+[sub_resource type="BoxShape3D" id="Box_6"]
+size = Vector3(0.25, 0.9, 0.25)
+
+[sub_resource type="ShaderMaterial" id="Mat_7"]
+render_priority = 0
+shader = ExtResource("9")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.502, 0.7529, 1.0, 1.0)
+shader_parameter/emission_energy = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+size = Vector3(0.25, 0.9, 0.25)
+
+[sub_resource type="BoxShape3D" id="Box_9"]
+size = Vector3(0.25, 0.9, 0.25)
+
+[node name="HiddenGrotto" type="Node3D"]
+script = ExtResource("1")
+room_id = &"hidden_grotto"
+
+[node name="Blocks" type="Node3D" parent="."]
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Exit" type="Node3D" parent="."]
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="Markers" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.1, 0.0)
+script = ExtResource("2")
+size = Vector3(7.8, 0.2, 7.8)
+material = ExtResource("3")
+scannable = ExtResource("4")
+
+[node name="Ceiling" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 4.1, 0.0)
+script = ExtResource("2")
+size = Vector3(7.8, 0.2, 7.8)
+material = ExtResource("5")
+
+[node name="WallNorthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, -3.7)
+script = ExtResource("2")
+size = Vector3(7.8, 4.0, 0.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallSouthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 3.7)
+script = ExtResource("2")
+size = Vector3(7.8, 4.0, 0.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallEast0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.7, 2.0, -2.35)
+script = ExtResource("2")
+size = Vector3(0.4, 4.0, 2.3)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallEastLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.7, 3.4, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 1.2, 2.4)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallEastEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.7, 2.0, 2.35)
+script = ExtResource("2")
+size = Vector3(0.4, 4.0, 2.3)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="WallWestEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.7, 2.0, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 4.0, 7.0)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Default" type="Marker3D" parent="Markers"]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 2.3, 0.0, 0.0)
+script = ExtResource("6")
+id = &"default"
+
+[node name="Crystal1" type="StaticBody3D" parent="Props"]
+transform = Transform3D(0.923, -0.1858, 0.3368, 0.2549, 0.9513, -0.1736, -0.2881, 0.2461, 0.9254, -2.6, 0.45, -2.4)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("7")
+data = ExtResource("8")
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/Crystal1"]
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Crystal1"]
+shape = SubResource("Box_3")
+
+[node name="Crystal1Light" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.6, 0.75, -2.4)
+light_color = Color(0.502, 0.7529, 1.0, 1.0)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.2
+script = ExtResource("10")
+flicker_amount = 0.1
+
+[node name="Crystal2" type="StaticBody3D" parent="Props"]
+transform = Transform3D(0.5219, 0.0159, 0.8529, 0.2549, 0.9513, -0.1736, -0.814, 0.308, 0.4924, -2.8, 0.45, 2.2)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("7")
+data = ExtResource("8")
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/Crystal2"]
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Crystal2"]
+shape = SubResource("Box_6")
+
+[node name="Crystal3" type="StaticBody3D" parent="Props"]
+transform = Transform3D(-0.1235, 0.2101, 0.9698, 0.2549, 0.9513, -0.1736, -0.9591, 0.2258, -0.171, -1.2, 0.45, -2.8)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("7")
+data = ExtResource("8")
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/Crystal3"]
+mesh = SubResource("BoxMesh_8")
+material_override = SubResource("Mat_7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Crystal3"]
+shape = SubResource("Box_9")
+
+[node name="BookSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.4, 0.0, 0.0)
+script = ExtResource("11")
+kind = &"book"
+chance = 0.5
+
+[node name="SilverSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.4, 0.0, 2.4)
+script = ExtResource("11")
+kind = &"silver"
+chance = 1.0
+amount_min = 10
+amount_max = 16
+
+[node name="GlassSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.6, 0.0, -1.4)
+script = ExtResource("11")
+kind = &"glass"
+chance = 1.0
+amount_min = 2
+amount_max = 3
+
+[node name="JarSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.6, 0.0, 2.6)
+script = ExtResource("11")
+kind = &"jar"
+chance = 1.0

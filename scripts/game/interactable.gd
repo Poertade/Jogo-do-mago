@@ -43,6 +43,13 @@ func current_prompt_key() -> String:
 	return prompt_key if is_available() else locked_prompt_key
 
 
+## Texto pronto que o HUD mostra agora (vazio: nenhum). Por padrão, o da chave acima;
+## objetos com números no texto (preços, por exemplo) reescrevem esta função.
+func current_prompt() -> String:
+	var key := current_prompt_key()
+	return Text.expand(key) if key != "" else ""
+
+
 ## Procura um Interactable em `node` ou nos seus pais.
 static func find_on(node: Node) -> Interactable:
 	while node != null:

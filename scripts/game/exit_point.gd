@@ -1,14 +1,14 @@
 class_name ExitPoint
 extends Interactable
-## Saída de uma sala da Dungeon. Fica fechada (com a grade `barrier`) até a sala ser limpa,
-## se `requires_clear` estiver ligado.
-## - Salas da incursão (`goes_deeper`): nas salas do meio, a saída é só a grade, e o caminho
-##   segue pelo corredor; na última, a passagem atrás da grade leva de volta à escola.
+## Saída de uma sala. Fica fechada (com a grade `barrier`) até a sala ser limpa, se
+## `requires_clear` estiver ligado.
+## - Na Dungeon (`ends_incursion`): leva de volta à escola, com vida e com o que foi achado
+##   (é a passagem atrás do chefe, no Grande Arquivo).
 ## - Outras salas: leva a uma sala fixa (`target_room`).
 
-## Ligado: saída de uma sala da incursão (veja acima).
-@export var goes_deeper := false
-## Destino fixo, usado quando `goes_deeper` está desligado.
+## Ligado: termina a incursão, voltando à escola.
+@export var ends_incursion := false
+## Destino fixo, usado quando `ends_incursion` está desligado.
 @export var target_room: StringName = &"school"
 @export var target_entrance: StringName = &"from_dungeon"
 ## Só abre depois que todos os inimigos da sala forem derrotados.
@@ -37,14 +37,14 @@ func is_available() -> bool:
 
 
 func interact(_player: Node3D) -> void:
-	if goes_deeper:
-		Game.finish_dungeon()
+	if ends_incursion:
+		Game.return_to_school()
 	else:
 		Game.travel(target_room, target_entrance)
 
 
 func _open() -> void:
-	if barrier == null:
+	if barrier == null or not is_instance_valid(barrier):
 		return
 	# A grade afunda no chão; a colisão sai junto quando termina.
 	var tween := create_tween()

@@ -1,0 +1,372 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/dungeon.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/well_atrium.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/collapsed_library.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/scholar_cabinet.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/ossuary_hall.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/bone_crypt.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/flooded_dormitory.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/stone_chamber.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/fungus_grotto.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/underground_lake.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/hidden_grotto.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/vis_spring.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/chasm.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/inverted_hall.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/archive_vestibule.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/grand_archive.tscn" id="16"]
+[ext_resource type="Script" path="res://scripts/game/corridor_path.gd" id="17"]
+[ext_resource type="Resource" path="res://data/dungeon/zones/school.tres" id="18"]
+[ext_resource type="Resource" path="res://data/dungeon/zones/caves.tres" id="19"]
+[ext_resource type="Resource" path="res://data/dungeon/zones/abyss.tres" id="20"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="21"]
+[ext_resource type="Material" path="res://assets/materials/cave_rock.tres" id="22"]
+[ext_resource type="Resource" path="res://data/scannables/damp_stone.tres" id="23"]
+[ext_resource type="Script" path="res://scripts/game/gate.gd" id="24"]
+[ext_resource type="Resource" path="res://data/scannables/iron_bars.tres" id="25"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="26"]
+[ext_resource type="Material" path="res://assets/materials/abyss_wall.tres" id="27"]
+[ext_resource type="PackedScene" path="res://scenes/props/old_key.tscn" id="28"]
+[ext_resource type="Script" path="res://scripts/game/secret_wall.gd" id="29"]
+[ext_resource type="Resource" path="res://data/scannables/illusory_wall.tres" id="30"]
+[ext_resource type="PackedScene" path="res://scenes/props/portal_anchor.tscn" id="31"]
+
+[node name="Dungeon" type="NavigationRegion3D"]
+script = ExtResource("1")
+
+[node name="Rooms" type="Node3D" parent="."]
+
+[node name="Corridors" type="Node3D" parent="."]
+
+[node name="Passages" type="Node3D" parent="."]
+
+[node name="Anchors" type="Node3D" parent="."]
+
+[node name="Shaft" type="Node3D" parent="."]
+
+[node name="WellAtrium" parent="Rooms" instance=ExtResource("2")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0)
+
+[node name="CollapsedLibrary" parent="Rooms" instance=ExtResource("3")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -20.0)
+
+[node name="ScholarCabinet" parent="Rooms" instance=ExtResource("4")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -12.0, 0.0, -17.0)
+
+[node name="OssuaryHall" parent="Rooms" instance=ExtResource("5")]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 18.0, 0.0, -20.0)
+
+[node name="BoneCrypt" parent="Rooms" instance=ExtResource("6")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 34.0, 0.0, -20.0)
+
+[node name="FloodedDormitory" parent="Rooms" instance=ExtResource("7")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 18.5, 0.0, -4.6)
+
+[node name="StoneChamber" parent="Rooms" instance=ExtResource("8")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -18.0, 0.0, 0.0)
+
+[node name="FungusGrotto" parent="Rooms" instance=ExtResource("9")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.0, -12.0, 22.0)
+
+[node name="UndergroundLake" parent="Rooms" instance=ExtResource("10")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -12.0, 0.0)
+
+[node name="HiddenGrotto" parent="Rooms" instance=ExtResource("11")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -12.5, -12.0, 0.0)
+
+[node name="VisSpring" parent="Rooms" instance=ExtResource("12")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -12.0, -19.0)
+
+[node name="Chasm" parent="Rooms" instance=ExtResource("13")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 23.0, -20.0, -3.0)
+
+[node name="InvertedHall" parent="Rooms" instance=ExtResource("14")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 54.0, -18.0, -3.0)
+
+[node name="ArchiveVestibule" parent="Rooms" instance=ExtResource("15")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 54.0, -18.0, -20.0)
+
+[node name="GrandArchive" parent="Rooms" instance=ExtResource("16")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 54.0, -18.0, -38.0)
+
+[node name="AtriumToLibrary" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(0.0, 0.0, -7.0, 0.0, 0.0, -14.0)
+zone = ExtResource("18")
+
+[node name="LibraryToOssuary" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(6.0, 0.0, -20.0, 9.0, 0.0, -20.0)
+zone = ExtResource("18")
+
+[node name="LibraryToCabinet" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(-6.0, 0.0, -17.0, -9.0, 0.0, -17.0)
+zone = ExtResource("18")
+
+[node name="OssuaryToCrypt" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(27.0, 0.0, -20.0, 30.0, 0.0, -20.0)
+zone = ExtResource("18")
+
+[node name="OssuaryToDormitory" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(18.5, 0.0, -17.0, 18.5, 0.0, -11.6)
+zone = ExtResource("18")
+
+[node name="DormitoryToAtrium" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(14.0, 0.0, 0.0, 7.0, 0.0, 0.0)
+zone = ExtResource("18")
+
+[node name="AtriumToChamber" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(-7.0, 0.0, 0.0, -13.0, 0.0, 0.0)
+zone = ExtResource("18")
+
+[node name="GreatStair" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(-18.0, 0.0, 6.0, -18.0, -6.0, 22.0, -4.0, -12.0, 22.0)
+zone = ExtResource("19")
+
+[node name="FungusToLake" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(2.0, -12.0, 15.0, 2.0, -12.0, 8.0)
+zone = ExtResource("19")
+
+[node name="LakeToSpring" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(0.0, -12.0, -8.0, 0.0, -12.0, -14.0)
+zone = ExtResource("19")
+
+[node name="LakeToGrotto" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(-7.0, -12.0, 0.0, -9.0, -12.0, 0.0)
+zone = ExtResource("19")
+
+[node name="LakeToChasm" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(7.0, -12.0, -3.0, 12.0, -12.0, -3.0)
+zone = ExtResource("19")
+
+[node name="ChasmTunnel" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(23.0, -20.0, 2.0, 23.0, -12.0, 22.0, 8.0, -12.0, 22.0)
+zone = ExtResource("19")
+
+[node name="SealedDescent" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(34.0, -12.0, -3.0, 48.0, -18.0, -3.0)
+zone = ExtResource("20")
+
+[node name="InvertedToVestibule" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(54.0, -18.0, -11.0, 54.0, -18.0, -16.0)
+zone = ExtResource("20")
+
+[node name="VestibuleToArchive" type="Node3D" parent="Corridors"]
+script = ExtResource("17")
+points = PackedVector3Array(54.0, -18.0, -24.0, 54.0, -18.0, -29.0)
+zone = ExtResource("20")
+
+[node name="ShaftNorth" type="StaticBody3D" parent="Shaft"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -3.0, -1.7)
+script = ExtResource("21")
+size = Vector3(3.8, 5.6, 0.4)
+material = ExtResource("22")
+scannable = ExtResource("23")
+
+[node name="ShaftSouth" type="StaticBody3D" parent="Shaft"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -3.0, 1.7)
+script = ExtResource("21")
+size = Vector3(3.8, 5.6, 0.4)
+material = ExtResource("22")
+scannable = ExtResource("23")
+
+[node name="ShaftWest" type="StaticBody3D" parent="Shaft"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.7, -3.0, 0.0)
+script = ExtResource("21")
+size = Vector3(0.4, 5.6, 3.0)
+material = ExtResource("22")
+scannable = ExtResource("23")
+
+[node name="ShaftEast" type="StaticBody3D" parent="Shaft"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.7, -3.0, 0.0)
+script = ExtResource("21")
+size = Vector3(0.4, 5.6, 3.0)
+material = ExtResource("22")
+scannable = ExtResource("23")
+
+[node name="ShaftGlow" type="OmniLight3D" parent="Shaft"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, 0.0)
+light_color = Color(0.2902, 0.502, 0.7529, 1.0)
+light_energy = 1.6
+omni_range = 7.0
+omni_attenuation = 1.2
+
+[node name="ShaftRim" type="OmniLight3D" parent="Shaft"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.2, 0.0)
+light_color = Color(0.3529, 0.5647, 0.8157, 1.0)
+light_energy = 1.0
+omni_range = 4.0
+omni_attenuation = 1.2
+
+[node name="DormitoryGate" type="Node3D" parent="Passages" node_paths=PackedStringArray("bars")]
+transform = Transform3D(0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 8.4, 0.0, 0.0)
+script = ExtResource("24")
+passage_id = &"dormitory_gate"
+one_way = true
+scannable = ExtResource("25")
+bars = NodePath("Bars")
+
+[node name="Bars" type="Node3D" parent="Passages/DormitoryGate"]
+
+[node name="Bar1" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="Bar2" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="Bar3" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="Bar4" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="Bar5" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="Cross1" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.9, 0.0)
+script = ExtResource("21")
+size = Vector3(2.4, 0.08, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="Cross2" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.9, 0.0)
+script = ExtResource("21")
+size = Vector3(2.4, 0.08, 0.08)
+material = ExtResource("26")
+scannable = ExtResource("25")
+
+[node name="SealedGate" type="Node3D" parent="Passages" node_paths=PackedStringArray("bars")]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 34.6, -12.0, -3.0)
+script = ExtResource("24")
+passage_id = &"sealed_gate"
+needs_key = &"crypt_key"
+scannable = ExtResource("25")
+bars = NodePath("Bars")
+
+[node name="Bars" type="Node3D" parent="Passages/SealedGate"]
+
+[node name="Bar1" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="Bar2" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="Bar3" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="Bar4" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="Bar5" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.08, 2.8, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="Cross1" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.9, 0.0)
+script = ExtResource("21")
+size = Vector3(2.4, 0.08, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="Cross2" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.9, 0.0)
+script = ExtResource("21")
+size = Vector3(2.4, 0.08, 0.08)
+material = ExtResource("27")
+scannable = ExtResource("25")
+
+[node name="CryptKey" parent="Passages" instance=ExtResource("28")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 36.4, 0.98, -20.0)
+key_id = &"crypt_key"
+name_key = "KEY_CRYPT"
+
+[node name="LibrarySecret" type="Node3D" parent="Passages"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 0.0, -17.0)
+script = ExtResource("29")
+passage_id = &"collapsed_library_secret"
+scannable = ExtResource("30")
+
+[node name="Wall" type="StaticBody3D" parent="Passages/LibrarySecret"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.4, 2.8, 2.4)
+material = ExtResource("26")
+
+[node name="LakeSecret" type="Node3D" parent="Passages"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -7.2, -12.0, 0.0)
+script = ExtResource("29")
+passage_id = &"underground_lake_secret"
+scannable = ExtResource("30")
+
+[node name="Wall" type="StaticBody3D" parent="Passages/LakeSecret"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
+script = ExtResource("21")
+size = Vector3(0.4, 2.8, 2.4)
+material = ExtResource("22")
+
+[node name="AtriumAnchor" parent="Anchors" instance=ExtResource("31")]
+transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 5.2)
+anchor_id = &"atrium"
+
+[node name="SpringAnchor" parent="Anchors" instance=ExtResource("31")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -12.0, -22.9)
+anchor_id = &"spring"
+
+[node name="VestibuleAnchor" parent="Anchors" instance=ExtResource("31")]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 51.4, -18.0, -20.0)
+anchor_id = &"vestibule"

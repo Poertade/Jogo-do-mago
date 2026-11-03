@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_dungeon.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"well_atrium"
+name_key = "ROOM_WELL_ATRIUM"
+scene_path = "res://scenes/rooms/well_atrium.tscn"
+zone = &"school"
+width = 14.0
+depth = 14.0
+height = 7.0
+fog_color = Color(0.03, 0.03, 0.045, 1)
+fog_near = 3.0
+fog_far = 20.0
+ambient_color = Color(0.26, 0.28, 0.34, 1)
+ambient_energy = 0.6
+ambience = ExtResource("2")

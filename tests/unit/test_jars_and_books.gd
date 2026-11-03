@@ -118,5 +118,5 @@ func test_simple_recipes_are_free_and_every_zone_has_books() -> void:
 	var free := db.free_recipes()
 	assert_true(&"energy" in free and &"light" in free, "Compostos de dois primais já vêm sabidos")
 	assert_false(&"tree" in free, "Arbor precisa de livro")
-	for step in db.dungeon_rules.steps:
-		assert_false(db.books_in(step.zone).is_empty(), "Região %s sem livros" % step.zone)
+	for zone_id in db.zones:
+		assert_false(db.books_in(zone_id).is_empty(), "Região %s sem livros" % zone_id)

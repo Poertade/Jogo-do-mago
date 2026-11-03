@@ -31,6 +31,8 @@ var _health_bar: ProgressBar
 var _health_value: Label
 ## Chefe que está lutando com o jogador (barra de vida no alto da tela).
 var _boss: Node3D
+## Sala da Dungeon em que o jogador está (o nome dela aparece no canto).
+var _room: RoomData
 
 
 func _ready() -> void:
@@ -44,6 +46,7 @@ func _ready() -> void:
 	Game.aspect_combined.connect(_on_aspect_combined)
 	Game.boss_engaged.connect(_on_boss_engaged)
 	Game.zone_entered.connect(_on_zone_entered)
+	Game.room_entered.connect(func(room: RoomData): _room = room)
 
 
 func _process(_delta: float) -> void:
@@ -102,7 +105,8 @@ func _update_stats() -> void:
 	var focus := Game.run.caster.focus
 	var focus_aspect: AspectData = Content.db.aspects.get(focus.element)
 	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE,
-		Game.run.jars, Game.run.carried_books.size())
+		Game.run.jars, Game.run.carried_books.size(),
+		{&"silver": Game.item_count(&"silver"), &"glass": Game.item_count(&"glass")})
 
 
 ## Entrou numa região nova da Dungeon: o nome dela aparece no alto e some devagar.
@@ -131,24 +135,21 @@ func _update_boss() -> void:
 		boss_bar.value = _boss.health.current
 
 
-## Na Dungeon, mostra em que sala da incursão o jogador está.
+## Na Dungeon, mostra no canto o nome da sala em que o jogador está (não há mapa na tela:
+## os nomes ajudam a se orientar).
 func _update_depth() -> void:
-	var run := Game.run
-	depth_label.visible = run.in_dungeon()
+	depth_label.visible = Game.run.in_dungeon() and _room != null and _room.name_key != ""
 	if depth_label.visible:
-		depth_label.text = tr("UI_DEPTH") % [run.room_index + 1, run.dungeon.size()]
+		depth_label.text = Text.tr_key(_room.name_key)
 
 
 func _update_prompt(playing: bool) -> void:
 	var target := player.aimed_interactable
-	var key := target.current_prompt_key() if target != null else ""
-	prompt_label.visible = playing and key != ""
+	var text := target.current_prompt() if target != null else ""
+	prompt_label.visible = playing and text != ""
 	if not prompt_label.visible:
 		return
-	if target.is_available():
-		prompt_label.text = tr("UI_PROMPT_INTERACT") % Text.expand(key)
-	else:
-		prompt_label.text = Text.expand(key)
+	prompt_label.text = tr("UI_PROMPT_INTERACT") % text if target.is_available() else text
 
 
 ## Mostra o nome e os aspectos do alvo. Antes do escaneamento: "???". Se a Lente já tentou e

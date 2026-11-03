@@ -28,6 +28,11 @@ extends ScannableData
 ## Segundos parado depois de tomar dano (a "reação ao dano"). 0: não se abala (chefes).
 @export var hurt_stun: float = 0.0
 
+@export_group("Espólio")
+## Prata que o inimigo deixa ao ser derrotado (sorteada entre os dois valores).
+@export var silver_min: int = 0
+@export var silver_max: int = 0
+
 @export_group("Chefe")
 ## Mostra a barra de vida no alto da tela quando o inimigo nota o jogador.
 @export var show_health_bar := false

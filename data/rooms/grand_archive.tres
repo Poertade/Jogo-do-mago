@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"grand_archive"
+name_key = "ROOM_GRAND_ARCHIVE"
 scene_path = "res://scenes/rooms/grand_archive.tscn"
-kind = &"boss"
 zone = &"abyss"
 width = 14.0
 depth = 18.0

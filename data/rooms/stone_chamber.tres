@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 id = &"stone_chamber"
+name_key = "ROOM_STONE_CHAMBER"
 scene_path = "res://scenes/rooms/stone_chamber.tscn"
-kind = &"combat"
 zone = &"school"
 width = 10.0
 depth = 12.0

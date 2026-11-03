@@ -1,9 +1,10 @@
 class_name JarPickup
 extends Interactable
-## Pote selado de Vis achado na Dungeon. E guarda o Vis no cinto de potes; se não couber tudo,
-## o resto fica no pote, e ele continua ali.
+## Pote selado de Vis achado na Dungeon. E tira o Vis dele: primeiro para os potes do cinto,
+## depois para a varinha. O que não couber fica no pote, e ele continua ali. Vazio, o pote se
+## parte e deixa cacos de vidro (para fabricar potes na escola).
 
-## Aspecto e quantidade do Vis guardado (definidos pelo DungeonBuilder).
+## Aspecto e quantidade do Vis guardado (definidos pela Dungeon).
 @export var aspect: StringName = &"fire"
 @export var amount := 8
 
@@ -21,6 +22,7 @@ func _ready() -> void:
 
 func interact(_player: Node3D) -> void:
 	var stored := Game.run.jars.store(aspect, amount)
+	stored += Game.run.wand.add(aspect, amount - stored)
 	if stored <= 0:
 		Game.message(Text.tr_key("UI_MSG_BELT_FULL"))
 		return
@@ -28,4 +30,6 @@ func interact(_player: Node3D) -> void:
 	Game.message(Text.tr_key("UI_MSG_JAR_TAKEN") % [stored, Text.aspect_name(aspect)], Content.db.aspects[aspect].color)
 	Audio.play(&"recharge")
 	if amount <= 0:
+		Audio.play_at(&"glass", global_position, get_parent())
+		Game.find_item(&"glass", Content.db.economy.glass_per_sealed_jar)
 		queue_free()

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_caves.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"hidden_grotto"
+name_key = "ROOM_HIDDEN_GROTTO"
+scene_path = "res://scenes/rooms/hidden_grotto.tscn"
+zone = &"caves"
+width = 7.0
+depth = 7.0
+height = 4.0
+fog_color = Color(0.02, 0.03, 0.04, 1)
+fog_near = 2.0
+fog_far = 11.0
+ambient_color = Color(0.25, 0.32, 0.36, 1)
+ambient_energy = 0.4
+ambience = ExtResource("2")

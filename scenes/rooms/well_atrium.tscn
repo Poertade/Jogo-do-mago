@@ -1,0 +1,607 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_floor.tres" id="3"]
+[ext_resource type="Resource" path="res://data/scannables/stone_slabs.tres" id="4"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_ceiling.tres" id="5"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="6"]
+[ext_resource type="Resource" path="res://data/scannables/damp_stone.tres" id="7"]
+[ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="8"]
+[ext_resource type="Resource" path="res://data/scannables/carved_stone.tres" id="9"]
+[ext_resource type="Resource" path="res://data/scannables/rubble.tres" id="10"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="11"]
+[ext_resource type="Resource" path="res://data/scannables/rotten_desk.tres" id="12"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="13"]
+[ext_resource type="Resource" path="res://data/scannables/torch.tres" id="14"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="15"]
+[ext_resource type="PackedScene" path="res://scenes/props/plaque.tscn" id="16"]
+[ext_resource type="Script" path="res://scripts/game/loot_spot.gd" id="17"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.3529, 0.0784, 0.0941, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(1.0, 2.6, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(1.0, 2.6, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(1.0, 2.6, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(1.0, 2.6, 0.04)
+
+[sub_resource type="ShaderMaterial" id="Mat_6"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_8"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_9"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_10"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_11"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_12"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.6902, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_13"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="ShaderMaterial" id="Mat_14"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.5647, 0.251, 1.0)
+shader_parameter/emission_energy = 2.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_15"]
+size = Vector3(0.4, 0.18, 0.4)
+
+[sub_resource type="ShaderMaterial" id="Mat_16"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.5647, 0.251, 1.0)
+shader_parameter/emission_energy = 2.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_17"]
+size = Vector3(0.4, 0.18, 0.4)
+
+[sub_resource type="ShaderMaterial" id="Mat_18"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.5647, 0.251, 1.0)
+shader_parameter/emission_energy = 2.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_19"]
+size = Vector3(0.4, 0.18, 0.4)
+
+[sub_resource type="ShaderMaterial" id="Mat_20"]
+render_priority = 0
+shader = ExtResource("13")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.5647, 0.251, 1.0)
+shader_parameter/emission_energy = 2.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_21"]
+size = Vector3(0.4, 0.18, 0.4)
+
+[node name="WellAtrium" type="Node3D"]
+script = ExtResource("1")
+room_id = &"well_atrium"
+
+[node name="Blocks" type="Node3D" parent="."]
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Exit" type="Node3D" parent="."]
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="Markers" type="Node3D" parent="."]
+
+[node name="FloorNorth" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.1, -4.45)
+script = ExtResource("2")
+size = Vector3(14.8, 0.2, 5.9)
+material = ExtResource("3")
+scannable = ExtResource("4")
+
+[node name="FloorSouth" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.1, 4.45)
+script = ExtResource("2")
+size = Vector3(14.8, 0.2, 5.9)
+material = ExtResource("3")
+scannable = ExtResource("4")
+
+[node name="FloorWest" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.45, -0.1, 0.0)
+script = ExtResource("2")
+size = Vector3(5.9, 0.2, 3.0)
+material = ExtResource("3")
+scannable = ExtResource("4")
+
+[node name="FloorEast" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.45, -0.1, 0.0)
+script = ExtResource("2")
+size = Vector3(5.9, 0.2, 3.0)
+material = ExtResource("3")
+scannable = ExtResource("4")
+
+[node name="Ceiling" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 7.1, 0.0)
+script = ExtResource("2")
+size = Vector3(14.8, 0.2, 14.8)
+material = ExtResource("5")
+
+[node name="WallNorth0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.3, 3.5, -7.2)
+script = ExtResource("2")
+size = Vector3(6.2, 7.0, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallNorthLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 4.9, -7.2)
+script = ExtResource("2")
+size = Vector3(2.4, 4.2, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallNorthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.3, 3.5, -7.2)
+script = ExtResource("2")
+size = Vector3(6.2, 7.0, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallSouthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 3.5, 7.2)
+script = ExtResource("2")
+size = Vector3(14.8, 7.0, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallEast0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 3.5, -4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 7.0, 5.8)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallEastLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 4.9, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 4.2, 2.4)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallEastEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 3.5, 4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 7.0, 5.8)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallWest0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -7.2, 3.5, -4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 7.0, 5.8)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallWestLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -7.2, 4.9, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 4.2, 2.4)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="WallWestEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -7.2, 3.5, 4.1)
+script = ExtResource("2")
+size = Vector3(0.4, 7.0, 5.8)
+material = ExtResource("6")
+scannable = ExtResource("7")
+
+[node name="Default" type="Marker3D" parent="Markers"]
+transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, -5.8)
+script = ExtResource("8")
+id = &"default"
+
+[node name="ParapetSouth" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.4, 1.65)
+script = ExtResource("2")
+size = Vector3(3.6, 0.8, 0.3)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="ParapetWest" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.65, 0.4, 0.0)
+script = ExtResource("2")
+size = Vector3(0.3, 0.8, 3.0)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="ParapetEast" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.65, 0.4, 0.0)
+script = ExtResource("2")
+size = Vector3(0.3, 0.8, 3.0)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="ParapetNorthLeft" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.35, 0.4, -1.65)
+script = ExtResource("2")
+size = Vector3(0.9, 0.8, 0.3)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="ParapetNorthRight" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.9903, 0.1392, 0.0, -0.1392, 0.9903, 0.0, 0.0, 0.0, 1.0, 1.55, 0.25, -1.65)
+script = ExtResource("2")
+size = Vector3(0.5, 0.5, 0.3)
+material = ExtResource("6")
+scannable = ExtResource("10")
+
+[node name="FallenParapet" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.9013, -0.0947, 0.4226, 0.1045, 0.9945, 0.0, -0.4203, 0.0442, 0.9063, 0.6, 0.15, -2.4)
+script = ExtResource("2")
+size = Vector3(0.8, 0.3, 0.35)
+material = ExtResource("6")
+scannable = ExtResource("10")
+
+[node name="Pillar1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.5, 3.5, -4.5)
+script = ExtResource("2")
+size = Vector3(0.9, 7.0, 0.9)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="PillarBase1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.5, 0.2, -4.5)
+script = ExtResource("2")
+size = Vector3(1.2, 0.4, 1.2)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="Pillar2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.5, 3.5, -4.5)
+script = ExtResource("2")
+size = Vector3(0.9, 7.0, 0.9)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="PillarBase2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.5, 0.2, -4.5)
+script = ExtResource("2")
+size = Vector3(1.2, 0.4, 1.2)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="Pillar3" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.5, 3.5, 4.5)
+script = ExtResource("2")
+size = Vector3(0.9, 7.0, 0.9)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="PillarBase3" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.5, 0.2, 4.5)
+script = ExtResource("2")
+size = Vector3(1.2, 0.4, 1.2)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="Pillar4" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.5, 3.5, 4.5)
+script = ExtResource("2")
+size = Vector3(0.9, 7.0, 0.9)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="PillarBase4" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.5, 0.2, 4.5)
+script = ExtResource("2")
+size = Vector3(1.2, 0.4, 1.2)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="StatuePlinth" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.6, 0.45, -5.6)
+script = ExtResource("2")
+size = Vector3(1.2, 0.9, 1.2)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="StatueBody" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.766, 0.0, 0.6428, 0.0, 1.0, 0.0, -0.6428, 0.0, 0.766, 5.6, 1.7, -5.6)
+script = ExtResource("2")
+size = Vector3(0.6, 1.6, 0.45)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="StatueHead" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7733, -0.4257, 0.4698, 0.604, 0.7198, -0.342, -0.1926, 0.5483, 0.8138, 4.6, 0.17, -4.0)
+script = ExtResource("2")
+size = Vector3(0.35, 0.35, 0.35)
+material = ExtResource("6")
+scannable = ExtResource("10")
+
+[node name="Bench1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, -4.8, 0.22, 2.0)
+script = ExtResource("2")
+size = Vector3(2.2, 0.45, 0.5)
+material = ExtResource("11")
+scannable = ExtResource("12")
+
+[node name="Bench2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.0594, -0.1632, 0.9848, 0.9397, 0.342, 0.0, -0.3368, 0.9254, 0.1736, 4.8, 0.3, 2.2)
+script = ExtResource("2")
+size = Vector3(2.2, 0.45, 0.5)
+material = ExtResource("11")
+scannable = ExtResource("12")
+
+[node name="Rubble1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.8576, -0.1205, 0.5, 0.1392, 0.9903, 0.0, -0.4951, 0.0696, 0.866, -5.4, 0.17, -5.2)
+script = ExtResource("2")
+size = Vector3(0.9, 0.35, 0.7)
+material = ExtResource("6")
+scannable = ExtResource("10")
+
+[node name="Rubble2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.9397, 0.0, -0.342, 0.0, 1.0, 0.0, 0.342, 0.0, 0.9397, 3.2, 0.15, -6.2)
+script = ExtResource("2")
+size = Vector3(0.6, 0.3, 0.5)
+material = ExtResource("6")
+scannable = ExtResource("10")
+
+[node name="Banner1" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, -6.9, 4.4, -4.0)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Banner2" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, -6.9, 4.4, 4.0)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="Banner3" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 6.9, 4.4, -4.0)
+mesh = SubResource("BoxMesh_4")
+material_override = SubResource("Mat_1")
+
+[node name="Banner4" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 6.9, 4.4, 4.0)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_1")
+
+[node name="Torch1Holder" type="StaticBody3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.9, 1.9, -2.6)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("11")
+scannable = ExtResource("14")
+
+[node name="Torch1Flame" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, -6.9, 2.17, -2.6)
+mesh = SubResource("BoxMesh_7")
+material_override = SubResource("Mat_6")
+
+[node name="Torch1" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.55, 2.3, -2.6)
+light_color = Color(1.0, 0.6275, 0.3765, 1.0)
+light_energy = 1.0
+omni_range = 6.0
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="Torch2Holder" type="StaticBody3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.9, 1.9, -2.6)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("11")
+scannable = ExtResource("14")
+
+[node name="Torch2Flame" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 6.9, 2.17, -2.6)
+mesh = SubResource("BoxMesh_9")
+material_override = SubResource("Mat_8")
+
+[node name="Torch2" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.55, 2.3, -2.6)
+light_color = Color(1.0, 0.6275, 0.3765, 1.0)
+light_energy = 1.0
+omni_range = 6.0
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="Torch3Holder" type="StaticBody3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.9, 1.9, 2.6)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("11")
+scannable = ExtResource("14")
+
+[node name="Torch3Flame" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, -6.9, 2.17, 2.6)
+mesh = SubResource("BoxMesh_11")
+material_override = SubResource("Mat_10")
+
+[node name="Torch3" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.55, 2.3, 2.6)
+light_color = Color(1.0, 0.6275, 0.3765, 1.0)
+light_energy = 1.0
+omni_range = 6.0
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="Torch4Holder" type="StaticBody3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.9, 1.9, 2.6)
+script = ExtResource("2")
+size = Vector3(0.12, 0.4, 0.12)
+material = ExtResource("11")
+scannable = ExtResource("14")
+
+[node name="Torch4Flame" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 6.9, 2.17, 2.6)
+mesh = SubResource("BoxMesh_13")
+material_override = SubResource("Mat_12")
+
+[node name="Torch4" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.55, 2.3, 2.6)
+light_color = Color(1.0, 0.6275, 0.3765, 1.0)
+light_energy = 1.0
+omni_range = 6.0
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="HighWindow" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 6.4, 5.0)
+light_color = Color(0.502, 0.5647, 0.6902, 1.0)
+light_energy = 0.6
+omni_range = 9.0
+omni_attenuation = 1.2
+
+[node name="Brazier1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.4, 0.35, -3.4)
+script = ExtResource("2")
+size = Vector3(0.6, 0.7, 0.6)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="BrazierFire1" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, -3.4, 0.79, -3.4)
+mesh = SubResource("BoxMesh_15")
+material_override = SubResource("Mat_14")
+
+[node name="BrazierLight1" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.4, 1.4, -3.4)
+light_color = Color(1.0, 0.6039, 0.3137, 1.0)
+light_energy = 1.3
+omni_range = 7.5
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="Brazier2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.4, 0.35, -3.4)
+script = ExtResource("2")
+size = Vector3(0.6, 0.7, 0.6)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="BrazierFire2" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 3.4, 0.79, -3.4)
+mesh = SubResource("BoxMesh_17")
+material_override = SubResource("Mat_16")
+
+[node name="BrazierLight2" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.4, 1.4, -3.4)
+light_color = Color(1.0, 0.6039, 0.3137, 1.0)
+light_energy = 1.3
+omni_range = 7.5
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="Brazier3" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.4, 0.35, 3.4)
+script = ExtResource("2")
+size = Vector3(0.6, 0.7, 0.6)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="BrazierFire3" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, -3.4, 0.79, 3.4)
+mesh = SubResource("BoxMesh_19")
+material_override = SubResource("Mat_18")
+
+[node name="BrazierLight3" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.4, 1.4, 3.4)
+light_color = Color(1.0, 0.6039, 0.3137, 1.0)
+light_energy = 1.3
+omni_range = 7.5
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="Brazier4" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.4, 0.35, 3.4)
+script = ExtResource("2")
+size = Vector3(0.6, 0.7, 0.6)
+material = ExtResource("6")
+scannable = ExtResource("9")
+
+[node name="BrazierFire4" type="MeshInstance3D" parent="Lights"]
+transform = Transform3D(0.7071, 0.0, 0.7071, 0.0, 1.0, 0.0, -0.7071, 0.0, 0.7071, 3.4, 0.79, 3.4)
+mesh = SubResource("BoxMesh_21")
+material_override = SubResource("Mat_20")
+
+[node name="BrazierLight4" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.4, 1.4, 3.4)
+light_color = Color(1.0, 0.6039, 0.3137, 1.0)
+light_energy = 1.3
+omni_range = 7.5
+omni_attenuation = 1.2
+script = ExtResource("15")
+flicker_amount = 0.3
+
+[node name="WellGleam" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.5, 0.0)
+light_color = Color(0.4392, 0.5647, 0.7529, 1.0)
+light_energy = 0.9
+omni_range = 10.0
+omni_attenuation = 1.2
+
+[node name="WellPlaque" parent="Props" instance=ExtResource("16")]
+transform = Transform3D(-0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, -0.9397, -2.4, 0.0, -3.0)
+title_key = "NOTE_WELL_TITLE"
+body_key = "NOTE_WELL_BODY"
+
+[node name="JarSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -5.8, 0.0, 5.6)
+script = ExtResource("17")
+kind = &"jar"
+chance = 0.4
+
+[node name="SilverSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.8, 0.0, 5.4)
+script = ExtResource("17")
+kind = &"silver"
+chance = 0.5
+amount_min = 3
+amount_max = 6

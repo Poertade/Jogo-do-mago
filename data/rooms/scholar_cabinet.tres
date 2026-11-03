@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_dungeon.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"scholar_cabinet"
+name_key = "ROOM_SCHOLAR_CABINET"
+scene_path = "res://scenes/rooms/scholar_cabinet.tscn"
+zone = &"school"
+width = 6.0
+depth = 6.0
+height = 3.2
+fog_color = Color(0.03, 0.025, 0.02, 1)
+fog_near = 1.5
+fog_far = 9.0
+ambient_color = Color(0.3, 0.25, 0.2, 1)
+ambient_energy = 0.35
+ambience = ExtResource("2")

@@ -1,8 +1,10 @@
 extends Node
 ## Autoload "Game": o estado do jogador que atravessa salas e mortes.
-## - knowledge: o progresso permanente, gravado em user://save.json a cada descoberta;
+## - knowledge: o conhecimento, progresso permanente, gravado em user://save.json a cada mudança;
+## - world: o que o jogador já mudou no mapa da Dungeon (atalhos, chaves, âncoras), também salvo;
+## - stash: o que ele guarda na escola (prata, cacos de vidro, potes), também salvo;
 ## - modifiers: os efeitos das páginas estudadas;
-## - run: a incursão atual (vida, Vis da varinha, roteiro de salas), reiniciada ao morrer;
+## - run: a incursão atual (vida, Vis, achados), reiniciada ao morrer;
 ## - rng: o gerador com semente (definido pela cena principal), que sorteia cada incursão.
 ## Também serve de "central de avisos" entre o mundo e a interface (sinais abaixo).
 
@@ -21,10 +23,13 @@ signal travel_requested(room_id: StringName, entrance_id: StringName)
 ## O jogador tomou dano / morreu.
 signal player_damaged(amount: float)
 signal player_died
-## A incursão foi sorteada: a cena principal monta a Dungeon (com transição).
-signal dungeon_requested(plan: DungeonPlan)
+## Uma incursão começou: a cena principal monta a Dungeon (com transição), com inimigos e achados
+## sorteados por `incursion_seed`, e põe o jogador na âncora `anchor_id`.
+signal dungeon_requested(incursion_seed: int, anchor_id: StringName)
 ## O jogador entrou numa região nova da Dungeon (o HUD mostra o nome dela).
 signal zone_entered(zone: StringName)
+## O jogador entrou numa sala (o HUD mostra o nome dela no canto, na Dungeon).
+signal room_entered(room: RoomData)
 ## Um inimigo notou o jogador: os que estão perto acordam também.
 signal enemy_alerted(at: Vector3)
 ## Barulho (uma magia lançada): acorda os inimigos até `radius` metros.
@@ -39,18 +44,22 @@ signal note_requested(title_key: String, body_key: String)
 const SAVE_PATH := "user://save.json"
 
 var knowledge: Knowledge
+var world: DungeonProgress
+var stash: Stash
 var modifiers := Modifiers.new()
 var run: RunState
 var rng := GameRng.new(0)
 
 
 func _ready() -> void:
-	knowledge = _load_save()
+	_load_save()
 	# As receitas dos compostos simples já vêm sabidas (não vão para o save).
 	knowledge.free_recipes = Content.db.free_recipes()
 	knowledge.changed.connect(_on_knowledge_changed)
+	world.changed.connect(save)
+	stash.changed.connect(save)
 	_update_modifiers()
-	run = RunState.new(Content.db.player)
+	run = RunState.new(Content.db.player, stash.jars)
 
 
 ## Pede a troca de sala (quem faz a transição é a cena principal).
@@ -58,20 +67,119 @@ func travel(room_id: StringName, entrance_id: StringName) -> void:
 	travel_requested.emit(room_id, entrance_id)
 
 
-## Começa uma incursão: sorteia o roteiro de salas (com uma semente tirada do gerador do jogo)
-## e pede a montagem da Dungeon.
-func start_dungeon() -> void:
+## O portal da escola: com uma âncora só, leva direto a ela; com mais, a tela do portal pergunta
+## para onde ir (e chama `start_dungeon`).
+func enter_portal() -> void:
+	var anchors := attuned_anchors()
+	if anchors.size() > 1:
+		screen_requested.emit(&"portal")
+	elif not anchors.is_empty():
+		start_dungeon(anchors[0])
+
+
+## Âncoras aonde o portal pode levar, na ordem das regras (a primeira está sempre sintonizada).
+func attuned_anchors() -> Array[StringName]:
+	var rules := Content.db.dungeon_rules
+	var result: Array[StringName] = []
+	for i in rules.anchors.size():
+		if i == 0 or world.is_attuned(rules.anchors[i]):
+			result.append(rules.anchors[i])
+	return result
+
+
+## Começa uma incursão na âncora `anchor_id`: sorteia a semente (de inimigos e achados) com o
+## gerador do jogo e pede a montagem da Dungeon.
+func start_dungeon(anchor_id: StringName) -> void:
 	var incursion_seed := rng.range_int(0, 2147483646)
-	var plan := DungeonPlan.generate(Content.db.dungeon_rules, Content.db.rooms_by_slot(), incursion_seed)
-	print("Incursão: semente %d, salas %s" % [incursion_seed, plan.rooms])
-	run.start_dungeon(plan)
-	dungeon_requested.emit(plan)
+	print("Incursão: semente %d, âncora %s" % [incursion_seed, anchor_id])
+	run.start_dungeon(incursion_seed)
+	dungeon_requested.emit(incursion_seed, anchor_id)
 
 
-## Sai da Dungeon pela última sala: volta à escola (os livros achados vão junto).
-func finish_dungeon() -> void:
+## Volta à escola com vida (por uma âncora ou pela saída do Grande Arquivo): os achados vão junto.
+func return_to_school() -> void:
 	var rules := Content.db.dungeon_rules
 	travel(rules.return_room, rules.return_entrance)
+
+
+## Chegou vivo à escola: guarda o que foi achado na incursão (a cena principal chama).
+func arrive_at_school() -> void:
+	var was_in_dungeon := run.in_dungeon()
+	run.leave_dungeon()
+	run.health.restore()
+	var found := run.take_found()
+	if found.is_empty() or not was_in_dungeon:
+		return
+	stash.add(found)
+	message(Text.tr_key("UI_MSG_BANKED") % items_text(found), Color(0.95, 0.85, 0.6))
+
+
+## Um material achado na Dungeon (bolsa de prata, cacos, prata de um inimigo).
+func find_item(item_id: StringName, amount: int) -> void:
+	if amount <= 0:
+		return
+	run.find(item_id, amount)
+	var item: ItemData = Content.db.items.get(item_id)
+	message(Text.tr_key("UI_MSG_FOUND_ITEM") % [Text.tr_key(item.name_key) if item != null else String(item_id), amount],
+		item.color if item != null else Color.WHITE)
+
+
+## Texto de uma lista de materiais: "Prata 20, Cacos de vidro 3".
+func items_text(amounts: Dictionary) -> String:
+	var parts: PackedStringArray = []
+	var ids: Array = amounts.keys()
+	ids.sort_custom(ContentDB.by_name)
+	for item_id in ids:
+		var item: ItemData = Content.db.items.get(item_id)
+		parts.append("%s %d" % [Text.tr_key(item.name_key) if item != null else String(item_id), amounts[item_id]])
+	return ", ".join(parts)
+
+
+## Quanto o jogador tem de um material: o guardado na escola mais o achado nesta incursão.
+func item_count(item_id: StringName) -> int:
+	return stash.count(item_id) + run.found.get(item_id, 0)
+
+
+## O cinto já tem todos os potes que cabem?
+func belt_full() -> bool:
+	return stash.jars >= Content.db.player.jar_slots
+
+
+## Compra um pote no Almoxarife. Devolve false se não der (sem prata ou o cinto cheio).
+func buy_jar() -> bool:
+	if belt_full() or not stash.spend(Content.db.economy.jar_price):
+		return false
+	_gain_jar()
+	return true
+
+
+## Vis da varinha que falta para fabricar um pote ({aspecto: quanto falta}).
+func missing_jar_vis() -> Dictionary:
+	var result := {}
+	var cost := run.wand.effective_cost(Content.db.economy.jar_vis)
+	for aspect_id in cost:
+		var lacking: int = cost[aspect_id] - run.wand.reserve(aspect_id)
+		if lacking > 0:
+			result[aspect_id] = lacking
+	return result
+
+
+## Fabrica um pote na bancada de vidraria: gasta os cacos de vidro e o Vis da varinha.
+func craft_jar() -> bool:
+	var economy := Content.db.economy
+	if belt_full() or not stash.can_afford(economy.jar_materials) or not run.wand.can_pay(economy.jar_vis):
+		return false
+	stash.spend(economy.jar_materials)
+	run.wand.pay(economy.jar_vis)
+	_gain_jar()
+	return true
+
+
+func _gain_jar() -> void:
+	stash.add_jar(Content.db.player.jar_slots)
+	run.jars.set_count(stash.jars)
+	Audio.play(&"recharge")
+	message(Text.tr_key("UI_MSG_JAR_GAINED") % [stash.jars, Content.db.player.jar_slots], Color(0.75, 0.9, 0.85))
 
 
 ## Aplica dano no jogador. Na vida zero, avisa a morte (uma vez).
@@ -208,17 +316,23 @@ func save() -> void:
 	if file == null:
 		push_error("Não foi possível gravar o save em %s." % SAVE_PATH)
 		return
-	file.store_string(SaveGame.to_json(knowledge))
+	file.store_string(SaveGame.to_json(knowledge, world, stash))
 
 
-func _load_save() -> Knowledge:
+func _load_save() -> void:
+	knowledge = Knowledge.new()
+	world = DungeonProgress.new()
+	stash = Stash.new()
 	if not FileAccess.file_exists(SAVE_PATH):
-		return Knowledge.new()
-	var loaded := SaveGame.from_json(FileAccess.get_file_as_string(SAVE_PATH))
+		return
+	var data := SaveGame.parse(FileAccess.get_file_as_string(SAVE_PATH))
+	var loaded := SaveGame.from_dict(data) if not data.is_empty() else null
 	if loaded == null:
 		# Save corrompido ou de uma versão mais nova: guarda uma cópia e começa do zero.
 		var backup := SAVE_PATH + ".bak"
 		DirAccess.copy_absolute(ProjectSettings.globalize_path(SAVE_PATH), ProjectSettings.globalize_path(backup))
 		push_warning("Save inválido; cópia guardada em %s. Começando do zero." % backup)
-		return Knowledge.new()
-	return loaded
+		return
+	knowledge = loaded
+	world = SaveGame.world_from_dict(data)
+	stash = SaveGame.stash_from_dict(data)
