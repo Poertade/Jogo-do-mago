@@ -11,7 +11,8 @@ var current_room_data: RoomData
 
 
 ## Troca a sala atual pela sala `room_id`, com o jogador na entrada `entrance_id`.
-func load_room(room_id: StringName, entrance_id: StringName = &"default") -> void:
+## `room_seed` sorteia o que varia na sala (quais inimigos aparecem).
+func load_room(room_id: StringName, entrance_id: StringName = &"default", room_seed := 0) -> void:
 	var data: RoomData = Content.db.rooms.get(room_id)
 	if data == null:
 		push_error("Sala '%s' não existe em data/rooms/." % room_id)
@@ -19,6 +20,7 @@ func load_room(room_id: StringName, entrance_id: StringName = &"default") -> voi
 	if current_room != null:
 		current_room.queue_free()
 	current_room = (load(data.scene_path) as PackedScene).instantiate() as Room
+	current_room.rng = GameRng.new(room_seed)
 	current_room_data = data
 	add_child(current_room)
 	_apply_atmosphere(data)

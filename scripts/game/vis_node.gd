@@ -2,11 +2,14 @@ class_name VisNode
 extends Interactable
 ## Nódulo de Vis (inspirado nos nódulos de aura do Thaumcraft): um núcleo de energia de um
 ## aspecto primal, com bolinhas de Vis em órbita. Segure E mirando o nódulo para drenar Vis para
-## o recipiente desse aspecto na varinha: as bolinhas voam até a ponta dela. Pela decisão 3, só
-## há nódulos na escola (fora dela, a varinha não recarrega).
+## o recipiente desse aspecto na varinha: as bolinhas voam até a ponta dela.
+## Os nódulos da escola não acabam; os da Dungeon (sala de descanso, D054) têm `vis_amount` e se
+## apagam quando esgotam.
 
 ## Aspecto do nódulo: dá a cor e diz para qual recipiente da varinha o Vis vai.
 @export var aspect: StringName = &"fire"
+## Quanto Vis o nódulo tem (-1: não acaba, como o da escola). Ao esgotar, ele se apaga.
+@export var vis_amount := -1
 ## Pontos de reserva drenados por segundo enquanto E está seguro.
 @export var drain_rate := 12.0
 ## Quantas bolinhas de Vis voam até a varinha por segundo durante a drenagem.
@@ -17,6 +20,7 @@ var _spark_buffer := 0.0
 var _time := 0.0
 var _draining := false
 var _drained_total := 0
+var _empty := false
 var _sound: AudioStreamPlayer
 var _spark_mesh: SphereMesh
 var _spark_material: ShaderMaterial
@@ -58,7 +62,15 @@ func hold(player: Node3D, delta: float) -> void:
 	var whole := floori(_drain_buffer)
 	if whole > 0:
 		_drain_buffer -= whole
-		_drained_total += wand.add(aspect, whole)
+		if vis_amount >= 0:
+			whole = mini(whole, vis_amount)
+		var added := wand.add(aspect, whole)
+		_drained_total += added
+		if vis_amount >= 0:
+			vis_amount -= added
+			if vis_amount <= 0:
+				_go_out()
+				return
 		if wand.is_full(aspect):
 			_say_full(wand, "UI_MSG_RECHARGED")
 	_spark_buffer += sparks_per_second * delta
@@ -76,6 +88,21 @@ func _say_full(wand: WandState, aspect_key: String) -> void:
 		Game.message(Text.tr_key("UI_MSG_WAND_FULL") % wand.total_capacity())
 
 
+func is_available() -> bool:
+	return not _empty
+
+
+## O nódulo esgotou: o núcleo e as bolinhas somem, sobra uma brasa fraca.
+func _go_out() -> void:
+	_empty = true
+	release_hold()
+	Game.message(Text.tr_key("UI_MSG_NODE_EMPTY") % Text.aspect_name(aspect), Content.db.aspects[aspect].color.darkened(0.3))
+	var tween := create_tween().set_parallel()
+	tween.tween_property(core, "scale", Vector3.ONE * 0.15, 0.6)
+	tween.tween_property(light, "light_energy", 0.15, 0.6)
+	orbs.visible = false
+
+
 func release_hold() -> void:
 	_draining = false
 	_drain_buffer = 0.0
@@ -84,6 +111,8 @@ func release_hold() -> void:
 
 
 func _process(delta: float) -> void:
+	if _empty:
+		return
 	_time += delta
 	var speed := 3.0 if _draining else 1.0
 	# Núcleo pulsa; as bolinhas giram em órbitas inclinadas e sobem e descem.

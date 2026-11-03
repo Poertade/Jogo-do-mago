@@ -1,5 +1,5 @@
 class_name EnemyRig
-extends Node3D
+extends EnemyBody
 ## Corpo articulado de um inimigo humanoide: "juntas" (nós Node3D) que giram para formar as
 ## poses, com as peças (malhas) penduradas nelas. A animação é calculada por código e
 ## "travada" em poucos quadros por segundo, como nos jogos de PS1.
@@ -9,8 +9,6 @@ extends Node3D
 ##   Hips/Spine/ShoulderL/ElbowL, Hips/Spine/ShoulderR/ElbowR e .../Head/Eyes (o brilho).
 ## Para um inimigo novo com o mesmo esqueleto, duplique a cena e troque as peças e materiais.
 
-## Quadros de animação por segundo (o PS1 animava "aos trancos").
-@export var animation_fps := 12.0
 ## Inclinação do tronco para a frente, em graus (corcunda).
 @export var hunch_degrees := 16.0
 ## Altura do quadril em pé, em metros.
@@ -25,7 +23,6 @@ var _walk_amount := 0.0
 var _strike_time := 0.0
 var _hurt_time := 0.0
 var _dead := false
-var _flash_materials: Array[ShaderMaterial] = []
 
 @onready var hips: Node3D = $Hips
 @onready var thigh_l: Node3D = $Hips/ThighL
@@ -42,17 +39,6 @@ var _flash_materials: Array[ShaderMaterial] = []
 @onready var elbow_r: Node3D = $Hips/Spine/ShoulderR/ElbowR
 
 
-func _ready() -> void:
-	# Materiais que piscam em branco ao tomar dano (os que não brilham sozinhos).
-	for node in find_children("*", "MeshInstance3D", true, false):
-		var material := (node as MeshInstance3D).material_override as ShaderMaterial
-		if material != null and not material in _flash_materials \
-				and float(material.get_shader_parameter(&"emission_energy")) == 0.0:
-			_flash_materials.append(material)
-
-
-## Atualiza a pose. `speed`: velocidade atual (m/s); `max_speed`: a de perseguição;
-## `windup`: preparação do golpe, de 0 a 1 (0 quando não está atacando); `alert`: viu o jogador.
 func update_pose(delta: float, speed: float, max_speed: float, windup: float, alert: bool) -> void:
 	if _dead:
 		return
@@ -133,15 +119,8 @@ func play_strike() -> void:
 
 ## Tranco e clarão branco ao tomar dano.
 func play_hurt() -> void:
+	super.play_hurt()
 	_hurt_time = 0.3
-	var tween := create_tween()
-	tween.tween_method(_set_flash, 1.0, 0.0, 0.25)
-
-
-func _set_flash(value: float) -> void:
-	for material in _flash_materials:
-		material.set_shader_parameter(&"emission_color", Color.WHITE)
-		material.set_shader_parameter(&"emission_energy", value)
 
 
 ## Desmorona: os joelhos cedem, o tronco dobra, a cabeça tomba e o corpo cai num monte.

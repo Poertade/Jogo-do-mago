@@ -19,8 +19,10 @@ func _initialize() -> void:
 	_save(_portal_swirl(), "portal_swirl.png")
 	_save(_bone(), "bone.png")
 	_save(_robe(), "robe.png")
+	_save(_cloth(909, Color(0.3, 0.34, 0.4), Color(0.72, 0.7, 0.62)), "uniform.png")
 	_save(_skull_face(), "skull_face.png")
 	_save(_iron(), "iron.png")
+	_save(_ink(), "ink.png")
 	quit()
 
 
@@ -175,12 +177,16 @@ func _bone() -> Image:
 ## Manto do bedel (32x64, com transparência): pano quase preto com dobras verticais, uma faixa
 ## de acabamento gasta no alto, manchas e furos, e a barra rasgada em pontas irregulares.
 func _robe() -> Image:
+	return _cloth(808, Color(0.12, 0.13, 0.12), Color(0.32, 0.12, 0.16))
+
+
+## Pano rasgado (com transparência na barra e furos): `base` é o tecido, `trim` a faixa de cima.
+## O manto do Bedel usa preto e vinho; o uniforme dos aprendizes, cinza-azulado e gola clara.
+func _cloth(seed_value: int, base: Color, trim: Color) -> Image:
 	var rng := RandomNumberGenerator.new()
-	rng.seed = 808
+	rng.seed = seed_value
 	var height := SIZE * 2
 	var image := Image.create_empty(SIZE, height, false, Image.FORMAT_RGBA8)
-	var base := Color(0.12, 0.13, 0.12)
-	var trim := Color(0.32, 0.12, 0.16)
 	# Altura da barra rasgada em cada coluna: pontas compridas e curtas alternadas.
 	var hem: Array[int] = []
 	for x in SIZE:
@@ -275,6 +281,29 @@ func _iron() -> Image:
 
 
 ## Pequena variação aleatória de brilho, pixel a pixel.
+## Tinta viva (Lodo de Tinta): preto-azulado com veios brilhantes e restos de letras claras.
+func _ink() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1212
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var base := Color(0.05, 0.06, 0.1)
+	for y in SIZE:
+		for x in SIZE:
+			var vein := sin(x * 0.45 + sin(y * 0.3) * 2.0) * sin(y * 0.2 + x * 0.1)
+			var color := base.lightened(maxf(vein, 0.0) * 0.18)
+			image.set_pixel(x, y, _noise(color, rng, 0.02))
+	# Letras soltas, como se a tinta ainda guardasse o texto que borrou.
+	var ink_letter := Color(0.55, 0.52, 0.4)
+	for letter in 7:
+		var lx := rng.randi_range(1, SIZE - 5)
+		var ly := rng.randi_range(1, SIZE - 5)
+		for i in 5:
+			var px := lx + rng.randi_range(0, 3)
+			var py := ly + rng.randi_range(0, 3)
+			image.set_pixel(px, py, ink_letter.darkened(rng.randf_range(0.0, 0.4)))
+	return image
+
+
 func _noise(color: Color, rng: RandomNumberGenerator, amount: float) -> Color:
 	var delta := rng.randf_range(-amount, amount)
 	return Color(clampf(color.r + delta, 0, 1), clampf(color.g + delta, 0, 1), clampf(color.b + delta, 0, 1))

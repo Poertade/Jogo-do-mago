@@ -8,6 +8,10 @@ extends Resource
 @export var id: StringName
 ## Cena da sala.
 @export_file("*.tscn") var scene_path: String
+## Tipo da sala na Dungeon, para o sorteio das incursões (data/dungeon/rules.tres):
+## combat (combate), rest (descanso, com Nódulo) ou boss (chefe). Vazio: a sala não é sorteada
+## (escola, sala de teste).
+@export var kind: StringName
 
 @export_group("Atmosfera")
 ## Cor da névoa e do fundo.

@@ -9,6 +9,7 @@ const DATA_ROOT := "res://data"
 var player: PlayerData
 var settings_defaults: SettingsDefaults
 var research_rules: ResearchRules
+var dungeon_rules: DungeonRules
 var sound_bank: SoundBank
 var presets: Array[GraphicsPreset] = []
 var rooms: Dictionary[StringName, RoomData] = {}
@@ -26,6 +27,7 @@ func load_all(root := DATA_ROOT) -> void:
 	player = _load_single(root.path_join("player/player.tres")) as PlayerData
 	settings_defaults = _load_single(root.path_join("settings/defaults.tres")) as SettingsDefaults
 	research_rules = _load_single(root.path_join("research/rules.tres")) as ResearchRules
+	dungeon_rules = _load_single(root.path_join("dungeon/rules.tres")) as DungeonRules
 	sound_bank = _load_single(root.path_join("audio/sound_bank.tres")) as SoundBank
 	for resource in _load_folder(root.path_join("settings/presets")):
 		if resource is GraphicsPreset:
@@ -99,6 +101,17 @@ func find_scannable(id: StringName) -> ScannableData:
 	if id in scannables:
 		return scannables[id]
 	return enemies.get(id)
+
+
+## Salas da Dungeon por tipo (tipo → identificadores), para o sorteio das incursões.
+func rooms_by_kind() -> Dictionary[StringName, Array]:
+	var result: Dictionary[StringName, Array] = {}
+	for room: RoomData in rooms.values():
+		if room.kind != &"":
+			if not room.kind in result:
+				result[room.kind] = []
+			result[room.kind].append(room.id)
+	return result
 
 
 ## Páginas de pesquisa a partir de uma lista de identificadores (ignora os desconhecidos).
@@ -187,6 +200,10 @@ func validate() -> void:
 		_validate_settings()
 	for room: RoomData in rooms.values():
 		_validate_room(room)
+	if dungeon_rules == null:
+		errors.append("Faltam as regras da Dungeon (data/dungeon/rules.tres).")
+	else:
+		_validate_dungeon()
 	for aspect: AspectData in aspects.values():
 		_validate_aspect(aspect)
 	for scannable: ScannableData in scannables.values():
@@ -301,6 +318,23 @@ func _validate_room(room: RoomData) -> void:
 		errors.append("Sala '%s': cena não encontrada ('%s')." % [room.id, room.scene_path])
 	if room.fog_far <= room.fog_near:
 		errors.append("Sala '%s': fog_far precisa ser maior que fog_near." % room.id)
+
+
+func _validate_dungeon() -> void:
+	if dungeon_rules.layout.is_empty():
+		errors.append("dungeon/rules.tres: a sequência de salas (layout) está vazia.")
+	if dungeon_rules.entrance_id == &"":
+		errors.append("dungeon/rules.tres: falta a entrada das salas (entrance_id).")
+	if not dungeon_rules.return_room in rooms:
+		errors.append("dungeon/rules.tres: a sala de volta '%s' não existe." % dungeon_rules.return_room)
+	var by_kind := rooms_by_kind()
+	var checked := {}
+	for kind in dungeon_rules.layout:
+		if kind in checked:
+			continue
+		checked[kind] = true
+		if not kind in by_kind:
+			errors.append("dungeon/rules.tres: não há nenhuma sala do tipo '%s' em data/rooms/." % kind)
 
 
 func _validate_aspect(aspect: AspectData) -> void:

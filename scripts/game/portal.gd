@@ -1,11 +1,17 @@
 class_name Portal
 extends Interactable
-## O portal da escola: a única passagem para a Dungeon. O destino é um dado (sala e entrada),
-## para que no futuro ele leve a salas geradas.
+## O portal da escola: a única passagem para a Dungeon. Atravessá-lo começa uma incursão,
+## com as salas sorteadas a partir de data/dungeon/rules.tres.
 
+## Ligado: começa uma incursão sorteada. Desligado: vai direto para `target_room` (útil para
+## testar uma sala).
+@export var starts_incursion := true
 @export var target_room: StringName = &"stone_chamber"
-@export var target_entrance: StringName = &"from_portal"
+@export var target_entrance: StringName = &"south"
 
 
 func interact(_player: Node3D) -> void:
-	Game.travel(target_room, target_entrance)
+	if starts_incursion:
+		Game.start_dungeon()
+	else:
+		Game.travel(target_room, target_entrance)

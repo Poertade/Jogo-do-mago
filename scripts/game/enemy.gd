@@ -1,7 +1,8 @@
 class_name Enemy
 extends CharacterBody3D
 ## Inimigo corpo a corpo. A decisão (parado, perseguindo, atacando, reação ao dano, morte)
-## fica em EnemyBrain (scripts/core); o corpo e as animações ficam no EnemyRig (nó "Rig");
+## fica em EnemyBrain (scripts/core); o corpo e as animações ficam no nó "Rig" (um EnemyBody:
+## EnemyRig para humanoides, BlobRig para a gosma);
 ## aqui ficam o movimento, a visão, o dano e os sons.
 ## Pode ser escaneado pela Lente (get_scannable) e recebe dano (take_damage).
 
@@ -15,7 +16,7 @@ var brain: EnemyBrain
 var _player: Node3D
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-@onready var rig: EnemyRig = $Rig
+@onready var rig: EnemyBody = $Rig
 
 
 func _ready() -> void:

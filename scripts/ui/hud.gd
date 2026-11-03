@@ -21,6 +21,7 @@ const MESSAGE_SECONDS := 4.0
 @onready var stats: VBoxContainer = %Stats
 @onready var damage_flash: ColorRect = %DamageFlash
 @onready var vis_gauge: VisGauge = %VisGauge
+@onready var depth_label: Label = %DepthLabel
 
 var _health_bar: ProgressBar
 var _health_value: Label
@@ -44,6 +45,7 @@ func _process(_delta: float) -> void:
 	_update_prompt(playing)
 	_update_scan(playing)
 	_update_stats()
+	_update_depth()
 	var charge := Game.run.caster.charge_ratio()
 	crosshair.color = Color(0.85, 0.8, 0.7, 0.8).lerp(Color(1.0, 0.55, 0.2, 1.0), charge)
 	crosshair.scale = Vector2.ONE * (1.0 + charge)
@@ -91,6 +93,14 @@ func _update_stats() -> void:
 	var focus := Game.run.caster.focus
 	var focus_aspect: AspectData = Content.db.aspects.get(focus.element)
 	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE)
+
+
+## Na Dungeon, mostra em que sala da incursão o jogador está.
+func _update_depth() -> void:
+	var run := Game.run
+	depth_label.visible = run.in_dungeon()
+	if depth_label.visible:
+		depth_label.text = tr("UI_DEPTH") % [run.room_index + 1, run.dungeon.size()]
 
 
 func _update_prompt(playing: bool) -> void:

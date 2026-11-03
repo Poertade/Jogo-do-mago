@@ -143,6 +143,20 @@ max_value = 1.0
 step = 0.001
 show_percentage = false
 
+[node name="DepthLabel" type="Label" parent="Pixels/Viewport/Screen"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = 20.0
+grow_horizontal = 0
+mouse_filter = 2
+horizontal_alignment = 2
+auto_translate_mode = 2
+
 [node name="Messages" type="VBoxContainer" parent="Pixels/Viewport/Screen"]
 unique_name_in_owner = true
 anchors_preset = 2

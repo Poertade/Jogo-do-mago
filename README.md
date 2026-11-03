@@ -14,7 +14,13 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
-**M5: primeiro recorte completo.** O ciclo inteiro funciona:
+**M6: a Dungeon montada.** Cada travessia do portal começa uma **incursão** de 5 salas sorteadas (com semente) entre peças prontas: quatro salas de combate, com inimigos que variam a cada vez, e uma fonte de Vis no meio do caminho. Dois inimigos novos: o **Aprendiz Esquecido** e o **Lodo de Tinta**.
+
+| Aprendiz Esquecido, Bedel Descarnado e Lodo de Tinta | Biblioteca desabada (sala 1 de 5) |
+| --- | --- |
+| ![Inimigos](docs/images/inimigos-m6.png) | ![Biblioteca](docs/images/incursao-biblioteca.png) |
+
+**Antes, no M5, o primeiro recorte ficou completo.** O ciclo inteiro funciona:
 
 1. Na escola, você escaneia objetos, estuda e recarrega a varinha.
 2. Atravessa o portal e enfrenta o Bedel Descarnado na Dungeon.
@@ -88,13 +94,24 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 
 **Dungeon:**
 11. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
-12. O **portal** (E) leva à câmara de pedra, onde o **Bedel Descarnado** espera.
-   - Ele é lento e persegue quando vê você.
-   - Antes de golpear, ergue o braço com um sopro: recue para esquivar.
-   - É fraco a fogo: três disparos o derrubam, ou dois com a página estudada.
-   - Pode ser escaneado depois que você descobrir Mortuus e Exanimis na Mesa.
-13. Vencer abre a grade ao norte. **Voltar à escola** (E) leva à Sala do Portal e restaura a vida; o Vis só volta no Nódulo de Vis.
-14. Se a vida chegar a zero, você desperta no Salão de Estudos com a vida cheia e a varinha com o Vis inicial (10 de Ignis; o resto se perde). O conhecimento (aspectos, pontos, escaneamentos, notas e páginas) continua.
+12. O **portal** (E) começa uma **incursão**: 5 salas sorteadas em sequência, na ordem combate, combate, descanso, combate, combate. O canto de cima à direita mostra em que sala você está.
+   - **Câmaras sorteadas:** a câmara de pedra, o dormitório alagado, a biblioteca desabada e o corredor do ossuário. Cada uma sorteia também quais inimigos aparecem.
+   - **Avançar:** em cada sala, a grade ao norte só abre depois de todos os inimigos caírem. **Descer mais fundo** (E) leva à próxima sala.
+   - **Fonte de Vis:** a sala de descanso tem dois Nódulos pequenos, de Ignis e de Aqua, com 10 de Vis cada; eles se apagam quando esgotam.
+   - **Fim:** a saída da última sala leva de volta à escola.
+13. **Inimigos:**
+
+   | Inimigo | Comportamento | Fogo | Escaneável depois de descobrir |
+   | --- | --- | --- | --- |
+   | **Bedel Descarnado** | lento; antes de golpear, ergue o bastão com um sopro: recue para esquivar | fraco: 3 disparos, ou 2 com a página | Mortuus e Exanimis |
+   | **Aprendiz Esquecido** | rápido e frágil; golpeia com a pena quase sem aviso | fraco: 2 disparos | Mortuus, Exanimis e Cognitio |
+   | **Lodo de Tinta** | lento, golpe forte com o braço de tinta | resiste: 4 disparos | Cognitio |
+
+   Na Dungeon há objetos novos para escanear (livros afogados, pilhas de ossos, poças de tinta, lamparinas de almas, beliches), com aspectos que a escola não tem, como Mortuus, Vacuos e Spiritus. Para escanear, você precisa descobrir esses aspectos na Mesa antes.
+   - Antes, o portal levava sempre à câmara de pedra; agora ela é uma das câmaras sorteadas.
+   - Para repetir a mesma incursão, rode o jogo com `--seed=N` (a semente de cada incursão aparece no terminal).
+14. Voltando à escola pela última sala, a vida é restaurada; o Vis só volta nos Nódulos.
+15. Se a vida chegar a zero, você desperta no Salão de Estudos com a vida cheia e a varinha com o Vis inicial (10 de Ignis; o resto se perde). O conhecimento (aspectos, pontos, escaneamentos, notas e páginas) continua.
 
 O conhecimento é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
@@ -131,6 +148,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Pesquisa:** escaneamento bloqueado por composto desconhecido, pontos por aspecto, combinação na Mesa, notas de pesquisa (grade, ligações, escrever e apagar, nota completa), estudo de páginas, andamento do escaneamento, efeitos das páginas, economia da pesquisa (tudo pode ser escaneado com os pontos disponíveis).
 - **Magia:** recipientes de Vis da varinha (limite por aspecto e total), custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
+- **Incursão:** sorteio das salas com semente (mesma semente, mesmo roteiro; sem repetir sala), avanço e fim da incursão, morte que encerra a incursão, entrada e saída de toda sala sorteável.
 - **Sistema:** persistência (save), gerador com semente, opções.
 - **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
 - **Arquitetura:** a regra de camadas e os arquivos de cena (parâmetros de shader com casa decimal).
@@ -139,7 +157,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 
 | Comando | O que faz |
 | --- | --- |
-| `godot --headless --path . -s tools/balance_report.gd` | relatório de balanceamento: disparos por reserva, acertos para derrubar cada inimigo (com e sem páginas), golpes para derrubar o jogador, pontos de pesquisa |
+| `godot --headless --path . -s tools/balance_report.gd` | relatório de balanceamento: disparos por recipiente, acertos para derrubar cada inimigo (com e sem páginas), golpes para derrubar o jogador, pontos de pesquisa e quantos disparos uma incursão pede em média |
 | `godot --headless --path . -s tools/generate_textures.gd` | gera de novo as texturas provisórias |
 | `godot --headless --path . -s tools/generate_sounds.gd` | gera de novo os sons provisórios |
 | `godot --headless --path . -s tools/generate_icons.gd` | gera de novo os ícones dos aspectos (`assets/icons/aspects/`) |
@@ -157,6 +175,7 @@ data/              conteúdo do jogo, um arquivo .tres por item (editável no in
   enemies/         inimigos (também escaneáveis)
   wands/  foci/    varinhas e Focus
   research/        regras de escaneamento e pontos (rules.tres) e páginas (pages/)
+  dungeon/         como as incursões são montadas (rules.tres: sequência de tipos de sala)
   player/          vida, equipamento inicial e movimento do jogador
   rooms/           salas: identificador, cena, atmosfera e som de ambiente
   settings/        opções padrão e filtros visuais (presets/)
@@ -229,11 +248,12 @@ Tudo abaixo é feito no editor do Godot (ou editando os arquivos de texto) e nã
 
 2. Em `locales/content.csv`: `ENEMY_ASH_WRAITH,Espectro de Cinzas`.
 3. Para colocá-lo numa sala, abra a cena da sala (ex.: `scenes/rooms/stone_chamber.tscn`):
-   - Adicione um `Marker3D`, anexe o script `scripts/game/enemy_spawn.gd` e, em `enemy`, escolha o novo `.tres`.
+   - Acrescente o novo `.tres` em `enemy_pool` de um `EnemySpawn` existente, ou adicione um `Marker3D` com o script `scripts/game/enemy_spawn.gd`. Um inimigo da lista é sorteado a cada incursão; `chance` decide se aparece alguém ali.
    - A seta azul indica para onde ele começa olhando.
    - A sala conta os inimigos sozinha: a saída só abre quando todos caem.
 4. **Aparência própria (opcional):** duplique `scenes/enemies/bone_beadle.tscn` e troque as peças (malhas) e os materiais.
-   - **O que manter:** o script `Enemy` na raiz e o nó `Rig` (script `EnemyRig`), com as juntas `Hips`, `Hips/ThighL/KneeL`, `Hips/ThighR/KneeR`, `Hips/Spine`, `Hips/Spine/Neck/Head` (com `Jaw` e `Eyes`) e `Hips/Spine/ShoulderL/ElbowL` e `ShoulderR/ElbowR`. As peças são filhas das juntas; a animação só gira as juntas.
+   - **Outro formato de corpo:** o nó `Rig` pode ter qualquer script que herde de `EnemyBody` (`scripts/game/enemy_body.gd`). O Lodo de Tinta usa `BlobRig` (`scripts/game/blob_rig.gd`).
+   - **O que manter num humanoide:** o script `Enemy` na raiz e o nó `Rig` (script `EnemyRig`), com as juntas `Hips`, `Hips/ThighL/KneeL`, `Hips/ThighR/KneeR`, `Hips/Spine`, `Hips/Spine/Neck/Head` (com `Jaw` e `Eyes`) e `Hips/Spine/ShoulderL/ElbowL` e `ShoulderR/ElbowR`. As peças são filhas das juntas; a animação só gira as juntas.
    - **Ajustes no Inspetor do `Rig`:** `hunch_degrees` (corcunda), `stride_degrees` (passada), `hip_height` e `animation_fps`.
    - Aponte `scene_path` para a cópia.
 5. Rode os testes e `tools/balance_report.gd`, que mostra quantos disparos o novo inimigo aguenta.
@@ -286,19 +306,20 @@ Equipe-a em `data/player/player.tres` (`starting_wand`). Ali também fica `start
 
 ### Adicionar uma sala da Dungeon
 
-1. Duplique `scenes/rooms/stone_chamber.tscn` (ou crie uma cena com raiz `Node3D` e o script `scripts/game/room.gd`) e monte a sala:
+1. Duplique uma sala de `scenes/rooms/` (ex.: `flooded_dormitory.tscn`), ou crie uma cena com raiz `Node3D` e o script `scripts/game/room.gd`, e monte a sala:
 
    | Elemento | Como montar |
    | --- | --- |
-   | Paredes, chão, teto | nós `StaticBody3D` com o script `scripts/game/greybox_block.gd`; ajuste `size` e escolha um material de `assets/materials/`. A malha e a colisão se refazem sozinhas. |
+   | Paredes, chão, teto | nós `StaticBody3D` com o script `scripts/game/greybox_block.gd`; ajuste `size` e escolha um material de `assets/materials/`. A malha e a colisão se refazem sozinhas. Preencha `scannable`. |
    | Luzes | `OmniLight3D`; o script `flicker_light.gd` faz tremular |
-   | Entradas | `Marker3D` com `entrance_point.gd` e um `id` (ex.: `from_portal`) |
-   | Inimigos | `Marker3D` com `enemy_spawn.gd` |
-   | Saída | `Node3D` com `exit_point.gd`: destino em `target_room` e `target_entrance`; `requires_clear` para só abrir depois da vitória; `barrier` aponta para a grade que afunda |
+   | Entrada | `Marker3D` com `entrance_point.gd` e `id` = `south` (a entrada que a incursão usa, `entrance_id` em `data/dungeon/rules.tres`) |
+   | Inimigos | `Marker3D` com `enemy_spawn.gd`: `enemy_pool` (um deles é sorteado) e `chance` (de aparecer alguém) |
+   | Saída | `Node3D` com `exit_point.gd`, com `goes_deeper` ligado (leva à próxima sala); `requires_clear` para só abrir depois da vitória; `barrier` aponta para a grade que afunda |
+   | Nódulo (sala de descanso) | instancie `scenes/props/vis_node.tscn`; ajuste `aspect`, `vis_amount` (quanto Vis tem; -1 = não acaba) e `scannable` |
 
-2. Crie o recurso da sala: duplique `data/rooms/stone_chamber.tres`, mude `id` e `scene_path`, e ajuste a atmosfera (cor e distâncias da névoa, luz ambiente) e o som de `ambience`.
-3. Ligue a sala ao portal: abra `scenes/rooms/school.tscn`, selecione `PortalRoom/Portal` e mude `target_room` e `target_entrance`.
-4. Teste direto: `godot --path . -- --room=<id da sala>`.
+2. Crie o recurso da sala: duplique `data/rooms/flooded_dormitory.tres`, mude `id`, `scene_path` e `kind` (`combat`, `rest` ou `boss`), e ajuste a atmosfera (cor e distâncias da névoa, luz ambiente) e o som de `ambience`.
+3. Pronto: a sala entra no sorteio do tipo dela. A ordem dos tipos numa incursão fica em `layout`, em `data/dungeon/rules.tres`.
+4. Teste direto: `godot --path . -- --room=<id da sala> --entrance=south`. Os testes conferem a entrada e a saída de toda sala sorteável, e `tools/balance_report.gd` mostra quantos inimigos e disparos cada sala pede em média.
 
 ### Trocar textos, nomes, sons e texturas
 

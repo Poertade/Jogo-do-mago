@@ -7,6 +7,7 @@
 script = ExtResource("1")
 id = &"stone_chamber"
 scene_path = "res://scenes/rooms/stone_chamber.tscn"
+kind = &"combat"
 fog_color = Color(0.02, 0.027, 0.04, 1)
 fog_near = 1.5
 fog_far = 11.0

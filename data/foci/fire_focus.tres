@@ -9,7 +9,7 @@ name_key = "FOCUS_FIRE"
 spell_type = &"projectile"
 element = &"fire"
 cost = Dictionary[StringName, int]({
-&"fire": 2
+&"fire": 1
 })
 charge_time = 0.6
 cooldown = 0.4

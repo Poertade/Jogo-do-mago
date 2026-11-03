@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"drowned_books"
+name_key = "OBJ_DROWNED_BOOKS"
+aspects = Dictionary[StringName, int]({
+&"entropy": 1,
+&"mind": 1,
+&"water": 2
+})

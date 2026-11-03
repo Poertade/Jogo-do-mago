@@ -36,6 +36,8 @@ func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
 	rng = GameRng.new(GameRng.seed_from_args(args, randi()))
 	print("Semente: %d" % rng.seed_value)
+	# As incursões são sorteadas a partir desta semente: --seed=N repete as mesmas.
+	Game.rng = rng
 
 	Settings.changed.connect(_apply_settings)
 	_apply_settings()
@@ -95,9 +97,11 @@ func _on_travel_requested(room_id: StringName, entrance_id: StringName) -> void:
 
 
 func _arrive(room_id: StringName, entrance_id: StringName) -> void:
-	world.load_room(room_id, entrance_id)
 	if room_id == safe_room:
+		Game.run.leave_dungeon()
 		Game.run.health.restore()
+	# Na Dungeon, cada sala tem a sua semente (para sortear os inimigos dela).
+	world.load_room(room_id, entrance_id, Game.run.current_room_seed())
 
 
 ## Morte: a incursão recomeça no Salão de Estudos; o conhecimento já está salvo.

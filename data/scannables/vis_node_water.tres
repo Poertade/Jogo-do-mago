@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"vis_node_water"
+name_key = "OBJ_VIS_NODE"
+aspects = Dictionary[StringName, int]({
+&"magic": 2,
+&"water": 4
+})

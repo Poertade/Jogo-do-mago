@@ -32,7 +32,7 @@ script = ExtResource("p_script")
 scannable = ExtResource("scan_portal")
 prompt_key = "PROMPT_PORTAL"
 target_room = &"stone_chamber"
-target_entrance = &"from_portal"
+target_entrance = &"south"
 
 [node name="PostL" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.8, 0)

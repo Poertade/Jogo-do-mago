@@ -59,4 +59,48 @@ func _initialize() -> void:
 		print("  %s: %d pontos escaneando tudo (nível %d)" % [aspect_id, totals[aspect_id], db.tier(aspect_id)])
 	for page: ResearchPageData in db.pages.values():
 		print("Página %s: nota de raio %d com %s" % [page.id, page.note_radius, page.note_aspects])
+	_incursion_report(db)
 	quit()
+
+
+## Incursão: quantos inimigos e disparos cada sala sorteável pede, em média (pela chance de cada
+## EnemySpawn e pelo sorteio entre os inimigos possíveis), e quanto Vis os Nódulos dela dão.
+func _incursion_report(db: ContentDB) -> void:
+	var focus := db.player.starting_focus
+	var wand := WandState.new(db.player.starting_wand)
+	var cost := 0
+	for amount in wand.effective_cost(focus.cost).values():
+		cost += amount
+	print("\n=== Incursão (Focus %s, sem páginas, sem errar) ===" % focus.id)
+	var by_kind: Dictionary = {}
+	for room: RoomData in db.rooms.values():
+		if room.kind == &"":
+			continue
+		var scene: Node = (load(room.scene_path) as PackedScene).instantiate()
+		var enemies := 0.0
+		var shots := 0.0
+		for node in scene.find_children("*", "EnemySpawn", true, false):
+			var spawn := node as EnemySpawn
+			var pool: Array = spawn.enemy_pool if not spawn.enemy_pool.is_empty() else [spawn.enemy]
+			for enemy: EnemyData in pool:
+				var damage := Combat.damage_against(focus.damage, focus.element, enemy.weaknesses)
+				shots += spawn.chance / pool.size() * ceili(enemy.max_health / damage)
+			enemies += spawn.chance
+		var vis := 0
+		for node in scene.find_children("*", "VisNode", true, false):
+			vis += maxi(node.vis_amount, 0)
+		scene.free()
+		print("  %s (%s): %.1f inimigo(s), %.1f disparo(s), %d de Vis nos Nódulos" % [room.id, room.kind, enemies, shots, vis])
+		if not room.kind in by_kind:
+			by_kind[room.kind] = []
+		by_kind[room.kind].append(shots)
+	var total := 0.0
+	for kind in db.dungeon_rules.layout:
+		var list: Array = by_kind.get(kind, [0.0])
+		var average := 0.0
+		for value in list:
+			average += value
+		total += average / list.size()
+	var start := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(focus.cost)
+	print("Roteiro %s: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
+		db.dungeon_rules.layout, total, total * cost, start, cost])

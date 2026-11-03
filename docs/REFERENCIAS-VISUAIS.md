@@ -67,3 +67,16 @@ Pedido do usuário depois da rodada do pergaminho: os menus estavam "destoantes,
 3. **Papel visto à luz de vela:** pergaminho apagado e sujo (`#8f7650`), bordas queimadas, tinta quase preta (`#1c120a`) e títulos em vermelho escuro (`#5c120a`). A Mesa de Pesquisa tem moldura de madeira escura (`#30200f`).
 4. **O jogo continua visível** atrás dos menus, escurecido.
 5. **HUD:** texto claro (`#dbcdad`) com contorno preto de 1 pixel; o mostrador de Vis segue o do Thaumcraft 4 (orbe do Focus e frascos em leque), em desenho próprio.
+
+## Dungeon do M6
+
+- **Aprendiz Esquecido:** o mesmo esqueleto do Bedel, menor e mais curvado, com uniforme cinza-azulado desbotado (`assets/textures/uniform.png`), capuz, gola clara, livro e pena. Olhos azul-claros.
+- **Lodo de Tinta:** gosma quase preta, com veios azulados e letras borradas na textura (`assets/textures/ink.png`), quatro olhos amarelo-pálidos desiguais e um braço de tinta. Silhueta baixa e larga, oposta à dos esqueletos.
+- **Salas:** cada uma com uma cor de luz própria, para ser reconhecida (princípio 3):
+
+| Sala | Luz |
+| --- | --- |
+| Dormitório alagado | azul fria, com poças de tinta |
+| Biblioteca desabada | lamparinas verde-água e um feixe pálido do alto |
+| Corredor do ossuário | tochas e lamparinas |
+| Fonte de Vis | lilás, com a cor dos Nódulos |

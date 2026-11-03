@@ -36,7 +36,7 @@ func test_school_values_match_the_specification() -> void:
 	assert_eq(db.player.starting_wand.aspect_capacity, 10, "Limite de cada recipiente (D051)")
 	assert_eq(db.player.starting_vis, {&"fire": 10} as Dictionary[StringName, int])
 	var focus := db.player.starting_focus
-	assert_eq(focus.cost, {&"fire": 2} as Dictionary[StringName, int], "Ajustado em D051 para manter 5 disparos")
+	assert_eq(focus.cost, {&"fire": 1} as Dictionary[StringName, int], "Ajustado em D055: 10 disparos por recipiente, para a incursão de 5 salas")
 	assert_eq(focus.damage, 15.0)
 	assert_eq(focus.charge_time, 0.6)
 	assert_eq(focus.cooldown, 0.4)

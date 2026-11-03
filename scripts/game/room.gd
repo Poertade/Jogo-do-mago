@@ -2,12 +2,14 @@ class_name Room
 extends Node3D
 ## Raiz de uma cena de sala (scenes/rooms/). A sala é montada no editor com GreyboxBlock,
 ## luzes e marcadores: EntrancePoint (onde o jogador aparece), EnemySpawn (onde nascem os
-## inimigos) e saídas (ExitPoint). Por ser feita só de marcadores e dados, a mesma estrutura
-## servirá para montar Dungeons combinando salas.
+## inimigos) e saídas (ExitPoint). As salas da Dungeon são sorteadas para cada incursão
+## (data/dungeon/rules.tres), e os EnemySpawn podem sortear o inimigo com o gerador `rng`.
 
 ## Todos os inimigos da sala foram derrotados.
 signal cleared
 
+## Gerador com a semente desta sala (definido pelo World antes de a sala entrar na árvore).
+var rng := GameRng.new(0)
 var _enemies_alive := 0
 
 
@@ -35,15 +37,21 @@ func get_entrance(entrance_id: StringName) -> EntrancePoint:
 
 
 func _spawn(spawn: EnemySpawn) -> void:
-	if spawn.enemy == null:
-		push_warning("EnemySpawn '%s' sem inimigo definido." % spawn.name)
+	var data := spawn.pick(rng)
+	if data == null:
 		return
-	var enemy: Enemy = (load(spawn.enemy.scene_path) as PackedScene).instantiate()
-	enemy.data = spawn.enemy
+	spawn_enemy(data, spawn.global_transform)
+
+
+## Cria um inimigo na sala (também usado por chefes que chamam ajuda).
+func spawn_enemy(data: EnemyData, at: Transform3D) -> Enemy:
+	var enemy: Enemy = (load(data.scene_path) as PackedScene).instantiate()
+	enemy.data = data
 	add_child(enemy)
-	enemy.global_transform = spawn.global_transform
+	enemy.global_transform = at
 	_enemies_alive += 1
 	enemy.died.connect(_on_enemy_died)
+	return enemy
 
 
 func _on_enemy_died() -> void:

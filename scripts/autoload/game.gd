@@ -2,7 +2,8 @@ extends Node
 ## Autoload "Game": o estado do jogador que atravessa salas e mortes.
 ## - knowledge: o progresso permanente, gravado em user://save.json a cada descoberta;
 ## - modifiers: os efeitos das páginas estudadas;
-## - run: a incursão atual (vida, reserva da varinha), reiniciada ao morrer.
+## - run: a incursão atual (vida, Vis da varinha, roteiro de salas), reiniciada ao morrer;
+## - rng: o gerador com semente (definido pela cena principal), que sorteia cada incursão.
 ## Também serve de "central de avisos" entre o mundo e a interface (sinais abaixo).
 
 ## Um objeto do mundo pediu uma tela (ex.: &"research_table").
@@ -28,6 +29,7 @@ const SAVE_PATH := "user://save.json"
 var knowledge: Knowledge
 var modifiers := Modifiers.new()
 var run: RunState
+var rng := GameRng.new(0)
 
 
 func _ready() -> void:
@@ -40,6 +42,26 @@ func _ready() -> void:
 ## Pede a troca de sala (quem faz a transição é a cena principal).
 func travel(room_id: StringName, entrance_id: StringName) -> void:
 	travel_requested.emit(room_id, entrance_id)
+
+
+## Começa uma incursão: sorteia o roteiro de salas (com uma semente tirada do gerador do jogo)
+## e vai para a primeira sala.
+func start_dungeon() -> void:
+	var rules := Content.db.dungeon_rules
+	var incursion_seed := rng.range_int(0, 2147483646)
+	var plan := DungeonPlan.generate(rules.layout, Content.db.rooms_by_kind(), incursion_seed)
+	print("Incursão: semente %d, salas %s" % [incursion_seed, plan.rooms])
+	travel(run.start_dungeon(plan), rules.entrance_id)
+
+
+## Vai para a próxima sala da incursão; depois da última (ou fora de uma incursão), volta à escola.
+func advance_dungeon() -> void:
+	var rules := Content.db.dungeon_rules
+	var next := run.advance()
+	if next == &"":
+		travel(rules.return_room, rules.return_entrance)
+	else:
+		travel(next, rules.entrance_id)
 
 
 ## Aplica dano no jogador. Na vida zero, avisa a morte (uma vez).

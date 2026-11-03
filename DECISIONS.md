@@ -419,6 +419,54 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Apagar o save inteiro.**
 - **Motivo:** nenhum código estudava a página sozinho; ela vinha do save das versões anteriores. Agora a única forma de estudar é resolver a nota.
 
+## M6 e M7 (aprovados pelo usuário)
+
+### D054 · 2026-11-03 · Escopo do M6 e do M7, feitos de uma vez
+
+- **Escolha:** o usuário autorizou fazer o M6 e o M7 sem parar entre eles e aceitou as escolhas propostas:
+  - **Recarga na Dungeon:** um Nódulo pequeno, que se esgota, numa sala de descanso no meio do caminho. Muda a decisão 3, que não previa nenhuma recarga fora da escola.
+  - **Tamanho:** 5 salas por incursão.
+  - **Chefe:** sim, na última sala; vencê-lo abre a volta à escola.
+- **M6, a Dungeon montada:** salas sorteadas de peças prontas, com semente (a mesma semente gera a mesma incursão), dois inimigos novos e a sala de descanso.
+- **M7, magia e pesquisa novas:** Focus de Gelo (gasta Aqua e Ordo), Nódulo de Aqua na escola, troca de Focus na escola, uma página de pesquisa ligada aos aspectos da Dungeon e o chefe.
+- **Descartado:** fazer só o M6 e esperar a aprovação do M7.
+- **Motivo:** pedido do usuário ("pode dar início até o M7"). Ao fim do M7, o trabalho para até o usuário jogar.
+
+### D055 · 2026-11-03 · Fogo a 1 de Ignis por disparo (equilíbrio da incursão)
+
+- **Escolha:** o Focus de Fogo passa a gastar 1 de Ignis por disparo, então o recipiente cheio dá 10 disparos.
+- **Descartado:** manter 2 por disparo (5 disparos) da D051.
+- **Motivo:** uma incursão de 5 salas pede uns 17 disparos em média (`tools/balance_report.gd`). Com 10 no começo e 10 de Ignis na fonte, dá para vencer, mas é preciso acertar. Com 5 por recipiente, seria impossível.
+
+### D056 · 2026-11-03 · Incursão: salas em sequência, sorteadas com semente
+
+- **Escolha:**
+  - **Roteiro:** o portal sorteia o roteiro da incursão (`DungeonPlan`, em `scripts/core`), uma sala para cada tipo da sequência `layout` de `data/dungeon/rules.tres`. Uma sala não se repete na mesma incursão enquanto houver outra do mesmo tipo.
+  - **Passagem:** cada sala é carregada sozinha, com a transição de pixels, quando o jogador atravessa a saída da anterior. Todas as salas sorteáveis têm a entrada `south`, sobre um círculo de chegada, e uma saída com `goes_deeper`.
+  - **Variação:** cada sala tem a sua semente, derivada da semente da incursão, e cada `EnemySpawn` sorteia o inimigo (`enemy_pool`) e se aparece alguém (`chance`).
+  - **Semente:** a semente da incursão sai do gerador do jogo, então `--seed=N` repete as mesmas incursões.
+- **Descartado:**
+  - **Emendar as salas num espaço só, sem transição:** exige evitar sobreposição, juntar a névoa e a luz de várias salas e pesa mais (várias salas acesas ao mesmo tempo).
+  - **Gerar a planta da sala por código:** perde o cuidado de cada sala montada à mão.
+- **Motivo:** aproveita a sala como módulo, que a especificação pedia desde o M4 (seção 5.6), e o mesmo fluxo de viagem que já existia. Salas novas entram no sorteio só com dados.
+
+### D057 · 2026-11-03 · Inimigos novos e corpo de inimigo como peça trocável
+
+- **Escolha:**
+  - **Corpo trocável:** o nó `Rig` de um inimigo pode ter qualquer script que herde de `EnemyBody`: `EnemyRig` (humanoide articulado) ou `BlobRig` (gosma). O comportamento (`EnemyBrain`) é o mesmo para todos, e só os números mudam.
+  - **Aprendiz Esquecido:** aluno morto da Primeira Escola, com uniforme cinza-azulado, capuz, livro e pena. Rápido e frágil (28 de vida, 2,3 m/s, golpe com 0,45 s de aviso), fraco a fogo.
+  - **Lodo de Tinta:** gosma da tinta dos livros afogados, com olhos claros e um braço que bate. Lento e forte (36 de vida, 12 de dano), resiste a fogo (×0,6), para pedir outra magia no M7.
+- **Descartado:** um inimigo que ataca de longe, porque pede um comportamento novo no cérebro (fica para depois).
+- **Motivo:** dois perfis opostos ao Bedel (rápido e frágil; lento e resistente) mudam o jeito de lutar sem código de IA novo. Os aspectos deles (Cognitio, Mortuus, Exanimis) levam a pesquisa para a Dungeon.
+
+### D058 · 2026-11-03 · Nódulos que se esgotam e objetos novos da Dungeon
+
+- **Escolha:**
+  - **Nódulos:** `VisNode.vis_amount` limita o Vis de um nódulo (-1 = não acaba, como o da escola). A fonte de Vis tem um nódulo de Ignis e um de Aqua, com 10 cada; ao esgotar, o nódulo se apaga.
+  - **Objetos novos para escanear:** livros afogados, pilha de ossos, poça de tinta, lamparina de almas e beliche apodrecido.
+- **Descartado:** recarga lenta e contínua na Dungeon.
+- **Motivo:** D054 (um nódulo pequeno no meio do caminho). Os objetos novos trazem aspectos que a escola não tem (Mortuus, Vacuos, Spiritus), para explorar render pesquisa.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

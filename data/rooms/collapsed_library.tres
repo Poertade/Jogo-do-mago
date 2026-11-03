@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_dungeon.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"collapsed_library"
+scene_path = "res://scenes/rooms/collapsed_library.tscn"
+kind = &"combat"
+fog_color = Color(0.035, 0.028, 0.02, 1)
+fog_near = 2.0
+fog_far = 13.0
+ambient_color = Color(0.3, 0.25, 0.2, 1)
+ambient_energy = 0.42
+ambience = ExtResource("2")
