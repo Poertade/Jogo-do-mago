@@ -1,8 +1,10 @@
 class_name Hud
 extends CanvasLayer
-## Interface sobre o jogo: vida e reserva da varinha, mira (que acende com a carga da magia),
-## aviso "Clique para jogar", texto de interação (E), informações do alvo da Lente com a
-## barra de escaneamento, e avisos curtos.
+## Interface sobre o jogo: vida, mostrador de Vis da varinha, mira (que acende com a carga da
+## magia), aviso "Clique para jogar", texto de interação (E), informações do alvo da Lente com
+## a barra de escaneamento, e avisos curtos.
+## Tudo é desenhado na imagem pequena da interface (640x360, ampliada 2x); a aparência vem de
+## assets/ui/hud_theme.tres.
 
 ## Segundos que cada aviso fica na tela.
 const MESSAGE_SECONDS := 4.0
@@ -18,14 +20,10 @@ const MESSAGE_SECONDS := 4.0
 @onready var messages: VBoxContainer = %Messages
 @onready var stats: VBoxContainer = %Stats
 @onready var damage_flash: ColorRect = %DamageFlash
-
-## Uma linha (barra e número) para a vida e outra para o Vis da varinha.
-const VIS_COLOR := Color(0.7, 0.55, 1.0)
+@onready var vis_gauge: VisGauge = %VisGauge
 
 var _health_bar: ProgressBar
 var _health_value: Label
-var _vis_bar: ProgressBar
-var _vis_value: Label
 
 
 func _ready() -> void:
@@ -52,12 +50,9 @@ func _process(_delta: float) -> void:
 
 
 func _build_stats() -> void:
-	var row := _stat_row(tr("UI_HEALTH"), Color(0.7, 0.15, 0.12))
+	var row := _stat_row(tr("UI_HEALTH"), Color(0.6, 0.12, 0.1))
 	_health_bar = row[0]
 	_health_value = row[1]
-	var vis_row := _stat_row(tr("TERM_VIS"), VIS_COLOR)
-	_vis_bar = vis_row[0]
-	_vis_value = vis_row[1]
 
 
 ## Cria uma linha "Nome [barra] valor" e devolve [barra, rótulo do valor].
@@ -65,18 +60,15 @@ func _stat_row(title: String, color: Color) -> Array:
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var name_label := _outlined_label(title)
-	name_label.custom_minimum_size.x = 70
+	name_label.custom_minimum_size.x = 30
 	row.add_child(name_label)
 	var bar := ProgressBar.new()
-	bar.custom_minimum_size = Vector2(160, 14)
+	bar.custom_minimum_size = Vector2(80, 6)
 	bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	bar.show_percentage = false
 	var fill := StyleBoxFlat.new()
 	fill.bg_color = color
 	bar.add_theme_stylebox_override("fill", fill)
-	var background := StyleBoxFlat.new()
-	background.bg_color = Color(0.05, 0.05, 0.06, 0.8)
-	bar.add_theme_stylebox_override("background", background)
 	row.add_child(bar)
 	var value := _outlined_label("")
 	row.add_child(value)
@@ -88,9 +80,6 @@ func _outlined_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 6)
-	label.add_theme_font_size_override("font_size", 18)
 	return label
 
 
@@ -99,10 +88,9 @@ func _update_stats() -> void:
 	_health_bar.max_value = health.max_health
 	_health_bar.value = health.current
 	_health_value.text = "%d/%d" % [ceili(health.current), health.max_health]
-	var wand := Game.run.wand
-	_vis_bar.max_value = wand.capacity()
-	_vis_bar.value = wand.vis
-	_vis_value.text = "%d/%d" % [wand.vis, wand.capacity()]
+	var focus := Game.run.caster.focus
+	var focus_aspect: AspectData = Content.db.aspects.get(focus.element)
+	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE)
 
 
 func _update_prompt(playing: bool) -> void:
@@ -176,9 +164,6 @@ func show_message(text: String, color := Color(0.9, 0.86, 0.78)) -> void:
 	var label := Label.new()
 	label.text = text
 	label.add_theme_color_override("font_color", color)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 6)
-	label.add_theme_font_size_override("font_size", 20)
 	messages.add_child(label)
 	var tween := label.create_tween()
 	tween.tween_interval(MESSAGE_SECONDS)

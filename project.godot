@@ -35,7 +35,7 @@ enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [gui]
 
-theme/custom_font="res://assets/fonts/PixelifySans.ttf"
+theme/custom_font="res://assets/ui/ui_font.tres"
 
 [importer_defaults]
 
@@ -119,6 +119,18 @@ renderer/rendering_method.mobile="gl_compatibility"
 
 [shader_globals]
 
+ps1_color_limit={
+"type": "bool",
+"value": true
+}
+ps1_dithering={
+"type": "bool",
+"value": true
+}
+ps1_color_levels={
+"type": "float",
+"value": 32.0
+}
 ps1_vertex_snap={
 "type": "bool",
 "value": true

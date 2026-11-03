@@ -357,7 +357,7 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** copiar os ícones do Thaumcraft; só bolinhas coloridas.
 - **Motivo:** a Mesa no estilo da imagem enviada é uma grade de ícones, e os ícones do mod não podem ser usados.
 
-### D047 · 2026-11-03 · Reserva única de Vis na varinha
+### D047 · 2026-11-03 · Reserva única de Vis na varinha (substituída por D051)
 
 - **Escolha:** a varinha guarda um só número de Vis (`capacity` = 30); cada Focus custa um tanto desse Vis (`cost` = 5 no Focus de Fogo); o Nódulo de Vis enche a reserva; o HUD mostra uma barra de Vis. A reserva não vai para o save: ela é da incursão.
 - **Descartado:** uma reserva por aspecto (como estava, e como nos Thaumcraft 3 e 4, em que a varinha guarda os seis primais separados).
@@ -385,6 +385,40 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** desenhar uma fonte própria (muito trabalho para pouco ganho); a fonte padrão do Godot (lisa, destoa do visual PS1); fontes sem licença livre.
 - **Motivo:** pedido do usuário ("menus que pareçam pergaminhos"). A OFL permite distribuir a fonte dentro do jogo, inclusive em venda, desde que a licença acompanhe.
 
+### D051 · 2026-11-03 · Recipientes de Vis por aspecto, com limite total (substitui D047)
+
+- **Escolha:** a varinha tem um recipiente para cada aspecto da lista `aspects` (os seis primais, na ordem dos frascos do HUD). Cada recipiente guarda até `aspect_capacity` (10), e a soma de todos não passa de `capacity` (30): com 10 de Ignis, 10 de Aqua e 10 de Perditio, a varinha está cheia.
+  - **Custo:** o Focus volta a ter custo por aspecto (`cost`), e o Focus de Fogo passa a gastar 2 de Ignis.
+  - **Vis inicial:** fica em `starting_vis` (`data/player/player.tres`, 10 de Ignis). Ele vale no começo de cada incursão e depois da morte; o resto se perde ao morrer.
+  - **Nódulo:** enche só o recipiente do aspecto dele, até o limite do recipiente ou o total.
+  - **HUD:** um mostrador como o do Thaumcraft 4 (imagem enviada pelo usuário), com o orbe do Focus no centro, um frasco por recipiente em leque e o total embaixo.
+- **Descartado:**
+  - **Manter os 5 de Ignis por disparo da especificação:** com 10 no recipiente, seriam só 2 disparos, e o Bedel precisa de 3 sem a página.
+  - **Recipientes sem limite próprio:** o usuário pediu os dois limites.
+- **Motivo:** pedido do usuário ("um contêiner separado para cada Vis, com uma reserva total e uma separada"). Com 2 por disparo, o recipiente cheio dá 5 disparos: o Bedel cai com 3, ou 2 com a página, como antes.
+
+### D052 · 2026-11-03 · Interface em pixels grandes, com o mesmo filtro do mundo (refina D050)
+
+- **Escolha:**
+  - **Pixels grandes:** HUD e menus são desenhados num `SubViewport` de 640×360 e ampliados 2× sem filtro (`SubViewportContainer` com `stretch_shrink` = 2).
+  - **Mesmo filtro do mundo:** a imagem pequena passa pelo mesmo dithering e pela mesma cor limitada do mundo 3D (`scripts/render/ui_pixels.gdshader`). Ela segue as mesmas opções, por parâmetros globais de shader.
+  - **Cores:** o pergaminho ficou mais escuro, sujo e queimado nas bordas, e a madeira mais escura. O fundo atrás dos menus escurece menos, para o jogo continuar visível.
+  - **Desenho na grade:** ícones dos aspectos em 16×16 sem escala, linhas de 1 pixel e controles (chave, seta, marcador) desenhados em pixels.
+  - **Letras:** 10 px e 20 px, os únicos tamanhos em que a Pixelify Sans fica nítida. Os espaços entre palavras ganharam 1 pixel (`assets/ui/ui_font.tres`).
+- **Descartado:**
+  - **Mudar o modo de esticar do projeto para "viewport":** a imagem do mundo, de 240 linhas, ficaria ampliada 1,5×, com pixels desiguais.
+  - **Pixelar a tela inteira por cima:** as letras ficariam tortas.
+  - **Uma imagem de 427×240, como o mundo:** não cabe a Mesa de Pesquisa com texto legível.
+- **Motivo:** o usuário achou os menus "destoantes, como se fossem de outro jogo": eram claros, lisos e em alta resolução sobre um mundo escuro e pixelado. A interface fica com pixels de 2×, perto dos 3× do mundo.
+
+### D053 · 2026-11-03 · Save formato 4: páginas estudadas no sistema antigo reabrem
+
+- **Escolha:** ao carregar um save anterior ao formato 4, uma página só continua estudada se tiver a nota resolvida guardada. As que foram pagas com pontos no sistema antigo (antes de D048) voltam a ficar abertas.
+- **Descartado:**
+  - **Manter como estava:** a Mesa mostrava "Pesquisa concluída" com a grade vazia, e o usuário viu como erro ("a pesquisa se compreendeu sozinha").
+  - **Apagar o save inteiro.**
+- **Motivo:** nenhum código estudava a página sozinho; ela vinha do save das versões anteriores. Agora a única forma de estudar é resolver a nota.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |
@@ -392,5 +426,4 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 | 10 | Computador de jogo | Aguardando sistema, processador e vídeo. Até lá: 240 linhas e todos os efeitos ligados por padrão |
 | 11 | Referências visuais | Aguardando imagens ou descrições. Até lá: greybox com o shader PS1 |
 | — | Nomes próprios dos aspectos compostos | Para a versão distribuída (como Lume, Maré… nos primais). Até lá, nomes latinos em `locales/names.csv` |
-| — | Reserva de Vis | Feita como reserva única (D047). Se preferir seis reservas, uma por primal, como no mod, é só pedir |
 | — | Receitas do Thaumcraft | Se quiser conferir com a wiki, cole a tabela de aspectos: as receitas ficam só em `data/aspects/` |

@@ -3,8 +3,8 @@ extends MenuLayer
 ## Livro de Pesquisa (Tab): aspectos descobertos, alvos escaneados e páginas estudadas.
 
 ## Cores de tinta sobre o pergaminho.
-const POINTS_COLOR := "#7a3a14"
-const SOFT_COLOR := "#6b5a44"
+const POINTS_COLOR := "#5c1a0a"
+const SOFT_COLOR := "#3d2c1c"
 
 @onready var points_label: Label = %PointsLabel
 @onready var aspects_list: VBoxContainer = %AspectsList
@@ -27,12 +27,12 @@ func _on_opened() -> void:
 		if aspect == null:
 			continue
 		var line := "%s%s  [color=%s]%d[/color]  [color=%s](%s)[/color]" % [
-			Text.aspect_icon_bbcode(aspect_id, 24), Text.aspect_bbcode(aspect_id, Text.aspect_name(aspect_id), true),
+			Text.aspect_icon_bbcode(aspect_id), Text.aspect_bbcode(aspect_id, Text.aspect_name(aspect_id), true),
 			POINTS_COLOR, knowledge.points(aspect_id), SOFT_COLOR, tr(aspect.meaning_key)]
 		if aspect.is_compound():
 			line += "\n      [color=%s]= %s%s + %s%s[/color]" % [SOFT_COLOR,
-				Text.aspect_icon_bbcode(aspect.parents[0], 16), Text.aspect_name(aspect.parents[0]),
-				Text.aspect_icon_bbcode(aspect.parents[1], 16), Text.aspect_name(aspect.parents[1])]
+				Text.aspect_icon_bbcode(aspect.parents[0]), Text.aspect_name(aspect.parents[0]),
+				Text.aspect_icon_bbcode(aspect.parents[1]), Text.aspect_name(aspect.parents[1])]
 		_add_line(aspects_list, line)
 
 	_clear(scanned_list)

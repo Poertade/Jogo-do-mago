@@ -170,7 +170,7 @@ func _update_note() -> void:
 	var check := knowledge.check_study(_page, Content.db.aspects)
 	match check:
 		Knowledge.StudyCheck.ALREADY_STUDIED:
-			status_label.text = "[center][color=#2f6b2a]%s[/color][/center]" % tr("UI_NOTE_DONE")
+			status_label.text = "[center][color=#1d4a17]%s[/color][/center]" % tr("UI_NOTE_DONE")
 		Knowledge.StudyCheck.MISSING_ASPECT:
 			status_label.text = "[center]%s[/center]" % tr("UI_NOTE_MISSING_ASPECT")
 		Knowledge.StudyCheck.MISSING_PAGE:

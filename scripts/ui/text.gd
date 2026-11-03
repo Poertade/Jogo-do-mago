@@ -47,12 +47,12 @@ static func aspect_bbcode(aspect_id: StringName, text: String, on_paper := false
 	var aspect: AspectData = Content.db.aspects.get(aspect_id)
 	var color := aspect.color if aspect != null else Color.WHITE
 	if on_paper:
-		color = color.darkened(0.45)
+		color = color.darkened(0.62)
 	return "[color=#%s]%s[/color]" % [color.to_html(false), text]
 
 
 ## O ícone do aspecto como imagem no texto (vazio se o aspecto não tiver ícone).
-static func aspect_icon_bbcode(aspect_id: StringName, icon_size := 20) -> String:
+static func aspect_icon_bbcode(aspect_id: StringName, icon_size := 16) -> String:
 	var aspect: AspectData = Content.db.aspects.get(aspect_id)
 	if aspect == null or aspect.icon == null:
 		return ""

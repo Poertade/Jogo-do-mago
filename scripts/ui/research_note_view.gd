@@ -6,8 +6,9 @@ extends Control
 
 signal cell_clicked(cell: Vector2i, button: MouseButton)
 
-const INK := Color(0.23, 0.16, 0.1, 0.85)
-const LINK := Color(0.42, 0.18, 0.5, 0.9)
+const INK := Color(0.16, 0.1, 0.06)
+const TARGET_INK := Color(0.36, 0.07, 0.04)
+const LINK := Color(0.34, 0.12, 0.42)
 
 var note: ResearchNote
 ## Aspectos que o jogador ainda não descobriu aparecem como "?" nos alvos.
@@ -36,9 +37,10 @@ func _hex_size() -> float:
 	return minf(size.x / (sqrt(3.0) * span), size.y / (1.5 * span + 0.5)) * 0.98
 
 
+## Centro do hexágono, arredondado para um pixel inteiro (desenho nítido na interface 640x360).
 func cell_center(cell: Vector2i) -> Vector2:
 	var s := _hex_size()
-	return size / 2.0 + Vector2(s * sqrt(3.0) * (cell.x + cell.y / 2.0), s * 1.5 * cell.y)
+	return (size / 2.0 + Vector2(s * sqrt(3.0) * (cell.x + cell.y / 2.0), s * 1.5 * cell.y)).floor()
 
 
 func cell_at(point: Vector2) -> Vector2i:
@@ -74,25 +76,25 @@ func _draw() -> void:
 	var aspects := Content.db.aspects
 	# Ligações primeiro, por baixo dos círculos.
 	for pair in note.links(aspects):
-		draw_line(cell_center(pair[0]), cell_center(pair[1]), LINK, maxf(2.0, s * 0.12))
+		draw_line(cell_center(pair[0]), cell_center(pair[1]), LINK, 3.0)
 	var font := get_theme_default_font()
+	var radius := floorf(s * 0.62)
 	for cell in note.cells():
 		var center := cell_center(cell)
 		var aspect_id := note.aspect_at(cell)
-		var radius := s * 0.62
 		if note.is_target(cell):
-			draw_circle(center, radius, Color(0.6, 0.45, 0.25, 0.35))
-			draw_arc(center, radius, 0, TAU, 24, Color(0.45, 0.13, 0.08), 3.0)
+			draw_circle(center, radius, Color(0.3, 0.2, 0.12, 0.35))
+			draw_arc(center, radius, 0, TAU, 32, TARGET_INK, 2.0)
 		else:
-			draw_arc(center, radius, 0, TAU, 24, INK, 2.0)
+			draw_arc(center, radius, 0, TAU, 32, INK, 1.0)
 		if cell == _hover and not finished and note.can_write(cell):
-			draw_circle(center, radius - 2, Color(1, 1, 1, 0.15))
+			draw_circle(center, radius - 2, Color(1, 0.95, 0.8, 0.18))
 		if aspect_id == &"":
 			continue
 		var aspect: AspectData = aspects.get(aspect_id)
 		if note.is_target(cell) and not known.call(aspect_id):
-			var font_size := int(radius)
-			draw_string(font, center + Vector2(-radius, font_size * 0.35), "?", HORIZONTAL_ALIGNMENT_CENTER, radius * 2, font_size, Color(0.45, 0.13, 0.08))
+			var width := font.get_string_size("?", HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
+			draw_string(font, center + Vector2(-floorf(width / 2.0), 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, TARGET_INK)
 		elif aspect != null and aspect.icon != null:
-			var icon_size := s * 1.0
-			draw_texture_rect(aspect.icon, Rect2(center - Vector2(icon_size, icon_size) / 2.0, Vector2(icon_size, icon_size)), false)
+			# Ícone no tamanho original (16x16), em posição inteira.
+			draw_texture_rect(aspect.icon, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)

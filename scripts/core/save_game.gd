@@ -7,7 +7,8 @@ extends RefCounted
 ## 1: pontos de pesquisa num único total (até o M5).
 ## 2: pontos de pesquisa por aspecto (pesquisa no estilo do Thaumcraft 4).
 ## 3: notas de pesquisa em andamento.
-const FORMAT_VERSION := 3
+## 4: páginas só contam como estudadas com a nota resolvida (as de saves antigos reabrem).
+const FORMAT_VERSION := 4
 
 
 static func to_dict(knowledge: Knowledge) -> Dictionary:
@@ -93,6 +94,18 @@ static func _migrate(data: Dictionary, from_version: int) -> Dictionary:
 			"studied_pages": old.get("studied_pages", []),
 		}}
 	# A versão 2 não tinha notas de pesquisa: a 3 só acrescenta o campo (vazio).
+	if from_version < 4:
+		# Até a versão 3, uma página podia constar como estudada sem nota resolvida (era paga
+		# direto com pontos, no sistema antigo). Agora só a nota resolvida estuda a página:
+		# essas páginas voltam a ficar abertas, para o jogador resolver a nota.
+		var saved = data.get("knowledge")
+		if saved is Dictionary and saved.get("studied_pages") is Array:
+			var notes = saved.get("research_notes", {})
+			var kept := []
+			for page_id in saved["studied_pages"]:
+				if notes is Dictionary and notes.get(page_id) is Dictionary and not notes[page_id].is_empty():
+					kept.append(page_id)
+			saved["studied_pages"] = kept
 	return data
 
 

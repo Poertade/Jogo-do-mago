@@ -32,6 +32,24 @@ func test_version_2_gets_empty_notes() -> void:
 	assert_eq(loaded.notes.size(), 0)
 
 
+## O save do usuário na rodada 3: página estudada no sistema antigo, sem nota, gravada já no
+## formato 3. Ela aparecia como "concluída" com a grade vazia.
+func test_version_3_reopens_pages_studied_without_a_note() -> void:
+	var loaded := SaveGame.from_dict({"format_version": 3, "knowledge": {
+		"discovered_aspects": ["fire"], "studied_pages": ["fire_comprehension", "solved_page"],
+		"research_notes": {"solved_page": {"0,0": "fire"}}}})
+	assert_not_null(loaded)
+	assert_eq(loaded.studied_pages, [&"solved_page"] as Array[StringName], "Só fica estudada a página com nota resolvida")
+	assert_eq(loaded.notes[&"solved_page"][Vector2i.ZERO], &"fire")
+
+
+func test_current_version_keeps_studied_pages() -> void:
+	var knowledge := _sample()
+	knowledge.notes[&"fire_comprehension"] = {Vector2i(0, 0): &"energy"}
+	var loaded := SaveGame.from_json(SaveGame.to_json(knowledge))
+	assert_eq(loaded.studied_pages, [&"fire_comprehension"] as Array[StringName])
+
+
 func test_save_is_readable_json_with_version() -> void:
 	var text := SaveGame.to_json(_sample())
 	var data: Dictionary = JSON.parse_string(text)
@@ -55,7 +73,7 @@ func test_version_1_is_migrated() -> void:
 		"research_points": 3, "studied_pages": ["fire_comprehension"]}})
 	assert_not_null(loaded)
 	assert_eq(loaded.discovered_aspects, [&"fire", &"water"] as Array[StringName])
-	assert_eq(loaded.studied_pages, [&"fire_comprehension"] as Array[StringName])
+	assert_eq(loaded.studied_pages.size(), 0, "Página paga no sistema antigo volta a ficar aberta")
 	assert_eq(loaded.scanned_targets.size(), 0, "Objetos voltam a render pontos por aspecto")
 	assert_eq(loaded.aspect_points.size(), 0, "O total antigo não tem como ser dividido")
 

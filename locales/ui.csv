@@ -46,9 +46,10 @@ UI_STUDY_MISSING_PAGE,Exige outra página antes
 UI_STUDY_MISSING_ASPECT,Exige descobrir: %s
 UI_CLOSE,Fechar
 UI_HEALTH,Vida
-UI_MSG_NO_ENERGY,Sem %s na varinha
-UI_MSG_RECHARGED,Reserva de %s cheia
-UI_MSG_ALREADY_FULL,A reserva de %s já está cheia
+UI_MSG_NO_ENERGY,Falta %s na varinha
+UI_MSG_RECHARGED,Recipiente de %s cheio
+UI_MSG_ALREADY_FULL,O recipiente de %s já está cheio
+UI_MSG_WAND_FULL,"A varinha está cheia (%d de Vis no total)"
 UI_OPT_VOLUME,Volume
 UI_SCAN_NEEDS_RESEARCH,Conhecimento insuficiente: descubra o que falta na Mesa de Pesquisa
 UI_MSG_SCAN_BLOCKED,%s: conhecimento insuficiente (%d aspecto(s) desconhecido(s))

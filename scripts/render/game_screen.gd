@@ -28,6 +28,10 @@ func apply_settings(settings: GameSettings, defaults: SettingsDefaults) -> void:
 	material.set_shader_parameter(&"color_limit", settings.color_limit)
 	material.set_shader_parameter(&"dithering", settings.dithering)
 	material.set_shader_parameter(&"color_levels", float(settings.color_levels()))
+	# A interface (scripts/render/ui_pixels.gdshader) segue as mesmas opções de cor.
+	RenderingServer.global_shader_parameter_set(&"ps1_color_limit", settings.color_limit)
+	RenderingServer.global_shader_parameter_set(&"ps1_dithering", settings.dithering)
+	RenderingServer.global_shader_parameter_set(&"ps1_color_levels", float(settings.color_levels()))
 	_internal_height = settings.internal_height
 	_snap_pixel_size = defaults.vertex_snap_pixel_size
 	_update_viewport_size()

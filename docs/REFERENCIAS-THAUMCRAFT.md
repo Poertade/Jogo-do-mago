@@ -19,15 +19,15 @@
 | **Notas de pesquisa**: um quebra-cabeça hexagonal ligando aspectos para liberar pesquisas | nota hexagonal no pergaminho da Mesa: escrever um aspecto gasta 1 ponto dele; vizinhos se ligam quando um é pai do outro; ligar todos os alvos estuda a página | feito (sem tinta, sem cópia de notas) |
 | **Taumonomicon**: o livro com as pesquisas e receitas | Livro de Pesquisa (Tab) | parcial |
 | **Aspectos**: 6 primais, ~40 compostos em camadas | 6 primais + 15 compostos (receitas da versão 4.2) | parcial |
-| **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com uma reserva única de Vis e eficiência (`data/wands/`); visual com núcleo + ponteiras | parcial (um tipo só) |
+| **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com um recipiente por primal, limite por recipiente e limite total, e eficiência (`data/wands/`); visual com núcleo + ponteiras; mostrador de frascos no HUD | parcial (um tipo só) |
 | **Focus**: encaixado na varinha, define a magia (Fogo, Gelo, Choque, Escavação, Portal…) | Focus de Fogo (projétil carregado) | um Focus |
 | **Nódulos de aura**: esferas de Vis com aspectos; a varinha drena Vis segurando o botão; o nódulo se recarrega devagar | Nódulo de Vis no Salão de Estudos (segurar E) | feito (sem esgotar) |
-| **Vis**: a varinha guarda os seis primais (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com sua reserva; no 4, em centésimos ("centi-Vis") | uma reserva única de Vis na varinha, a pedido do usuário (D047) | simplificado |
+| **Vis**: a varinha guarda os seis primais (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com sua reserva; no 4, em centésimos ("centi-Vis") | um recipiente por primal (até 10) e, a pedido do usuário, um limite total (30) (D051) | feito (valores inteiros) |
 | **Pedestal de recarga / bancada arcana**: recarregam a varinha com Vis de uma rede de nódulos | — | ideia futura |
 
 ## Ideias para próximos marcos (precisam de aprovação)
 
-1. **Mais Focus**, com custos de Vis diferentes. Do Thaumcraft 4: Gelo (projétil que congela), Choque (raio em cadeia), Escavação (quebra paredes frágeis e abre passagens secretas). Todos gastam da reserva única da varinha.
+1. **Mais Focus**, cada um gastando primais diferentes. Do Thaumcraft 4: Gelo (Aqua + Ordo, projétil que congela), Choque (Aer, raio em cadeia), Escavação (Terra/Ordo, quebra paredes frágeis e abre passagens secretas). Usam os outros recipientes da varinha, que já existem.
 2. **Núcleos e ponteiras de varinha** como dados: capacidade (núcleo) e desconto (ponteiras), montados numa bancada na escola.
 3. **Mais aspectos compostos** e objetos que os contenham. A Dungeon pode trazer aspectos que a escola não tem, como Alienis, Tenebrae e Vitium; isso faz explorar valer pesquisa.
 4. **Notas de pesquisa mais ricas** (a versão simples já existe): tinta e penas como recurso, notas que pedem aspectos raros da Dungeon, copiar uma nota resolvida.

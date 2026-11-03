@@ -9,6 +9,9 @@ script = ExtResource("1")
 max_health = 100
 starting_wand = ExtResource("2")
 starting_focus = ExtResource("3")
+starting_vis = Dictionary[StringName, int]({
+&"fire": 10
+})
 walk_speed = 3.0
 run_speed = 5.0
 acceleration = 20.0

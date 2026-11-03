@@ -207,13 +207,50 @@ func _validate_player() -> void:
 	if player.starting_wand == null or player.starting_focus == null:
 		errors.append("player.tres: faltam a varinha ou o Focus iniciais.")
 		return
-	if player.starting_wand.capacity < player.starting_focus.cost:
-		errors.append("A varinha inicial não guarda Vis suficiente para um disparo do Focus inicial.")
+	var wand := player.starting_wand
+	for aspect_id in player.starting_focus.cost.keys() + player.starting_vis.keys():
+		if not aspect_id in wand.aspects:
+			errors.append("A varinha inicial não tem recipiente de '%s' (usado pelo Focus ou por starting_vis)." % aspect_id)
+	var shot := WandState.new(wand).effective_cost(player.starting_focus.cost)
+	var shot_total := 0
+	for aspect_id in shot:
+		shot_total += shot[aspect_id]
+		if shot[aspect_id] > wand.aspect_capacity:
+			errors.append("A varinha inicial não guarda %s suficiente para um disparo do Focus inicial." % aspect_id)
+	if shot_total > wand.capacity:
+		errors.append("A varinha inicial não guarda Vis suficiente (no total) para um disparo do Focus inicial.")
+	_validate_vis_amounts("player.tres (starting_vis)", player.starting_vis)
+	var start_total := 0
+	for aspect_id in player.starting_vis:
+		start_total += player.starting_vis[aspect_id]
+		if player.starting_vis[aspect_id] > wand.aspect_capacity:
+			errors.append("player.tres: starting_vis de %s passa do limite do recipiente da varinha." % aspect_id)
+	if start_total > wand.capacity:
+		errors.append("player.tres: a soma de starting_vis passa do limite total da varinha.")
 
 
 func _validate_wand(wand: WandData) -> void:
-	if wand.efficiency <= 0.0 or wand.capacity <= 0:
-		errors.append("Varinha '%s': capacity e efficiency precisam ser maiores que zero." % wand.id)
+	if wand.efficiency <= 0.0 or wand.capacity <= 0 or wand.aspect_capacity <= 0:
+		errors.append("Varinha '%s': capacity, aspect_capacity e efficiency precisam ser maiores que zero." % wand.id)
+	if wand.aspects.is_empty():
+		errors.append("Varinha '%s': a lista de recipientes (aspects) está vazia." % wand.id)
+	var amounts := {}
+	for aspect_id in wand.aspects:
+		if aspect_id in amounts:
+			errors.append("Varinha '%s': recipiente de '%s' repetido." % [wand.id, aspect_id])
+		amounts[aspect_id] = 1
+	_validate_vis_amounts("Varinha '%s'" % wand.id, amounts)
+
+
+## Vis só existe dos aspectos primais (como no Thaumcraft): custos e reservas usam só eles.
+func _validate_vis_amounts(owner: String, amounts: Dictionary) -> void:
+	if amounts.is_empty():
+		return
+	_validate_aspect_amounts(owner, amounts)
+	for aspect_id in amounts:
+		var aspect: AspectData = aspects.get(aspect_id)
+		if aspect != null and aspect.is_compound():
+			errors.append("%s: '%s' não é primal; Vis só existe dos aspectos primais." % [owner, aspect_id])
 
 
 func _validate_focus(focus: FocusData) -> void:
@@ -222,8 +259,9 @@ func _validate_focus(focus: FocusData) -> void:
 		errors.append("%s: tipo de magia desconhecido '%s'." % [owner, focus.spell_type])
 	if not focus.element in aspects:
 		errors.append("%s: elemento '%s' não é um aspecto." % [owner, focus.element])
-	if focus.cost <= 0:
-		errors.append("%s: o custo em Vis precisa ser maior que zero." % owner)
+	if focus.cost.is_empty():
+		errors.append("%s: falta o custo em Vis (aspecto → quantidade)." % owner)
+	_validate_vis_amounts(owner, focus.cost)
 	if focus.damage <= 0.0 or focus.charge_time < 0.0 or focus.cooldown < 0.0:
 		errors.append("%s: dano precisa ser positivo e tempos não podem ser negativos." % owner)
 	if focus.spell_type == FocusData.SPELL_PROJECTILE and (focus.projectile_speed <= 0.0 or focus.projectile_lifetime <= 0.0):

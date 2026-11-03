@@ -9,6 +9,8 @@ extends Resource
 ## Varinha e Focus com que o jogador começa.
 @export var starting_wand: WandData
 @export var starting_focus: FocusData
+## Vis na varinha no começo de cada incursão (e ao despertar depois de morrer), por aspecto.
+@export var starting_vis: Dictionary[StringName, int] = {}
 
 @export_group("Movimento")
 ## Velocidade andando, em metros por segundo.

@@ -2,6 +2,7 @@ class_name AspectCell
 extends Button
 ## Uma casinha com o ícone de um aspecto e, embaixo à direita, quantos pontos você tem dele.
 ## Usada na grade de aspectos e nos espaços de combinação da Mesa de Pesquisa.
+## Desenhada em pixels da interface (640x360): o ícone fica no tamanho original, 16x16.
 
 ## Aspecto mostrado (vazio: a casinha fica vazia ou com `placeholder`).
 var aspect_id: StringName = &"":
@@ -29,7 +30,7 @@ var selected := false:
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(52, 52)
+	custom_minimum_size = Vector2(24, 24)
 	flat = true
 	focus_mode = Control.FOCUS_NONE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -44,22 +45,25 @@ func _update_tooltip() -> void:
 func _draw() -> void:
 	var rect := Rect2(Vector2.ZERO, size)
 	if framed:
-		draw_rect(rect, Color(0.08, 0.05, 0.03, 0.85))
-		draw_rect(rect.grow(-1), Color(0.55, 0.42, 0.26), false, 2.0)
+		draw_rect(rect, Color(0.05, 0.03, 0.02, 0.95))
+		draw_rect(Rect2(0.5, 0.5, size.x - 1, size.y - 1), Color(0.45, 0.33, 0.19), false, 1.0)
 	if selected:
-		draw_rect(rect.grow(-1), Color(1.0, 0.9, 0.5, 0.25))
-		draw_rect(rect.grow(-1), Color(1.0, 0.85, 0.4), false, 2.0)
+		draw_rect(rect, Color(0.9, 0.7, 0.3, 0.2))
+		draw_rect(Rect2(0.5, 0.5, size.x - 1, size.y - 1), Color(0.92, 0.74, 0.35), false, 1.0)
 	elif is_hovered():
-		draw_rect(rect.grow(-1), Color(1, 1, 1, 0.08))
+		draw_rect(rect, Color(1, 1, 1, 0.07))
 	var aspect: AspectData = Content.db.aspects.get(aspect_id)
 	var font := get_theme_default_font()
 	if aspect != null and aspect.icon != null:
-		var icon_size := minf(size.x, size.y) - 14.0
-		draw_texture_rect(aspect.icon, Rect2((size - Vector2(icon_size, icon_size)) / 2.0 - Vector2(0, 3), Vector2(icon_size, icon_size)), false)
+		# Tamanho original e posição inteira: os pixels do ícone ficam do tamanho dos da tela.
+		var icon_position := ((size - Vector2(16, 16)) / 2.0 - Vector2(0, 2)).floor()
+		draw_texture_rect(aspect.icon, Rect2(icon_position, Vector2(16, 16)), false)
 	elif placeholder != "":
-		draw_string(font, Vector2(0, size.y / 2 + 9), placeholder, HORIZONTAL_ALIGNMENT_CENTER, size.x, 26, Color(0.93, 0.85, 0.68))
+		var width := font.get_string_size(placeholder, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
+		draw_string(font, Vector2(floorf((size.x - width) / 2.0), floorf(size.y / 2.0) + 7), placeholder,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color(0.82, 0.72, 0.53))
 	if count >= 0:
 		var text := str(count)
-		var text_position := Vector2(size.x - 4 - font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 15).x, size.y - 4)
-		draw_string_outline(font, text_position, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, 4, Color(0.08, 0.05, 0.03))
-		draw_string(font, text_position, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color(0.97, 0.92, 0.8))
+		var text_position := Vector2(size.x - 1 - font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x, size.y - 1).floor()
+		draw_string_outline(font, text_position, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, 2, Color(0.05, 0.03, 0.02))
+		draw_string(font, text_position, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(0.95, 0.88, 0.72))

@@ -6,5 +6,7 @@
 script = ExtResource("1")
 id = &"apprentice_wand"
 name_key = "WAND_APPRENTICE"
+aspects = Array[StringName]([&"air", &"earth", &"fire", &"water", &"order", &"entropy"])
 capacity = 30
+aspect_capacity = 10
 efficiency = 1.0

@@ -1,8 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/ui/options_menu.tscn" id="2"]
-[ext_resource type="Theme" path="res://assets/ui/parchment_theme.tres" id="theme"]
+[ext_resource type="Material" path="res://assets/ui/ui_pixels_material.tres" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/options_menu.tscn" id="3"]
+[ext_resource type="Theme" path="res://assets/ui/parchment_theme.tres" id="4"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 2
@@ -14,54 +15,64 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.02, 0.02, 0.03, 0.75)
+mouse_filter = 2
+color = Color(0.02, 0.015, 0.01, 0.6)
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="Pixels" type="SubViewportContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("theme")
+mouse_filter = 0
+texture_filter = 1
+material = ExtResource("2")
+stretch = true
+stretch_shrink = 2
 
-[node name="MainPanel" type="PanelContainer" parent="Center"]
+[node name="Viewport" type="SubViewport" parent="Pixels"]
+transparent_bg = true
+size = Vector2i(640, 360)
+
+[node name="Center" type="CenterContainer" parent="Pixels/Viewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4")
+
+[node name="MainPanel" type="PanelContainer" parent="Pixels/Viewport/Center"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(320, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 
-[node name="Margin" type="MarginContainer" parent="Center/MainPanel"]
+[node name="VBox" type="VBoxContainer" parent="Pixels/Viewport/Center/MainPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 20
+theme_override_constants/separation = 4
 
-[node name="VBox" type="VBoxContainer" parent="Center/MainPanel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Title" type="Label" parent="Center/MainPanel/Margin/VBox"]
+[node name="Title" type="Label" parent="Pixels/Viewport/Center/MainPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "UI_PAUSED"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="Center/MainPanel/Margin/VBox"]
+[node name="ResumeButton" type="Button" parent="Pixels/Viewport/Center/MainPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "UI_RESUME"
 
-[node name="OptionsButton" type="Button" parent="Center/MainPanel/Margin/VBox"]
+[node name="OptionsButton" type="Button" parent="Pixels/Viewport/Center/MainPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "UI_OPTIONS"
 
-[node name="QuitButton" type="Button" parent="Center/MainPanel/Margin/VBox"]
+[node name="QuitButton" type="Button" parent="Pixels/Viewport/Center/MainPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "UI_QUIT"
 
-[node name="OptionsMenu" parent="Center" instance=ExtResource("2")]
+[node name="OptionsMenu" parent="Pixels/Viewport/Center" instance=ExtResource("3")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

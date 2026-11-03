@@ -32,9 +32,11 @@ func test_school_values_match_the_specification() -> void:
 	assert_almost_eq(db.pages[&"fire_comprehension"].effects[0].value, 1.2, 0.0001)
 	# Varinha, Focus de Fogo e jogador (seção 6)
 	assert_eq(db.player.max_health, 100)
-	assert_eq(db.player.starting_wand.capacity, 30, "Reserva única de Vis")
+	assert_eq(db.player.starting_wand.capacity, 30, "Limite total de Vis (pedido do usuário, D051)")
+	assert_eq(db.player.starting_wand.aspect_capacity, 10, "Limite de cada recipiente (D051)")
+	assert_eq(db.player.starting_vis, {&"fire": 10} as Dictionary[StringName, int])
 	var focus := db.player.starting_focus
-	assert_eq(focus.cost, 5)
+	assert_eq(focus.cost, {&"fire": 2} as Dictionary[StringName, int], "Ajustado em D051 para manter 5 disparos")
 	assert_eq(focus.damage, 15.0)
 	assert_eq(focus.charge_time, 0.6)
 	assert_eq(focus.cooldown, 0.4)
@@ -151,7 +153,8 @@ func test_research_page_saves_a_shot_against_the_enemy() -> void:
 	var shots_without := ceili(beadle.max_health / base)
 	var shots_with := ceili(beadle.max_health / studied)
 	assert_lt(shots_with, shots_without, "A página deve poupar pelo menos um disparo")
-	var shots_per_reserve := db.player.starting_wand.capacity / focus.cost
+	var wand := WandState.new(db.player.starting_wand, db.player.starting_vis)
+	var shots_per_reserve := wand.casts_available(focus.cost)
 	assert_lt(shots_without, shots_per_reserve, "Sem a página ainda deve dar para vencer com uma reserva")
 
 

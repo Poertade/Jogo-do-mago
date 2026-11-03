@@ -57,3 +57,13 @@ Pedido do usuário depois do M5: o primeiro inimigo estava feio; usar os de Luna
 O Bedel Descarnado segue esses princípios (`scenes/enemies/bone_beadle.tscn`, `scripts/game/enemy_rig.gd`). Próximos inimigos humanoides podem reaproveitar o esqueleto; criaturas de outro formato (como o desmembramento por partes) pedem um esqueleto próprio.
 
 **Nódulo de Vis:** núcleo e bolinhas na cor do aspecto (Ignis: laranja `#e0602a`), centro quase branco, luz da mesma cor. É a fonte de luz quente principal do Salão de Estudos.
+
+## Interface (menus e HUD)
+
+Pedido do usuário depois da rodada do pergaminho: os menus estavam "destoantes, como se fossem de outro jogo". Princípios adotados (D052):
+
+1. **Mesmo tamanho de pixel do mundo**, ou perto dele: a interface é desenhada em 640×360 e ampliada 2× (o mundo, em 240 linhas, fica 3×).
+2. **Mesmo filtro:** cor limitada e dithering iguais aos do mundo.
+3. **Papel visto à luz de vela:** pergaminho apagado e sujo (`#8f7650`), bordas queimadas, tinta quase preta (`#1c120a`) e títulos em vermelho escuro (`#5c120a`). A Mesa de Pesquisa tem moldura de madeira escura (`#30200f`).
+4. **O jogo continua visível** atrás dos menus, escurecido.
+5. **HUD:** texto claro (`#dbcdad`) com contorno preto de 1 pixel; o mostrador de Vis segue o do Thaumcraft 4 (orbe do Focus e frascos em leque), em desenho próprio.

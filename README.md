@@ -25,8 +25,8 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 - O braseiro virou um Nódulo de Vis.
 - O Bedel Descarnado ganhou um corpo articulado e animado.
 - As páginas de pesquisa são estudadas resolvendo **notas de pesquisa**: uma grade de hexágonos no pergaminho da Mesa.
-- A varinha guarda uma **reserva única de Vis**, de onde saem todas as magias.
-- Os menus parecem **pergaminho** (com moldura de madeira na Mesa) e cada aspecto tem um **ícone**.
+- A varinha tem um **recipiente de Vis para cada primal** (até 10 em cada) e um **limite total** (30). O HUD mostra os recipientes como frascos em volta do orbe do Focus.
+- Menus e HUD são desenhados **em pixels grandes**, com a mesma redução de cores e o mesmo dithering do mundo 3D, sobre **pergaminho velho** (com moldura de madeira na Mesa). Cada aspecto tem um **ícone**.
 
 | Documento | Conteúdo |
 | --- | --- |
@@ -80,7 +80,10 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 
 **Magia:**
 8. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a bola de fogo. Soltar antes cancela sem gastar nada.
-9. A varinha guarda **uma reserva única de Vis** (30, a barra roxa do HUD), e cada disparo gasta 5. No **Nódulo de Vis** do Salão (as bolinhas laranja), segure E: o Vis voa até a varinha e enche a reserva. Fora da escola não há recarga.
+9. **Vis na varinha:** um recipiente para cada primal (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com até 10, e no máximo 30 somando todos. Por exemplo: 10 de Ignis, 10 de Aqua e 10 de Perditio enchem a varinha.
+   - No HUD (canto de cima), cada recipiente é um frasco em volta do orbe do Focus, com o número ao lado; embaixo, o total.
+   - Cada disparo de fogo gasta 2 de Ignis: com o recipiente cheio, são 5 disparos.
+   - No **Nódulo de Vis** do Salão (as bolinhas laranja, de Ignis), segure E: o Vis voa até a varinha e enche o recipiente de Ignis, até 10 ou até a varinha toda chegar a 30. Fora da escola não há recarga.
 10. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
 
 **Dungeon:**
@@ -91,7 +94,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    - É fraco a fogo: três disparos o derrubam, ou dois com a página estudada.
    - Pode ser escaneado depois que você descobrir Mortuus e Exanimis na Mesa.
 13. Vencer abre a grade ao norte. **Voltar à escola** (E) leva à Sala do Portal e restaura a vida; o Vis só volta no Nódulo de Vis.
-14. Se a vida chegar a zero, você desperta no Salão de Estudos com vida e Vis cheios. O conhecimento (aspectos, pontos, escaneamentos, notas e páginas) continua.
+14. Se a vida chegar a zero, você desperta no Salão de Estudos com a vida cheia e a varinha com o Vis inicial (10 de Ignis; o resto se perde). O conhecimento (aspectos, pontos, escaneamentos, notas e páginas) continua.
 
 O conhecimento é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
@@ -126,7 +129,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 
 **O que os testes cobrem:**
 - **Pesquisa:** escaneamento bloqueado por composto desconhecido, pontos por aspecto, combinação na Mesa, notas de pesquisa (grade, ligações, escrever e apagar, nota completa), estudo de páginas, andamento do escaneamento, efeitos das páginas, economia da pesquisa (tudo pode ser escaneado com os pontos disponíveis).
-- **Magia:** reserva única de Vis, custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
+- **Magia:** recipientes de Vis da varinha (limite por aspecto e total), custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Sistema:** persistência (save), gerador com semente, opções.
 - **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
@@ -140,7 +143,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 | `godot --headless --path . -s tools/generate_textures.gd` | gera de novo as texturas provisórias |
 | `godot --headless --path . -s tools/generate_sounds.gd` | gera de novo os sons provisórios |
 | `godot --headless --path . -s tools/generate_icons.gd` | gera de novo os ícones dos aspectos (`assets/icons/aspects/`) |
-| `godot --headless --path . -s tools/generate_ui_theme.gd` | gera de novo o pergaminho, a moldura de madeira e o tema dos menus (`assets/ui/`); rode duas vezes, com `--import` no meio, para o tema usar as texturas novas |
+| `godot --headless --path . -s tools/generate_ui_theme.gd` | gera de novo o pergaminho, a moldura de madeira, os ícones dos controles, a fonte e os temas dos menus e do HUD (`assets/ui/`); rode duas vezes, com `--import` no meio, para os temas usarem as texturas novas |
 | `godot --path . -- --seed=123` | escolhe a semente do gerador aleatório (impressa ao abrir o jogo) |
 | `godot --path . -- --room=stone_chamber` | começa direto numa sala (`school` é o padrão; `test_room` é a sala do M1) |
 | `godot --path . -- --screenshot=captura.png` | tira uma captura depois de 30 quadros e fecha |
@@ -251,15 +254,24 @@ Ao escanear, a busca sobe dos blocos até o primeiro nó que tenha dados.
 
 ### Adicionar um Focus
 
-1. Duplique `data/foci/fire_focus.tres`. Mude `id`, `name_key`, `element`, `cost`, `charge_time`, `cooldown`, `damage` e os valores do projétil (velocidade, duração, cor e força da luz).
+1. Duplique `data/foci/fire_focus.tres`. Mude `id`, `name_key`, `element`, `cost` (Vis por disparo, por aspecto: ex.: `water` = 2, `order` = 1), `charge_time`, `cooldown`, `damage` e os valores do projétil (velocidade, duração, cor e força da luz).
 2. Para equipá-lo, abra `data/player/player.tres` e troque `starting_focus`. Neste recorte não há troca de Focus durante o jogo.
-3. `cost` é quanto Vis cada disparo gasta da reserva única da varinha. A varinha precisa guardar pelo menos isso (`capacity` em `data/wands/`); os testes avisam se não guardar.
+3. Cada aspecto de `cost` sai do recipiente dele na varinha. Só aspectos primais têm Vis, e a varinha precisa ter recipiente para eles e guardar pelo menos um disparo; os testes avisam se não guardar. Para o jogador começar com Vis desse aspecto, acrescente-o em `starting_vis` (`data/player/player.tres`).
 
 O único `spell_type` existente é `projectile`. Um tipo novo de magia (cone, raio…) é código novo no motor.
 
 ### Adicionar uma varinha
 
-Duplique `data/wands/apprentice_wand.tres`, ajuste `capacity` (reserva máxima de Vis) e `efficiency` (o custo é dividido por ela) e equipe-a em `data/player/player.tres` (`starting_wand`).
+Duplique `data/wands/apprentice_wand.tres` e ajuste:
+
+| Campo | O que é |
+| --- | --- |
+| `aspects` | os recipientes da varinha (aspectos primais), na ordem dos frascos do HUD |
+| `aspect_capacity` | quanto cabe em cada recipiente (10) |
+| `capacity` | quanto cabe somando todos (30) |
+| `efficiency` | o custo das magias é dividido por ela |
+
+Equipe-a em `data/player/player.tres` (`starting_wand`). Ali também fica `starting_vis`: o Vis com que a varinha começa cada incursão (e volta depois da morte).
 
 ### Adicionar uma página de pesquisa
 
@@ -293,7 +305,10 @@ Duplique `data/wands/apprentice_wand.tres`, ajuste `capacity` (reserva máxima d
 - **Textos:** `locales/ui.csv` (interface) e `locales/content.csv` (conteúdo).
 - **Nomes que remetem a outras obras:** só em `locales/names.csv`. Para uma versão distribuída, troque pelos nomes próprios da decisão 7 (Lume, Maré, Barro, Sopro, Prumo, Ruína; "Foco" no lugar de "Focus").
 - **Sons:** substitua o arquivo em `assets/sounds/` mantendo o nome, ou aponte o evento para outro arquivo em `data/audio/sound_bank.tres`, onde também fica o volume de cada som. Sons que repetem precisam de **Loop Mode: Forward** na aba Importar.
-- **Menus:** a aparência de pergaminho fica em `assets/ui/parchment_theme.tres` (abrir no editor mostra o editor de temas) e nas texturas `parchment.png` e `wood_frame.png`. A fonte é a Pixelify Sans (`assets/fonts/`). Variações do tema: `WoodPanel` (moldura de madeira), `WoodLabel` (texto claro sobre madeira) e `TitleLabel` (títulos em tinta vermelha).
+- **Menus e HUD:** cada tela (`scenes/ui/`) desenha o conteúdo num `SubViewport` de 640×360 (nó `Pixels/Viewport`), que o `SubViewportContainer` amplia 2× sem filtro. Edite o conteúdo dentro de `Pixels/Viewport`, em pixels dessa imagem pequena.
+  - **Aparência:** `assets/ui/parchment_theme.tres` (menus) e `assets/ui/hud_theme.tres` (HUD); abrir um tema no editor mostra o editor de temas. Variações do tema dos menus: `WoodPanel` (moldura de madeira), `WoodLabel` e `WoodTitleLabel` (texto claro sobre madeira), `TitleLabel` e `HeaderLabel` (tinta vermelha).
+  - **Letras:** a fonte Pixelify Sans (`assets/fonts/`, usada por `assets/ui/ui_font.tres`) fica nítida em **10 px** e **20 px**; outros tamanhos entortam os pixels e somem com acentos e dois-pontos.
+  - **Texturas:** `parchment.png`, `wood_frame.png` e os ícones de `assets/ui/icons/` (chave liga/desliga, seta, marcador).
 - **Ícones dos aspectos:** substitua o PNG em `assets/icons/aspects/` mantendo o nome (16×16).
 - **Texturas:** substitua o PNG em `assets/textures/` mantendo o nome. Texturas novas já entram sem mipmaps e sem compressão (padrão do projeto). Mantenha-as pequenas (32×32 ou 64×64) para o visual PS1.
 
@@ -324,3 +339,4 @@ O executável já leva o jogo dentro (um arquivo só). A pasta `export/` fica fo
 - `scripts/render/ps1_cutout.gdshader` é a mesma coisa com **recorte**: pixels transparentes da textura somem (pano rasgado, o rosto da caveira). O código comum aos dois fica em `ps1_common.gdshaderinc`.
 - `scripts/render/ps1_post.gdshader` reduz as cores a 5 bits por canal, aplica o **dithering** com uma matriz de Bayer 4×4 e faz a transição entre salas, que dissolve os pixels na ordem da mesma matriz.
 - Os efeitos são ligados e desligados por parâmetros globais de shader (**Projeto → Configurações do Projeto → Shader Globals**), que o menu de opções altera.
+- A **interface** também é pixelada: cada tela é desenhada em 640×360 e ampliada 2× sem filtro, e `scripts/render/ui_pixels.gdshader` aplica nela a mesma cor limitada e o mesmo dithering do mundo (seguindo as mesmas opções).

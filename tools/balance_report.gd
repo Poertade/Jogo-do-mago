@@ -11,17 +11,23 @@ func _initialize() -> void:
 		print("Erros no conteúdo:\n  " + "\n  ".join(db.errors))
 	var player := db.player
 	var focus := player.starting_focus
-	var wand := WandState.new(player.starting_wand)
-	var cost: int = wand.effective_cost(focus.cost)
-	var shots_per_reserve := wand.capacity() / maxi(cost, 1)
+	# A varinha com os recipientes que o Focus usa cheios (o máximo que um nódulo enche).
+	var full := {}
+	for aspect_id in focus.cost:
+		full[aspect_id] = player.starting_wand.aspect_capacity
+	var wand := WandState.new(player.starting_wand, full)
+	var cost := wand.effective_cost(focus.cost)
+	var shots_per_reserve := wand.casts_available(focus.cost)
+	var start_shots := WandState.new(player.starting_wand, player.starting_vis).casts_available(focus.cost)
 	var page_multiplier := 1.0
 	for page: ResearchPageData in db.pages.values():
 		page_multiplier *= Modifiers.from_pages([page] as Array[ResearchPageData]).damage_multiplier(focus.element)
 	var cycle := focus.charge_time + focus.cooldown
 
 	print("=== Jogador ===")
-	print("Vida: %d | Reserva de Vis: %d | Custo por disparo: %d → %d disparos por reserva" % [
-		player.max_health, wand.capacity(), cost, shots_per_reserve])
+	print("Vida: %d | Varinha: %d por recipiente, %d no total | Custo por disparo: %s" % [
+		player.max_health, wand.aspect_capacity(), wand.total_capacity(), cost])
+	print("Disparos com os recipientes do Focus cheios: %d | no começo da incursão: %d" % [shots_per_reserve, start_shots])
 	print("Ciclo de disparo: %.1f s de carga + %.1f s de intervalo = %.1f s" % [focus.charge_time, focus.cooldown, cycle])
 	print("Dano: %.1f (com todas as páginas: %.1f)" % [focus.damage, focus.damage * page_multiplier])
 

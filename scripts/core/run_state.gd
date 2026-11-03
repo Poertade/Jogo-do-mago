@@ -6,17 +6,19 @@ extends RefCounted
 var health: Health
 var wand: WandState
 var caster: SpellCaster
+var _player: PlayerData
 
 
 func _init(player: PlayerData) -> void:
+	_player = player
 	health = Health.new(player.max_health)
-	wand = WandState.new(player.starting_wand)
+	wand = WandState.new(player.starting_wand, player.starting_vis)
 	caster = SpellCaster.new(player.starting_focus, wand)
 
 
-## Começa de novo: vida e reserva cheias, magia parada.
+## Começa de novo: vida cheia, a varinha com o Vis inicial e a magia parada.
 func reset() -> void:
 	health.restore()
-	wand.refill()
+	wand.reset(_player.starting_vis)
 	caster.cancel()
 	caster.cooldown_left = 0.0

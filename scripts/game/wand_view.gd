@@ -33,7 +33,10 @@ func _physics_process(delta: float) -> void:
 			_charge_sound = Audio.play(&"spell_charge")
 		elif failure == SpellCaster.Failure.NO_ENERGY:
 			Audio.play(&"no_energy")
-			Game.message(Text.tr_key("UI_MSG_NO_ENERGY") % Text.tr_key("TERM_VIS"))
+			var names: PackedStringArray = []
+			for aspect_id in caster.focus.cost:
+				names.append(Text.aspect_name(aspect_id))
+			Game.message(Text.tr_key("UI_MSG_NO_ENERGY") % " / ".join(names))
 	if caster.is_busy() and (not Input.is_action_pressed("cast") or not playing):
 		Audio.fade_out(_charge_sound)
 		_charge_sound = null

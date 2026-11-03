@@ -30,15 +30,20 @@ func test_run_reset_restores_health_and_reserve() -> void:
 	var player := PlayerData.new()
 	player.max_health = 100
 	var wand := WandData.new()
+	wand.aspects = [&"fire", &"water"] as Array[StringName]
 	wand.capacity = 30
+	wand.aspect_capacity = 10
 	wand.efficiency = 1.0
 	var focus := FocusData.new()
-	focus.cost = 5
+	focus.cost = {&"fire": 2} as Dictionary[StringName, int]
 	player.starting_wand = wand
 	player.starting_focus = focus
+	player.starting_vis = {&"fire": 10} as Dictionary[StringName, int]
 	var run := RunState.new(player)
 	run.health.take_damage(60)
 	run.wand.pay(focus.cost)
+	run.wand.add(&"water", 5)
 	run.reset()
 	assert_eq(run.health.current, 100.0)
-	assert_eq(run.wand.vis, 30)
+	assert_eq(run.wand.reserve(&"fire"), 10, "Volta ao Vis inicial")
+	assert_eq(run.wand.reserve(&"water"), 0, "O que foi drenado na incursão se perde")

@@ -1,11 +1,11 @@
 class_name VisNode
 extends Interactable
-## Nódulo de Vis (inspirado nos nódulos de aura do Thaumcraft): um núcleo de energia, com
-## bolinhas de Vis em órbita. Segure E mirando o nódulo para drenar Vis para a reserva única
-## da varinha: as bolinhas voam até a ponta dela. Pela decisão 3, só há nódulos na escola
-## (fora dela, a reserva não recarrega).
+## Nódulo de Vis (inspirado nos nódulos de aura do Thaumcraft): um núcleo de energia de um
+## aspecto primal, com bolinhas de Vis em órbita. Segure E mirando o nódulo para drenar Vis para
+## o recipiente desse aspecto na varinha: as bolinhas voam até a ponta dela. Pela decisão 3, só
+## há nódulos na escola (fora dela, a varinha não recarrega).
 
-## Aspecto que dá a cor ao nódulo (o Vis drenado vai para a reserva única da varinha).
+## Aspecto do nódulo: dá a cor e diz para qual recipiente da varinha o Vis vai.
 @export var aspect: StringName = &"fire"
 ## Pontos de reserva drenados por segundo enquanto E está seguro.
 @export var drain_rate := 12.0
@@ -48,23 +48,32 @@ func hold(player: Node3D, delta: float) -> void:
 	if not _draining:
 		_draining = true
 		_drained_total = 0
-		if wand.is_full():
-			Game.message(Text.tr_key("UI_MSG_ALREADY_FULL") % Text.tr_key("TERM_VIS"))
+		if wand.is_full(aspect):
+			_say_full(wand, "UI_MSG_ALREADY_FULL")
 		else:
 			_sound = Audio.play(&"recharge")
-	if wand.is_full():
+	if wand.is_full(aspect):
 		return
 	_drain_buffer += drain_rate * delta
 	var whole := floori(_drain_buffer)
 	if whole > 0:
 		_drain_buffer -= whole
-		_drained_total += wand.add(whole)
-		if wand.is_full():
-			Game.message(Text.tr_key("UI_MSG_RECHARGED") % Text.tr_key("TERM_VIS"), Content.db.aspects[aspect].color)
+		_drained_total += wand.add(aspect, whole)
+		if wand.is_full(aspect):
+			_say_full(wand, "UI_MSG_RECHARGED")
 	_spark_buffer += sparks_per_second * delta
 	while _spark_buffer >= 1.0:
 		_spark_buffer -= 1.0
 		_launch_spark((player as Player).wand_view.tip)
+
+
+## Avisa que não cabe mais nada: o recipiente do aspecto está cheio, ou a varinha toda está
+## (o limite total).
+func _say_full(wand: WandState, aspect_key: String) -> void:
+	if wand.reserve(aspect) >= wand.aspect_capacity():
+		Game.message(Text.tr_key(aspect_key) % Text.aspect_name(aspect), Content.db.aspects[aspect].color)
+	else:
+		Game.message(Text.tr_key("UI_MSG_WAND_FULL") % wand.total_capacity())
 
 
 func release_hold() -> void:
