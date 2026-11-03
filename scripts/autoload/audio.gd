@@ -53,10 +53,11 @@ func play_at(event: StringName, position: Vector3, parent: Node) -> void:
 
 
 ## Abaixa o som até sumir e então o apaga. Cortar um som de uma vez faz um estalo.
-func fade_out(player: AudioStreamPlayer, seconds := 0.08) -> void:
+## `player` pode já ter terminado e sumido (aí não faz nada), por isso não tem tipo.
+func fade_out(player, seconds := 0.08) -> void:
 	if not is_instance_valid(player):
 		return
-	var tween := player.create_tween()
+	var tween: Tween = player.create_tween()
 	tween.tween_property(player, "volume_db", -60.0, seconds)
 	tween.tween_callback(player.queue_free)
 

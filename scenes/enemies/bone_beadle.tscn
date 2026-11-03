@@ -13,7 +13,7 @@ render_priority = 0
 shader = ExtResource("3")
 shader_parameter/albedo_color = Color(0.1647, 0.1647, 0.1882, 1)
 shader_parameter/emission_color = Color(1, 1, 1, 1)
-shader_parameter/emission_energy = 0
+shader_parameter/emission_energy = 0.0
 resource_local_to_scene = true
 
 [sub_resource type="ShaderMaterial" id="Mat_3"]
@@ -36,7 +36,7 @@ render_priority = 0
 shader = ExtResource("3")
 shader_parameter/albedo_color = Color(0, 0, 0, 1)
 shader_parameter/emission_color = Color(0.6235, 0.8471, 0.6275, 1)
-shader_parameter/emission_energy = 3
+shader_parameter/emission_energy = 3.0
 
 [sub_resource type="ShaderMaterial" id="Mat_7"]
 render_priority = 0

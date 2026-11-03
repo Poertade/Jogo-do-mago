@@ -21,6 +21,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var scanner: Scanner = %Scanner
+@onready var wand_view: WandView = %WandView
 
 
 func _ready() -> void:

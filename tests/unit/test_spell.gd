@@ -113,3 +113,14 @@ func test_charge_ratio_grows_with_time() -> void:
 	caster.start_charge()
 	caster.update(0.3)
 	assert_almost_eq(caster.charge_ratio(), 0.5, 0.001)
+
+
+func test_add_fills_without_passing_capacity() -> void:
+	var wand := WandState.new(wand_data)
+	wand.pay(focus.cost)
+	wand.pay(focus.cost)
+	assert_eq(wand.add(&"fire", 3), 3)
+	assert_eq(wand.reserve(&"fire"), 23)
+	assert_eq(wand.add(&"fire", 50), 7, "Só cabe até a capacidade")
+	assert_eq(wand.reserve(&"fire"), 30)
+	assert_eq(wand.add(&"fire", 5), 0)

@@ -1,0 +1,170 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/vis_node.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/vis_node.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.3608, 0.3373, 0.3137, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.1804, 0.1647, 0.1569, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.0706, 0.0471, 0.0314, 1)
+shader_parameter/emission_color = Color(1, 0.5412, 0.2275, 1)
+shader_parameter/emission_energy = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4"]
+top_radius = 0.12
+bottom_radius = 0.2
+height = 0.75
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5"]
+top_radius = 0.42
+bottom_radius = 0.22
+height = 0.26
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+top_radius = 0.36
+bottom_radius = 0.36
+height = 0.02
+radial_segments = 8
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="Mat_7"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.5412, 0.2275, 1)
+shader_parameter/emission_energy = 1.4
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="Mat_8"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.9569, 0.8784, 1)
+shader_parameter/emission_energy = 3.0
+
+[sub_resource type="ShaderMaterial" id="Mat_9"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/emission_color = Color(1, 0.6902, 0.4392, 1)
+shader_parameter/emission_energy = 1.6
+resource_local_to_scene = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_10"]
+radius = 0.12
+height = 0.24
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_11"]
+radius = 0.06
+height = 0.12
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_12"]
+radius = 0.04
+height = 0.08
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxShape3D" id="Box_13"]
+size = Vector3(0.9, 1.7, 0.9)
+
+[node name="VisNode" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_DRAIN_VIS"
+hold_to_use = true
+scannable = ExtResource("2")
+aspect = &"fire"
+
+[node name="Column" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+mesh = SubResource("CylinderMesh_4")
+material_override = SubResource("Mat_1")
+
+[node name="Bowl" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.89, 0)
+mesh = SubResource("CylinderMesh_5")
+material_override = SubResource("Mat_2")
+
+[node name="Runes" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.025, 0)
+mesh = SubResource("CylinderMesh_6")
+material_override = SubResource("Mat_3")
+
+[node name="Core" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
+
+[node name="Glow" type="MeshInstance3D" parent="Core"]
+mesh = SubResource("SphereMesh_10")
+material_override = SubResource("Mat_7")
+
+[node name="Center" type="MeshInstance3D" parent="Core"]
+mesh = SubResource("SphereMesh_11")
+material_override = SubResource("Mat_8")
+
+[node name="Orbs" type="Node3D" parent="Core"]
+transform = Transform3D(0.9781, -0.2079, 0, 0.1977, 0.9303, -0.309, 0.0642, 0.3023, 0.9511, 0, 0, 0)
+
+[node name="Orb1" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.3, 0, 0)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Orb2" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.187, 0, 0.2345)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Orb3" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -0.0668, 0, 0.2925)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Orb4" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.2703, 0, 0.1302)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Orb5" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -0.2703, 0, -0.1302)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Orb6" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -0.0668, 0, -0.2925)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Orb7" type="MeshInstance3D" parent="Core/Orbs"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.187, 0, -0.2345)
+mesh = SubResource("SphereMesh_12")
+material_override = SubResource("Mat_9")
+
+[node name="Light" type="OmniLight3D" parent="Core"]
+light_color = Color(1, 0.5412, 0.2275, 1)
+light_energy = 1.6
+omni_range = 8.0
+omni_attenuation = 1.2
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("Box_13")

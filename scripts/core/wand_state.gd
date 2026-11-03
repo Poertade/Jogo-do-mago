@@ -49,6 +49,15 @@ func pay(cost: Dictionary) -> bool:
 	return true
 
 
+## Acrescenta energia a uma reserva, sem passar da capacidade. Devolve quanto entrou.
+func add(aspect_id: StringName, amount: int) -> int:
+	var added := clampi(amount, 0, capacity(aspect_id) - reserve(aspect_id))
+	if added > 0:
+		_reserves[aspect_id] = reserve(aspect_id) + added
+		reserves_changed.emit()
+	return added
+
+
 ## Enche a reserva de um aspecto até a capacidade.
 func refill(aspect_id: StringName) -> void:
 	_reserves[aspect_id] = capacity(aspect_id)
