@@ -29,7 +29,7 @@ var _books := 0
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(110, 108)
+	custom_minimum_size = Vector2(110, 114)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
@@ -65,7 +65,7 @@ func _draw() -> void:
 			draw_string(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, color.lightened(0.25))
 	_draw_orb()
 	var total := "%s %d/%d" % [Text.tr_key("TERM_VIS"), _wand.total(), _wand.total_capacity()]
-	var total_at := Vector2(2, 84)
+	var total_at := Vector2(2, 91)
 	draw_string_outline(font, total_at, total, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
 	draw_string(font, total_at, total, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
 	_draw_belt(font)
@@ -75,7 +75,7 @@ func _draw() -> void:
 func _draw_belt(font: Font) -> void:
 	if _jars == null:
 		return
-	var y := 90.0
+	var y := 96.0
 	for i in _jars.jars.size():
 		var jar := _jars.jars[i]
 		var x := 2.0 + i * 15.0
