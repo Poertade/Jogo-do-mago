@@ -16,18 +16,18 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Tecnologia
 
-Three.js + TypeScript + Vite, rodando no navegador (WebGL2). Motivos em [`DECISIONS.md`](DECISIONS.md#d001--2026-11-03--tecnologia-threejs--typescript--vite-no-navegador).
+Godot 4.7 com GDScript, programa de desktop (Windows, Linux e macOS). Motivos em [`DECISIONS.md`](DECISIONS.md#d001--2026-11-03--tecnologia-godot-47-com-gdscript-programa-de-desktop).
 
 ## Como executar
 
 A partir do M1:
 
-```sh
-npm install
-npm run dev    # abre o jogo no navegador
-npm test       # roda os testes da lógica
-```
+1. Baixe o [Godot 4.7.2](https://godotengine.org/download/) (versão padrão, não a .NET). É um executável, sem instalação.
+2. Abra o Godot, clique em **Importar** e escolha o arquivo `project.godot` desta pasta.
+3. Aperte **F5** para jogar.
+
+Os executáveis exportados entram no fim do recorte (M5).
 
 ## Como estender o jogo
 
-Adicionar um aspecto, um Focus, um inimigo ou uma sala será documentado aqui no M5. O conteúdo ficará em `data/` e os textos em `locales/pt-BR/`, sem mexer no motor.
+Adicionar um aspecto, um Focus, um inimigo ou uma sala será documentado aqui no M5. O conteúdo ficará em `data/` (arquivos `.tres`, editáveis no inspetor do Godot) e os textos em `locales/`, sem mexer no motor.

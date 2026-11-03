@@ -1,5 +1,10 @@
-node_modules/
-dist/
-coverage/
+# Godot (os arquivos .import e export_presets.cfg devem ir para o git)
+.godot/
+/android/
+
+# Executáveis exportados
+/export/
+
+# Sistema
 *.log
 .DS_Store

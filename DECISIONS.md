@@ -5,62 +5,63 @@ Detalhes e comparações completas em [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.m
 
 ## Tomadas
 
-### D001 · 2026-11-03 · Tecnologia: Three.js + TypeScript + Vite, no navegador
+### D001 · 2026-11-03 · Tecnologia: Godot 4.7 com GDScript, programa de desktop
 
-- **Escolha:** Three.js (WebGL2) com TypeScript, Vite para desenvolvimento e build, Vitest para testes. Decisão delegada pelo usuário ("escolha a opção de ferramentas que mais se adequar").
+- **Escolha:** Godot 4.7.2 (versão estável mais recente), GDScript com tipos, exportação para desktop.
+- **Histórico:** a primeira proposta (mesmo dia) era Three.js + TypeScript no navegador, escolhida porque deixa o Claude Code ver o jogo rodando na nuvem. O usuário pediu **um programa de desktop desde o começo**, e a proposta foi refeita.
 - **Descartadas:**
-  - Godot 4 + GDScript: tem editor visual e shaders PS1 prontos, mas no modo headless não renderiza, então o Claude Code na nuvem não consegue ver o jogo rodando antes de cada entrega.
-  - Unity + C#: não roda no ambiente de desenvolvimento na nuvem, exige conta e editor pesado.
-- **Motivo:** permite verificar cada marco rodando o jogo de verdade (Chromium headless com WebGL2, testado em 2026-11-03), roda em qualquer sistema sem instalação, deixa a lógica em TypeScript puro e testável e mantém o efeito PS1 pequeno e próprio.
-- **Custo aceito:** sem editor visual de fases; colisão e demais sistemas de motor escritos por nós, no tamanho necessário.
+  - Three.js + TypeScript em Electron: daria um executável, mas com um navegador inteiro embutido (~150 MB) e sem editor; colisão e demais sistemas de motor seriam escritos por nós.
+  - Unity + C#: editor pesado, licença com conta, testes que dependem do editor.
+- **Motivo:** motor de jogo nativo para desktop, com editor visual, primeira pessoa, física, áudio e interface prontos, save em arquivo real e testes de lógica pela linha de comando (GUT).
+- **Custo aceito:** a conferência visual na nuvem depende de rodar o Godot numa tela virtual com OpenGL por software, ainda não confirmada (pergunta 12 da proposta).
 
-### D002 · 2026-11-03 · Renderizador: WebGL2, não WebGPU
+### D002 · 2026-11-03 · Renderizador: Compatibility
 
-- **Escolha:** `WebGLRenderer` do Three.js, desenhando numa imagem de baixa resolução (padrão de 240 linhas) ampliada sem filtragem.
-- **Descartada:** `WebGPURenderer`, ainda ausente ou instável em parte dos navegadores e placas.
-- **Motivo:** compatibilidade máxima com computadores modestos. Os padrões serão calibrados quando o usuário informar o computador de jogo.
+- **Escolha:** renderizador Compatibility (OpenGL 3.3), desenhando numa imagem de baixa resolução (padrão de 240 linhas) ampliada sem filtragem.
+- **Descartados:** Forward+ e Mobile (Vulkan), mais pesados e com recursos que o visual PS1 não usa.
+- **Motivo:** roda em quase qualquer placa de vídeo, inclusive gráficos integrados antigos. Os padrões serão calibrados quando o usuário informar o computador de jogo.
 
-### D003 · 2026-11-03 · Save: armazenamento local do navegador, com exportar e importar
+### D003 · 2026-11-03 · Save em `user://save.json`
 
-- **Escolha:** save em JSON legível e versionado (`formatVersion`) no armazenamento local do navegador, com botões para exportar e importar um arquivo `.json`. O save passa por uma interface de armazenamento, para que outra implementação (arquivo em disco) possa entrar sem mudar a lógica.
-- **Descartadas:** File System Access API (só funciona em navegadores baseados no Chromium); empacotar como app desktop com Electron ou Tauri agora (peso e complexidade sem necessidade no recorte).
-- **Motivo:** a especificação pede arquivo local legível; no navegador, exportar e importar é a forma portátil de entregar isso. Se o usuário quiser o arquivo direto no disco, o empacotamento desktop fica para depois.
+- **Escolha:** save em JSON legível e versionado (`format_version`) no diretório de dados do usuário do Godot; opções gráficas separadas em `user://settings.cfg`.
+- **Descartado:** save em `.tres` (formato do Godot), menos legível e capaz de carregar scripts, o que é arriscado num arquivo que o jogador pode editar.
+- **Motivo:** a especificação pede arquivo local legível com número de versão.
 
-### D004 · 2026-11-03 · Formato de dados: JSON validado com esquemas
+### D004 · 2026-11-03 · Conteúdo em Resources do Godot (`.tres`)
 
-- **Escolha:** um arquivo JSON por categoria (`data/aspects.json`, `data/foci.json`…) e um por sala (`data/rooms/`), validados ao carregar com esquemas `zod`, incluindo referências entre arquivos (um Focus que gasta um aspecto inexistente é um erro com mensagem clara).
-- **Descartadas:** YAML (exige parser extra e tem ambiguidades de tipo); conteúdo em código TypeScript (viola o pilar 5).
-- **Motivo:** JSON é lido nativamente pelo navegador e pelo Node, e a validação protege quem adiciona conteúdo sem mexer no motor.
+- **Escolha:** cada tipo de conteúdo é uma classe `Resource` com campos tipados (o esquema), e cada item é um arquivo `.tres` em `data/`. Um `content_db.gd` valida tudo ao iniciar.
+- **Descartado:** JSON para o conteúdo, que exigiria um validador escrito à mão e não teria formulário no editor.
+- **Motivo:** o editor mostra cada item como formulário, os tipos são checados e as referências entre itens não quebram por erro de digitação. Os `.tres` continuam sendo texto, legíveis no git.
 
-### D005 · 2026-11-03 · Colisão própria em vez de motor de física
+### D005 · 2026-11-03 · Física e colisão do próprio Godot
 
-- **Escolha:** jogador como cilindro contra caixas alinhadas aos eixos (os blocos da sala); raios para mira e escaneamento; esferas para projéteis e inimigos.
-- **Descartadas:** Rapier e cannon-es.
-- **Motivo:** as salas são feitas de blocos e o recorte não tem física de objetos; algumas dezenas de linhas testáveis bastam. Um motor de física pode entrar se o jogo precisar.
+- **Escolha:** `CharacterBody3D` para o jogador e o inimigo; blocos CSG com colisão para o greybox das salas; raios para mira e escaneamento.
+- **Descartada:** colisão escrita por nós.
+- **Motivo:** já vem pronta e testada no motor.
 
-### D006 · 2026-11-03 · Interface em HTML/CSS sobre o jogo
+### D006 · 2026-11-03 · Interface com os nós de UI do Godot
 
-- **Escolha:** HUD, Livro de Pesquisa, Mesa e menus em HTML/CSS por cima da tela do jogo, com textos vindos de `locales/pt-BR/`.
+- **Escolha:** HUD, Livro de Pesquisa, Mesa e menus com nós `Control`, textos traduzidos por `tr()` a partir de `locales/*.csv`.
 - **Descartada:** interface desenhada dentro da cena 3D.
-- **Motivo:** texto em português fácil de trocar, menus simples de fazer e de estudar.
+- **Motivo:** sistema de interface e de tradução embutidos; trocar textos vira editar uma planilha CSV.
 
-### D007 · 2026-11-03 · Camadas `core`, `engine`, `game` e `ui`
+### D007 · 2026-11-03 · Camadas `core`, `game`, `ui` e `render`
 
-- **Escolha:** `src/core` é lógica pura (sem Three.js nem navegador); `src/engine` é o motor genérico; `src/game` e `src/ui` ligam os dois. Um teste falha se `core` importar algo proibido.
-- **Descartada:** organizar por funcionalidade misturando lógica e renderização.
+- **Escolha:** `scripts/core` só tem `RefCounted` e `Resource`, sem nós nem árvore de cena; `game`, `ui` e `render` ligam a lógica ao mundo. Um teste falha se `core` usar algo proibido.
+- **Descartada:** lógica dentro dos scripts dos nós.
 - **Motivo:** a especificação exige lógica testável sem abrir o jogo.
 
-### D008 · 2026-11-03 · Identificadores neutros; nomes exibidos em arquivo de localização
+### D008 · 2026-11-03 · Identificadores neutros; nomes exibidos em arquivo de tradução
 
-- **Escolha:** identificadores internos em inglês e neutros (`fire`, `water`…); todo nome exibido vem de `locales/pt-BR/`, e os que remetem a outras obras ficam só em `locales/pt-BR/names.json`.
+- **Escolha:** identificadores internos em inglês e neutros (`fire`, `water`…); todo nome exibido vem de `locales/`, e os que remetem a outras obras ficam só em `locales/names.csv`.
 - **Descartada:** usar os nomes latinos como identificadores.
 - **Motivo:** trocar os nomes para uma versão distribuída vira a troca de um arquivo. A escolha dos nomes em si é a decisão 7, ainda pendente.
 
 ### D009 · 2026-11-03 · Dependências previstas
 
-- **Escolha:** `three`, `typescript`, `vite`, `vitest`, `zod`, com versões fixas, instaladas no M1. Playwright, já presente no ambiente de desenvolvimento, só para testes de fumaça e capturas de tela.
-- **Descartadas:** frameworks de interface (React, Vue) e motores de física, por não serem necessários no recorte.
-- **Motivo:** o mínimo para renderizar, tipar, testar e validar dados.
+- **Escolha:** Godot 4.7.2 e GUT (Godot Unit Test) em `addons/gut`, com versões fixas, instalados no M1. Shader PS1 escrito por nós.
+- **Descartados:** gdUnit4 (mais recursos do que o recorte precisa) e shaders PS1 prontos de terceiros (o nosso fica menor, comentado em português e com cada efeito ligável pelas opções).
+- **Motivo:** o mínimo para o motor e os testes.
 
 ## Pendentes (aguardando o usuário)
 
@@ -76,5 +77,6 @@ Recomendações completas em [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.md#c-decis
 | 7 | Nomes | IDs neutros; latinos durante o desenvolvimento; Lume, Maré, Barro, Sopro, Prumo e Ruína para distribuir |
 | 8 | Premissa | As Ruínas da Primeira Escola |
 | 9 | Prioridade visual | Cortar dithering → afim → resolução → névoa |
-| — | Computador de jogo | Aguardando: sistema, processador, vídeo e navegador |
-| — | Referências visuais | Aguardando imagens ou descrições; até lá, greybox |
+| 10 | Computador de jogo | Aguardando: sistema, processador e vídeo |
+| 11 | Referências visuais | Aguardando imagens ou descrições; até lá, greybox |
+| 12 | Executar o Godot na nuvem | Aguardando autorização para testes e capturas de tela |
