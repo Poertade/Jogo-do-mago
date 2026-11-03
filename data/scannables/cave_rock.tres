@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"cave_rock"
+name_key = "OBJ_CAVE_ROCK"
+aspects = Dictionary[StringName, int]({
+&"earth": 2,
+&"entropy": 1
+})

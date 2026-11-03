@@ -19,6 +19,8 @@ var pages: Dictionary[StringName, ResearchPageData] = {}
 var wands: Dictionary[StringName, WandData] = {}
 var foci: Dictionary[StringName, FocusData] = {}
 var enemies: Dictionary[StringName, EnemyData] = {}
+var books: Dictionary[StringName, BookData] = {}
+var zones: Dictionary[StringName, DungeonZone] = {}
 var errors: PackedStringArray = []
 
 
@@ -53,6 +55,12 @@ func load_all(root := DATA_ROOT) -> void:
 	for resource in _load_folder(root.path_join("enemies")):
 		if resource is EnemyData:
 			add_enemy(resource)
+	for resource in _load_folder(root.path_join("books")):
+		if resource is BookData:
+			_add_unique(books, resource, "Livro")
+	for resource in _load_folder(root.path_join("dungeon/zones")):
+		if resource is DungeonZone:
+			_add_unique(zones, resource, "Região")
 	validate()
 
 
@@ -104,13 +112,24 @@ func find_scannable(id: StringName) -> ScannableData:
 
 
 ## Salas da Dungeon por tipo (tipo → identificadores), para o sorteio das incursões.
-func rooms_by_kind() -> Dictionary[StringName, Array]:
-	var result: Dictionary[StringName, Array] = {}
+## Salas da Dungeon por região e tipo ("região/tipo" → identificadores), para o sorteio.
+func rooms_by_slot() -> Dictionary:
+	var result := {}
 	for room: RoomData in rooms.values():
 		if room.kind != &"":
-			if not room.kind in result:
-				result[room.kind] = []
-			result[room.kind].append(room.id)
+			var key := DungeonPlan.slot_key(room.zone, room.kind)
+			if not key in result:
+				result[key] = []
+			result[key].append(room.id)
+	return result
+
+
+## Os livros que ensinam a receita do aspecto.
+func books_teaching(aspect_id: StringName) -> Array[BookData]:
+	var result: Array[BookData] = []
+	for book: BookData in books.values():
+		if aspect_id in book.teaches:
+			result.append(book)
 	return result
 
 
@@ -221,6 +240,8 @@ func validate() -> void:
 func _validate_player() -> void:
 	if player.max_health <= 0:
 		errors.append("player.tres: max_health precisa ser maior que zero.")
+	if player.jar_slots < 0 or (player.jar_slots > 0 and player.jar_capacity <= 0):
+		errors.append("player.tres: jar_slots não pode ser negativo, e com potes jar_capacity precisa ser maior que zero.")
 	if player.starting_wand == null or player.starting_focus == null:
 		errors.append("player.tres: faltam a varinha ou o Focus iniciais.")
 		return
@@ -328,20 +349,45 @@ func _validate_room(room: RoomData) -> void:
 
 
 func _validate_dungeon() -> void:
-	if dungeon_rules.layout.is_empty():
-		errors.append("dungeon/rules.tres: a sequência de salas (layout) está vazia.")
-	if dungeon_rules.entrance_id == &"":
-		errors.append("dungeon/rules.tres: falta a entrada das salas (entrance_id).")
-	if not dungeon_rules.return_room in rooms:
-		errors.append("dungeon/rules.tres: a sala de volta '%s' não existe." % dungeon_rules.return_room)
-	var by_kind := rooms_by_kind()
+	var rules := dungeon_rules
+	if rules.steps.is_empty():
+		errors.append("dungeon/rules.tres: o caminho (steps) está vazio.")
+	if rules.corridor_length_min < 1.0 or rules.corridor_length_max < rules.corridor_length_min:
+		errors.append("dungeon/rules.tres: corredores precisam de pelo menos 1 m, e o máximo não pode ser menor que o mínimo.")
+	if not rules.return_room in rooms:
+		errors.append("dungeon/rules.tres: a sala de volta '%s' não existe." % rules.return_room)
+	var by_slot := rooms_by_slot()
 	var checked := {}
-	for kind in dungeon_rules.layout:
-		if kind in checked:
+	for step in rules.steps:
+		if step == null:
+			errors.append("dungeon/rules.tres: há um passo vazio no caminho.")
 			continue
-		checked[kind] = true
-		if not kind in by_kind:
-			errors.append("dungeon/rules.tres: não há nenhuma sala do tipo '%s' em data/rooms/." % kind)
+		if step.drop_min < 0.0 or step.drop_max < step.drop_min:
+			errors.append("dungeon/rules.tres: descida inválida no passo %s." % DungeonPlan.slot_key(step.zone, step.kind))
+		if not step.zone in zones:
+			errors.append("dungeon/rules.tres: a região '%s' não existe em data/dungeon/zones/." % step.zone)
+		var key := DungeonPlan.slot_key(step.zone, step.kind)
+		if key in checked:
+			continue
+		checked[key] = true
+		if not key in by_slot:
+			errors.append("dungeon/rules.tres: não há nenhuma sala '%s' (região/tipo) em data/rooms/." % key)
+	for room: RoomData in rooms.values():
+		if room.kind != &"" and (room.zone == &"" or room.width <= 0.0 or room.depth <= 0.0 or room.height <= 0.0):
+			errors.append("Sala '%s': salas da Dungeon precisam de zone, width, depth e height." % room.id)
+	for zone: DungeonZone in zones.values():
+		if zone.wall_material == null or zone.floor_material == null or zone.ceiling_material == null:
+			errors.append("Região '%s': faltam materiais dos corredores." % zone.id)
+	for book: BookData in books.values():
+		if not book.zone in zones:
+			errors.append("Livro '%s': a região '%s' não existe." % [book.id, book.zone])
+		for aspect_id in book.teaches:
+			var aspect: AspectData = aspects.get(aspect_id)
+			if aspect == null or not aspect.needs_recipe:
+				errors.append("Livro '%s': ensina '%s', que não é um aspecto com receita escondida." % [book.id, aspect_id])
+	for aspect: AspectData in aspects.values():
+		if aspect.needs_recipe and books_teaching(aspect.id).is_empty():
+			errors.append("Aspecto '%s' tem receita escondida, mas nenhum livro a ensina." % aspect.id)
 
 
 func _validate_aspect(aspect: AspectData) -> void:

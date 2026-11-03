@@ -7,9 +7,12 @@ extends RefCounted
 var health: Health
 var wand: WandState
 var caster: SpellCaster
-## Roteiro da incursão atual (null fora da Dungeon) e a posição nele (0 = primeira sala).
+## Roteiro da incursão atual (null fora da Dungeon) e a sala em que o jogador está.
 var dungeon: DungeonPlan
 var room_index := -1
+## Potes de Vis no cinto e livros achados ainda não lidos (perdem-se ao morrer).
+var jars: VisJarBelt
+var carried_books: Array[BookData] = []
 var _player: PlayerData
 
 
@@ -18,6 +21,7 @@ func _init(player: PlayerData) -> void:
 	health = Health.new(player.max_health)
 	wand = WandState.new(player.starting_wand, player.starting_vis)
 	caster = SpellCaster.new(player.starting_focus, wand)
+	jars = VisJarBelt.new(player.jar_slots, player.jar_capacity)
 
 
 ## Começa de novo: vida cheia, a varinha com o Vis inicial e a magia parada.
@@ -26,7 +30,17 @@ func reset() -> void:
 	wand.reset(_player.starting_vis)
 	caster.cancel()
 	caster.cooldown_left = 0.0
+	jars.clear()
+	carried_books.clear()
 	leave_dungeon()
+
+
+## Guarda um livro achado (até ser lido na escola). Devolve false se já estava com ele.
+func carry_book(book: BookData) -> bool:
+	if book in carried_books:
+		return false
+	carried_books.append(book)
+	return true
 
 
 ## Começa uma incursão com o roteiro `plan`. Devolve a primeira sala.
@@ -46,6 +60,12 @@ func advance() -> StringName:
 		leave_dungeon()
 		return &""
 	return current_room()
+
+
+## O jogador entrou na sala `index` do roteiro (a Dungeon é contínua: ele anda até ela).
+func enter_room(index: int) -> void:
+	if dungeon != null and index >= 0 and index < dungeon.size():
+		room_index = index
 
 
 func current_room() -> StringName:

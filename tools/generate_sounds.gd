@@ -34,6 +34,8 @@ func _initialize() -> void:
 	_save("enemy_death", _enemy_death())
 	_save("ambience_school", _ambience_school(), true)
 	_save("ambience_dungeon", _ambience_dungeon(), true)
+	_save("ambience_caves", _ambience_caves(), true)
+	_save("ambience_abyss", _ambience_abyss(), true)
 	quit()
 
 
@@ -248,6 +250,46 @@ func _ambience_dungeon() -> PackedFloat32Array:
 			var index := int(start * RATE) + i
 			if index < out.size():
 				out[index] += sin(phase) * 0.25 * _env(t, 0.002, 0.25)
+	return out
+
+
+## Ambiente das grutas (8 s, repete): ronco grave da terra e muitas gotas ecoando.
+func _ambience_caves() -> PackedFloat32Array:
+	var out := _silence(8.0)
+	var lp := 0.0
+	for i in out.size():
+		var t := float(i) / RATE
+		lp = lerpf(lp, rng.randf_range(-1.0, 1.0), 0.004)
+		out[i] = lp * 0.7 + sin(TAU * 32.0 * t) * 0.05 * (0.6 + 0.4 * sin(TAU * 0.25 * t))
+	for drop in 9:
+		var start := rng.randf_range(0.2, 7.6)
+		var pitch := rng.randf_range(700.0, 1600.0)
+		var phase := 0.0
+		for i in int(0.3 * RATE):
+			var t := float(i) / RATE
+			phase += TAU * lerpf(pitch, pitch * 0.6, t / 0.3) / RATE
+			var index := int(start * RATE) + i
+			if index < out.size():
+				# Gota e eco fraco logo depois.
+				out[index] += sin(phase) * 0.2 * _env(t, 0.002, 0.3)
+				var echo := index + int(0.12 * RATE)
+				if echo < out.size():
+					out[echo] += sin(phase) * 0.07 * _env(t, 0.002, 0.3)
+	return out
+
+
+## Ambiente do Avesso (8 s, repete): dois zumbidos graves desafinados que batem entre si,
+## um pulso lento e um sussurro de ruído que vem e vai.
+func _ambience_abyss() -> PackedFloat32Array:
+	var out := _silence(8.0)
+	var lp := 0.0
+	for i in out.size():
+		var t := float(i) / RATE
+		lp = lerpf(lp, rng.randf_range(-1.0, 1.0), 0.08)
+		var drone := sin(TAU * 49.0 * t) * 0.09 + sin(TAU * 51.5 * t) * 0.09 + sin(TAU * 73.4 * t) * 0.03
+		var pulse := 0.5 + 0.5 * sin(TAU * 0.5 * t)
+		var whisper := lp * 0.12 * maxf(sin(TAU * 0.125 * t), 0.0)
+		out[i] = drone * (0.6 + 0.4 * pulse) + whisper
 	return out
 
 

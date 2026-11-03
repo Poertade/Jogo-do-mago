@@ -18,7 +18,9 @@
 | **Mesa de Pesquisa**: combinar dois aspectos conhecidos descobre o composto e rende pontos dele | igual (1 ponto de cada pai → 1 do composto) | feito |
 | **Notas de pesquisa**: um quebra-cabeça hexagonal ligando aspectos para liberar pesquisas | nota hexagonal no pergaminho da Mesa: escrever um aspecto gasta 1 ponto dele; vizinhos se ligam quando um é pai do outro; ligar todos os alvos estuda a página | feito (sem tinta, sem cópia de notas) |
 | **Taumonomicon**: o livro com as pesquisas e receitas | Livro de Pesquisa (Tab) | parcial |
-| **Aspectos**: 6 primais, ~40 compostos em camadas | 6 primais + 16 compostos (receitas da versão 4.2), com Gelum (Ignis + Perditio) | parcial |
+| **Aspectos**: 6 primais, ~40 compostos em camadas | 6 primais + 20 compostos (receitas da versão 4.2), com Gelum, e Tenebrae, Limus, Vitium e Alienis, de receita escondida | parcial |
+| **Pesquisa achada no mundo** (fragmentos de conhecimento, notas em masmorras) | livros perdidos na Dungeon, lidos no atril da escola, que ensinam receitas escondidas | feito |
+| **Potes protegidos** (guardam essentia) | potes de Vis no cinto: guardam o que sobra dos Nódulos e recarregam a varinha (R) | adaptado |
 | **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com um recipiente por primal, limite por recipiente e limite total, e eficiência (`data/wands/`); visual com núcleo + ponteiras; mostrador de frascos no HUD | parcial (um tipo só) |
 | **Focus**: encaixado na varinha, define a magia (Fogo, Gelo, Choque, Escavação, Portal…) | Focus de Fogo e Focus de Gelo (lentidão), trocados com Q; o de Gelo é liberado por pesquisa | dois Focus |
 | **Nódulos de aura**: esferas de Vis com aspectos; a varinha drena Vis segurando o botão; o nódulo se recarrega devagar | Nódulos de Ignis e de Aqua (com Ordo) na escola, que não acabam; na Dungeon, nódulos que se esgotam | feito (sem recarga lenta) |

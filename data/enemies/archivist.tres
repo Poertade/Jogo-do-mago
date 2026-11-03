@@ -7,7 +7,7 @@
 script = ExtResource("1")
 scene_path = "res://scenes/enemies/archivist.tscn"
 max_health = 130.0
-damage = 18.0
+damage = 28.0
 weaknesses = Dictionary[StringName, float]({
 &"cold": 1.3
 })

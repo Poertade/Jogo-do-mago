@@ -24,6 +24,7 @@ var _time := 0.0
 var _draining := false
 var _drained_total := 0
 var _empty := false
+var _told_jars := false
 var _sound: AudioStreamPlayer
 var _spark_mesh: SphereMesh
 var _spark_material: ShaderMaterial
@@ -63,6 +64,7 @@ func hold(player: Node3D, delta: float) -> void:
 	if not _draining:
 		_draining = true
 		_drained_total = 0
+		_told_jars = false
 		if _all_full(wand):
 			_say_full(wand, "UI_MSG_ALREADY_FULL")
 		else:
@@ -76,7 +78,13 @@ func hold(player: Node3D, delta: float) -> void:
 		var added := 0
 		for drained in _aspects():
 			var amount := whole if vis_amount < 0 else mini(whole, vis_amount - added)
-			added += wand.add(drained, amount)
+			var into_wand := wand.add(drained, amount)
+			# O que não cabe na varinha vai para os potes do cinto.
+			var into_jars := Game.run.jars.store(drained, amount - into_wand)
+			if into_jars > 0 and not _told_jars:
+				_told_jars = true
+				Game.message(Text.tr_key("UI_MSG_JARS_FILLING"))
+			added += into_wand + into_jars
 		_drained_total += added
 		if vis_amount >= 0:
 			vis_amount -= added
@@ -110,10 +118,10 @@ func _aspects() -> Array[StringName]:
 	return result
 
 
-## Nenhum dos aspectos do nódulo cabe mais na varinha?
+## Nenhum dos aspectos do nódulo cabe mais (nem na varinha, nem nos potes)?
 func _all_full(wand: WandState) -> bool:
 	for drained in _aspects():
-		if not wand.is_full(drained):
+		if not wand.is_full(drained) or Game.run.jars.has_room_for(drained):
 			return false
 	return true
 

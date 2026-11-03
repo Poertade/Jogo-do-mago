@@ -12,6 +12,14 @@ extends Resource
 ## combat (combate), rest (descanso, com Nódulo) ou boss (chefe). Vazio: a sala não é sorteada
 ## (escola, sala de teste).
 @export var kind: StringName
+## Região da Dungeon a que a sala pertence (school, caves, abyss).
+@export var zone: StringName
+## Medidas internas da sala, em metros. A cena tem o centro do chão na origem, a porta de
+## entrada no meio da parede sul (z = depth / 2) e a saída no meio da parede norte
+## (z = -depth / 2). A incursão usa isso para encaixar as salas com corredores.
+@export var width: float = 0.0
+@export var depth: float = 0.0
+@export var height: float = 0.0
 
 @export_group("Atmosfera")
 ## Cor da névoa e do fundo.

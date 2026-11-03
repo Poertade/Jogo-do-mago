@@ -22,6 +22,7 @@ const MESSAGE_SECONDS := 4.0
 @onready var damage_flash: ColorRect = %DamageFlash
 @onready var vis_gauge: VisGauge = %VisGauge
 @onready var depth_label: Label = %DepthLabel
+@onready var zone_title: Label = %ZoneTitle
 @onready var boss_panel: Control = %BossPanel
 @onready var boss_name: Label = %BossName
 @onready var boss_bar: ProgressBar = %BossBar
@@ -42,6 +43,7 @@ func _ready() -> void:
 	Game.page_studied.connect(func(page): show_message(tr("UI_MSG_PAGE_STUDIED") % Text.expand(page.name_key)))
 	Game.aspect_combined.connect(_on_aspect_combined)
 	Game.boss_engaged.connect(_on_boss_engaged)
+	Game.zone_entered.connect(_on_zone_entered)
 
 
 func _process(_delta: float) -> void:
@@ -99,7 +101,20 @@ func _update_stats() -> void:
 	_health_value.text = "%d/%d" % [ceili(health.current), health.max_health]
 	var focus := Game.run.caster.focus
 	var focus_aspect: AspectData = Content.db.aspects.get(focus.element)
-	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE)
+	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE,
+		Game.run.jars, Game.run.carried_books.size())
+
+
+## Entrou numa região nova da Dungeon: o nome dela aparece no alto e some devagar.
+func _on_zone_entered(zone_id: StringName) -> void:
+	var zone: DungeonZone = Content.db.zones.get(zone_id)
+	if zone == null:
+		return
+	zone_title.text = Text.tr_key(zone.name_key)
+	var tween := zone_title.create_tween()
+	tween.tween_property(zone_title, "modulate:a", 1.0, 0.8).from(0.0)
+	tween.tween_interval(2.5)
+	tween.tween_property(zone_title, "modulate:a", 0.0, 1.2)
 
 
 func _on_boss_engaged(enemy: Node3D) -> void:

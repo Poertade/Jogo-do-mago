@@ -438,7 +438,7 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** manter 2 por disparo (5 disparos) da D051.
 - **Motivo:** uma incursão de 5 salas pede uns 17 disparos em média (`tools/balance_report.gd`). Com 10 no começo e 10 de Ignis na fonte, dá para vencer, mas é preciso acertar. Com 5 por recipiente, seria impossível.
 
-### D056 · 2026-11-03 · Incursão: salas em sequência, sorteadas com semente
+### D056 · 2026-11-03 · Incursão: salas em sequência, sorteadas com semente (substituída por D065)
 
 - **Escolha:**
   - **Roteiro:** o portal sorteia o roteiro da incursão (`DungeonPlan`, em `scripts/core`), uma sala para cada tipo da sequência `layout` de `data/dungeon/rules.tres`. Uma sala não se repete na mesma incursão enquanto houver outra do mesmo tipo.
@@ -502,6 +502,61 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Escolha:** `test_scripts_load.gd` carrega todo script de `scripts/` e `tools/`.
 - **Descartado:** confiar só nos testes de lógica.
 - **Motivo:** um erro de sintaxe no HUD passou pelos testes e só aparecia ao abrir o jogo.
+
+## Edições depois do M7 (pedidas pelo usuário)
+
+### D063 · 2026-11-03 · Potes de Vis no cinto
+
+- **Escolha:** o usuário escolheu "potes que você carrega". O cinto tem 3 potes (`jar_slots`) de até 10 de Vis cada (`jar_capacity`), um aspecto por pote (`VisJarBelt`, em `scripts/core`).
+  - **Encher:** o Vis que não cabe na varinha enquanto o jogador drena um Nódulo vai para os potes.
+  - **Usar:** R despeja na varinha um pote do aspecto que o Focus gasta (ou de outro, se nenhum servir).
+  - **Achar:** potes selados aparecem pelas salas (`LootSpot` com `kind` = `jar`); o que não cabe no cinto fica no pote.
+  - **Morte:** o conteúdo se perde.
+  - **HUD:** os potes aparecem embaixo do mostrador de Vis.
+- **Descartado:** potes espalhados que se drenam como Nódulos; potes fixos de guardar Vis na escola (as outras duas opções da pergunta).
+- **Motivo:** escolha do usuário. Também resolve o orçamento: o caminho de 7 salas pede uns 39 disparos, e só a varinha e a fonte não bastam.
+
+### D064 · 2026-11-03 · Livros perdidos e receitas escondidas
+
+- **Escolha:**
+  - **Aspectos novos:** Tenebrae (Vacuos + Lux), Limus (Victus + Aqua), Vitium (Praecantatio + Perditio) e Alienis (Vacuos + Tenebrae), as receitas do Thaumcraft 4. Todos com `needs_recipe`: a Mesa só combina os pais depois de ler o livro que ensina a receita.
+  - **Os livros** (`data/books/`): Tratado das Sombras (ruínas), Bestiário das Grutas (grutas), Diário do Arquivista e Fragmentos do Avesso (o Avesso).
+  - **Achar:** cada região mostra um livro ainda não lido por incursão, num lugar de livro das salas dela.
+  - **Ler:** só no atril do Salão de Estudos. Quem morre antes perde o livro, que volta a aparecer.
+  - **Save formato 5:** livros lidos e receitas aprendidas.
+  - **Escanear:** as coisas das grutas e do Avesso têm esses aspectos e só podem ser escaneadas depois que eles forem descobertos.
+- **Descartado:**
+  - **Ler na hora, na Dungeon:** o usuário pediu que os livros fossem lidos só na escola.
+  - **Livros que dão pontos:** não ensinariam nada novo.
+- **Motivo:** pedido do usuário. Trazer o livro vivo para a escola dá um motivo para voltar e um risco a cada sala, como os fragmentos de conhecimento que o Thaumcraft 4 espalha pelo mundo.
+
+### D065 · 2026-11-03 · Dungeon contínua, com regiões (substitui D056)
+
+- **Escolha:**
+  - **Montagem:** o portal monta a Dungeon inteira de uma vez (`Dungeon`, em `scripts/game`). As salas sorteadas ficam em fila para o norte, ligadas por corredores retos que descem em rampa. A planta é calculada em `DungeonLayout`, em `scripts/core` (testada).
+  - **O caminho** (`steps` em `data/dungeon/rules.tres`): 7 salas, das **ruínas da escola** (2) às **grutas** (combate, fonte de Vis, combate) e ao **Avesso** (combate e o chefe). Cada passo diz a região, o tipo e quanto o corredor antes dele desce.
+  - **Regiões** (`data/dungeon/zones/`): nome, materiais e luzes dos corredores. Ao entrar numa região, o nome dela aparece no alto da tela.
+  - **Atmosfera:** a névoa, a luz ambiente e o som mudam aos poucos conforme o jogador anda de uma sala para outra.
+  - **Convenção das salas:** porta aberta ao sul (`SouthDoorway`) e saída com grade ao norte. A passagem atrás da grade (`ExitPassage`) só fica na última sala, onde leva de volta à escola. O círculo de chegada fica num beco antes da primeira sala.
+  - **Salas novas:** gruta dos fungos, lago subterrâneo e salão invertido. A fonte de Vis foi para as grutas, e o Grande Arquivo, para o Avesso. As salas antigas foram refeitas na convenção nova.
+  - **Rampas:** a descida de um corredor é sorteada, e o corredor tem pelo menos 2,2 vezes o comprimento da descida (rampa de até uns 25°). O jogador desce andando, conferido com a tecla de andar.
+  - **Sons novos:** ambientes das grutas (gotas com eco) e do Avesso (zumbidos desafinados).
+- **Descartado:**
+  - **Manter salas separadas com transição (D056):** o usuário pediu "sem esses portais, ligadas por corredores".
+  - **Corredores com curvas:** pedem cuidado com sobreposição; a fila reta, com a névoa curta, já esconde o fim.
+  - **Escadas com degraus:** o corpo do jogador não sobe degraus sem código a mais; rampas resolvem.
+- **Motivo:** pedido do usuário, com uma narrativa que desce da escola para o bizarro. A montagem leva cerca de 1,3 s, dentro da transição do portal.
+
+### D066 · 2026-11-03 · Inimigos que contornam obstáculos, se chamam e batem mais forte
+
+- **Escolha:**
+  - **Navegação:** a Dungeon gera uma malha de navegação na montagem, a partir das colisões fixas; as grades ficam de fora, porque abrem depois. Cada inimigo segue o caminho dela com um `NavigationAgent3D`. Num teste, o Bedel contornou um pilar até o alcance do golpe; sem a malha, ficava preso atrás dele.
+  - **Alerta:** quem nota o jogador acorda os inimigos a até 9 m, e cada magia lançada acorda os que estão a até 10 m (`noise_radius` na varinha).
+  - **Dano:** Bedel 10 → 16, Aprendiz 7 → 11, Lodo 12 → 20, Arquivista 18 → 28.
+- **Descartado:**
+  - **Desvio local entre inimigos (avoidance):** mais custo; eles raramente se amontoam.
+  - **Ataques à distância:** comportamento novo, fica para depois.
+- **Motivo:** pedido do usuário: "os inimigos dão pouco dano e são meio burrinhos, tente fazê-los dar a volta em obstáculos".
 
 ## Pendentes (aguardando o usuário)
 

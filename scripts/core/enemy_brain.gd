@@ -72,6 +72,13 @@ func on_died() -> void:
 	state = State.DEAD
 
 
+## Alguém avisou (outro inimigo que viu o jogador, ou o barulho de uma magia): se estava
+## parado, passa a perseguir.
+func alert() -> void:
+	if state == State.IDLE:
+		state = State.CHASE
+
+
 ## Confere a fúria com a fração de vida que resta. Devolve true só na vez em que ele se
 ## enfurece (para o jogo chamar ajuda e avisar).
 func check_enrage(health_ratio: float) -> bool:

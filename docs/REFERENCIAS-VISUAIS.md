@@ -86,3 +86,15 @@ Pedido do usuário depois da rodada do pergaminho: os menus estavam "destoantes,
 - **O Arquivista (chefe):** o esqueleto humanoide 1,55× maior, de manto escuro com faixa vinho, mitra com aro dourado e lentes. Carrega um tomo de ferro (a arma) e uma lanterna de almas verde-água, que ilumina o chão em volta dele. Os olhos são lilás e brilham o dobro quando ele se enfurece.
 - **Gelo:** azul-claro (`#9ed9ff`) no projétil, no clarão, na ponta da varinha e no orbe do HUD. A geada no inimigo lento é um brilho azul fraco por cima do corpo.
 - **Nódulo de Aqua:** núcleo azul com bolinhas azuis e brancas (Ordo).
+
+## A Dungeon contínua (regiões)
+
+O caminho desce, e cada região tem materiais, luz e som próprios. Os valores ficam em `data/dungeon/zones/` e nas salas:
+
+| Região | Paredes e chão | Luz | Som |
+| --- | --- | --- | --- |
+| Ruínas da Primeira Escola | tijolos de pedra fria, lajes | tochas âmbar | vento e gotas |
+| As Grutas | rocha natural com rachaduras (`rock.png`), limo verde | fungos verde-água, lago azul | ronco grave e gotas com eco |
+| O Avesso | "carne de pedra" roxa com veias claras (`flesh.png`) | roxo e rosa que pulsam | zumbidos desafinados e sussurro |
+
+No Avesso, o estranho vem da geometria: móveis presos no teto, escada para lugar nenhum, pilares tortos, pedras flutuando e olhos nas paredes.

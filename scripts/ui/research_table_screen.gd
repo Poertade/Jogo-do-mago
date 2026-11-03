@@ -130,7 +130,13 @@ func _update_combination() -> void:
 			result_cell.placeholder = "?"
 		var check := Game.knowledge.check_combine(compound, rules)
 		combine_button.disabled = check != Knowledge.CombineCheck.OK
-		combine_info.text = tr("UI_COMBINE_READY") if check == Knowledge.CombineCheck.OK else tr("UI_STUDY_NO_POINTS")
+		match check:
+			Knowledge.CombineCheck.OK:
+				combine_info.text = tr("UI_COMBINE_READY")
+			Knowledge.CombineCheck.UNKNOWN_RECIPE:
+				combine_info.text = tr("UI_COMBINE_NEEDS_BOOK")
+			_:
+				combine_info.text = tr("UI_STUDY_NO_POINTS")
 
 
 func _on_combine() -> void:

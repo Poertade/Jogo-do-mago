@@ -2,7 +2,8 @@ class_name VisGauge
 extends Control
 ## Mostrador de Vis da varinha, no canto do HUD (inspirado no do Thaumcraft 4): no centro, o
 ## orbe do Focus equipado; em volta, em leque, um frasco para cada recipiente da varinha, cheio
-## até onde há Vis daquele aspecto. Embaixo, o total guardado e o limite da varinha.
+## até onde há Vis daquele aspecto. Embaixo, o total guardado e o limite da varinha, os potes
+## do cinto (cheios até onde há Vis, na cor do aspecto) e quantos livros o jogador carrega.
 ## Desenhado em pixels da interface (640x360); o HUD chama `show_wand` a cada quadro.
 
 ## Centro do orbe, raio do orbe e onde os frascos começam e terminam (distância do centro).
@@ -23,17 +24,21 @@ const TEXT := Color(0.86, 0.8, 0.68)
 
 var _wand: WandState
 var _focus_color := Color.WHITE
+var _jars: VisJarBelt
+var _books := 0
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(100, 96)
+	custom_minimum_size = Vector2(110, 108)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 ## Atualiza o que o mostrador exibe.
-func show_wand(wand: WandState, focus_color: Color) -> void:
+func show_wand(wand: WandState, focus_color: Color, jars: VisJarBelt = null, books := 0) -> void:
 	_wand = wand
 	_focus_color = focus_color
+	_jars = jars
+	_books = books
 	queue_redraw()
 
 
@@ -60,9 +65,34 @@ func _draw() -> void:
 			draw_string(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, color.lightened(0.25))
 	_draw_orb()
 	var total := "%s %d/%d" % [Text.tr_key("TERM_VIS"), _wand.total(), _wand.total_capacity()]
-	var total_at := Vector2(2, size.y - 2)
+	var total_at := Vector2(2, 84)
 	draw_string_outline(font, total_at, total, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
 	draw_string(font, total_at, total, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
+	_draw_belt(font)
+
+
+## Os potes do cinto (vidro, líquido do aspecto, tampa de latão) e os livros carregados.
+func _draw_belt(font: Font) -> void:
+	if _jars == null:
+		return
+	var y := 90.0
+	for i in _jars.jars.size():
+		var jar := _jars.jars[i]
+		var x := 2.0 + i * 15.0
+		draw_rect(Rect2(x, y, 11, 15), GLASS_EDGE)
+		draw_rect(Rect2(x + 1, y + 2, 9, 12), GLASS)
+		if not jar.is_empty():
+			var aspect: AspectData = Content.db.aspects.get(jar.aspect)
+			var height := roundf(11.0 * jar.amount / maxf(_jars.capacity, 1.0))
+			draw_rect(Rect2(x + 2, y + 13 - height, 7, height), aspect.color if aspect != null else Color.WHITE)
+		draw_rect(Rect2(x, y, 11, 2), BRASS)
+	if _books > 0:
+		var x := 6.0 + _jars.jars.size() * 15.0
+		draw_rect(Rect2(x, y + 2, 9, 12), Color(0.36, 0.12, 0.08))
+		draw_rect(Rect2(x + 1, y + 3, 7, 1), Color(0.88, 0.76, 0.42))
+		var text := "x%d" % _books
+		draw_string_outline(font, Vector2(x + 11, y + 12), text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
+		draw_string(font, Vector2(x + 11, y + 12), text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
 
 
 ## Um frasco: vidro escuro, o líquido do aspecto até `ratio` e uma tampa de latão na ponta.

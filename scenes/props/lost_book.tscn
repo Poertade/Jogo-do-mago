@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/book_pickup.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/lost_book.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.55, 0.35, 0.5)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.3529, 0.1176, 0.0784, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 0.0
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.7843, 0.7216, 0.5647, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.8784, 0.7529, 0.4392, 1.0)
+shader_parameter/emission_energy = 1.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.34, 0.07, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.31, 0.06, 0.23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+size = Vector3(0.07, 0.005, 0.07)
+
+[node name="LostBook" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_TAKE_BOOK"
+scannable = ExtResource("2")
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.15, 0.0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_1")
+
+[node name="Cover" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, 0.9397, 0.0, 0.04, 0.0)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_2")
+
+[node name="Pages" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9397, 0.0, 0.342, 0.0, 1.0, 0.0, -0.342, 0.0, 0.9397, 0.01, 0.045, 0.0)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_3")
+
+[node name="Sigil" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.4226, 0.0, 0.9063, 0.0, 1.0, 0.0, -0.9063, 0.0, 0.4226, 0.0, 0.081, 0.0)
+mesh = SubResource("BoxMesh_7")
+material_override = SubResource("Mat_4")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.4, 0.0)
+light_color = Color(1.0, 0.8784, 0.6275, 1.0)
+light_energy = 0.6
+omni_range = 2.5

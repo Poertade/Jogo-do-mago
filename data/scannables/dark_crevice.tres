@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"dark_crevice"
+name_key = "OBJ_DARK_CREVICE"
+aspects = Dictionary[StringName, int]({
+&"darkness": 2,
+&"earth": 1
+})

@@ -14,6 +14,16 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
+**Depois do M7: a Dungeon contínua.**
+- **Caminho contínuo:** as salas de uma incursão ficam ligadas por corredores e rampas que descem: das ruínas da escola às grutas, e das grutas ao Avesso, onde o chefe espera.
+- **Potes de Vis:** levam Vis além da varinha.
+- **Livros perdidos:** lidos no atril da escola, ensinam as receitas de quatro aspectos novos.
+- **Inimigos:** contornam obstáculos, chamam uns aos outros e batem mais forte.
+
+| Entrada das grutas | O Avesso |
+| --- | --- |
+| ![Grutas](docs/images/grutas.png) | ![Avesso](docs/images/avesso.png) |
+
 **M7: magia e pesquisa novas.**
 - **Focus de Gelo:** liberado pela página de pesquisa *Focus de Gelum*. Gasta Aqua e Ordo e deixa o alvo lento. A tecla **Q** troca de Focus.
 - **Nódulo de Aqua** na escola, que dá Aqua e Ordo.
@@ -76,6 +86,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 | E | interagir (Mesa, ler, atravessar o portal, sair) |
 | E (segurar) | drenar Vis do Nódulo para a varinha |
 | Q | trocar de Focus (depois de liberar o Focus de Gelo) |
+| R | despejar um pote de Vis na varinha |
 | Tab | Livro de Pesquisa |
 | Esc | pausa e opções; fecha qualquer tela |
 
@@ -108,17 +119,28 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 
 **Dungeon:**
 11. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
-12. O **portal** (E) começa uma **incursão**: 5 salas sorteadas em sequência, na ordem combate, combate, descanso, combate, chefe. O canto de cima à direita mostra em que sala você está.
-   - **Câmaras sorteadas:** a câmara de pedra, o dormitório alagado, a biblioteca desabada e o corredor do ossuário. Cada uma sorteia também quais inimigos aparecem.
-   - **Avançar:** em cada sala, a grade ao norte só abre depois de todos os inimigos caírem. **Descer mais fundo** (E) leva à próxima sala.
-   - **Fonte de Vis:** a sala de descanso tem dois Nódulos pequenos: um de Ignis (10 de Vis) e um de Aqua com Ordo (14). Eles se apagam quando esgotam.
+12. O **portal** (E) começa uma **incursão**: um caminho contínuo de 7 salas, sorteadas com semente e ligadas por corredores e rampas que descem. Não há mais transição entre as salas: você anda de uma para a outra. O canto de cima à direita mostra em que sala você está.
+   - **Ruínas da Primeira Escola** (2 salas): câmara de pedra, dormitório alagado, biblioteca desabada e corredor do ossuário. Tijolos e tochas.
+   - **As Grutas** (3 salas): gruta dos fungos, lago subterrâneo e a fonte de Vis, no meio do caminho. Rocha, limo e fungos que brilham.
+   - **O Avesso** (2 salas): o salão invertido, com móveis presos no teto, olhos nas paredes e pedras flutuando, e o Grande Arquivo, onde o chefe espera. Paredes de carne e luz roxa.
+   - Ao entrar numa região, o nome dela aparece no alto da tela, e a névoa, a luz e o som mudam aos poucos.
+   - **Avançar:** a grade ao norte de cada sala só abre depois de todos os inimigos caírem; o caminho segue pelo corredor.
+   - **Fonte de Vis:** dois Nódulos pequenos, um de Ignis (10 de Vis) e um de Aqua com Ordo (14). Eles se apagam quando esgotam.
    - **Chefe:** no Grande Arquivo espera **O Arquivista**, com a barra de vida no alto da tela.
-     - Alto e lento, golpeia forte com o tomo (18 de dano) e não se abala com os disparos.
+     - Alto e lento, golpeia forte com o tomo e não se abala com os disparos.
      - Na metade da vida, se enfurece: fica mais rápido e chama dois aprendizes.
      - O fogo o fere normalmente; o frio, 30% a mais.
-     - Vencê-lo abre a volta à escola.
-   - **Fogo só não basta:** sem a página de fogo, uma incursão pede uns 25 disparos e a varinha dá 20 de fogo. O Focus de Gelo, ou a Compreensão de Ignis, é o que leva até o fim.
-13. **Inimigos:**
+     - Vencê-lo abre a passagem de volta à escola.
+13. **Potes de Vis:** o cinto leva 3 potes, de até 10 de Vis cada (um aspecto por pote). Eles aparecem embaixo do mostrador de Vis.
+   - **Na escola:** segure E num Nódulo com a varinha cheia; o que sobra vai para os potes.
+   - **Na Dungeon:** **R** despeja um pote na varinha. Ele escolhe primeiro um aspecto que o Focus encaixado gasta.
+   - **Potes selados** aparecem pelas salas (E para pegar); o que não couber no cinto fica no pote.
+   - Ao morrer, o conteúdo dos potes se perde.
+14. **Livros perdidos:** cada região esconde um livro (com brilho dourado). Pegue-o com E; ele só pode ser lido no **atril** do Salão de Estudos, na escola.
+   - Os livros ensinam receitas de aspectos estranhos (Tenebrae, Limus, Vitium, Alienis). Sem a receita, a Mesa não deixa combinar os pais deles.
+   - Esses aspectos estão nas coisas das grutas e do Avesso. Sem eles, essas coisas não podem ser escaneadas.
+   - Quem morre antes de voltar à escola perde os livros que carregava; eles voltam a aparecer em outra incursão.
+15. **Inimigos:**
 
    | Inimigo | Comportamento | Fogo | Escaneável depois de descobrir |
    | --- | --- | --- | --- |
@@ -127,11 +149,13 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    | **Lodo de Tinta** | lento, golpe forte com o braço de tinta | resiste: 4 disparos (gelo: 2) | Cognitio |
    | **O Arquivista** (chefe) | ver acima | normal: 9 disparos | Cognitio, Exanimis, Spiritus e Mortuus |
 
-   Na Dungeon há objetos novos para escanear (livros afogados, pilhas de ossos, poças de tinta, lamparinas de almas, beliches), com aspectos que a escola não tem, como Mortuus, Vacuos e Spiritus. Para escanear, você precisa descobrir esses aspectos na Mesa antes.
-   - Antes, o portal levava sempre à câmara de pedra; agora ela é uma das câmaras sorteadas.
+   - **Movimento:** os inimigos andam por uma malha de navegação gerada junto com a Dungeon, contornando pilares, móveis e pedras.
+   - **Alerta:** quando um nota você, acorda os que estão a até 9 m, e cada magia lançada acorda os que estão a até 10 m.
+   - **Dano:** batem mais forte que antes (o Bedel tira 16 de vida; o Arquivista, 28).
+   - Na Dungeon há muitos objetos para escanear, com aspectos que a escola não tem.
    - Para repetir a mesma incursão, rode o jogo com `--seed=N` (a semente de cada incursão aparece no terminal).
-14. Voltando à escola pela última sala, a vida é restaurada; o Vis só volta nos Nódulos.
-15. Se a vida chegar a zero, você desperta no Salão de Estudos com a vida cheia e a varinha com o Vis inicial (10 de Ignis; o resto se perde). O conhecimento (aspectos, pontos, escaneamentos, notas e páginas) continua.
+16. Voltando à escola pela última sala, a vida é restaurada; o Vis só volta nos Nódulos.
+17. Se a vida chegar a zero, você desperta no Salão de Estudos com a vida cheia e a varinha com o Vis inicial; os potes e os livros não lidos se perdem. O conhecimento (aspectos, pontos, escaneamentos, notas, páginas, livros lidos e receitas) continua.
 
 O conhecimento é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
@@ -170,7 +194,8 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala.
 - **Scripts:** todo script do jogo e das ferramentas compila.
-- **Incursão:** sorteio das salas com semente (mesma semente, mesmo roteiro; sem repetir sala), avanço e fim da incursão, morte que encerra a incursão, entrada e saída de toda sala sorteável.
+- **Incursão:** sorteio das salas por região e tipo, com semente (mesma semente, mesmo roteiro; sem repetir sala), planta contínua (salas em fila, corredores que descem, em que sala fica cada ponto), morte que encerra a incursão, convenção das cenas de sala.
+- **Potes e livros:** guardar e despejar Vis nos potes, receitas escondidas e livros, save com livros e receitas.
 - **Sistema:** persistência (save), gerador com semente, opções.
 - **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
 - **Arquitetura:** a regra de camadas e os arquivos de cena (parâmetros de shader com casa decimal).
@@ -197,7 +222,8 @@ data/              conteúdo do jogo, um arquivo .tres por item (editável no in
   enemies/         inimigos (também escaneáveis)
   wands/  foci/    varinhas e Focus
   research/        regras de escaneamento e pontos (rules.tres) e páginas (pages/)
-  dungeon/         como as incursões são montadas (rules.tres: sequência de tipos de sala)
+  dungeon/         como as incursões são montadas (rules.tres: o caminho; zones/: as regiões)
+  books/           livros perdidos, que ensinam receitas escondidas
   player/          vida, equipamento inicial e movimento do jogador
   rooms/           salas: identificador, cena, atmosfera e som de ambiente
   settings/        opções padrão e filtros visuais (presets/)
@@ -331,20 +357,37 @@ Equipe-a em `data/player/player.tres` (`starting_wand`). Ali também fica `start
 
 ### Adicionar uma sala da Dungeon
 
-1. Duplique uma sala de `scenes/rooms/` (ex.: `flooded_dormitory.tscn`), ou crie uma cena com raiz `Node3D` e o script `scripts/game/room.gd`, e monte a sala:
+1. Duplique uma sala de `scenes/rooms/` (ex.: `fungus_grotto.tscn`), ou crie uma cena com raiz `Node3D` e o script `scripts/game/room.gd`. A sala segue esta convenção, que a incursão usa para encaixá-la nos corredores:
+   - o centro do chão fica na origem;
+   - a entrada é uma abertura de 2,4 × 2,8 m no meio da parede sul (z = profundidade / 2), marcada pelo nó `SouthDoorway`;
+   - a saída é uma abertura igual no meio da parede norte, com a grade.
 
    | Elemento | Como montar |
    | --- | --- |
    | Paredes, chão, teto | nós `StaticBody3D` com o script `scripts/game/greybox_block.gd`; ajuste `size` e escolha um material de `assets/materials/`. A malha e a colisão se refazem sozinhas. Preencha `scannable`. |
    | Luzes | `OmniLight3D`; o script `flicker_light.gd` faz tremular |
-   | Entrada | `Marker3D` com `entrance_point.gd` e `id` = `south` (a entrada que a incursão usa, `entrance_id` em `data/dungeon/rules.tres`) |
+   | Entrada (para testar a sala sozinha) | `Marker3D` com `entrance_point.gd` e `id` = `south` |
    | Inimigos | `Marker3D` com `enemy_spawn.gd`: `enemy_pool` (um deles é sorteado) e `chance` (de aparecer alguém) |
-   | Saída | `Node3D` com `exit_point.gd`, com `goes_deeper` ligado (leva à próxima sala); `requires_clear` para só abrir depois da vitória; `barrier` aponta para a grade que afunda |
-   | Nódulo (sala de descanso) | instancie `scenes/props/vis_node.tscn`; ajuste `aspect`, `vis_amount` (quanto Vis tem; -1 = não acaba) e `scannable` |
+   | Saída | `Node3D` com `exit_point.gd`, `goes_deeper` ligado, `requires_clear` (só abre depois da vitória) e `barrier` (a grade que afunda). Dentro dela, o nó `ExitPassage`: a passagem de volta à escola, que a montagem tira quando a sala não é a última |
+   | Achados | `Marker3D` com `loot_spot.gd`: `kind` = `book` (lugar de livro) ou `jar` (pote selado, com `chance`, aspectos e quantidade) |
+   | Nódulo (sala de descanso) | instancie `scenes/props/vis_node.tscn`; ajuste `aspect`, `other_aspects`, `vis_amount` (quanto Vis tem; -1 = não acaba) e `scannable` |
 
-2. Crie o recurso da sala: duplique `data/rooms/flooded_dormitory.tres`, mude `id`, `scene_path` e `kind` (`combat`, `rest` ou `boss`), e ajuste a atmosfera (cor e distâncias da névoa, luz ambiente) e o som de `ambience`.
-3. Pronto: a sala entra no sorteio do tipo dela. A ordem dos tipos numa incursão fica em `layout`, em `data/dungeon/rules.tres`.
-4. Teste direto: `godot --path . -- --room=<id da sala> --entrance=south`. Os testes conferem a entrada e a saída de toda sala sorteável, e `tools/balance_report.gd` mostra quantos inimigos e disparos cada sala pede em média.
+2. Crie o recurso da sala: duplique `data/rooms/fungus_grotto.tres` e mude:
+   - `id` e `scene_path`;
+   - `kind` (`combat`, `rest` ou `boss`) e `zone` (`school`, `caves` ou `abyss`);
+   - as medidas internas (`width`, `depth`, `height`);
+   - a atmosfera (cor e distâncias da névoa, luz ambiente) e o som de `ambience`.
+3. Pronto: a sala entra no sorteio da região e do tipo dela. O caminho de uma incursão fica em `steps`, em `data/dungeon/rules.tres`: região, tipo e quanto o corredor antes de cada sala desce.
+4. **Região nova:** duplique `data/dungeon/zones/caves.tres` (nome, materiais e luzes dos corredores) e use o `id` dela nas salas e nos passos.
+5. Teste direto: `godot --path . -- --room=<id da sala> --entrance=south`. Os testes conferem a porta, a saída e a passagem de toda sala sorteável, e `tools/balance_report.gd` mostra quantos inimigos e disparos cada sala pede em média.
+
+### Adicionar um livro e uma receita escondida
+
+1. Crie o aspecto como de costume (veja **Adicionar um aspecto**) e ligue `needs_recipe`: a Mesa só combina os pais depois que o livro for lido.
+2. Duplique `data/books/cave_bestiary.tres`:
+   - preencha `id`, `name_key`, `text_key`, `teaches` (os aspectos que ele ensina) e `zone` (em que região ele aparece);
+   - escreva o título e o texto em `locales/content.csv`. A receita aprendida é acrescentada sozinha no fim da leitura.
+3. Cada região mostra um livro ainda não lido por incursão, num dos lugares de livro (`LootSpot` com `kind` = `book`) das salas dela.
 
 ### Trocar textos, nomes, sons e texturas
 

@@ -1,10 +1,12 @@
 class_name ExitPoint
 extends Interactable
 ## Saída de uma sala da Dungeon. Fica fechada (com a grade `barrier`) até a sala ser limpa,
-## se `requires_clear` estiver ligado. Leva à próxima sala da incursão (`goes_deeper`) ou a uma
-## sala fixa (`target_room`).
+## se `requires_clear` estiver ligado.
+## - Salas da incursão (`goes_deeper`): nas salas do meio, a saída é só a grade, e o caminho
+##   segue pelo corredor; na última, a passagem atrás da grade leva de volta à escola.
+## - Outras salas: leva a uma sala fixa (`target_room`).
 
-## Ligado: leva à próxima sala sorteada da incursão (depois da última, de volta à escola).
+## Ligado: saída de uma sala da incursão (veja acima).
 @export var goes_deeper := false
 ## Destino fixo, usado quando `goes_deeper` está desligado.
 @export var target_room: StringName = &"school"
@@ -36,7 +38,7 @@ func is_available() -> bool:
 
 func interact(_player: Node3D) -> void:
 	if goes_deeper:
-		Game.advance_dungeon()
+		Game.finish_dungeon()
 	else:
 		Game.travel(target_room, target_entrance)
 

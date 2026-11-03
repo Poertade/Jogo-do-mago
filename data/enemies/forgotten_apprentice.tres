@@ -6,7 +6,7 @@
 script = ExtResource("1")
 scene_path = "res://scenes/enemies/forgotten_apprentice.tscn"
 max_health = 28.0
-damage = 7.0
+damage = 11.0
 weaknesses = Dictionary[StringName, float]({
 &"fire": 1.5
 })

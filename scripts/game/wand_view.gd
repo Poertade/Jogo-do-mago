@@ -9,6 +9,8 @@ extends Node3D
 ## Posição normal da varinha e quanto ela recua ao disparar, em relação à câmera.
 @export var rest_position := Vector3(0.22, -0.26, -0.42)
 @export var recoil := Vector3(0.0, 0.02, 0.08)
+## Até onde o barulho de uma magia acorda inimigos, em metros.
+@export var noise_radius := 10.0
 
 @onready var tip: Node3D = $Tip
 @onready var tip_light: OmniLight3D = $Tip/Light
@@ -29,6 +31,8 @@ func _physics_process(delta: float) -> void:
 	var playing := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 	if playing and Input.is_action_just_pressed("switch_focus") and not caster.is_busy():
 		Game.cycle_focus()
+	if playing and Input.is_action_just_pressed("pour_jar"):
+		Game.pour_jar()
 	if playing and Input.is_action_just_pressed("cast") and player.can_cast():
 		var failure := caster.start_charge()
 		if failure == SpellCaster.Failure.NONE:
@@ -60,6 +64,8 @@ func _fire(caster: SpellCaster) -> void:
 	projectile.setup(caster.focus, direction, caster.damage(Game.modifiers), ignore)
 	position = rest_position + recoil
 	Audio.play(&"spell_cast")
+	# O barulho da magia acorda os inimigos por perto.
+	Game.noise_made.emit(player.global_position, noise_radius)
 
 
 ## A ponta brilha mais conforme a carga, na cor do Focus encaixado.

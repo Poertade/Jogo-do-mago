@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="DungeonZone" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/dungeon_zone.gd" id="1"]
+[ext_resource type="Material" path="res://assets/materials/abyss_wall.tres" id="2"]
+[ext_resource type="Material" path="res://assets/materials/abyss_floor.tres" id="3"]
+[ext_resource type="Material" path="res://assets/materials/abyss_wall.tres" id="4"]
+[ext_resource type="Resource" path="res://data/scannables/living_stone.tres" id="5"]
+[ext_resource type="Resource" path="res://data/scannables/living_stone.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = &"abyss"
+name_key = "ZONE_ABYSS"
+wall_material = ExtResource("2")
+floor_material = ExtResource("3")
+ceiling_material = ExtResource("4")
+wall_scannable = ExtResource("5")
+floor_scannable = ExtResource("6")
+light_color = Color(0.72, 0.38, 1, 1)
+light_energy = 0.8
+light_spacing = 7.0
+torches = false

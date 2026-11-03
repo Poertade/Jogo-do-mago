@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ScannableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/scannable_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"stalagmite"
+name_key = "OBJ_STALAGMITE"
+aspects = Dictionary[StringName, int]({
+&"crystal": 1,
+&"earth": 2
+})

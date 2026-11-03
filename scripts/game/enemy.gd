@@ -5,8 +5,13 @@ extends CharacterBody3D
 ## EnemyRig para humanoides, BlobRig para a gosma);
 ## aqui ficam o movimento, a visão, o dano e os sons.
 ## Pode ser escaneado pela Lente (get_scannable) e recebe dano (take_damage).
+## Na Dungeon, anda pela malha de navegação (NavigationAgent3D), contornando pilares e móveis;
+## ao notar o jogador, acorda os inimigos por perto, e o barulho das magias também os acorda.
 
 signal died
+
+## Raio em que um inimigo que nota o jogador acorda os outros, em metros.
+const ALERT_RADIUS := 9.0
 
 ## Tipo de inimigo (preenchido pelo EnemySpawn; pode ser definido no editor para testes).
 @export var data: EnemyData
@@ -16,6 +21,7 @@ var brain: EnemyBrain
 ## Lentidão (Focus de Gelo): fração da velocidade e segundos que ainda faltam.
 var _slow_factor := 1.0
 var _slow_left := 0.0
+var _agent: NavigationAgent3D
 var _player: Node3D
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -28,6 +34,14 @@ func _ready() -> void:
 	brain.attack_landed.connect(_on_attack_landed)
 	health.died.connect(_on_died)
 	_player = get_tree().get_first_node_in_group(&"player")
+	_agent = NavigationAgent3D.new()
+	_agent.path_desired_distance = 0.6
+	_agent.target_desired_distance = 0.8
+	_agent.radius = 0.45
+	_agent.height = 1.8
+	add_child(_agent)
+	Game.enemy_alerted.connect(_on_alerted)
+	Game.noise_made.connect(_on_noise)
 
 
 func get_scannable() -> ScannableData:
@@ -82,17 +96,49 @@ func _physics_process(real_delta: float) -> void:
 		rig.play_strike()
 
 	var move := Vector3.ZERO
+	var facing := to_player
 	if brain.wants_to_move() and distance > data.attack_range * 0.8:
-		move = to_player.normalized() * data.move_speed * brain.speed_multiplier() * (_slow_factor if _slow_left > 0.0 else 1.0)
+		var direction := _chase_direction(to_player)
+		move = direction * data.move_speed * brain.speed_multiplier() * (_slow_factor if _slow_left > 0.0 else 1.0)
+		# Longe, olha para onde anda (contornando); perto, encara o jogador.
+		if distance > data.attack_range * 2.0:
+			facing = direction
 	velocity.x = move.x
 	velocity.z = move.z
-	if brain.state != EnemyBrain.State.IDLE and distance > 0.01:
-		# Vira devagar para o jogador.
-		var target_yaw := atan2(-to_player.x, -to_player.z)
+	if brain.state != EnemyBrain.State.IDLE and facing.length() > 0.01:
+		# Vira devagar.
+		var target_yaw := atan2(-facing.x, -facing.z)
 		rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-6.0 * delta))
 	move_and_slide()
 	var alert := brain.state != EnemyBrain.State.IDLE
 	rig.update_pose(delta, Vector2(velocity.x, velocity.z).length(), data.move_speed, brain.windup_ratio(), alert)
+
+
+## Para onde andar para chegar ao jogador: pelo caminho da malha de navegação (em volta dos
+## obstáculos) quando a sala tem uma; em linha reta, se não tiver.
+func _chase_direction(to_player: Vector3) -> Vector3:
+	if _agent != null and _has_navigation():
+		_agent.target_position = _player.global_position
+		var next := _agent.get_next_path_position() - global_position
+		next.y = 0.0
+		if next.length() > 0.05:
+			return next.normalized()
+	return to_player.normalized()
+
+
+func _has_navigation() -> bool:
+	var map := get_world_3d().navigation_map
+	return NavigationServer3D.map_get_iteration_id(map) > 0 and not NavigationServer3D.map_get_regions(map).is_empty()
+
+
+func _on_alerted(at: Vector3) -> void:
+	if not health.is_dead() and global_position.distance_to(at) <= ALERT_RADIUS:
+		brain.alert()
+
+
+func _on_noise(at: Vector3, radius: float) -> void:
+	if not health.is_dead() and global_position.distance_to(at) <= radius:
+		brain.alert()
 
 
 ## Enxerga o jogador se nada bloqueia a linha entre os olhos dele e a cabeça do jogador.
@@ -139,8 +185,11 @@ func _enrage() -> void:
 func _play_state_sounds(previous: EnemyBrain.State, current: EnemyBrain.State) -> void:
 	if previous == current:
 		return
-	if previous == EnemyBrain.State.IDLE and current != EnemyBrain.State.DEAD and data.show_health_bar:
-		Game.boss_engaged.emit(self)
+	if previous == EnemyBrain.State.IDLE and current != EnemyBrain.State.DEAD:
+		# Acordou: chama os que estão por perto (o sinal volta para ele também, sem efeito).
+		Game.enemy_alerted.emit.call_deferred(global_position)
+		if data.show_health_bar:
+			Game.boss_engaged.emit(self)
 	if previous == EnemyBrain.State.IDLE and current == EnemyBrain.State.CHASE:
 		Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
 	elif current == EnemyBrain.State.ATTACK:

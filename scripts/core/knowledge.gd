@@ -13,6 +13,8 @@ extends RefCounted
 ##   não rende nada.
 ## - Páginas de pesquisa são estudadas resolvendo a nota delas (ResearchNote): escrever um
 ##   aspecto num hexágono gasta pontos dele; apagar devolve.
+## - Alguns compostos têm receita escondida (`needs_recipe`): só se combinam depois de ler,
+##   na escola, o livro que a ensina.
 
 ## Emitido a cada mudança (quem grava o save escuta este sinal).
 signal changed
@@ -20,7 +22,7 @@ signal changed
 ## Resultado da verificação antes de estudar uma página.
 enum StudyCheck { OK, ALREADY_STUDIED, NOTE_INCOMPLETE, MISSING_PAGE, MISSING_ASPECT }
 ## Resultado da verificação antes de combinar aspectos.
-enum CombineCheck { OK, NOT_COMPOUND, UNKNOWN_PARENT, NOT_ENOUGH_POINTS }
+enum CombineCheck { OK, NOT_COMPOUND, UNKNOWN_PARENT, NOT_ENOUGH_POINTS, UNKNOWN_RECIPE }
 
 var discovered_aspects: Array[StringName] = []
 var aspect_points: Dictionary[StringName, int] = {}
@@ -28,6 +30,9 @@ var scanned_targets: Array[StringName] = []
 var studied_pages: Array[StringName] = []
 ## Notas em andamento: página → {célula (Vector2i): aspecto escrito}.
 var notes: Dictionary[StringName, Dictionary] = {}
+## Livros já lidos e as receitas escondidas que eles ensinaram.
+var books_read: Array[StringName] = []
+var learned_recipes: Array[StringName] = []
 
 
 func knows_aspect(aspect_id: StringName) -> bool:
@@ -36,6 +41,28 @@ func knows_aspect(aspect_id: StringName) -> bool:
 
 func points(aspect_id: StringName) -> int:
 	return aspect_points.get(aspect_id, 0)
+
+
+func knows_recipe(aspect_id: StringName) -> bool:
+	return aspect_id in learned_recipes
+
+
+func has_read(book_id: StringName) -> bool:
+	return book_id in books_read
+
+
+## Lê um livro: aprende as receitas dele. Devolve as receitas novas (vazio se já tinha lido).
+func read_book(book: BookData) -> Array[StringName]:
+	var learned: Array[StringName] = []
+	if has_read(book.id):
+		return learned
+	books_read.append(book.id)
+	for aspect_id in book.teaches:
+		if not knows_recipe(aspect_id):
+			learned_recipes.append(aspect_id)
+			learned.append(aspect_id)
+	changed.emit()
+	return learned
 
 
 func has_scanned(target_id: StringName) -> bool:
@@ -84,6 +111,8 @@ func register_scan(target: ScannableData, aspects: Dictionary, rules: ResearchRu
 func check_combine(compound: AspectData, rules: ResearchRules) -> CombineCheck:
 	if not compound.is_compound() or compound.parents.size() != 2:
 		return CombineCheck.NOT_COMPOUND
+	if compound.needs_recipe and not knows_recipe(compound.id):
+		return CombineCheck.UNKNOWN_RECIPE
 	for parent in compound.parents:
 		if not knows_aspect(parent):
 			return CombineCheck.UNKNOWN_PARENT

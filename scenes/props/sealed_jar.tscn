@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/jar_pickup.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/sealed_jar.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.5, 0.6, 0.5)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.102, 0.1412, 0.1882, 1.0)
+shader_parameter/emission_color = Color(0.1882, 0.251, 0.3137, 1.0)
+shader_parameter/emission_energy = 0.3
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.502, 0.251, 1.0)
+shader_parameter/emission_energy = 1.6
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.6275, 0.4784, 0.1882, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_5"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.4784, 0.102, 0.0784, 1.0)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+top_radius = 0.12
+bottom_radius = 0.14
+height = 0.34
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7"]
+top_radius = 0.105
+bottom_radius = 0.115
+height = 0.22
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8"]
+top_radius = 0.1
+bottom_radius = 0.13
+height = 0.05
+radial_segments = 7
+rings = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_9"]
+size = Vector3(0.08, 0.03, 0.08)
+
+[node name="SealedJar" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_TAKE_JAR"
+scannable = ExtResource("2")
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.3, 0.0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_1")
+
+[node name="Glass" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.17, 0.0)
+mesh = SubResource("CylinderMesh_6")
+material_override = SubResource("Mat_2")
+
+[node name="Liquid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.14, 0.0)
+mesh = SubResource("CylinderMesh_7")
+material_override = SubResource("Mat_3")
+
+[node name="Lid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.36, 0.0)
+mesh = SubResource("CylinderMesh_8")
+material_override = SubResource("Mat_4")
+
+[node name="Seal" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.866, 0.0, 0.5, 0.0, 1.0, 0.0, -0.5, 0.0, 0.866, 0.0, 0.39, 0.0)
+mesh = SubResource("BoxMesh_9")
+material_override = SubResource("Mat_5")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.4, 0.0)
+light_energy = 0.5
+omni_range = 2.0

@@ -23,6 +23,8 @@ func _initialize() -> void:
 	_save(_skull_face(), "skull_face.png")
 	_save(_iron(), "iron.png")
 	_save(_ink(), "ink.png")
+	_save(_rock(), "rock.png")
+	_save(_flesh(), "flesh.png")
 	quit()
 
 
@@ -281,6 +283,45 @@ func _iron() -> Image:
 
 
 ## Pequena variação aleatória de brilho, pixel a pixel.
+## Rocha das grutas: manchas irregulares, rachaduras escuras e veios claros, sem padrão de
+## tijolo (pedra natural).
+func _rock() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1313
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var base := Color(0.34, 0.31, 0.28)
+	for y in SIZE:
+		for x in SIZE:
+			# Ondas com período que cabe na textura, para repetir sem emenda.
+			var blob := sin(TAU * x / SIZE * 2.0 + sin(TAU * y / SIZE) * 1.5) * cos(TAU * y / SIZE * 3.0)
+			var color := base.lightened(maxf(blob, 0.0) * 0.12).darkened(maxf(-blob, 0.0) * 0.18)
+			image.set_pixel(x, y, _noise(color, rng, 0.06))
+	for crack in 5:
+		var px := rng.randi_range(0, SIZE - 1)
+		var py := rng.randi_range(0, SIZE - 1)
+		for step in rng.randi_range(5, 12):
+			image.set_pixel(px % SIZE, py % SIZE, base.darkened(0.6))
+			px += rng.randi_range(0, 1)
+			py += rng.randi_range(-1, 1) + 1
+	return image
+
+
+## Carne de pedra (o Avesso): roxo escuro com veias claras que pulsam na luz.
+func _flesh() -> Image:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1414
+	var image := Image.create_empty(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	var base := Color(0.3, 0.16, 0.26)
+	for y in SIZE:
+		for x in SIZE:
+			var vein := absf(sin(TAU * (x + sin(TAU * y / SIZE) * 4.0) / SIZE * 3.0))
+			var color := base.darkened(0.15 * vein)
+			if vein < 0.12:
+				color = Color(0.62, 0.36, 0.5)
+			image.set_pixel(x, y, _noise(color, rng, 0.04))
+	return image
+
+
 ## Tinta viva (Lodo de Tinta): preto-azulado com veios brilhantes e restos de letras claras.
 func _ink() -> Image:
 	var rng := RandomNumberGenerator.new()

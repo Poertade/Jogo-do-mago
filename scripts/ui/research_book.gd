@@ -45,6 +45,15 @@ func _on_opened() -> void:
 	for page in Content.db.pages_by_id(knowledge.studied_pages):
 		_add_line(pages_list, "[b]%s[/b]\n   %s" % [Text.expand(page.name_key), Text.expand(page.description_key)])
 
+	if not knowledge.books_read.is_empty():
+		var names: PackedStringArray = []
+		for book_id in knowledge.books_read:
+			var book: BookData = Content.db.books.get(book_id)
+			if book != null:
+				names.append(tr(book.name_key))
+		_add_line(pages_list, "[color=%s]%s[/color]
+   %s" % [POINTS_COLOR, tr("UI_BOOK_BOOKS"), ", ".join(names)])
+
 	for list in [aspects_list, scanned_list, pages_list]:
 		if list.get_child_count() == 0:
 			_add_line(list, "[color=%s]%s[/color]" % [SOFT_COLOR, tr("UI_BOOK_EMPTY")])

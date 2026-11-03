@@ -12,6 +12,14 @@ func _ready() -> void:
 	close_button.pressed.connect(close)
 
 
+## Mostra um texto já pronto (ex.: um livro, com as receitas aprendidas no fim).
+func show_text(title: String, body: String) -> void:
+	title_label.text = title
+	body_label.text = body
+	open()
+	close_button.grab_focus()
+
+
 func show_note(title_key: String, body_key: String) -> void:
 	title_label.text = Text.expand(title_key)
 	body_label.text = Text.expand(body_key)

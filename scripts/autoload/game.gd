@@ -21,8 +21,18 @@ signal travel_requested(room_id: StringName, entrance_id: StringName)
 ## O jogador tomou dano / morreu.
 signal player_damaged(amount: float)
 signal player_died
+## A incursão foi sorteada: a cena principal monta a Dungeon (com transição).
+signal dungeon_requested(plan: DungeonPlan)
+## O jogador entrou numa região nova da Dungeon (o HUD mostra o nome dela).
+signal zone_entered(zone: StringName)
+## Um inimigo notou o jogador: os que estão perto acordam também.
+signal enemy_alerted(at: Vector3)
+## Barulho (uma magia lançada): acorda os inimigos até `radius` metros.
+signal noise_made(at: Vector3, radius: float)
 ## Um chefe notou o jogador (o HUD mostra a barra de vida dele).
 signal boss_engaged(enemy: Node3D)
+## Um texto pronto para ler (título e corpo já traduzidos), como um livro com as receitas.
+signal text_requested(title: String, body: String)
 ## Um texto para ler (placa, anotação), com título e corpo (chaves de tradução).
 signal note_requested(title_key: String, body_key: String)
 
@@ -47,23 +57,19 @@ func travel(room_id: StringName, entrance_id: StringName) -> void:
 
 
 ## Começa uma incursão: sorteia o roteiro de salas (com uma semente tirada do gerador do jogo)
-## e vai para a primeira sala.
+## e pede a montagem da Dungeon.
 func start_dungeon() -> void:
-	var rules := Content.db.dungeon_rules
 	var incursion_seed := rng.range_int(0, 2147483646)
-	var plan := DungeonPlan.generate(rules.layout, Content.db.rooms_by_kind(), incursion_seed)
+	var plan := DungeonPlan.generate(Content.db.dungeon_rules, Content.db.rooms_by_slot(), incursion_seed)
 	print("Incursão: semente %d, salas %s" % [incursion_seed, plan.rooms])
-	travel(run.start_dungeon(plan), rules.entrance_id)
+	run.start_dungeon(plan)
+	dungeon_requested.emit(plan)
 
 
-## Vai para a próxima sala da incursão; depois da última (ou fora de uma incursão), volta à escola.
-func advance_dungeon() -> void:
+## Sai da Dungeon pela última sala: volta à escola (os livros achados vão junto).
+func finish_dungeon() -> void:
 	var rules := Content.db.dungeon_rules
-	var next := run.advance()
-	if next == &"":
-		travel(rules.return_room, rules.return_entrance)
-	else:
-		travel(next, rules.entrance_id)
+	travel(rules.return_room, rules.return_entrance)
 
 
 ## Aplica dano no jogador. Na vida zero, avisa a morte (uma vez).
@@ -125,6 +131,42 @@ func study(page: ResearchPageData) -> bool:
 	if foci.size() > foci_before:
 		message(Text.tr_key("UI_MSG_FOCUS_UNLOCKED") % Text.tr_key(foci.back().name_key), Color(0.7, 0.85, 1.0))
 	return true
+
+
+## Despeja na varinha um pote do cinto (tecla R): primeiro os aspectos que o Focus encaixado
+## gasta, depois qualquer um que caiba. Devolve quanto Vis entrou.
+func pour_jar() -> int:
+	var wanted: Array = run.caster.focus.cost.keys()
+	for aspect_id in run.wand.wand.aspects:
+		if not aspect_id in wanted:
+			wanted.append(aspect_id)
+	var poured := run.jars.pour_into(run.wand, wanted)
+	if poured > 0:
+		Audio.play(&"recharge")
+		message(Text.tr_key("UI_MSG_JAR_POURED") % poured)
+	else:
+		message(Text.tr_key("UI_MSG_NO_JAR"))
+	return poured
+
+
+## Guarda um livro achado na Dungeon (lido só no atril da escola).
+func take_book(book: BookData) -> void:
+	if run.carry_book(book):
+		message(Text.tr_key("UI_MSG_BOOK_TAKEN") % Text.tr_key(book.name_key), Color(0.95, 0.85, 0.6))
+
+
+## Lê o próximo livro trazido: aprende as receitas e mostra o texto (com elas no fim).
+func read_next_book() -> void:
+	if run.carried_books.is_empty():
+		return
+	var book: BookData = run.carried_books.pop_front()
+	var learned := knowledge.read_book(book)
+	var body := Text.expand(book.text_key)
+	for aspect_id in learned:
+		var aspect: AspectData = Content.db.aspects[aspect_id]
+		body += "\n\n" + Text.tr_key("UI_RECIPE_LEARNED") % [Text.aspect_name(aspect_id),
+			Text.aspect_name(aspect.parents[0]), Text.aspect_name(aspect.parents[1])]
+	text_requested.emit(Text.tr_key(book.name_key), body)
 
 
 ## Os Focus que o jogador pode usar: o inicial e os liberados por páginas estudadas.

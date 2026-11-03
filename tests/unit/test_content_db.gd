@@ -44,7 +44,7 @@ func test_school_values_match_the_specification() -> void:
 	# Inimigo (seção 6)
 	var beadle := db.enemies[&"bone_beadle"]
 	assert_eq(beadle.max_health, 50.0, "Ajustado no M5 (D034): a página de pesquisa precisa fazer diferença")
-	assert_eq(beadle.damage, 10.0)
+	assert_eq(beadle.damage, 16.0, "Subiu em D066: os inimigos batiam fraco demais")
 	assert_eq(beadle.weaknesses[&"fire"], 1.5)
 	assert_false(beadle.aspects.is_empty(), "O inimigo pode ser escaneado")
 	assert_eq(db.find_scannable(&"bone_beadle"), beadle)
@@ -189,7 +189,8 @@ func test_frost_focus_and_its_page() -> void:
 func test_boss_room_closes_the_layout() -> void:
 	var db := ContentDB.new()
 	db.load_all()
-	assert_eq(db.dungeon_rules.layout.back(), &"boss")
+	assert_eq(db.dungeon_rules.steps.back().kind, &"boss")
+	assert_eq(db.dungeon_rules.steps.back().zone, &"abyss", "O caminho termina no Avesso")
 	var boss: EnemyData = db.enemies[&"archivist"]
 	assert_true(boss.show_health_bar)
 	assert_eq(boss.hurt_stun, 0.0, "O chefe não é interrompido a cada disparo")

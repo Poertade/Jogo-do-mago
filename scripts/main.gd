@@ -45,7 +45,9 @@ func _ready() -> void:
 		menu.closed.connect(_capture_mouse)
 	Game.screen_requested.connect(_on_screen_requested)
 	Game.note_requested.connect(note_screen.show_note)
+	Game.text_requested.connect(note_screen.show_text)
 	Game.travel_requested.connect(_on_travel_requested)
+	Game.dungeon_requested.connect(_on_dungeon_requested)
 	Game.player_died.connect(_on_player_died)
 	pause_menu.quit_requested.connect(quit_game)
 	# Fechar a janela passa por quit_game(), para parar os sons antes de sair.
@@ -96,12 +98,18 @@ func _on_travel_requested(room_id: StringName, entrance_id: StringName) -> void:
 	await _transition(travel_color, _arrive.bind(room_id, entrance_id))
 
 
+## Portal: dissolve, monta a Dungeon da incursão (e a malha de navegação) e volta.
+func _on_dungeon_requested(plan: DungeonPlan) -> void:
+	if _transitioning:
+		return
+	await _transition(travel_color, world.load_dungeon.bind(plan))
+
+
 func _arrive(room_id: StringName, entrance_id: StringName) -> void:
 	if room_id == safe_room:
 		Game.run.leave_dungeon()
 		Game.run.health.restore()
-	# Na Dungeon, cada sala tem a sua semente (para sortear os inimigos dela).
-	world.load_room(room_id, entrance_id, Game.run.current_room_seed())
+	world.load_room(room_id, entrance_id)
 
 
 ## Morte: a incursão recomeça no Salão de Estudos; o conhecimento já está salvo.

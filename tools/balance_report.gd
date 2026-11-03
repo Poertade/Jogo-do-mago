@@ -92,20 +92,24 @@ func _incursion_report(db: ContentDB) -> void:
 		for node in scene.find_children("*", "VisNode", true, false):
 			vis += maxi(node.vis_amount, 0)
 		scene.free()
-		print("  %s (%s): %.1f inimigo(s), %.1f disparo(s), %d de Vis nos Nódulos" % [room.id, room.kind, enemies, shots, vis])
-		if not room.kind in by_kind:
-			by_kind[room.kind] = []
-		by_kind[room.kind].append(shots)
+		var key := DungeonPlan.slot_key(room.zone, room.kind)
+		print("  %s (%s): %.1f inimigo(s), %.1f disparo(s), %d de Vis nos Nódulos" % [room.id, key, enemies, shots, vis])
+		if not key in by_kind:
+			by_kind[key] = []
+		by_kind[key].append(shots)
 	var total := 0.0
-	for kind in db.dungeon_rules.layout:
-		var list: Array = by_kind.get(kind, [0.0])
+	var path: PackedStringArray = []
+	for step in db.dungeon_rules.steps:
+		var key := DungeonPlan.slot_key(step.zone, step.kind)
+		path.append(key)
+		var list: Array = by_kind.get(key, [0.0])
 		var average := 0.0
 		for value in list:
 			average += value
 		total += average / list.size()
 	var start := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(focus.cost)
-	print("Roteiro %s: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
-		db.dungeon_rules.layout, total, total * cost, start, cost])
+	print("Caminho %s: cerca de %.0f disparos (%.0f de Vis); a varinha começa com %d disparos (%d de Vis por disparo)" % [
+		", ".join(path), total, total * cost, start, cost])
 	# Todos os Focus: quantos disparos o Vis inicial dá a cada um (os recipientes são separados).
 	for other: FocusData in db.foci.values():
 		var casts := WandState.new(db.player.starting_wand, db.player.starting_vis).casts_available(other.cost)

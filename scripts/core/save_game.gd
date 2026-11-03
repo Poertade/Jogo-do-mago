@@ -8,7 +8,8 @@ extends RefCounted
 ## 2: pontos de pesquisa por aspecto (pesquisa no estilo do Thaumcraft 4).
 ## 3: notas de pesquisa em andamento.
 ## 4: páginas só contam como estudadas com a nota resolvida (as de saves antigos reabrem).
-const FORMAT_VERSION := 4
+## 5: livros lidos e receitas aprendidas.
+const FORMAT_VERSION := 5
 
 
 static func to_dict(knowledge: Knowledge) -> Dictionary:
@@ -30,6 +31,8 @@ static func to_dict(knowledge: Knowledge) -> Dictionary:
 			"scanned_targets": _to_strings(knowledge.scanned_targets),
 			"studied_pages": _to_strings(knowledge.studied_pages),
 			"research_notes": notes,
+			"books_read": _to_strings(knowledge.books_read),
+			"learned_recipes": _to_strings(knowledge.learned_recipes),
 		},
 	}
 
@@ -59,6 +62,9 @@ static func from_dict(data: Dictionary) -> Knowledge:
 	knowledge.discovered_aspects = _to_names(saved.get("discovered_aspects", []))
 	knowledge.scanned_targets = _to_names(saved.get("scanned_targets", []))
 	knowledge.studied_pages = _to_names(saved.get("studied_pages", []))
+	# A versão 4 não tinha livros: os campos ficam vazios.
+	knowledge.books_read = _to_names(saved.get("books_read", []))
+	knowledge.learned_recipes = _to_names(saved.get("learned_recipes", []))
 	var points = saved.get("aspect_points", {})
 	if points is Dictionary:
 		for key in points:

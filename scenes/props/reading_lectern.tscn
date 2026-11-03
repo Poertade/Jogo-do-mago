@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/lectern.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/reading_lectern.tres" id="2"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="3"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="4"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="5"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("5")
+shader_parameter/albedo_color = Color(0.7843, 0.7216, 0.5647, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9412, 0.7529, 1.0)
+shader_parameter/emission_energy = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.5, 0.03, 0.34)
+
+[node name="ReadingLectern" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_READ_BOOKS"
+scannable = ExtResource("2")
+
+[node name="Foot" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.04, 0.0)
+script = ExtResource("4")
+size = Vector3(0.6, 0.08, 0.5)
+material = ExtResource("3")
+
+[node name="Stand" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.55, 0.0)
+script = ExtResource("4")
+size = Vector3(0.16, 1.0, 0.16)
+material = ExtResource("3")
+
+[node name="Top" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9063, -0.4226, 0.0, 0.4226, 0.9063, 0.0, 1.08, 0.05)
+script = ExtResource("4")
+size = Vector3(0.7, 0.06, 0.5)
+material = ExtResource("3")
+
+[node name="Ledge" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.27)
+script = ExtResource("4")
+size = Vector3(0.7, 0.06, 0.06)
+material = ExtResource("3")
+
+[node name="OpenBook" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9063, -0.4226, 0.0, 0.4226, 0.9063, 0.0, 1.13, 0.05)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.6, 0.3)
+light_color = Color(1.0, 0.8157, 0.5647, 1.0)
+light_energy = 0.6
+omni_range = 3.0

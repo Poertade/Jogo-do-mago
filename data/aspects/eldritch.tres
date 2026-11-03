@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AspectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/aspect_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icons/aspects/eldritch.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"eldritch"
+name_key = "ASPECT_ELDRITCH"
+meaning_key = "ASPECT_ELDRITCH_MEANING"
+kind = "compound"
+parents = Array[StringName]([&"void", &"darkness"])
+color = Color(0.62, 0.48, 0.95, 1)
+icon = ExtResource("2")
+needs_recipe = true

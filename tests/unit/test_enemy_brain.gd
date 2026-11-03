@@ -137,3 +137,13 @@ func test_unshakable_enemy_keeps_attacking() -> void:
 	assert_eq(brain.state, EnemyBrain.State.ATTACK)
 	brain.on_damaged()
 	assert_eq(brain.state, EnemyBrain.State.ATTACK, "O golpe não é interrompido")
+
+
+func test_alert_wakes_an_idle_enemy_only() -> void:
+	var brain := EnemyBrain.new(data)
+	brain.alert()
+	assert_eq(brain.state, EnemyBrain.State.CHASE, "Acorda com o aviso")
+	brain.update(0.1, 1.0, true)
+	assert_eq(brain.state, EnemyBrain.State.ATTACK)
+	brain.alert()
+	assert_eq(brain.state, EnemyBrain.State.ATTACK, "Aviso não interrompe o golpe")

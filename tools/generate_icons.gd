@@ -163,6 +163,38 @@ func _glyph_cold() -> void:
 		_line(Vector2(7.5, 7.5), Vector2(7.5, 7.5) + d * 6.0, 0.5)
 		_disc(7.5 + d.x * 6.0, 7.5 + d.y * 6.0, 1.1)
 
+func _glyph_darkness() -> void:
+	# Lua negra: um disco comido por outro, como um eclipse.
+	_disc(8, 8, 6.4)
+	_clear_disc(10.6, 6.2, 5.0)
+	_disc(4.6, 9.6, 0.9, _color.lightened(0.35))
+
+func _glyph_slime() -> void:
+	# Gosma: uma poça baixa com bolhas subindo.
+	_ellipse(8, 11.5, 6.8, 3.6)
+	_disc(5.5, 8.6, 2.4)
+	_disc(10.8, 6.0, 1.7)
+	_disc(7.6, 3.6, 1.2)
+	_disc(4.6, 10.6, 0.9, _color.lightened(0.45))
+
+func _glyph_taint() -> void:
+	# Corrupção: uma mancha de pontas tortas, com o miolo escuro.
+	var points := PackedVector2Array()
+	for i in 14:
+		var a := i * TAU / 14 + 0.3
+		var r := 7.2 if i % 2 == 0 else (3.2 if i % 3 == 0 else 4.4)
+		points.append(Vector2(8, 8) + Vector2(cos(a), sin(a)) * r)
+	_poly(points)
+	_disc(8, 8, 1.8, _color.darkened(0.55))
+
+func _glyph_eldritch() -> void:
+	# O estranho: um olho aberto com tentáculos embaixo.
+	_ellipse(8, 6.5, 7.0, 4.0)
+	_clear_disc(8, 6.5, 2.5)
+	_disc(8, 6.5, 1.3, _color.darkened(0.6))
+	for x in [4.5, 8.0, 11.5]:
+		_line(Vector2(x, 9.5), Vector2(x + (x - 8.0) * 0.3, 15.0), 0.55)
+
 func _glyph_travel() -> void:
 	# Trilha tracejada em curva, terminando numa seta: a jornada.
 	var points: Array[Vector2] = []

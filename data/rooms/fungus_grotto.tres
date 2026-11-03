@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RoomData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambience_caves.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"fungus_grotto"
+scene_path = "res://scenes/rooms/fungus_grotto.tscn"
+kind = &"combat"
+zone = &"caves"
+width = 12.0
+depth = 14.0
+height = 5.0
+fog_color = Color(0.015, 0.03, 0.03, 1)
+fog_near = 2.0
+fog_far = 14.0
+ambient_color = Color(0.2, 0.32, 0.3, 1)
+ambient_energy = 0.4
+ambience = ExtResource("2")

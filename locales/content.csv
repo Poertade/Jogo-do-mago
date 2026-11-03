@@ -77,3 +77,32 @@ OBJ_HOARFROST,Geada
 ENEMY_ARCHIVIST,O Arquivista
 MSG_ARCHIVIST_ENRAGED,O Arquivista bate o tomo no chão: os aprendizes acordam!
 PROMPT_EXIT_FINAL,Voltar à escola
+ASPECT_DARKNESS_MEANING,escuridão
+ASPECT_SLIME_MEANING,gosma
+ASPECT_TAINT_MEANING,corrupção
+ASPECT_ELDRITCH_MEANING,o estranho
+BOOK_SHADOW_TREATISE,Tratado das Sombras
+BOOK_SHADOW_TREATISE_TEXT,"Escrito por um mestre da Primeira Escola, em tinta que ainda escurece a página. Explica que a sombra não é só falta de luz: é {void} que aprendeu a imitar {light}."
+BOOK_CAVE_BESTIARY,Bestiário das Grutas
+BOOK_CAVE_BESTIARY_TEXT,"Caderno de campo de um aluno que desceu às grutas para catalogar o que vivia lá. Nas últimas páginas, o traço treme."
+BOOK_ARCHIVIST_DIARY,Diário do Arquivista
+BOOK_ARCHIVIST_DIARY_TEXT,"""Guardei tudo o que a escola quis esquecer. Cada livro proibido que escondi aqui embaixo apodrecia um pouco a magia em volta."""
+BOOK_INVERTED_FRAGMENTS,Fragmentos do Avesso
+BOOK_INVERTED_FRAGMENTS_TEXT,"Folhas soltas, escritas de trás para a frente e de cabeça para baixo. Lidas num espelho, descrevem um lugar onde as coisas existem do lado errado."
+OBJ_CAVE_ROCK,Rocha da gruta
+OBJ_STALAGMITE,Estalagmite
+OBJ_GLOW_FUNGUS,Fungo luminoso
+OBJ_CAVE_SLIME,Limo da gruta
+OBJ_DARK_CREVICE,Fenda escura
+OBJ_LIVING_STONE,Pedra viva
+OBJ_WALL_EYE,Olho na parede
+OBJ_ABYSS_ROOT,Raiz do Avesso
+OBJ_SEALED_JAR,Pote selado
+OBJ_LOST_BOOK,Livro perdido
+OBJ_READING_LECTERN,Atril de leitura
+ZONE_SCHOOL,Ruínas da Primeira Escola
+ZONE_CAVES,As Grutas
+ZONE_ABYSS,O Avesso
+PROMPT_TAKE_JAR,Pegar o pote selado
+PROMPT_TAKE_BOOK,Pegar o livro
+PROMPT_READ_BOOKS,Ler os livros trazidos
