@@ -262,9 +262,100 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
 - **Descartado:** contar exatamente 6 aspectos e 6 objetos.
 - **Motivo:** o guia "Como estender" manda rodar os testes depois de adicionar conteúdo. Seguindo o guia numa cópia do projeto (aspecto composto "Lux", objeto "Lanterna", inimigo "Espectro de Cinzas" na câmara de pedra), tudo funcionou, mas a contagem exata falhava sem motivo real.
 
+## Depois do M5 (pedidos do usuário)
+
+### D039 · 2026-11-03 · Pesquisa no estilo do Thaumcraft 4 (substitui D022 e amplia a decisão 5)
+
+- **Pedido:** "quero que dê para escanear absolutamente tudo, mas que para aspectos mais complexos seja feito igual ao Thaumcraft: você precisa descobrir eles na mesa antes."
+- **Escolha:**
+  - **Tudo escaneável:** blocos de sala, objetos, decorações e o inimigo; são 28 escaneáveis.
+  - **Primais:** descobertos escaneando.
+  - **Compostos:** só na Mesa, combinando os dois pais. Cada combinação gasta 1 ponto de cada pai e rende 1 do composto.
+  - **Escaneamento bloqueado:** um alvo com composto ainda não descoberto não pode ser escaneado ("conhecimento insuficiente"), como no Thaumcraft 4. O HUD mostra "?" no que falta.
+  - **Pontos:** passam a ser **por aspecto**, 2 por unidade no primeiro escaneamento de cada alvo (`data/research/rules.tres`).
+  - **Páginas:** custam pontos de aspectos ("Compreensão de Ignis": 4 Ignis + 2 Potentia).
+  - **Save:** versão 2. Saves da versão 1 mantêm aspectos e páginas, mas perdem o total antigo de pontos e voltam a poder escanear tudo.
+  - **Escola:** os seis objetos da escola continuam só com primais, para o jogo começar.
+- **Descartados:**
+  - Escaneamento parcial (registrar só os aspectos conhecidos), mais generoso que o Thaumcraft.
+  - Manter um total único de pontos: a combinação de aspectos precisa de pontos de cada aspecto.
+- **Motivo:** pedido do usuário; o Thaumcraft é a base de quase todo o jogo. O teste `test_research_economy.gd` garante que, com o conteúdo atual, tudo pode ser escaneado e a página estudada.
+
+### D040 · 2026-11-03 · Receitas dos aspectos compostos (Thaumcraft 4.2)
+
+- **Escolha:** 15 compostos com as receitas do Thaumcraft 4.2:
+
+  | Composto | Receita |
+  | --- | --- |
+  | Lux | Aer + Ignis |
+  | Motus | Aer + Ordo |
+  | Vacuos | Aer + Perditio |
+  | Potentia | Ordo + Ignis |
+  | Victus | Aqua + Terra |
+  | Vitreus | Terra + Ordo |
+  | Herba | Terra + Victus |
+  | Mortuus | Victus + Perditio |
+  | Praecantatio | Vacuos + Potentia |
+  | Metallum | Terra + Vitreus |
+  | Arbor | Aer + Herba |
+  | Spiritus | Victus + Mortuus |
+  | Exanimis | Motus + Mortuus |
+  | Cognitio | Ignis + Spiritus |
+  | Iter | Motus + Terra |
+
+  Os identificadores são neutros (`light`, `life`…); os nomes latinos ficam em `locales/names.csv` (decisão 7).
+- **Descartadas:** as receitas do Thaumcraft 4.0/4.1 (ex.: Cognitio = Terra + Spiritus), que mudaram na 4.2.
+- **Motivo:** o acesso à wiki do Thaumcraft 4 foi liberado, mas o site (Fandom) recusa acesso automático deste ambiente (erro 403). As receitas vêm de buscas que citam a tabela atual da wiki (Cognitio, Exanimis, Arbor, Herba, Victus) e de fontes anteriores (Potentia, Praecantatio, Mortuus, Spiritus). Estão só em `data/aspects/`, fáceis de corrigir. Os nomes próprios dos compostos para a versão distribuída ainda não foram escolhidos.
+
+### D041 · 2026-11-03 · Nódulo de Vis no lugar do braseiro
+
+- **Pedido:** a chama do braseiro estava escura, sem animação, e deveria virar as "bolinhas de Vis" do Thaumcraft.
+- **Escolha:** um Nódulo de Vis (inspirado nos nódulos de aura do Thaumcraft 4):
+  - **Visual:** núcleo na cor do aspecto (Ignis), sete bolinhas em órbita, pulso e luz animados.
+  - **Uso:** **segurar E** drena 12 pontos de Vis por segundo para a varinha, com bolinhas voando até a ponta dela.
+  - **Código novo:** `Interactable` ganhou o modo "segurar" (`hold_to_use`), e `WandState`, o método `add()`.
+  - **Recarga:** continua só na escola (decisão 3).
+- **Descartados:** recarga instantânea com um aperto; nódulo com reserva própria que se esgota (fica para quando houver mais nódulos).
+- **Motivo:** pedido do usuário e fidelidade ao Thaumcraft 4, em que se drena Vis dos nódulos com a varinha.
+
+### D042 · 2026-11-03 · Parâmetros float de shader sempre com casa decimal
+
+- **Escolha:** o gerador de cenas grava valores decimais como `3.0`. O teste `test_scene_files.gd` falha se algum parâmetro float de shader estiver gravado como inteiro.
+- **Descartado:** confiar na conversão automática.
+- **Motivo:** a causa da "labareda escura": `emission_energy = 3` (inteiro) era ignorado e o brilho ficava em zero. Afetava as chamas, as tochas, o projétil, o impacto e os olhos do inimigo; em alguns computadores (como o do usuário) aparecia preto.
+
+### D043 · 2026-11-03 · Inimigos com esqueleto articulado (referência: Lunacid)
+
+- **Pedido:** o inimigo estava "terrivelmente feio"; usar os inimigos de Lunacid como base.
+- **Escolha:**
+  - **Corpo:** o Bedel Descarnado foi refeito com um esqueleto de juntas (`EnemyRig`), com peças de baixa contagem de polígonos presas a elas.
+  - **Animação:** calculada por código e travada em 12 quadros por segundo.
+  - **Texturas geradas:** osso rachado, manto com barra rasgada, rosto de caveira, ferro.
+  - **Recorte:** um shader com recorte (`ps1_cutout.gdshader`) para pano rasgado e rosto.
+  - **Das descrições de Lunacid:** silhueta marcante, detalhe nas texturas e não na geometria, animação "aos trancos", olhos que brilham no escuro.
+  - **Reuso:** o `EnemyRig` serve para os próximos inimigos humanoides.
+- **Descartados:** modelos animados em ferramenta externa (Blender), que o ambiente não tem; um corpo de uma peça só, sem articulação.
+- **Motivo:** uma figura mais legível e inquietante, que dá para editar no Godot. Não foi possível ver imagens de Lunacid (só textos): a direção está em `docs/REFERENCIAS-VISUAIS.md`.
+
+### D044 · 2026-11-03 · Varinha mais encorpada, no formato do Thaumcraft
+
+- **Escolha:** núcleo de madeira mais grosso, ponteiras de latão nas duas pontas e o Focus maior na ponta. O formato segue a varinha do Thaumcraft 4: núcleo + ponteiras + Focus.
+- **Descartado:** só engrossar o bastão.
+- **Motivo:** pedido do usuário ("ficou muito fininha") e preparo para varinhas com núcleos e ponteiras diferentes.
+
+### D045 · 2026-11-03 · Sons: estalos mais baixos e sem cortes secos
+
+- **Escolha:**
+  - **Estalos:** os do ambiente da escola caíram para cerca de um quarto, e o ambiente tocado está 4 dB mais baixo.
+  - **Laços:** os sons em laço (carga da magia, zumbido da Lente, drenagem de Vis) somem em 0,08 a 0,2 s em vez de cortar.
+- **Descartado:** tirar os estalos.
+- **Motivo:** pedido do usuário. Cortar um som no meio também gera estalo.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |
 | --- | --- | --- |
 | 10 | Computador de jogo | Aguardando sistema, processador e vídeo. Até lá: 240 linhas e todos os efeitos ligados por padrão |
 | 11 | Referências visuais | Aguardando imagens ou descrições. Até lá: greybox com o shader PS1 |
+| — | Nomes próprios dos aspectos compostos | Para a versão distribuída (como Lume, Maré… nos primais). Até lá, nomes latinos em `locales/names.csv` |
+| — | Receitas do Thaumcraft | Se quiser conferir com a wiki, cole a tabela de aspectos: as receitas ficam só em `data/aspects/` |

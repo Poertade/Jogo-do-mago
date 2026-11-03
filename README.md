@@ -4,7 +4,11 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 "Jogo do Mago" é o nome provisório; o nome escolhido para distribuir é *Catálogo do Abismo* (decisão 7).
 
-![Combate com o Bedel Descarnado na Dungeon](docs/images/m4-combate.png)
+![Bola de fogo acertando o Bedel Descarnado na Dungeon](docs/images/bedel-combate.png)
+
+| Mesa de Pesquisa | Nódulo de Vis | Conhecimento insuficiente |
+| --- | --- | --- |
+| ![Mesa](docs/images/mesa-de-pesquisa.png) | ![Nódulo](docs/images/nodulo-de-vis.png) | ![Bloqueado](docs/images/escaneamento-bloqueado.png) |
 
 ## Estado
 
@@ -14,13 +18,17 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 2. Atravessa o portal e enfrenta o Bedel Descarnado na Dungeon.
 3. Vencendo, volta à escola pela saída; morrendo, desperta no Salão de Estudos sem perder o conhecimento.
 
-O recorte tem sons provisórios e valores de balanceamento revisados.
+Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
+- Tudo é escaneável, e os aspectos compostos são descobertos na Mesa de Pesquisa, combinando os dois pais.
+- O braseiro virou um Nódulo de Vis.
+- O Bedel Descarnado ganhou um corpo articulado e animado.
 
 | Documento | Conteúdo |
 | --- | --- |
 | [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md) | especificação completa do projeto |
 | [`docs/PROPOSTA-M0.md`](docs/PROPOSTA-M0.md) | tecnologia, arquitetura e decisões da seção 9 |
-| [`docs/REFERENCIAS-VISUAIS.md`](docs/REFERENCIAS-VISUAIS.md) | direção de arte e paleta |
+| [`docs/REFERENCIAS-VISUAIS.md`](docs/REFERENCIAS-VISUAIS.md) | direção de arte, paleta e inimigos (Lunacid) |
+| [`docs/REFERENCIAS-THAUMCRAFT.md`](docs/REFERENCIAS-THAUMCRAFT.md) | mecânicas do Thaumcraft 3 e 4 usadas como base, e as que podem entrar depois |
 | [`DECISIONS.md`](DECISIONS.md) | registro de todas as decisões |
 | [`CREDITS.md`](CREDITS.md) | ferramentas e recursos de terceiros |
 
@@ -45,32 +53,35 @@ O recorte tem sons provisórios e valores de balanceamento revisados.
 | Espaço | pular |
 | Botão esquerdo (segurar e soltar) | carregar e lançar a magia de fogo |
 | Botão direito (segurar) | escanear com a Lente Taxonômica |
-| E | interagir (estudar, recarregar, ler, atravessar o portal, sair) |
+| E | interagir (Mesa, ler, atravessar o portal, sair) |
+| E (segurar) | drenar Vis do Nódulo para a varinha |
 | Tab | Livro de Pesquisa |
 | Esc | pausa e opções; fecha qualquer tela |
 
 ## Como se joga
 
-**Pesquisa (escola):**
-1. Você começa no **Salão de Estudos**. Mire um objeto (vela, jarro, vaso, pena, livro de registros, osso) e **segure o botão direito**: a Lente sobe e a barra enche em 1,5 s.
-2. Cada **aspecto novo** rende 1 ponto de pesquisa. Escanear de novo não rende nada, mas mirar algo já escaneado mostra seus aspectos.
-3. Na **Mesa de Pesquisa** (E), gaste 3 pontos para estudar **Compreensão de Ignis**: +20% de dano de fogo, para sempre.
-4. O **Livro de Pesquisa** (Tab) lista aspectos, alvos escaneados e páginas estudadas.
+**Pesquisa (escola), no estilo do Thaumcraft 4:**
+1. Você começa no **Salão de Estudos**. Tudo pode ser escaneado: objetos, paredes, piso, estantes, a janela, o portal, o inimigo. Mire e **segure o botão direito**: a Lente sobe e a barra enche em 1,5 s.
+2. O primeiro escaneamento de cada coisa rende **pontos de pesquisa de cada aspecto** dela: 2 por unidade, então a vela (Ignis 3) rende 6 de Ignis. Escanear de novo não rende nada, mas mirar algo já escaneado mostra seus aspectos.
+3. Aspectos **primais** (Ignis, Aqua, Terra, Aer, Ordo, Perditio) são descobertos escaneando. Os seis objetos iniciais da escola só têm primais.
+4. Aspectos **compostos** só se descobrem na **Mesa de Pesquisa** (E), combinando os dois pais. Por exemplo, Aqua + Terra dá Victus, e cada combinação gasta 1 ponto de cada pai. Quem tem um composto ainda desconhecido não pode ser escaneado: a Lente avisa "conhecimento insuficiente" e mostra "?" no que falta. Para as tábuas do piso (Arbor), por exemplo, é preciso descobrir Victus, depois Herba, depois Arbor.
+5. Na Mesa, estude **Compreensão de Ignis** (4 de Ignis e 2 de Potentia): +20% de dano de fogo, para sempre.
+6. O **Livro de Pesquisa** (Tab) lista aspectos (com pontos e receita), alvos escaneados e páginas estudadas.
 
 **Magia:**
-5. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a bola de fogo. Soltar antes cancela sem gastar nada.
-6. Cada disparo gasta 5 de Ignis, e a varinha guarda 30. O **braseiro** (E) enche a reserva; fora da escola não há recarga.
-7. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
+7. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a bola de fogo. Soltar antes cancela sem gastar nada.
+8. Cada disparo gasta 5 de Ignis, e a varinha guarda 30. No **Nódulo de Vis** do Salão (as bolinhas laranja), segure E: o Vis voa até a varinha e enche a reserva. Fora da escola não há recarga.
+9. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
 
 **Dungeon:**
-8. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
-9. O **portal** (E) leva à câmara de pedra, onde o **Bedel Descarnado** espera.
+10. O corredor ao norte leva à **Sala do Portal**. A placa de bronze (E) conta por que a escola e o portal existem.
+11. O **portal** (E) leva à câmara de pedra, onde o **Bedel Descarnado** espera.
    - Ele é lento e persegue quando vê você.
    - Antes de golpear, ergue o braço com um sopro: recue para esquivar.
    - É fraco a fogo: três disparos o derrubam, ou dois com a página estudada.
-   - Também pode ser escaneado.
-10. Vencer abre a grade ao norte. **Voltar à escola** (E) leva à Sala do Portal e restaura a vida; a reserva de Ignis só volta no braseiro.
-11. Se a vida chegar a zero, você desperta no Salão de Estudos com vida e Ignis cheios. O conhecimento (aspectos, escaneamentos, páginas) continua.
+   - Pode ser escaneado depois que você descobrir Mortuus e Exanimis na Mesa.
+12. Vencer abre a grade ao norte. **Voltar à escola** (E) leva à Sala do Portal e restaura a vida; a reserva de Ignis só volta no Nódulo de Vis.
+13. Se a vida chegar a zero, você desperta no Salão de Estudos com vida e Ignis cheios. O conhecimento (aspectos, escaneamentos, páginas) continua.
 
 O conhecimento é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
@@ -104,12 +115,12 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
   ```
 
 **O que os testes cobrem:**
-- **Pesquisa:** descoberta de aspectos e pontos de pesquisa, estudo de páginas, andamento do escaneamento, efeitos das páginas.
+- **Pesquisa:** escaneamento bloqueado por composto desconhecido, pontos por aspecto, combinação na Mesa, estudo de páginas, andamento do escaneamento, efeitos das páginas, economia da pesquisa (tudo pode ser escaneado com os pontos disponíveis).
 - **Magia:** custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Sistema:** persistência (save), gerador com semente, opções.
 - **Dados:** carregamento e verificação de todo o conteúdo, inclusive os valores da especificação e o balanceamento.
-- **Arquitetura:** a regra de camadas.
+- **Arquitetura:** a regra de camadas e os arquivos de cena (parâmetros de shader com casa decimal).
 
 ## Ferramentas
 
@@ -163,21 +174,23 @@ Tudo abaixo é feito no editor do Godot (ou editando os arquivos de texto) e nã
 
 ### Adicionar um aspecto
 
-1. Duplique `data/aspects/fire.tres` como, por exemplo, `data/aspects/light.tres`.
+1. Duplique `data/aspects/light.tres` como, por exemplo, `data/aspects/darkness.tres`.
 2. No Inspetor, preencha:
 
    | Campo | Valor |
    | --- | --- |
-   | `id` | `light` |
-   | `name_key` | `ASPECT_LIGHT` |
-   | `meaning_key` | `ASPECT_LIGHT_MEANING` |
+   | `id` | `darkness` |
+   | `name_key` | `ASPECT_DARKNESS` |
+   | `meaning_key` | `ASPECT_DARKNESS_MEANING` |
    | `color` | a cor do aspecto |
    | `kind` | `primal` (básico) ou `compound` (composto) |
-   | `parents` | os dois aspectos pais, se composto (ex.: `fire` e `air`) |
+   | `parents` | os dois aspectos pais, se composto (ex.: `void` e `light`) |
 
-3. Em `locales/names.csv`, acrescente o nome: `ASPECT_LIGHT,Lux`. Em `locales/content.csv`, o significado: `ASPECT_LIGHT_MEANING,luz`.
-4. Para que ele apareça no jogo, coloque-o nos aspectos de um objeto ou inimigo (próximas seções). Escaneá-lo rende pontos como qualquer aspecto novo.
-5. Rode os testes.
+3. Em `locales/names.csv`, acrescente o nome: `ASPECT_DARKNESS,Tenebrae`. Em `locales/content.csv`, o significado: `ASPECT_DARKNESS_MEANING,escuridão`.
+4. Para que ele apareça no jogo, coloque-o nos aspectos de um objeto ou inimigo (próximas seções).
+   - **Composto:** a Mesa de Pesquisa passa a oferecer a combinação dos pais sozinha. Tudo o que o contém só pode ser escaneado depois dessa descoberta.
+   - **Primal:** é descoberto escaneando.
+5. Rode os testes. O `test_research_economy.gd` confere se há pontos suficientes no jogo para descobrir tudo; se falhar, acrescente objetos que rendam os aspectos que faltam.
 
 ### Adicionar um objeto escaneável
 
@@ -202,8 +215,25 @@ Tudo abaixo é feito no editor do Godot (ou editando os arquivos de texto) e nã
    - Adicione um `Marker3D`, anexe o script `scripts/game/enemy_spawn.gd` e, em `enemy`, escolha o novo `.tres`.
    - A seta azul indica para onde ele começa olhando.
    - A sala conta os inimigos sozinha: a saída só abre quando todos caem.
-4. **Aparência própria (opcional):** duplique `scenes/enemies/bone_beadle.tscn` e mude as malhas. Mantenha o script `Enemy` na raiz e os nós `Model`, `Model/Robe`, `Model/ArmPivot` e `Model/Eyes`, usados pelas animações. Aponte `scene_path` para a cópia.
+4. **Aparência própria (opcional):** duplique `scenes/enemies/bone_beadle.tscn` e troque as peças (malhas) e os materiais.
+   - **O que manter:** o script `Enemy` na raiz e o nó `Rig` (script `EnemyRig`), com as juntas `Hips`, `Hips/ThighL/KneeL`, `Hips/ThighR/KneeR`, `Hips/Spine`, `Hips/Spine/Neck/Head` (com `Jaw` e `Eyes`) e `Hips/Spine/ShoulderL/ElbowL` e `ShoulderR/ElbowR`. As peças são filhas das juntas; a animação só gira as juntas.
+   - **Ajustes no Inspetor do `Rig`:** `hunch_degrees` (corcunda), `stride_degrees` (passada), `hip_height` e `animation_fps`.
+   - Aponte `scene_path` para a cópia.
 5. Rode os testes e `tools/balance_report.gd`, que mostra quantos disparos o novo inimigo aguenta.
+
+### Tornar algo escaneável
+
+Tudo no jogo deve ter dados de escaneamento (`data/scannables/`):
+
+| O que é | Onde ficam os dados |
+| --- | --- |
+| Blocos de sala (`GreyboxBlock`) | campo `scannable` |
+| Objetos interagíveis (mesa, portal, placa, nódulo) | campo `scannable` do nó raiz |
+| Objeto de uma peça (vela, jarro) | raiz com o script `scannable_prop.gd` (campo `data`) |
+| Objeto feito de vários blocos (estante) | raiz com o script `scannable_group.gd`, deixando o `scannable` dos blocos vazio |
+| Decoração fina, sem colisão própria (janela, círculo no chão) | `StaticBody3D` com `scannable_prop.gd` na **camada 2** de colisão: a mira enxerga, o jogador atravessa |
+
+Ao escanear, a busca sobe dos blocos até o primeiro nó que tenha dados.
 
 ### Adicionar um Focus
 
@@ -219,7 +249,7 @@ Duplique `data/wands/apprentice_wand.tres`, ajuste `capacity` (reserva máxima p
 
 ### Adicionar uma página de pesquisa
 
-1. Duplique `data/research/pages/fire_comprehension.tres`. Preencha `id`, `name_key`, `description_key` e `cost`.
+1. Duplique `data/research/pages/fire_comprehension.tres`. Preencha `id`, `name_key`, `description_key` e `cost` (pontos de pesquisa por aspecto, ex.: `fire` = 4, `energy` = 2).
 2. Preencha os requisitos: `required_pages` (outras páginas) e `required_aspects`. É isso que forma a árvore de pesquisa.
 3. Preencha `effects`. Hoje existe o efeito `damage_multiplier`: `element` e `value`, por exemplo 1.2 para +20%.
 4. Textos em `locales/content.csv`. Nos textos, `{fire}` vira o nome do aspecto. A Mesa de Pesquisa lista a página sozinha.
@@ -271,5 +301,6 @@ O executável já leva o jogo dentro (um arquivo só). A pasta `export/` fica fo
   - o **brilho próprio** de chamas, cristais e portal.
 
   A iluminação é calculada por vértice, como no PS1.
+- `scripts/render/ps1_cutout.gdshader` é a mesma coisa com **recorte**: pixels transparentes da textura somem (pano rasgado, o rosto da caveira). O código comum aos dois fica em `ps1_common.gdshaderinc`.
 - `scripts/render/ps1_post.gdshader` reduz as cores a 5 bits por canal, aplica o **dithering** com uma matriz de Bayer 4×4 e faz a transição entre salas, que dissolve os pixels na ordem da mesma matriz.
 - Os efeitos são ligados e desligados por parâmetros globais de shader (**Projeto → Configurações do Projeto → Shader Globals**), que o menu de opções altera.

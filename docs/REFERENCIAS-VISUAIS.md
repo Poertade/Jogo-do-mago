@@ -43,3 +43,17 @@
 **Magia:**
 - O fogo do jogador é laranja vivo `#ff8a3a` e ilumina o caminho, por isso é o momento mais brilhante da tela.
 - A Lente usa verde-água `#5fd3c6`.
+
+## Inimigos (referência: Lunacid)
+
+Pedido do usuário depois do M5: o primeiro inimigo estava feio; usar os de Lunacid como base. As buscas não trouxeram um bestiário nem imagens (só textos, como os que falam do visual "áspero" de PS1/Dreamcast e do sistema de desmembrar partes do corpo dos inimigos — [TV Tropes](https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/Lunacid)). Princípios adotados:
+
+1. **Silhueta antes de detalhe.** Cada inimigo precisa ser reconhecível de longe, no escuro, só pelo contorno e pelo brilho dos olhos.
+2. **O detalhe mora na textura**, não na geometria: osso rachado, pano rasgado (com recorte), rosto pintado. Poucos polígonos.
+3. **Animação aos trancos**, em poucos quadros por segundo (12), como no PS1.
+4. **Corpo articulado** (juntas e peças), para gestos inquietantes: cabeça que pende de lado, mandíbula que bate, braço que se estica para o jogador.
+5. **Ligado ao lugar:** os mortos-vivos da Primeira Escola usam restos de uniforme (manto, barrete de bedel, chaves).
+
+O Bedel Descarnado segue esses princípios (`scenes/enemies/bone_beadle.tscn`, `scripts/game/enemy_rig.gd`). Próximos inimigos humanoides podem reaproveitar o esqueleto; criaturas de outro formato (como o desmembramento por partes) pedem um esqueleto próprio.
+
+**Nódulo de Vis:** núcleo e bolinhas na cor do aspecto (Ignis: laranja `#e0602a`), centro quase branco, luz da mesma cor. É a fonte de luz quente principal do Salão de Estudos.

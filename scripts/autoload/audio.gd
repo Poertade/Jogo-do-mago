@@ -5,6 +5,8 @@ extends Node
 
 ## Distância, em metros, em que um som 3D some.
 const MAX_DISTANCE_3D := 22.0
+## Grupo de todos os sons tocando (2D e 3D), para pará-los ao fechar o jogo.
+const PLAYING_GROUP := &"playing_sounds"
 
 var _bank: SoundBank
 var _ambience: AudioStreamPlayer
@@ -31,6 +33,7 @@ func play(event: StringName) -> AudioStreamPlayer:
 	var player := AudioStreamPlayer.new()
 	player.stream = _bank.sounds[event]
 	player.volume_db = _bank.volumes_db.get(event, 0.0)
+	player.add_to_group(PLAYING_GROUP)
 	add_child(player)
 	player.finished.connect(player.queue_free)
 	player.play()
@@ -46,6 +49,7 @@ func play_at(event: StringName, position: Vector3, parent: Node) -> void:
 	player.stream = _bank.sounds[event]
 	player.volume_db = _bank.volumes_db.get(event, 0.0)
 	player.max_distance = MAX_DISTANCE_3D
+	player.add_to_group(PLAYING_GROUP)
 	parent.add_child(player)
 	player.global_position = position
 	player.finished.connect(player.queue_free)
@@ -77,10 +81,9 @@ func set_ambience(stream: AudioStream) -> void:
 func stop_all() -> void:
 	_ambience.stop()
 	_ambience.stream = null
-	for child in get_children():
-		if child is AudioStreamPlayer and child != _ambience:
-			child.stop()
-			child.queue_free()
+	for player in get_tree().get_nodes_in_group(PLAYING_GROUP):
+		player.stop()
+		player.queue_free()
 
 
 ## Volume geral, de 0 a 1.
