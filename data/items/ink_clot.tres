@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"ink_clot"
+name_key = "ITEM_INK_CLOT"
+color = Color(0.25, 0.35, 0.7, 1)
+aspects = Dictionary[StringName, int]({
+&"water": 2,
+&"mind": 1
+})
+pickup_scene = "res://scenes/props/ink_clot.tscn"

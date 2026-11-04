@@ -58,7 +58,7 @@ func test_stash_remembers_parts_and_survives_the_save() -> void:
 	stash.add_cap(&"brass")
 	stash.equip(&"wood", true)
 	var data := SaveGame.parse(SaveGame.to_json(Knowledge.new(), DungeonProgress.new(), stash))
-	assert_eq(int(data["format_version"]), 7)
+	assert_eq(int(data["format_version"]), SaveGame.FORMAT_VERSION)
 	var loaded := SaveGame.stash_from_dict(data)
 	assert_eq(loaded.cores, [&"bone"] as Array[StringName])
 	assert_eq(loaded.caps, [&"brass"] as Array[StringName])

@@ -13,10 +13,11 @@ extends RefCounted
 ## 6: o mapa fixo da Dungeon (atalhos, chaves, âncoras, chefes) e o que fica guardado na escola
 ##    (prata, cacos de vidro, potes).
 ## 7: peças de varinha feitas na Bancada Arcana (núcleos e ponteiras) e as que estão montadas.
-const FORMAT_VERSION := 7
+## 8: a essência do cadinho e os elixires preparados.
+const FORMAT_VERSION := 8
 
 
-static func to_dict(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null) -> Dictionary:
+static func to_dict(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null, crucible: Crucible = null) -> Dictionary:
 	var points := {}
 	for aspect_id in knowledge.aspect_points:
 		points[String(aspect_id)] = knowledge.aspect_points[aspect_id]
@@ -40,11 +41,12 @@ static func to_dict(knowledge: Knowledge, world: DungeonProgress = null, stash: 
 		},
 		"world": _world_to_dict(world if world != null else DungeonProgress.new()),
 		"stash": _stash_to_dict(stash if stash != null else Stash.new()),
+		"crucible": _amounts_to_dict((crucible if crucible != null else Crucible.new()).essentia),
 	}
 
 
-static func to_json(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null) -> String:
-	return JSON.stringify(to_dict(knowledge, world, stash), "  ")
+static func to_json(knowledge: Knowledge, world: DungeonProgress = null, stash: Stash = null, crucible: Crucible = null) -> String:
+	return JSON.stringify(to_dict(knowledge, world, stash, crucible), "  ")
 
 
 ## Lê o texto de um save. Devolve um dicionário vazio se não for JSON de um objeto.
@@ -80,12 +82,8 @@ static func stash_from_dict(data: Dictionary) -> Stash:
 	var stash := Stash.new()
 	var saved = data.get("stash", {})
 	if saved is Dictionary:
-		var items = saved.get("items", {})
-		if items is Dictionary:
-			for key in items:
-				var value = items[key]
-				if key is String and (value is float or value is int) and int(value) > 0:
-					stash.items[StringName(key)] = int(value)
+		stash.items = _amounts_from(saved.get("items", {}))
+		stash.elixirs = _amounts_from(saved.get("elixirs", {}))
 		var jars = saved.get("jars", 0)
 		if jars is float or jars is int:
 			stash.jars = maxi(int(jars), 0)
@@ -112,7 +110,34 @@ static func _stash_to_dict(stash: Stash) -> Dictionary:
 		if stash.items[item_id] > 0:
 			items[String(item_id)] = stash.items[item_id]
 	return {"items": items, "jars": stash.jars, "cores": _to_strings(stash.cores), "caps": _to_strings(stash.caps),
-		"core": String(stash.core), "cap": String(stash.cap)}
+		"core": String(stash.core), "cap": String(stash.cap), "elixirs": _amounts_to_dict(stash.elixirs)}
+
+
+## A essência do cadinho (vazio em saves antigos).
+static func crucible_from_dict(data: Dictionary) -> Crucible:
+	var crucible := Crucible.new()
+	crucible.essentia = _amounts_from(data.get("crucible", {}))
+	return crucible
+
+
+## {"nome": quantidade} de um dicionário de StringName → int (só quantidades positivas).
+static func _amounts_to_dict(amounts: Dictionary) -> Dictionary:
+	var result := {}
+	for key in amounts:
+		if amounts[key] > 0:
+			result[String(key)] = amounts[key]
+	return result
+
+
+## O contrário de _amounts_to_dict, ignorando o que não for nome → número positivo.
+static func _amounts_from(values) -> Dictionary[StringName, int]:
+	var result: Dictionary[StringName, int] = {}
+	if values is Dictionary:
+		for key in values:
+			var value = values[key]
+			if key is String and (value is float or value is int) and int(value) > 0:
+				result[StringName(key)] = int(value)
+	return result
 
 
 static func from_dict(data: Dictionary) -> Knowledge:

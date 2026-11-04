@@ -12,6 +12,7 @@ wand_aspects = Array[StringName]([&"air", &"earth", &"fire", &"water", &"order",
 starting_core = ExtResource("2")
 starting_cap = ExtResource("4")
 starting_focus = ExtResource("3")
+max_elixirs = 5
 jar_slots = 4
 jar_capacity = 10
 starting_vis = Dictionary[StringName, int]({

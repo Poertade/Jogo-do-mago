@@ -26,6 +26,7 @@
 | **Nódulos de aura**: esferas de Vis com aspectos; a varinha drena Vis segurando o botão; o nódulo se recarrega devagar | Nódulos de Ignis e de Aqua (com Ordo) na escola, que não acabam; na Dungeon, nódulos que se esgotam | feito (sem recarga lenta) |
 | **Vis**: a varinha guarda os seis primais (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com sua reserva; no 4, em centésimos ("centi-Vis") | um recipiente por primal (até 10) e, a pedido do usuário, um limite total (30) (D051) | feito (valores inteiros) |
 | **Bancada arcana** (receitas que gastam Vis da varinha) | bancada de vidraria: um pote de Vis custa cacos de vidro e Ignis e Ordo da varinha (D069) | adaptado |
+| **Cadinho** (alquimia): objetos jogados nele se desfazem em essentia dos seus aspectos; receitas alquímicas pedem essentia de aspectos certos e um catalisador | cadinho no laboratório da escola: materiais da Dungeon viram essência; a essência é anotada como pontos de pesquisa ou paga receitas (Elixir de Victus, Vis destilado em potes), sem catalisador (D072) | adaptado |
 | **Pedestal de recarga**: recarrega a varinha com Vis de uma rede de nódulos | — | ideia futura |
 
 ## Ideias para próximos marcos (precisam de aprovação)
@@ -35,6 +36,6 @@
 3. **Mais aspectos compostos** e objetos que os contenham. A Dungeon pode trazer aspectos que a escola não tem, como Alienis, Tenebrae e Vitium; isso faz explorar valer pesquisa.
 4. **Notas de pesquisa mais ricas** (a versão simples já existe): tinta e penas como recurso, notas que pedem aspectos raros da Dungeon, copiar uma nota resolvida.
 5. **Nódulos na Dungeon** (raros), com reserva que se esgota e volta devagar. Hoje a decisão 3 diz "sem recarga fora da escola"; mudar isso pede aprovação.
-6. **Alquimia (cadinho e essentia)**: jogar objetos no cadinho os derrete em aspectos; receitas pedem aspectos específicos.
+6. ~~**Alquimia (cadinho e essentia)**~~: feito no M9 (D072). Ainda daria para trazer o fluxo (essência que sobra polui) e os alambiques.
 7. **Distorção ("warp")**: conhecimento proibido com efeitos colaterais. Cabe na premissa das ruínas da Primeira Escola.
 8. **Inimigos com aspectos coerentes**: cada um com uma fraqueza ligada aos aspectos que tem, que a Lente revela (pesquisar o inimigo ajuda a vencê-lo).

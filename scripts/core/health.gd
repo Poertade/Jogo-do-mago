@@ -34,5 +34,14 @@ func restore() -> void:
 	current = max_health
 
 
+## Cura (sem passar do máximo; quem já caiu não se levanta). Devolve quanto curou.
+func heal(amount: float) -> float:
+	if is_dead() or amount <= 0.0:
+		return 0.0
+	var healed := minf(amount, max_health - current)
+	current += healed
+	return healed
+
+
 func ratio() -> float:
 	return current / max_health if max_health > 0.0 else 0.0

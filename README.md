@@ -14,6 +14,16 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
+**M9: alquimia.** Uma porta nova, na parede leste do Salão de Estudos, leva ao **laboratório**, com o **cadinho**, como no Thaumcraft 4.
+- **Dissolver:** os materiais trazidos da Dungeon viram essência dos aspectos de que são feitos.
+- **Anotar:** a essência vira pontos de pesquisa, outro caminho além de escanear.
+- **Preparar:** o **Elixir de Victus** cura 40 de vida (F na Dungeon). Os destilados enchem um pote vazio com 10 de Vis.
+- **Ingredientes novos:** fungos luminosos, nas grutas, e tinta coagulada, que cai do Lodo de Tinta.
+
+| O cadinho, no laboratório | A tela do cadinho |
+| --- | --- |
+| ![Cadinho](docs/images/cadinho.png) | ![Tela do cadinho](docs/images/cadinho-tela.png) |
+
 **M8: a varinha que cresce.** A Dungeon dá materiais, e com eles você monta varinhas melhores na **Bancada Arcana** da escola, como no Thaumcraft.
 - **Núcleo** (quanto Vis cabe): madeira (10 por recipiente, 30 no total), osso (12/36) e cristal (15/45).
 - **Ponteiras** (quanto as magias custam): ferro (o normal), latão (80% do Vis) e prata (dois terços).
@@ -103,6 +113,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 | E (segurar) | drenar Vis do Nódulo para a varinha |
 | Q | trocar de Focus (depois de liberar o Focus de Gelo) |
 | R | despejar um pote de Vis na varinha |
+| F | beber um elixir (feito no cadinho) |
 | Tab | Livro de Pesquisa |
 | Esc | pausa e opções; fecha qualquer tela |
 
@@ -214,6 +225,30 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    - **Baú:** um por incursão, num de quatro lugares do mapa (cripta, gruta dos fungos, fundo da Fenda, salão invertido), com prata e três materiais sorteados.
    - O Livro de Pesquisa (Tab) mostra os materiais guardados e a varinha montada.
 
+19. **O cadinho**, no laboratório (porta na parede leste do Salão de Estudos). E abre a tela, em três colunas:
+   - **Guardado:** os materiais trazidos da Dungeon. Cada clique joga um no cadinho, e ele se desfaz na essência dos aspectos dele.
+
+     | Material | Essência |
+     | --- | --- |
+     | Fungo luminoso (grutas) | Victus 2, Lux 1 |
+     | Tinta coagulada (cai do Lodo de Tinta) | Aqua 2, Cognitio 1 |
+     | Osso antigo | Mortuus 1, Terra 2 |
+     | Lasca de cristal | Vitreus 2, Ordo 2 |
+     | Fio de latão | Metallum 2, Ignis 2 |
+     | Cacos de vidro | Vitreus 1, Ignis 1 |
+     | Prata | Metallum 2 |
+
+   - **Essência no cadinho:** fica guardada entre as incursões, e a cor do caldo segue o aspecto que mais há nele. **Anotar** transforma toda a essência de um aspecto em pontos de pesquisa (1 por 1). Aspectos que você ainda não descobriu aparecem como "?" e esperam a Mesa.
+   - **Receitas:**
+
+     | Receita | Gasta | Dá |
+     | --- | --- | --- |
+     | Elixir de Victus | Victus 3, Aqua 2 | um elixir: F, na Dungeon, devolve 40 de vida (até 5 elixires) |
+     | Destilar Ignis, Aqua ou Ordo | 3 do aspecto | 10 de Vis num pote vazio do cinto |
+
+   - Para preparar, você precisa ter descoberto os aspectos da receita.
+   - Os elixires ficam com você mesmo se você morrer, como os potes. O HUD mostra um frasco vermelho com a quantidade ao lado dos potes.
+
 O progresso é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
 - **Linux:** `~/.local/share/godot/app_userdata/Jogo do Mago`
@@ -251,6 +286,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala.
 - **Scripts:** todo script do jogo e das ferramentas compila.
+- **Alquimia (M9):** dissolver um material vira essência dos aspectos dele (e sai do que está guardado); materiais sem aspectos não se dissolvem; gastar essência é tudo ou nada; anotar só vale para aspectos descobertos; elixires respeitam o limite e curam sem passar do máximo; cadinho e elixires no save 8; toda receita usa aspectos que algum material dá.
 - **Varinha (M8):** núcleo e ponteira montam a varinha; a economia da eficiência se acumula (com 1,25, cinco disparos de 1 custam 4); trocar de peça mantém o Vis que couber; peças guardadas no save 7; páginas que liberam peças; cada núcleo guarda mais e cada ponteira gasta menos que a anterior; todo material das peças aparece no mapa, nos inimigos ou no baú; as notas das quatro páginas novas têm solução.
 - **Mapa da Dungeon:** o que fica para sempre (passagens, chaves, âncoras, chefes); o mapa tem toda âncora e toda sala, uma chave para cada porta trancada e passagens sem identificador repetido; toda sala sabe o próprio `room_id`.
 - **Potes, prata e livros:** o jogador começa sem potes; o cinto cresce até o limite; gastar materiais é tudo ou nada; o que é achado só fica guardado ao voltar vivo, e morrer perde os achados e o Vis dos potes, mas não os potes; save formato 6 (mapa e o que fica na escola; saves antigos carregam). Receitas necessárias para combinar (as simples já vêm sabidas); livro que ensina uma receita sorteada que o jogador não tem, de preferência uma que ele já possa fazer.
@@ -287,6 +323,7 @@ data/              conteúdo do jogo, um arquivo .tres por item (editável no in
   economy/         preço e receita dos potes de Vis, conteúdo do baú
   items/           materiais (prata, cacos de vidro, osso, cristal, latão, o Selo do Arquivista)
   wands/           peças de varinha: núcleos (cores/) e ponteiras (caps/)
+  alchemy/         receitas do cadinho (recipes/) e elixires (elixirs/)
   settings/        opções padrão e filtros visuais (presets/)
   audio/           banco de sons: qual arquivo toca em cada evento
 locales/           textos: ui.csv (interface), content.csv (conteúdo), names.csv (nomes de outras obras)
@@ -459,6 +496,14 @@ O mapa fica em `scenes/dungeon/dungeon.tscn`. Abra-o no editor: as salas, os cor
 5. **Teste direto:** `godot --path . -- --room=<id da sala>`.
    - **Os testes conferem:** que a sala está no mapa e sabe o `room_id`, e que toda porta trancada tem chave.
    - **`tools/balance_report.gd`** mostra quantos inimigos e disparos cada sala pede em média.
+
+### Adicionar uma receita alquímica ou um ingrediente
+
+1. **Receita:** duplique `data/alchemy/recipes/victus_elixir.tres` e ajuste `id`, `name_key`, `description_key` (o nome e a descrição podem citar aspectos, como `{life}`), `order` (a posição na tela) e `cost` (a essência gasta). O resultado é um destes:
+   - **um elixir** (`elixir`): duplique `data/alchemy/elixirs/victus_elixir.tres` e ajuste `heal` (a vida que devolve) e `color` (a cor do frasco no HUD);
+   - **Vis num pote vazio do cinto:** `jar_aspect` (um primal) e `jar_amount`.
+2. **Ingrediente:** duplique `data/items/glow_fungus.tres`, ajuste `aspects` (a essência que ele dá no cadinho) e `pickup_scene` (a cena do achado), e ponha lugares com `kind` igual ao `id` dele nas salas, ou dê a um inimigo (`material`, `material_chance`, `material_amount`).
+3. Os testes conferem que toda receita usa aspectos que algum material dá.
 
 ### Adicionar um livro
 

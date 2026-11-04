@@ -28,6 +28,8 @@ var _focus_color := Color.WHITE
 var _jars: VisJarBelt
 var _books := 0
 var _items: Dictionary = {}
+var _elixirs := 0
+var _elixir_color := Color(0.9, 0.25, 0.3)
 
 
 func _init() -> void:
@@ -37,12 +39,16 @@ func _init() -> void:
 
 ## Atualiza o que o mostrador exibe.
 ## `items`: material → quantidade (ex.: {&"silver": 12, &"glass": 2}).
-func show_wand(wand: WandState, focus_color: Color, jars: VisJarBelt = null, books := 0, items := {}) -> void:
+## `elixirs`: quantos elixires o jogador leva (F bebe um), e a cor do frasco.
+func show_wand(wand: WandState, focus_color: Color, jars: VisJarBelt = null, books := 0, items := {}, elixirs := 0,
+		elixir_color := Color(0.9, 0.25, 0.3)) -> void:
 	_wand = wand
 	_focus_color = focus_color
 	_jars = jars
 	_books = books
 	_items = items
+	_elixirs = elixirs
+	_elixir_color = elixir_color
 	queue_redraw()
 
 
@@ -115,13 +121,26 @@ func _draw_belt(font: Font) -> void:
 			var height := roundf(11.0 * jar.amount / maxf(_jars.capacity, 1.0))
 			draw_rect(Rect2(x + 2, y + 13 - height, 7, height), aspect.color if aspect != null else Color.WHITE)
 		draw_rect(Rect2(x, y, 11, 2), BRASS)
+	var x_next := 6.0 + _jars.jars.size() * 15.0
 	if _books > 0:
-		var x := 6.0 + _jars.jars.size() * 15.0
+		var x := x_next
+		x_next += 30.0
 		draw_rect(Rect2(x, y + 2, 9, 12), Color(0.36, 0.12, 0.08))
 		draw_rect(Rect2(x + 1, y + 3, 7, 1), Color(0.88, 0.76, 0.42))
 		var text := "x%d" % _books
 		draw_string_outline(font, Vector2(x + 11, y + 12), text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
 		draw_string(font, Vector2(x + 11, y + 12), text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
+	if _elixirs > 0:
+		# Frasco de elixir: gargalo, bojo na cor do elixir e a quantidade.
+		var x := x_next
+		draw_rect(Rect2(x + 2, y, 5, 4), GLASS_EDGE)
+		draw_rect(Rect2(x + 3, y + 1, 3, 3), BRASS)
+		draw_circle(Vector2(x + 4.5, y + 9), 5.0, GLASS_EDGE)
+		draw_circle(Vector2(x + 4.5, y + 9), 4.0, _elixir_color)
+		draw_rect(Rect2(x + 3, y + 7, 1, 2), _elixir_color.lightened(0.5))
+		var count := "x%d" % _elixirs
+		draw_string_outline(font, Vector2(x + 11, y + 12), count, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 2, Color.BLACK)
+		draw_string(font, Vector2(x + 11, y + 12), count, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT)
 
 
 ## Um frasco: vidro escuro, o líquido do aspecto até `ratio` e uma tampa de latão na ponta.

@@ -25,6 +25,9 @@ var enemies: Dictionary[StringName, EnemyData] = {}
 var books: Dictionary[StringName, BookData] = {}
 var zones: Dictionary[StringName, DungeonZone] = {}
 var items: Dictionary[StringName, ItemData] = {}
+## Alquimia: receitas do cadinho e elixires.
+var recipes: Dictionary[StringName, AlchemyRecipeData] = {}
+var elixirs: Dictionary[StringName, ElixirData] = {}
 var errors: PackedStringArray = []
 
 
@@ -72,6 +75,12 @@ func load_all(root := DATA_ROOT) -> void:
 	for resource in _load_folder(root.path_join("items")):
 		if resource is ItemData:
 			_add_unique(items, resource, "Material")
+	for resource in _load_folder(root.path_join("alchemy/elixirs")):
+		if resource is ElixirData:
+			_add_unique(elixirs, resource, "Elixir")
+	for resource in _load_folder(root.path_join("alchemy/recipes")):
+		if resource is AlchemyRecipeData:
+			_add_unique(recipes, resource, "Receita alquímica")
 	validate()
 
 
@@ -441,6 +450,24 @@ func _validate_economy() -> void:
 	for item: ItemData in items.values():
 		if item.pickup_scene != "" and not ResourceLoader.exists(item.pickup_scene):
 			errors.append("Material '%s': cena do achado não encontrada ('%s')." % [item.id, item.pickup_scene])
+		# Sem aspectos, o material não se dissolve no cadinho (raridades como o Selo).
+		if not item.aspects.is_empty():
+			_validate_aspect_amounts("Material '%s'" % item.id, item.aspects)
+	for elixir: ElixirData in elixirs.values():
+		if elixir.heal <= 0.0:
+			errors.append("Elixir '%s': heal precisa ser maior que zero." % elixir.id)
+	for recipe: AlchemyRecipeData in recipes.values():
+		var owner := "Receita alquímica '%s'" % recipe.id
+		if recipe.cost.is_empty():
+			errors.append("%s: falta a essência gasta (cost)." % owner)
+		_validate_aspect_amounts(owner, recipe.cost)
+		var makes_jar := recipe.jar_aspect != &""
+		if (recipe.elixir == null) == (not makes_jar):
+			errors.append("%s: dê um resultado só, um elixir ou Vis num pote (jar_aspect)." % owner)
+		if makes_jar:
+			_validate_vis_amounts(owner + " (jar_aspect)", {recipe.jar_aspect: maxi(recipe.jar_amount, 1)})
+			if recipe.jar_amount <= 0:
+				errors.append("%s: jar_amount precisa ser maior que zero." % owner)
 
 
 func _validate_aspect(aspect: AspectData) -> void:

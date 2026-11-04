@@ -651,6 +651,29 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Baú guardado por um inimigo a mais:** as salas com baú já têm inimigos.
 - **Motivo:** fecha o ciclo do roguelike: as incursões rendem materiais, e os materiais viram uma varinha melhor na seguinte.
 
+## M9 (aprovado pelo usuário)
+
+### D072 · 2026-11-04 · M9: alquimia (o cadinho)
+
+- **Escolha:** o usuário pediu para seguir para o M9. Entre as opções propostas, ficou a primeira da lista, a **alquimia**. O segundo andar da Dungeon e o acabamento continuam como opções para depois.
+  - **Laboratório:** uma sala nova a leste do Salão de Estudos, com uma porta na parede leste. Tem o cadinho, uma estante de frascos, uma mesa de trabalho e o "Caderno de alquimia" (placa), que explica o uso.
+  - **Cadinho (`Crucible`, em `scripts/core`):** um material guardado, jogado nele, se desfaz na essência dos aspectos dele (`ItemData.aspects`). A essência fica no cadinho entre as incursões, e a cor do caldo segue o aspecto que mais há nele.
+  - **Anotar:** a essência de um aspecto já descoberto vira pontos de pesquisa (1 por 1). É uma fonte renovável de pontos, além do escaneamento, que só rende uma vez por alvo.
+  - **Receitas (`data/alchemy/recipes/`):**
+    - **Elixir de Victus:** Victus 3 e Aqua 2; cura 40. A tecla **F** bebe, até 5 elixires.
+    - **Destilar Ignis, Aqua ou Ordo:** 3 do aspecto; 10 de Vis num pote vazio do cinto.
+    - Só dá para preparar com os aspectos da receita já descobertos.
+  - **Ingredientes novos:** fungo luminoso (Victus 2, Lux 1), em lugares das grutas, e tinta coagulada (Aqua 2, Cognitio 1), que cai do Lodo de Tinta (50%). Os materiais que já existiam ganharam aspectos: osso (Mortuus, Terra), cristal (Vitreus, Ordo), latão (Metallum, Ignis), vidro (Vitreus, Ignis) e prata (Metallum). O Selo do Arquivista não se dissolve.
+  - **Elixires** ficam com o jogador mesmo se ele morrer, como os potes: são feitos na escola.
+  - **HUD:** um frasco com a quantidade de elixires, ao lado dos potes.
+  - **Save formato 8:** a essência do cadinho e os elixires.
+- **Descartado:**
+  - **Catalisador nas receitas,** como no Thaumcraft: seria mais um material para juntar, sem mudar o jogo agora.
+  - **Fluxo** (essência que polui ao ser jogada fora): fica para quando houver distorção (ideia 7 da referência do Thaumcraft).
+  - **Pontos de pesquisa direto ao dissolver:** anotar à parte deixa o jogador escolher entre pontos e receitas.
+  - **Segundo andar da Dungeon agora:** era a outra opção do M9; fica para depois.
+- **Motivo:** a alquimia é o centro do Thaumcraft 4. Dá uso a tudo o que é achado na Dungeon e traz a primeira cura fora da escola.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

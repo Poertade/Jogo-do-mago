@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/item_pickup.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/ink_clot.tres" id="2"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="3"]
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.5, 0.3, 0.5)
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/albedo_color = Color(0.0392, 0.0471, 0.0941, 1.0)
+shader_parameter/emission_color = Color(0.1255, 0.1882, 0.4392, 1.0)
+shader_parameter/emission_energy = 0.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_3"]
+radius = 0.12
+height = 0.24
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_4"]
+radius = 0.07
+height = 0.14
+radial_segments = 6
+rings = 3
+
+[node name="InkClot" type="Node3D"]
+script = ExtResource("1")
+prompt_key = "PROMPT_TAKE_INK"
+scannable = ExtResource("2")
+item = &"ink_clot"
+amount = 1
+
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.12, 0.0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("Box_1")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.35, 0.0)
+light_color = Color(0.251, 0.3765, 0.7529, 1.0)
+light_energy = 0.45
+omni_range = 2.0
+
+[node name="Blob" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.3, 0.0, 0.0, 0.0, 0.6, 0.0, 0.0, 0.0, 1.0, 0.0, 0.07, 0.0)
+mesh = SubResource("SphereMesh_3")
+material_override = SubResource("Mat_2")
+
+[node name="Blob2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.6, 0.0, 0.0, 0.0, 1.0, 0.12, 0.04, 0.06)
+mesh = SubResource("SphereMesh_4")
+material_override = SubResource("Mat_2")

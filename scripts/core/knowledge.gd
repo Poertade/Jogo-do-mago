@@ -92,6 +92,16 @@ func read_book(book: BookData, aspects: Dictionary, roll: float) -> StringName:
 	return learned
 
 
+## Ganha pontos de pesquisa de um aspecto já descoberto (ex.: essência anotada do cadinho).
+## Devolve false se o aspecto ainda não foi descoberto.
+func add_points(aspect_id: StringName, amount: int) -> bool:
+	if not knows_aspect(aspect_id) or amount <= 0:
+		return false
+	aspect_points[aspect_id] = points(aspect_id) + amount
+	changed.emit()
+	return true
+
+
 func has_scanned(target_id: StringName) -> bool:
 	return target_id in scanned_targets
 

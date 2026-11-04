@@ -106,7 +106,15 @@ func _update_stats() -> void:
 	var focus_aspect: AspectData = Content.db.aspects.get(focus.element)
 	vis_gauge.show_wand(Game.run.wand, focus_aspect.color if focus_aspect != null else Color.WHITE,
 		Game.run.jars, Game.run.carried_books.size(),
-		{&"silver": Game.item_count(&"silver"), &"glass": Game.item_count(&"glass")})
+		{&"silver": Game.item_count(&"silver"), &"glass": Game.item_count(&"glass")}, Game.stash.elixir_total(), _elixir_color())
+
+
+## Cor do primeiro elixir que o jogador leva (o que F bebe).
+func _elixir_color() -> Color:
+	var ids: Array = Game.stash.elixirs.keys()
+	ids.sort_custom(ContentDB.by_name)
+	var elixir: ElixirData = Content.db.elixirs.get(ids[0]) if not ids.is_empty() else null
+	return elixir.color if elixir != null else Color(0.9, 0.25, 0.3)
 
 
 ## Entrou numa região nova da Dungeon: o nome dela aparece no alto e some devagar.

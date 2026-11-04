@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"glow_fungus"
+name_key = "ITEM_GLOW_FUNGUS"
+color = Color(0.45, 0.95, 0.7, 1)
+aspects = Dictionary[StringName, int]({
+&"life": 2,
+&"light": 1
+})
+pickup_scene = "res://scenes/props/glow_fungus_pickup.tscn"

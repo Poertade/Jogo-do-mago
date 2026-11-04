@@ -7,4 +7,8 @@ script = ExtResource("1")
 id = &"crystal"
 name_key = "ITEM_CRYSTAL"
 color = Color(0.6, 0.85, 1.0, 1)
+aspects = Dictionary[StringName, int]({
+&"crystal": 2,
+&"order": 2
+})
 pickup_scene = "res://scenes/props/crystal_shard.tscn"

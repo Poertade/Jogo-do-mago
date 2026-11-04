@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AlchemyRecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/alchemy_recipe_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"distill_water"
+name_key = "RECIPE_DISTILL_WATER"
+description_key = "RECIPE_DISTILL_WATER_DESC"
+order = 3
+cost = Dictionary[StringName, int]({
+&"water": 3
+})
+jar_aspect = &"water"
+jar_amount = 10

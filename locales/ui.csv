@@ -117,3 +117,26 @@ UI_WAND_CORE_STATS,%d / %d
 UI_WAND_CAP_STATS,custo %d%%
 UI_BOOK_MATERIALS,Materiais guardados na escola
 UI_BOOK_WAND,Varinha montada
+UI_ALCHEMY_TITLE,O Cadinho
+UI_ALCHEMY_ITEMS,Guardado: jogar no cadinho
+UI_ALCHEMY_ESSENCE,Essência no cadinho
+UI_ALCHEMY_RECIPES,Receitas
+UI_ALCHEMY_HELP,Jogue materiais no cadinho: eles viram essência dos aspectos deles. Anote a essência (pontos de pesquisa) ou prepare uma receita.
+UI_ALCHEMY_DISSOLVE_DETAIL,%s: cada um jogado no cadinho rende %s de essência.
+UI_ALCHEMY_NOTE,anotar
+UI_ALCHEMY_NOTE_DETAIL,Anotar: a essência vira %d pontos de pesquisa de %s.
+UI_ALCHEMY_UNKNOWN_DETAIL,Essência de um aspecto que você ainda não descobriu. Descubra-o na Mesa para anotar ou usar.
+UI_ALCHEMY_EMPTY,vazio
+UI_ALCHEMY_NO_ITEMS,nada guardado que se dissolva
+UI_ALCHEMY_BREW,preparar
+UI_ALCHEMY_UNKNOWN,aspecto desconhecido
+UI_ALCHEMY_NOT_ENOUGH,falta essência
+UI_ALCHEMY_ELIXIRS_FULL,elixires no limite
+UI_ALCHEMY_NO_EMPTY_JAR,sem pote vazio
+UI_ALCHEMY_COST,Gasta: %s
+UI_ALCHEMY_STATUS,Elixires: %d de %d · potes vazios no cinto: %d
+UI_MSG_ESSENCE_NOTED,+%d pontos de %s
+UI_MSG_BREWED,Pronto: %s
+UI_MSG_NO_ELIXIR,"Nenhum elixir (prepare no cadinho, na escola)"
+UI_MSG_HEALTH_FULL,A vida já está cheia
+UI_MSG_ELIXIR_DRUNK,%s: +%d de vida

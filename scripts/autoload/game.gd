@@ -48,6 +48,7 @@ const SAVE_PATH := "user://save.json"
 var knowledge: Knowledge
 var world: DungeonProgress
 var stash: Stash
+var crucible: Crucible
 var modifiers := Modifiers.new()
 var run: RunState
 var rng := GameRng.new(0)
@@ -60,6 +61,7 @@ func _ready() -> void:
 	knowledge.changed.connect(_on_knowledge_changed)
 	world.changed.connect(save)
 	stash.changed.connect(save)
+	crucible.changed.connect(save)
 	_update_modifiers()
 	run = RunState.new(Content.db.player, stash.jars)
 	_apply_wand()
@@ -195,6 +197,76 @@ func give_relic(enemy: EnemyData) -> void:
 	stash.add({enemy.material: enemy.material_amount})
 	var item: ItemData = Content.db.items.get(enemy.material)
 	message(Text.tr_key("UI_MSG_RELIC") % Text.tr_key(item.name_key if item != null else String(enemy.material)), Color(0.8, 0.7, 1.0))
+
+
+# --- Alquimia (cadinho) --------------------------------------------------------------
+
+## Joga uma unidade do material no cadinho: ela vira essência dos aspectos dela.
+func dissolve(item: ItemData) -> bool:
+	if not crucible.dissolve(item, stash):
+		return false
+	Audio.play(&"glass")
+	return true
+
+
+## Anota toda a essência de um aspecto (já descoberto) como pontos de pesquisa.
+func note_essence(aspect_id: StringName) -> int:
+	if not knowledge.knows_aspect(aspect_id):
+		return 0
+	var amount := crucible.take_all(aspect_id)
+	knowledge.add_points(aspect_id, amount)
+	if amount > 0:
+		Audio.play(&"scan_complete")
+		message(Text.tr_key("UI_MSG_ESSENCE_NOTED") % [amount, Text.aspect_name(aspect_id)], Content.db.aspects[aspect_id].color)
+	return amount
+
+
+## Por que a receita não pode ser preparada agora (chave de texto), ou vazio se pode.
+func brew_problem(recipe: AlchemyRecipeData) -> String:
+	for aspect_id in recipe.cost:
+		if not knowledge.knows_aspect(aspect_id):
+			return "UI_ALCHEMY_UNKNOWN"
+	if not crucible.missing(recipe.cost).is_empty():
+		return "UI_ALCHEMY_NOT_ENOUGH"
+	if recipe.elixir != null and stash.elixir_total() >= Content.db.player.max_elixirs:
+		return "UI_ALCHEMY_ELIXIRS_FULL"
+	if recipe.jar_aspect != &"" and not run.jars.jars.any(func(jar): return jar.is_empty()):
+		return "UI_ALCHEMY_NO_EMPTY_JAR"
+	return ""
+
+
+## Prepara a receita: gasta a essência e dá o elixir, ou enche um pote vazio do cinto.
+func brew(recipe: AlchemyRecipeData) -> bool:
+	if brew_problem(recipe) != "":
+		return false
+	crucible.spend(recipe.cost)
+	if recipe.elixir != null:
+		stash.add_elixir(recipe.elixir.id, Content.db.player.max_elixirs)
+	else:
+		run.jars.store(recipe.jar_aspect, recipe.jar_amount)
+	Audio.play(&"page_studied")
+	message(Text.tr_key("UI_MSG_BREWED") % Text.expand(recipe.name_key), Color(0.75, 0.9, 0.8))
+	return true
+
+
+## Bebe um elixir (tecla F), o primeiro que houver. Devolve false se não havia ou não precisava.
+func drink_elixir() -> bool:
+	var ids: Array = stash.elixirs.keys()
+	ids.sort_custom(ContentDB.by_name)
+	if ids.is_empty():
+		message(Text.tr_key("UI_MSG_NO_ELIXIR"))
+		return false
+	var elixir: ElixirData = Content.db.elixirs.get(ids[0])
+	if elixir == null:
+		return false
+	if run.health.current >= run.health.max_health:
+		message(Text.tr_key("UI_MSG_HEALTH_FULL"))
+		return false
+	stash.use_elixir(elixir.id)
+	var healed := run.health.heal(elixir.heal)
+	Audio.play(&"recharge")
+	message(Text.tr_key("UI_MSG_ELIXIR_DRUNK") % [Text.tr_key(elixir.name_key), roundi(healed)], elixir.color)
+	return true
 
 
 # --- Peças de varinha (Bancada Arcana) -------------------------------------------------
@@ -399,13 +471,14 @@ func save() -> void:
 	if file == null:
 		push_error("Não foi possível gravar o save em %s." % SAVE_PATH)
 		return
-	file.store_string(SaveGame.to_json(knowledge, world, stash))
+	file.store_string(SaveGame.to_json(knowledge, world, stash, crucible))
 
 
 func _load_save() -> void:
 	knowledge = Knowledge.new()
 	world = DungeonProgress.new()
 	stash = Stash.new()
+	crucible = Crucible.new()
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
 	var data := SaveGame.parse(FileAccess.get_file_as_string(SAVE_PATH))
@@ -419,3 +492,4 @@ func _load_save() -> void:
 	knowledge = loaded
 	world = SaveGame.world_from_dict(data)
 	stash = SaveGame.stash_from_dict(data)
+	crucible = SaveGame.crucible_from_dict(data)

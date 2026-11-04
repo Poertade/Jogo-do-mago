@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/merchant.tscn" id="merchant"]
 [ext_resource type="PackedScene" path="res://scenes/props/glass_workbench.tscn" id="workbench"]
 [ext_resource type="PackedScene" path="res://scenes/props/arcane_workbench.tscn" id="arcane"]
+[ext_resource type="PackedScene" path="res://scenes/props/crucible.tscn" id="crucible"]
 
 [sub_resource type="ShaderMaterial" id="Mat_1"]
 render_priority = 0
@@ -108,6 +109,118 @@ size = Vector3(0.3, 0.6, 0.3)
 [sub_resource type="BoxShape3D" id="Shape_Crystal2"]
 size = Vector3(0.3, 0.6, 0.3)
 
+[sub_resource type="ShaderMaterial" id="LabMat_1"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.4392, 0.9412, 0.6902, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_1"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.18
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_2"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.8784, 0.3137, 0.3137, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_2"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.23
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_3"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.3137, 0.502, 0.8784, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_3"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.28
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_4"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.9412, 0.6275, 0.251, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_4"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.18
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_5"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.7529, 0.7529, 0.8157, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_5"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.23
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_6"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.6275, 0.3765, 0.8784, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_6"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.28
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_7"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.4392, 0.8471, 0.7843, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_7"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.18
+radial_segments = 6
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="LabMat_8"]
+render_priority = 0
+shader = ExtResource("17")
+shader_parameter/albedo_color = Color(0.05, 0.05, 0.07, 1)
+shader_parameter/emission_color = Color(0.8784, 0.8157, 0.5647, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="CylinderMesh" id="LabFlask_8"]
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.23
+radial_segments = 6
+rings = 0
+
 [node name="School" type="Node3D"]
 script = ExtResource("1")
 
@@ -156,9 +269,23 @@ material = ExtResource("5")
 scannable = ExtResource("scan_carved_stone")
 
 [node name="WallEast" type="StaticBody3D" parent="StudyHall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.25, 1)
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 2.25, -1.05)
 script = ExtResource("2")
-size = Vector3(0.4, 4.5, 14.8)
+size = Vector3(0.4, 4.5, 10.7)
+material = ExtResource("5")
+scannable = ExtResource("scan_carved_stone")
+
+[node name="WallEastSouth" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 2.25, 7.55)
+script = ExtResource("2")
+size = Vector3(0.4, 4.5, 1.7)
+material = ExtResource("5")
+scannable = ExtResource("scan_carved_stone")
+
+[node name="WallEastLintel" type="StaticBody3D" parent="StudyHall"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 3.65, 5.5)
+script = ExtResource("2")
+size = Vector3(0.4, 1.7, 2.4)
 material = ExtResource("5")
 scannable = ExtResource("scan_carved_stone")
 
@@ -524,6 +651,179 @@ omni_attenuation = 1.2
 
 [node name="Plaque" parent="PortalRoom" instance=ExtResource("plaque")]
 transform = Transform3D(0.8660, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660, 2.6, 0, -15.6)
+
+[node name="Laboratory" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.9, -0.1, 4.8)
+script = ExtResource("2")
+size = Vector3(9.4, 0.2, 7.2)
+material = ExtResource("3")
+scannable = ExtResource("scan_planks")
+
+[node name="Ceiling" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.9, 4.1, 4.8)
+script = ExtResource("2")
+size = Vector3(9.4, 0.2, 7.2)
+material = ExtResource("4")
+scannable = ExtResource("scan_dark_timber")
+
+[node name="WallNorth" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.9, 2.0, 1.2)
+script = ExtResource("2")
+size = Vector3(9.8, 4.0, 0.4)
+material = ExtResource("5")
+scannable = ExtResource("scan_carved_stone")
+
+[node name="WallSouth" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.9, 2.0, 8.4)
+script = ExtResource("2")
+size = Vector3(9.8, 4.0, 0.4)
+material = ExtResource("5")
+scannable = ExtResource("scan_carved_stone")
+
+[node name="WallEast" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.6, 2.0, 4.8)
+script = ExtResource("2")
+size = Vector3(0.4, 4.0, 7.6)
+material = ExtResource("5")
+scannable = ExtResource("scan_carved_stone")
+
+[node name="Beam" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.9, 3.85, 4.8)
+script = ExtResource("2")
+size = Vector3(9.0, 0.3, 0.3)
+material = ExtResource("4")
+scannable = ExtResource("scan_dark_timber")
+
+[node name="Crucible" parent="Laboratory" instance=ExtResource("crucible")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 11.6, 0.0, 4.8)
+
+[node name="Shelf" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.1, 1.0, 4.8)
+script = ExtResource("2")
+size = Vector3(0.5, 0.08, 3.0)
+material = ExtResource("4")
+scannable = ExtResource("scan_dark_timber")
+
+[node name="ShelfHigh" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.1, 1.7, 4.8)
+script = ExtResource("2")
+size = Vector3(0.5, 0.08, 3.0)
+material = ExtResource("4")
+scannable = ExtResource("scan_dark_timber")
+
+[node name="ShelfLow" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.1, 0.3, 4.8)
+script = ExtResource("2")
+size = Vector3(0.5, 0.08, 3.0)
+material = ExtResource("4")
+scannable = ExtResource("scan_dark_timber")
+
+[node name="ShelfSideN" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.1, 0.9, 3.3)
+script = ExtResource("2")
+size = Vector3(0.5, 1.8, 0.08)
+material = ExtResource("4")
+
+[node name="ShelfSideS" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.1, 0.9, 6.3)
+script = ExtResource("2")
+size = Vector3(0.5, 1.8, 0.08)
+material = ExtResource("4")
+
+[node name="Flask1" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.14, 3.7)
+mesh = SubResource("LabFlask_1")
+material_override = SubResource("LabMat_1")
+
+[node name="Flask2" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.14, 4.4)
+mesh = SubResource("LabFlask_2")
+material_override = SubResource("LabMat_2")
+
+[node name="Flask3" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.14, 5.1)
+mesh = SubResource("LabFlask_3")
+material_override = SubResource("LabMat_3")
+
+[node name="Flask4" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.14, 5.8)
+mesh = SubResource("LabFlask_4")
+material_override = SubResource("LabMat_4")
+
+[node name="Flask5" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.84, 3.7)
+mesh = SubResource("LabFlask_5")
+material_override = SubResource("LabMat_5")
+
+[node name="Flask6" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.84, 4.4)
+mesh = SubResource("LabFlask_6")
+material_override = SubResource("LabMat_6")
+
+[node name="Flask7" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.84, 5.1)
+mesh = SubResource("LabFlask_7")
+material_override = SubResource("LabMat_7")
+
+[node name="Flask8" type="MeshInstance3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.05, 1.84, 5.8)
+mesh = SubResource("LabFlask_8")
+material_override = SubResource("LabMat_8")
+
+[node name="Worktable" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 9.0, 0.85, 1.9)
+script = ExtResource("2")
+size = Vector3(2.4, 0.1, 0.8)
+material = ExtResource("4")
+scannable = ExtResource("scan_dark_timber")
+
+[node name="WorktableLeg1" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.9, 0.4, 1.6)
+script = ExtResource("2")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="WorktableLeg2" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.1, 0.4, 1.6)
+script = ExtResource("2")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="WorktableLeg3" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.9, 0.4, 2.2)
+script = ExtResource("2")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="WorktableLeg4" type="StaticBody3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 10.1, 0.4, 2.2)
+script = ExtResource("2")
+size = Vector3(0.1, 0.8, 0.1)
+material = ExtResource("4")
+
+[node name="Candle" parent="Laboratory" instance=ExtResource("8")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 9.9, 0.9, 1.8)
+
+[node name="AlchemyNotes" parent="Laboratory" instance=ExtResource("plaque")]
+transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 8.2, 0.0, 2.6)
+title_key = "NOTE_LAB_TITLE"
+body_key = "NOTE_LAB_BODY"
+
+[node name="CandleLight" type="OmniLight3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 9.9, 1.5, 2.2)
+light_color = Color(1, 0.75, 0.5, 1)
+light_energy = 0.8
+omni_range = 5.0
+script = ExtResource("18")
+flicker_amount = 0.2
+
+[node name="ShelfLight" type="OmniLight3D" parent="Laboratory"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 14.0, 2.4, 4.8)
+light_color = Color(0.6, 0.85, 0.8, 1)
+light_energy = 0.6
+omni_range = 5.0
 
 [node name="Entrances" type="Node3D" parent="."]
 

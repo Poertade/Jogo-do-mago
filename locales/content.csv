@@ -187,3 +187,22 @@ PROMPT_TAKE_CRYSTAL,Pegar a lasca de cristal
 PROMPT_TAKE_BRASS,Pegar o fio de latão
 PROMPT_OPEN_CHEST,Abrir o baú
 PROMPT_ARCANE_WORKBENCH,Montar a varinha na Bancada Arcana
+ITEM_GLOW_FUNGUS,Fungo luminoso
+ITEM_INK_CLOT,Tinta coagulada
+OBJ_GLOW_FUNGUS_PICKUP,Fungos luminosos
+OBJ_INK_CLOT,Tinta coagulada
+OBJ_CRUCIBLE,O cadinho
+PROMPT_TAKE_FUNGUS,Colher os fungos luminosos
+PROMPT_TAKE_INK,Recolher a tinta coagulada
+PROMPT_CRUCIBLE,Usar o cadinho
+ELIXIR_VICTUS,Elixir de Victus
+RECIPE_VICTUS_ELIXIR,Elixir de {life}
+RECIPE_VICTUS_ELIXIR_DESC,"Um frasco vermelho que fecha feridas. Na Dungeon, F bebe: devolve 40 de vida."
+RECIPE_DISTILL_FIRE,Destilar {fire}
+RECIPE_DISTILL_FIRE_DESC,"Condensa a essência de {fire} em 10 de Vis, num pote vazio do cinto."
+RECIPE_DISTILL_WATER,Destilar {water}
+RECIPE_DISTILL_WATER_DESC,"Condensa a essência de {water} em 10 de Vis, num pote vazio do cinto."
+RECIPE_DISTILL_ORDER,Destilar {order}
+RECIPE_DISTILL_ORDER_DESC,"Condensa a essência de {order} em 10 de Vis, num pote vazio do cinto."
+NOTE_LAB_TITLE,Caderno de alquimia
+NOTE_LAB_BODY,"O cadinho não queima as coisas: desfaz. O que cai no caldo volta a ser os aspectos de que era feito, e a essência fica boiando até alguém dar uso a ela.\n\nAnote a essência e ela vira pontos de pesquisa. Ou siga uma receita: dois fungos luminosos e um tanto de tinta coagulada dão um Elixir de {life}, que fecha feridas lá embaixo.\n\nO que ainda não descobrimos aparece no caldo como um ponto de interrogação. Primeiro a Mesa, depois o cadinho."

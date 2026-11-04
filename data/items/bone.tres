@@ -7,4 +7,8 @@ script = ExtResource("1")
 id = &"bone"
 name_key = "ITEM_BONE"
 color = Color(0.86, 0.82, 0.7, 1)
+aspects = Dictionary[StringName, int]({
+&"death": 1,
+&"earth": 2
+})
 pickup_scene = "res://scenes/props/old_bones.tscn"

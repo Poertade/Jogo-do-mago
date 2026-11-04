@@ -18,6 +18,8 @@ var cores: Array[StringName] = []
 var caps: Array[StringName] = []
 var core: StringName = &""
 var cap: StringName = &""
+## Elixires preparados no cadinho: elixir → quantos (vão junto em toda incursão).
+var elixirs: Dictionary[StringName, int] = {}
 
 
 func count(item_id: StringName) -> int:
@@ -91,3 +93,31 @@ func equip(part_id: StringName, is_core: bool) -> void:
 	else:
 		cap = part_id
 	changed.emit()
+
+
+## Quantos elixires o jogador tem, somando todos.
+func elixir_total() -> int:
+	var total := 0
+	for elixir_id in elixirs:
+		total += elixirs[elixir_id]
+	return total
+
+
+## Guarda um elixir, se ainda couber (`max_elixirs` no total). Devolve false se não couber.
+func add_elixir(elixir_id: StringName, max_elixirs: int) -> bool:
+	if elixir_total() >= max_elixirs:
+		return false
+	elixirs[elixir_id] = elixirs.get(elixir_id, 0) + 1
+	changed.emit()
+	return true
+
+
+## Gasta um elixir. Devolve false se não havia nenhum.
+func use_elixir(elixir_id: StringName) -> bool:
+	if elixirs.get(elixir_id, 0) <= 0:
+		return false
+	elixirs[elixir_id] -= 1
+	if elixirs[elixir_id] <= 0:
+		elixirs.erase(elixir_id)
+	changed.emit()
+	return true

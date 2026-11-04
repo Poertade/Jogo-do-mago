@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/alchemy_screen.gd" id="1"]
+[ext_resource type="Material" path="res://assets/ui/ui_pixels_material.tres" id="2"]
+[ext_resource type="Theme" path="res://assets/ui/parchment_theme.tres" id="3"]
+
+[node name="AlchemyScreen" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.015, 0.01, 0.6)
+
+[node name="Pixels" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture_filter = 1
+material = ExtResource("2")
+stretch = true
+stretch_shrink = 2
+
+[node name="Viewport" type="SubViewport" parent="Pixels"]
+transparent_bg = true
+size = Vector2i(640, 360)
+
+[node name="Center" type="CenterContainer" parent="Pixels/Viewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3")
+
+[node name="Panel" type="PanelContainer" parent="Pixels/Viewport/Center"]
+custom_minimum_size = Vector2(620, 330)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="Pixels/Viewport/Center/Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "UI_ALCHEMY_TITLE"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="ItemsColumn" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns"]
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="Header" type="Label" parent="Pixels/Viewport/Center/Panel/VBox/Columns/ItemsColumn"]
+layout_mode = 2
+text = "UI_ALCHEMY_ITEMS"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns/ItemsColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Items" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns/ItemsColumn/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="EssenceColumn" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns"]
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="Header" type="Label" parent="Pixels/Viewport/Center/Panel/VBox/Columns/EssenceColumn"]
+layout_mode = 2
+text = "UI_ALCHEMY_ESSENCE"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns/EssenceColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Essence" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns/EssenceColumn/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="RecipesColumn" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns"]
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="Header" type="Label" parent="Pixels/Viewport/Center/Panel/VBox/Columns/RecipesColumn"]
+layout_mode = 2
+text = "UI_ALCHEMY_RECIPES"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns/RecipesColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Recipes" type="VBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox/Columns/RecipesColumn/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="DetailLabel" type="RichTextLabel" parent="Pixels/Viewport/Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+auto_translate_mode = 2
+
+[node name="Bottom" type="HBoxContainer" parent="Pixels/Viewport/Center/Panel/VBox"]
+layout_mode = 2
+
+[node name="StatusLabel" type="RichTextLabel" parent="Pixels/Viewport/Center/Panel/VBox/Bottom"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+auto_translate_mode = 2
+
+[node name="CloseButton" type="Button" parent="Pixels/Viewport/Center/Panel/VBox/Bottom"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "UI_CLOSE"

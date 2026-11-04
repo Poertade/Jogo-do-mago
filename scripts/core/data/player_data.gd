@@ -15,6 +15,8 @@ extends Resource
 @export var starting_focus: FocusData
 ## Vis na varinha no começo de cada incursão (e ao despertar depois de morrer), por aspecto.
 @export var starting_vis: Dictionary[StringName, int] = {}
+## Quantos elixires o jogador leva, somando todos.
+@export var max_elixirs: int = 0
 ## Quantos potes de Vis cabem no cinto (o jogador começa sem nenhum: compra ou fabrica na
 ## escola) e quanto Vis cabe em cada um.
 @export var jar_slots: int = 0

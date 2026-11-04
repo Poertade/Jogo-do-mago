@@ -53,6 +53,8 @@ func _physics_process(delta: float) -> void:
 		Game.cycle_focus()
 	if playing and Input.is_action_just_pressed("pour_jar"):
 		Game.pour_jar()
+	if playing and Input.is_action_just_pressed("drink_elixir"):
+		Game.drink_elixir()
 	if playing and Input.is_action_just_pressed("cast") and player.can_cast():
 		var failure := caster.start_charge()
 		if failure == SpellCaster.Failure.NONE:

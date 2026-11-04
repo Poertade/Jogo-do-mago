@@ -353,17 +353,25 @@ chance = 0.5
 amount_min = 1
 amount_max = 2
 
+[node name="FungusSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.2, 0.0, -6.8)
+script = ExtResource("20")
+kind = &"glow_fungus"
+chance = 0.6
+amount_min = 1
+amount_max = 2
+
 [node name="Stalagmite0" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.7046, 0.0591, 0.7071, -0.0774, 0.997, -0.0063, -0.7053, -0.0503, 0.7071, 5.9052, 0.6966, -5.6637)
+transform = Transform3D(0.7037, -0.0923, 0.7044, 0.0438, 0.9953, 0.0866, -0.7091, -0.0301, 0.7044, 3.845, 0.4173, -3.7939)
 script = ExtResource("2")
-size = Vector3(0.35, 1.3932, 0.35)
+size = Vector3(0.35, 0.8347, 0.35)
 material = ExtResource("5")
 scannable = ExtResource("21")
 
 [node name="Stalagmite1" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.6977, -0.1292, 0.7047, 0.1003, 0.9915, 0.0824, -0.7094, 0.0132, 0.7047, -3.03, 1.0312, -6.6086)
+transform = Transform3D(0.708, 0.0253, 0.7058, -0.097, 0.9934, 0.0616, -0.6995, -0.1121, 0.7058, 1.8901, 0.9395, 1.7363)
 script = ExtResource("2")
-size = Vector3(0.35, 2.0623, 0.35)
+size = Vector3(0.35, 1.8791, 0.35)
 material = ExtResource("5")
 scannable = ExtResource("21")
 

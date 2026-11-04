@@ -180,31 +180,39 @@ script = ExtResource("15")
 kind = &"jar"
 chance = 0.7
 
+[node name="FungusSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.2, 0.0, 2.2)
+script = ExtResource("15")
+kind = &"glow_fungus"
+chance = 0.7
+amount_min = 1
+amount_max = 2
+
 [node name="Boulder0" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.678, 0.1244, 0.7245, 0.0717, 0.9697, -0.2336, -0.7316, 0.2103, 0.6485, -2.7861, 0.2521, 2.0062)
+transform = Transform3D(0.386, -0.1907, 0.9026, 0.0556, 0.9814, 0.1836, -0.9208, -0.0207, 0.3895, -2.0913, 0.4521, -2.9454)
 script = ExtResource("2")
-size = Vector3(0.8194, 0.6303, 0.6303)
+size = Vector3(1.4694, 1.1303, 1.1303)
 material = ExtResource("5")
 scannable = ExtResource("4")
 
-[node name="Stalagmite1" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.707, 0.013, 0.7071, -0.0109, 0.9999, -0.0075, -0.7071, -0.0025, 0.7071, -2.1095, 0.4956, 1.829)
+[node name="Boulder1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.951, 0.0408, 0.3064, -0.0591, 0.997, 0.0508, -0.3034, -0.0664, 0.9506, -3.8923, 0.5031, -3.0924)
 script = ExtResource("2")
-size = Vector3(0.35, 0.9912, 0.35)
+size = Vector3(1.6352, 1.2579, 1.2579)
+material = ExtResource("5")
+scannable = ExtResource("4")
+
+[node name="Stalagmite2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.7019, 0.0891, 0.7067, -0.092, 0.9952, -0.0341, -0.7063, -0.0411, 0.7067, 3.0534, 0.6914, -1.9261)
+script = ExtResource("2")
+size = Vector3(0.35, 1.3829, 0.35)
 material = ExtResource("5")
 scannable = ExtResource("16")
 
-[node name="Boulder2" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(0.4234, -0.1077, 0.8995, -0.0289, 0.9908, 0.1323, -0.9055, -0.0821, 0.4164, 2.5172, 0.4071, -2.2349)
-script = ExtResource("2")
-size = Vector3(1.3231, 1.0178, 1.0178)
-material = ExtResource("5")
-scannable = ExtResource("4")
-
 [node name="Boulder3" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(-0.0115, 0.1757, 0.9844, -0.1607, 0.9713, -0.1752, -0.9869, -0.1602, 0.017, -3.8029, 0.2971, 2.574)
+transform = Transform3D(0.9965, -0.0698, 0.0461, 0.0793, 0.9641, -0.2532, -0.0268, 0.256, 0.9663, -3.5612, 0.4742, -1.0982)
 script = ExtResource("2")
-size = Vector3(0.9655, 0.7427, 0.7427)
+size = Vector3(1.5411, 1.1855, 1.1855)
 material = ExtResource("5")
 scannable = ExtResource("4")
 
