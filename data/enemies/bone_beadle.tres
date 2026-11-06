@@ -8,6 +8,7 @@ scene_path = "res://scenes/enemies/bone_beadle.tscn"
 max_health = 50.0
 damage = 16.0
 weaknesses = Dictionary[StringName, float]({
+&"earth": 1.5,
 &"fire": 1.5
 })
 move_speed = 1.4

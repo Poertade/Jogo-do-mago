@@ -114,8 +114,9 @@ func test_school_alone_unlocks_the_research_page() -> void:
 	_solve_note(db.pages[&"fire_comprehension"])
 
 
-## As páginas da varinha (M8) também têm solução: na ordem dos requisitos, cada nota fecha.
-func test_wand_pages_can_be_studied() -> void:
+## As páginas da varinha (M8) e dos Focus novos (M10) também têm solução: na ordem dos
+## requisitos, cada nota fecha.
+func test_later_pages_can_be_studied() -> void:
 	for round in 200:
 		if not _scan_everything_possible():
 			var discovered := false
@@ -130,7 +131,7 @@ func test_wand_pages_can_be_studied() -> void:
 					break
 			if not discovered:
 				break
-	for page_id in [&"brass_caps", &"bone_core", &"crystal_core", &"silver_caps"]:
+	for page_id in [&"shock_focus", &"excavation_focus", &"brass_caps", &"bone_core", &"crystal_core", &"silver_caps"]:
 		var page: ResearchPageData = db.pages[page_id]
 		_solve_note(page)
 		assert_true(knowledge.study(page, db.aspects), "Estudar %s" % page_id)

@@ -14,6 +14,15 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
+**M10: dois Focus novos**, liberados por páginas de pesquisa, como no Thaumcraft.
+- **Focus de Choque:** gasta Aer; um raio na hora, que salta para até dois inimigos próximos.
+- **Focus de Escavação:** gasta Terra; derruba **paredes rachadas** e arranca lascas dos **veios de cristal** das grutas.
+- **Nódulos novos na escola:** de Aer (com Perditio), na Sala do Portal, e de Terra, no laboratório.
+
+| O raio do Choque saltando entre bedéis | Uma parede rachada (atrás dela, o Depósito Soterrado) |
+| --- | --- |
+| ![Choque](docs/images/focus-choque.png) | ![Parede rachada](docs/images/parede-rachada.png) |
+
 **M9: alquimia.** Uma porta nova, na parede leste do Salão de Estudos, leva ao **laboratório**, com o **cadinho**, como no Thaumcraft 4.
 - **Dissolver:** os materiais trazidos da Dungeon viram essência dos aspectos de que são feitos.
 - **Anotar:** a essência vira pontos de pesquisa, outro caminho além de escanear.
@@ -111,7 +120,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 | Botão direito (segurar) | escanear com a Lente Taxonômica |
 | E | interagir (Mesa, ler, atravessar o portal, sair) |
 | E (segurar) | drenar Vis do Nódulo para a varinha |
-| Q | trocar de Focus (depois de liberar o Focus de Gelo) |
+| Q | trocar de Focus (depois de liberar outro Focus por pesquisa) |
 | R | despejar um pote de Vis na varinha |
 | F | beber um elixir (feito no cadinho) |
 | Tab | Livro de Pesquisa |
@@ -139,11 +148,16 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 8. Segure o botão esquerdo por 0,6 s (a ponta da varinha acende e treme) e solte para lançar a magia do Focus encaixado. Soltar antes cancela sem gastar nada.
    - **Focus de Fogo** (o inicial): bola de fogo, 15 de dano, 1 de Ignis por disparo.
    - **Focus de Gelo:** é liberado ao estudar a página *Focus de Gelum*, que liga Gelum, Aqua e Vacuos. Lança um projétil de gelo com 11 de dano, gasta 1 de Aqua e 1 de Ordo e deixa o alvo a 45% da velocidade por 3 s (andar e preparar o golpe).
+   - **Focus de Choque:** liberado pela página *Focus de Aer* (Aer, Motus, Potentia). Um raio sai na hora (até 16 m), com 10 de dano, gastando 1 de Aer. Se acertar um inimigo, salta para o inimigo mais próximo a até 5 m, e dali para mais um; cada salto causa 70% do dano do anterior. O Lodo de Tinta leva 50% a mais.
+   - **Focus de Escavação:** liberado pela página *Focus de Escavação* (Terra, Vitreus, Perditio). Um projétil de terra com 8 de dano (o Bedel leva 50% a mais) que gasta 1 de Terra e:
+     - derruba as **paredes rachadas** (as rachaduras brilham fraco; a Lente as mostra). A da câmara de pedra esconde o **Depósito Soterrado**. Derrubada, fica aberta para sempre;
+     - arranca as lascas dos **veios de cristal** das grutas (gruta dos fungos, lago, gruta escondida e fundo da Fenda). As lascas caem no chão para pegar, e os veios voltam a cada incursão.
    - **Q** troca de Focus em qualquer lugar. O orbe do HUD e a ponta da varinha mudam de cor.
 9. **Vis na varinha:** um recipiente para cada primal (Aer, Terra, Ignis, Aqua, Ordo, Perditio). Com o núcleo inicial, cada um guarda até 10, e no máximo 30 somando todos. Por exemplo: 10 de Ignis, 10 de Aqua e 10 de Perditio enchem a varinha. Núcleos melhores guardam mais (item 18).
    - No HUD (canto de cima), cada recipiente é um frasco em volta do orbe do Focus, com o número ao lado; embaixo, o total.
    - A varinha começa cada incursão com 10 de Ignis, 10 de Aqua e 10 de Ordo: 10 disparos de fogo e 10 de gelo.
    - No Salão há dois **Nódulos de Vis**: segure E e o Vis voa até a varinha. O laranja enche Ignis; o azul enche Aqua e Ordo (as bolinhas brancas). Cada um enche até 10 por recipiente ou até a varinha toda chegar a 30.
+   - Mais dois Nódulos: o de **Aer** (com Perditio), na Sala do Portal, e o de **Terra**, no laboratório. Como o total da varinha é limitado, escolher o Vis que você leva é escolher os Focus que vai usar.
    - Na Dungeon, só a fonte de Vis recarrega, e os Nódulos dela se esgotam.
 10. A Lente e a varinha não funcionam ao mesmo tempo: ou você estuda, ou você ataca.
 
@@ -284,7 +298,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Pesquisa:** escaneamento bloqueado por composto desconhecido, pontos por aspecto, combinação na Mesa, notas de pesquisa (grade, ligações, escrever e apagar, nota completa), estudo de páginas, andamento do escaneamento, efeitos das páginas, economia da pesquisa (tudo pode ser escaneado com os pontos disponíveis).
 - **Magia:** recipientes de Vis da varinha (limite por aspecto e total), custo, carga, intervalo e recarga da magia, eficiência da varinha, dano com páginas e fraquezas, vida, reinício da incursão.
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
-- **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala.
+- **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala. Corrente do Choque (salta para o mais perto, sem repetir alvo, com o dano caindo a cada salto); Choque e Escavação liberados por páginas cujas notas têm solução.
 - **Scripts:** todo script do jogo e das ferramentas compila.
 - **Alquimia (M9):** dissolver um material vira essência dos aspectos dele (e sai do que está guardado); materiais sem aspectos não se dissolvem; gastar essência é tudo ou nada; anotar só vale para aspectos descobertos; elixires respeitam o limite e curam sem passar do máximo; cadinho e elixires no save 8; toda receita usa aspectos que algum material dá.
 - **Varinha (M8):** núcleo e ponteira montam a varinha; a economia da eficiência se acumula (com 1,25, cinco disparos de 1 custam 4); trocar de peça mantém o Vis que couber; peças guardadas no save 7; páginas que liberam peças; cada núcleo guarda mais e cada ponteira gasta menos que a anterior; todo material das peças aparece no mapa, nos inimigos ou no baú; as notas das quatro páginas novas têm solução.

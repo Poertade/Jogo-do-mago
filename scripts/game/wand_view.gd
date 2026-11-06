@@ -75,6 +75,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _fire(caster: SpellCaster) -> void:
+	if caster.focus.spell_type == FocusData.SPELL_CHAIN:
+		_fire_chain(caster)
+		return
 	var projectile: Projectile = projectile_scene.instantiate()
 	var world := player.get_parent() as World
 	world.spawn(projectile)
@@ -87,6 +90,42 @@ func _fire(caster: SpellCaster) -> void:
 	position = rest_position + recoil
 	Audio.play(&"spell_cast")
 	# O barulho da magia acorda os inimigos por perto.
+	Game.noise_made.emit(player.global_position, noise_radius)
+
+
+## Focus de Choque: um raio instantâneo até a mira. Se acertar um inimigo, salta para os mais
+## próximos (ChainLightning), com o dano diminuindo a cada salto.
+func _fire_chain(caster: SpellCaster) -> void:
+	var focus := caster.focus
+	var world := player.get_parent() as World
+	var aim := player.aim_point(focus.chain_range)
+	var query := PhysicsRayQueryParameters3D.create(tip.global_position, aim + (aim - tip.global_position).normalized() * 0.2)
+	query.exclude = [player.get_rid()]
+	var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+	var points: Array[Vector3] = [tip.global_position]
+	var first: Node = Projectile._find_damageable(hit.collider) if not hit.is_empty() else null
+	var enemies: Array[Node3D] = []
+	for node in get_tree().get_nodes_in_group(&"enemies"):
+		if node is Enemy and not node.health.is_dead():
+			enemies.append(node)
+	if first is Enemy and first in enemies:
+		var positions: Array[Vector3] = []
+		for enemy in enemies:
+			positions.append(enemy.global_position + Vector3.UP * 1.0)
+		var order := ChainLightning.pick_targets(enemies.find(first), positions, focus.chain_jumps, focus.chain_jump_range)
+		var amounts := ChainLightning.damages(caster.damage(Game.modifiers), order.size(), focus.chain_falloff)
+		for i in order.size():
+			points.append(positions[order[i]])
+			enemies[order[i]].take_damage(amounts[i], focus.element)
+	else:
+		if first != null:
+			first.take_damage(caster.damage(Game.modifiers), focus.element)
+		points.append(hit.position if not hit.is_empty() else aim)
+	var bolt := LightningBolt.new()
+	world.spawn(bolt)
+	bolt.setup(points, focus.light_color)
+	position = rest_position + recoil
+	Audio.play(&"spell_cast")
 	Game.noise_made.emit(player.global_position, noise_radius)
 
 

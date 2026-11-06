@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/crystal_vein.gd" id="1"]
+[ext_resource type="Resource" path="res://data/scannables/crystal_vein.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="3"]
+[ext_resource type="Material" path="res://assets/materials/cave_rock.tres" id="4"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="5"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("5")
+shader_parameter/albedo_color = Color(0.1255, 0.1882, 0.3137, 1.0)
+shader_parameter/emission_color = Color(0.5647, 0.8157, 1.0, 1.0)
+shader_parameter/emission_energy = 1.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.09, 0.35, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(0.09, 0.45, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(0.09, 0.3, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.09, 0.25, 0.09)
+
+[node name="CrystalVein" type="Node3D"]
+script = ExtResource("1")
+scannable = ExtResource("2")
+
+[node name="Rock" type="StaticBody3D" parent="."]
+transform = Transform3D(0.9296, 0.1456, 0.3387, -0.1035, 0.9848, -0.1392, -0.3538, 0.0943, 0.9305, 0.0, 0.55, -0.15)
+script = ExtResource("3")
+size = Vector3(1.2, 1.1, 0.7)
+material = ExtResource("4")
+
+[node name="Shards" type="Node3D" parent="."]
+
+[node name="Shard1" type="MeshInstance3D" parent="Shards"]
+transform = Transform3D(0.635, 0.471, 0.6124, -0.1504, 0.8529, -0.5, -0.7578, 0.2254, 0.6124, -0.25, 0.7, 0.2)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Shard2" type="MeshInstance3D" parent="Shards"]
+transform = Transform3D(0.7456, 0.0506, 0.6645, 0.2432, 0.9077, -0.342, -0.6204, 0.4166, 0.6645, 0.1, 0.9, 0.22)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="Shard3" type="MeshInstance3D" parent="Shards"]
+transform = Transform3D(0.8123, 0.0687, 0.5792, 0.3462, 0.7424, -0.5736, -0.4695, 0.6664, 0.5792, 0.35, 0.5, 0.18)
+mesh = SubResource("BoxMesh_4")
+material_override = SubResource("Mat_1")
+
+[node name="Shard4" type="MeshInstance3D" parent="Shards"]
+transform = Transform3D(0.3415, 0.8227, 0.4545, -0.3214, 0.5567, -0.766, -0.8832, 0.1156, 0.4545, -0.05, 0.4, 0.25)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_1")
+
+[node name="Glow" type="OmniLight3D" parent="Shards"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.8, 0.6)
+light_color = Color(0.5647, 0.8157, 1.0, 1.0)
+light_energy = 0.7
+omni_range = 3.0

@@ -355,6 +355,9 @@ func _validate_focus(focus: FocusData) -> void:
 		errors.append("%s: projétil precisa de velocidade e duração positivas." % owner)
 	if focus.slow_factor <= 0.0 or focus.slow_factor > 1.0 or focus.slow_seconds < 0.0:
 		errors.append("%s: slow_factor fica entre 0 e 1 (1 = sem lentidão) e slow_seconds não pode ser negativo." % owner)
+	if focus.spell_type == FocusData.SPELL_CHAIN and (focus.chain_range <= 0.0 or focus.chain_jumps < 0 \
+			or focus.chain_jump_range < 0.0 or focus.chain_falloff <= 0.0 or focus.chain_falloff > 1.0):
+		errors.append("%s: a corrente precisa de chain_range positivo, saltos e distância não negativos e chain_falloff entre 0 e 1." % owner)
 
 
 func _validate_enemy(enemy: EnemyData) -> void:

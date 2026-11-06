@@ -19,7 +19,8 @@
 [ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="17"]
 [ext_resource type="Resource" path="res://data/enemies/bone_beadle.tres" id="18"]
 [ext_resource type="Script" path="res://scripts/game/loot_spot.gd" id="19"]
-[ext_resource type="Resource" path="res://data/scannables/stalagmite.tres" id="20"]
+[ext_resource type="PackedScene" path="res://scenes/props/crystal_vein.tscn" id="20"]
+[ext_resource type="Resource" path="res://data/scannables/stalagmite.tres" id="21"]
 
 [sub_resource type="ShaderMaterial" id="Mat_1"]
 render_priority = 0
@@ -566,6 +567,9 @@ chance = 0.6
 amount_min = 1
 amount_max = 2
 
+[node name="CrystalVein" parent="Props" instance=ExtResource("20")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, -4.6)
+
 [node name="ChestSpot" type="Marker3D" parent="Markers"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.9, 0.0, -1.2)
 script = ExtResource("19")
@@ -577,28 +581,28 @@ transform = Transform3D(0.6972, -0.137, 0.7037, 0.0951, 0.9906, 0.0986, -0.7105,
 script = ExtResource("2")
 size = Vector3(0.35, 1.9916, 0.35)
 material = ExtResource("5")
-scannable = ExtResource("20")
+scannable = ExtResource("21")
 
 [node name="Stalactite1" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.7069, 0.0183, 0.7071, -0.0259, 0.9997, 0.0, -0.7069, -0.0183, 0.7071, -2.2808, 15.2124, 0.9657)
 script = ExtResource("2")
 size = Vector3(0.3, 1.5752, 0.3)
 material = ExtResource("5")
-scannable = ExtResource("20")
+scannable = ExtResource("21")
 
 [node name="Stalactite2" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.7052, -0.0522, 0.7071, 0.0739, 0.9973, 0.0, -0.7052, 0.0522, 0.7071, -2.0176, 15.2424, -3.1021)
 script = ExtResource("2")
 size = Vector3(0.3, 1.5153, 0.3)
 material = ExtResource("5")
-scannable = ExtResource("20")
+scannable = ExtResource("21")
 
 [node name="Stalagmite3" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.709, -0.0166, 0.7051, 0.0989, 0.9922, -0.0762, -0.6983, 0.1237, 0.7051, 2.01, 0.7264, -1.9767)
 script = ExtResource("2")
 size = Vector3(0.35, 1.4528, 0.35)
 material = ExtResource("5")
-scannable = ExtResource("20")
+scannable = ExtResource("21")
 
 [node name="Boulder4" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.3629, 0.0248, 0.9315, 0.1616, 0.9828, -0.0891, -0.9177, 0.1829, 0.3526, -3.3848, 0.4828, -2.6664)
@@ -612,11 +616,11 @@ transform = Transform3D(0.7069, -0.015, 0.7071, 0.0213, 0.9998, 0.0, -0.7069, 0.
 script = ExtResource("2")
 size = Vector3(0.3, 0.7031, 0.3)
 material = ExtResource("5")
-scannable = ExtResource("20")
+scannable = ExtResource("21")
 
 [node name="Stalactite6" type="StaticBody3D" parent="Blocks"]
 transform = Transform3D(0.7071, 0.0017, 0.7071, -0.0024, 1.0, 0.0, -0.7071, -0.0017, 0.7071, 0.4095, 15.6908, -1.614)
 script = ExtResource("2")
 size = Vector3(0.3, 0.6183, 0.3)
 material = ExtResource("5")
-scannable = ExtResource("20")
+scannable = ExtResource("21")

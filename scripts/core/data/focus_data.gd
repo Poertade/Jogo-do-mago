@@ -6,12 +6,14 @@ extends Resource
 
 ## Tipos de magia conhecidos pelo motor.
 const SPELL_PROJECTILE := &"projectile"
-const SPELL_TYPES: Array[StringName] = [SPELL_PROJECTILE]
+const SPELL_CHAIN := &"chain"
+const SPELL_TYPES: Array[StringName] = [SPELL_PROJECTILE, SPELL_CHAIN]
 
 @export var id: StringName
 ## Chave de tradução do nome (em locales/content.csv).
 @export var name_key: String
-## Tipo de magia. "projectile": carrega e lança um projétil.
+## Tipo de magia. "projectile": carrega e lança um projétil. "chain": um raio instantâneo que
+## acerta o que está na mira e salta para os inimigos próximos (Focus de Choque).
 @export var spell_type: StringName
 ## Elemento do dano (um identificador de aspecto, ex.: fire). Inimigos podem ser fracos a ele.
 @export var element: StringName
@@ -32,12 +34,25 @@ const SPELL_TYPES: Array[StringName] = [SPELL_PROJECTILE]
 ## Por quantos segundos o alvo fica lento.
 @export var slow_seconds: float = 0.0
 
+## Ligado: o projétil escava (quebra paredes rachadas e extrai veios de cristal), como o Focus
+## de Escavação do Thaumcraft.
+@export var digs := false
+
+@export_group("Corrente (tipo chain)")
+## Alcance do raio, em metros.
+@export var chain_range: float = 0.0
+## Quantos saltos para outros inimigos, a até `chain_jump_range` metros cada.
+@export var chain_jumps: int = 0
+@export var chain_jump_range: float = 0.0
+## Fração do dano que cada salto mantém (0,7 = 70% do anterior).
+@export var chain_falloff: float = 1.0
+
 @export_group("Projétil")
 ## Velocidade, em metros por segundo.
 @export var projectile_speed: float = 0.0
 ## Segundos até o projétil se apagar sozinho.
 @export var projectile_lifetime: float = 0.0
-## Cor e força da luz que o projétil leva (ele ilumina o caminho).
+## Cor e força da luz que o projétil (ou o raio) leva.
 @export var light_color: Color = Color.BLACK
 @export var light_energy: float = 0.0
 @export var light_range: float = 0.0

@@ -34,6 +34,8 @@
 [ext_resource type="PackedScene" path="res://scenes/props/portal.tscn" id="21"]
 [ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="22"]
 [ext_resource type="Resource" path="res://data/scannables/vis_node_water.tres" id="scan_vis_node_water"]
+[ext_resource type="Resource" path="res://data/scannables/vis_node_air.tres" id="scan_vis_node_air"]
+[ext_resource type="Resource" path="res://data/scannables/vis_node_earth.tres" id="scan_vis_node_earth"]
 [ext_resource type="PackedScene" path="res://scenes/props/reading_lectern.tscn" id="lectern"]
 [ext_resource type="PackedScene" path="res://scenes/props/merchant.tscn" id="merchant"]
 [ext_resource type="PackedScene" path="res://scenes/props/glass_workbench.tscn" id="workbench"]
@@ -649,6 +651,12 @@ light_energy = 0.9
 omni_range = 5
 omni_attenuation = 1.2
 
+[node name="AerNode" parent="PortalRoom" instance=ExtResource("15")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.4, 0.0, -14.0)
+scannable = ExtResource("scan_vis_node_air")
+aspect = &"air"
+other_aspects = Array[StringName]([&"entropy"])
+
 [node name="Plaque" parent="PortalRoom" instance=ExtResource("plaque")]
 transform = Transform3D(0.8660, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660, 2.6, 0, -15.6)
 
@@ -824,6 +832,11 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 14.0, 2.4, 
 light_color = Color(0.6, 0.85, 0.8, 1)
 light_energy = 0.6
 omni_range = 5.0
+
+[node name="TerraNode" parent="Laboratory" instance=ExtResource("15")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 14.2, 0.0, 7.3)
+scannable = ExtResource("scan_vis_node_earth")
+aspect = &"earth"
 
 [node name="Entrances" type="Node3D" parent="."]
 

@@ -22,7 +22,7 @@
 | **Pesquisa achada no mundo** (fragmentos de conhecimento, notas em masmorras) | livros perdidos na Dungeon, lidos no atril da escola: cada um ensina uma receita sorteada que o jogador ainda não tem | feito |
 | **Potes protegidos** (guardam essentia) | potes de Vis no cinto: guardam o que sobra dos Nódulos e recarregam a varinha (R). O jogador começa sem nenhum: compra no Almoxarife ou fabrica na bancada de vidraria (D069) | adaptado |
 | **Varinha**: núcleo (madeira, cana, sangue…) define a capacidade de Vis; ponteiras (ferro, ouro, taumium…) definem o desconto no custo | varinha com um recipiente por primal e limite total. Núcleos (madeira, osso, cristal) dão os limites; ponteiras (ferro, latão, prata), a eficiência. Cada peça é liberada por uma página e feita na Bancada Arcana com materiais da Dungeon e Vis da varinha (`data/wands/`, D071) | adaptado |
-| **Focus**: encaixado na varinha, define a magia (Fogo, Gelo, Choque, Escavação, Portal…) | Focus de Fogo e Focus de Gelo (lentidão), trocados com Q; o de Gelo é liberado por pesquisa | dois Focus |
+| **Focus**: encaixado na varinha, define a magia (Fogo, Gelo, Choque, Escavação, Portal…) | Fogo, Gelo (lentidão), Choque (raio em corrente, Aer) e Escavação (Terra: derruba paredes rachadas e arranca cristal dos veios), trocados com Q; os três últimos liberados por pesquisa (D060, D073) | quatro Focus |
 | **Nódulos de aura**: esferas de Vis com aspectos; a varinha drena Vis segurando o botão; o nódulo se recarrega devagar | Nódulos de Ignis e de Aqua (com Ordo) na escola, que não acabam; na Dungeon, nódulos que se esgotam | feito (sem recarga lenta) |
 | **Vis**: a varinha guarda os seis primais (Aer, Terra, Ignis, Aqua, Ordo, Perditio), cada um com sua reserva; no 4, em centésimos ("centi-Vis") | um recipiente por primal (até 10) e, a pedido do usuário, um limite total (30) (D051) | feito (valores inteiros) |
 | **Bancada arcana** (receitas que gastam Vis da varinha) | bancada de vidraria: um pote de Vis custa cacos de vidro e Ignis e Ordo da varinha (D069) | adaptado |
@@ -31,7 +31,7 @@
 
 ## Ideias para próximos marcos (precisam de aprovação)
 
-1. **Mais Focus**, cada um gastando primais diferentes. O de Gelo já existe (M7). Do Thaumcraft 4 ainda faltam Choque (Aer, raio em cadeia) e Escavação (Terra/Ordo, quebra paredes frágeis e abre passagens secretas).
+1. ~~**Mais Focus**~~: Gelo (M7), Choque e Escavação (M10). Ainda faltam, por exemplo, o de Portal (Iter) e o de Escudo.
 2. ~~**Núcleos e ponteiras de varinha**~~: feito no M8 (D071).
 3. **Mais aspectos compostos** e objetos que os contenham. A Dungeon pode trazer aspectos que a escola não tem, como Alienis, Tenebrae e Vitium; isso faz explorar valer pesquisa.
 4. **Notas de pesquisa mais ricas** (a versão simples já existe): tinta e penas como recurso, notas que pedem aspectos raros da Dungeon, copiar uma nota resolvida.

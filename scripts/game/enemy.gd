@@ -34,6 +34,8 @@ func _ready() -> void:
 	brain.attack_landed.connect(_on_attack_landed)
 	health.died.connect(_on_died)
 	_player = get_tree().get_first_node_in_group(&"player")
+	# O Focus de Choque procura os próximos alvos da corrente neste grupo.
+	add_to_group(&"enemies")
 	_agent = NavigationAgent3D.new()
 	_agent.path_desired_distance = 0.6
 	_agent.target_desired_distance = 0.8

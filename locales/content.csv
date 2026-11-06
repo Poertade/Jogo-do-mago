@@ -206,3 +206,14 @@ RECIPE_DISTILL_ORDER,Destilar {order}
 RECIPE_DISTILL_ORDER_DESC,"Condensa a essência de {order} em 10 de Vis, num pote vazio do cinto."
 NOTE_LAB_TITLE,Caderno de alquimia
 NOTE_LAB_BODY,"O cadinho não queima as coisas: desfaz. O que cai no caldo volta a ser os aspectos de que era feito, e a essência fica boiando até alguém dar uso a ela.\n\nAnote a essência e ela vira pontos de pesquisa. Ou siga uma receita: dois fungos luminosos e um tanto de tinta coagulada dão um Elixir de {life}, que fecha feridas lá embaixo.\n\nO que ainda não descobrimos aparece no caldo como um ponto de interrogação. Primeiro a Mesa, depois o cadinho."
+FOCUS_SHOCK,Focus de Choque
+FOCUS_EXCAVATION,Focus de Escavação
+PAGE_SHOCK_FOCUS,Focus de {air}
+PAGE_SHOCK_FOCUS_DESC,"Prender o {air} em movimento num Focus: um raio que gasta {air}, acerta na hora e salta para até dois inimigos próximos. Q troca de Focus."
+PAGE_EXCAVATION_FOCUS,Focus de Escavação
+PAGE_EXCAVATION_FOCUS_DESC,"Desfazer a {earth} pelo que ela tem de {entropy}: um projétil que gasta {earth}, derruba paredes rachadas e arranca o {crystal} dos veios. Q troca de Focus."
+PROMPT_CRACKED_WALL,Parede rachada: só a Escavação a derruba
+PROMPT_CRYSTAL_VEIN,Veio de cristal: a Escavação arranca as lascas
+OBJ_CRACKED_WALL,Parede rachada
+OBJ_CRYSTAL_VEIN,Veio de cristal
+ROOM_BURIED_STOREROOM,Depósito Soterrado

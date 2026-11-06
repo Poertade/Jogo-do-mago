@@ -12,7 +12,7 @@ wand_part = ExtResource("3")
 [resource]
 script = ExtResource("2")
 id = &"bone_core"
-order = 4
+order = 6
 name_key = "PAGE_BONE_CORE"
 description_key = "PAGE_BONE_CORE_DESC"
 note_aspects = Array[StringName]([&"death", &"earth", &"entropy"])

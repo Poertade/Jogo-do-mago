@@ -8,6 +8,7 @@ scene_path = "res://scenes/enemies/ink_ooze.tscn"
 max_health = 36.0
 damage = 20.0
 weaknesses = Dictionary[StringName, float]({
+&"air": 1.5,
 &"cold": 1.8,
 &"fire": 0.6
 })

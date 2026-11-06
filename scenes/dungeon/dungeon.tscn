@@ -8,29 +8,64 @@
 [ext_resource type="PackedScene" path="res://scenes/rooms/bone_crypt.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/rooms/flooded_dormitory.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/rooms/stone_chamber.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/fungus_grotto.tscn" id="9"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/underground_lake.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/hidden_grotto.tscn" id="11"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/vis_spring.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/chasm.tscn" id="13"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/inverted_hall.tscn" id="14"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/archive_vestibule.tscn" id="15"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/grand_archive.tscn" id="16"]
-[ext_resource type="Script" path="res://scripts/game/corridor_path.gd" id="17"]
-[ext_resource type="Resource" path="res://data/dungeon/zones/school.tres" id="18"]
-[ext_resource type="Resource" path="res://data/dungeon/zones/caves.tres" id="19"]
-[ext_resource type="Resource" path="res://data/dungeon/zones/abyss.tres" id="20"]
-[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="21"]
-[ext_resource type="Material" path="res://assets/materials/cave_rock.tres" id="22"]
-[ext_resource type="Resource" path="res://data/scannables/damp_stone.tres" id="23"]
-[ext_resource type="Script" path="res://scripts/game/gate.gd" id="24"]
-[ext_resource type="Resource" path="res://data/scannables/iron_bars.tres" id="25"]
-[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="26"]
-[ext_resource type="Material" path="res://assets/materials/abyss_wall.tres" id="27"]
-[ext_resource type="PackedScene" path="res://scenes/props/old_key.tscn" id="28"]
-[ext_resource type="Script" path="res://scripts/game/secret_wall.gd" id="29"]
-[ext_resource type="Resource" path="res://data/scannables/illusory_wall.tres" id="30"]
-[ext_resource type="PackedScene" path="res://scenes/props/portal_anchor.tscn" id="31"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/buried_storeroom.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/fungus_grotto.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/underground_lake.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/hidden_grotto.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/vis_spring.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/chasm.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/inverted_hall.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/archive_vestibule.tscn" id="16"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/grand_archive.tscn" id="17"]
+[ext_resource type="Script" path="res://scripts/game/corridor_path.gd" id="18"]
+[ext_resource type="Resource" path="res://data/dungeon/zones/school.tres" id="19"]
+[ext_resource type="Resource" path="res://data/dungeon/zones/caves.tres" id="20"]
+[ext_resource type="Resource" path="res://data/dungeon/zones/abyss.tres" id="21"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="22"]
+[ext_resource type="Material" path="res://assets/materials/cave_rock.tres" id="23"]
+[ext_resource type="Resource" path="res://data/scannables/damp_stone.tres" id="24"]
+[ext_resource type="Script" path="res://scripts/game/gate.gd" id="25"]
+[ext_resource type="Resource" path="res://data/scannables/iron_bars.tres" id="26"]
+[ext_resource type="Material" path="res://assets/materials/dungeon_wall.tres" id="27"]
+[ext_resource type="Material" path="res://assets/materials/abyss_wall.tres" id="28"]
+[ext_resource type="PackedScene" path="res://scenes/props/old_key.tscn" id="29"]
+[ext_resource type="Script" path="res://scripts/game/secret_wall.gd" id="30"]
+[ext_resource type="Resource" path="res://data/scannables/illusory_wall.tres" id="31"]
+[ext_resource type="Script" path="res://scripts/game/cracked_wall.gd" id="32"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="33"]
+[ext_resource type="Resource" path="res://data/scannables/cracked_wall.tres" id="34"]
+[ext_resource type="PackedScene" path="res://scenes/props/portal_anchor.tscn" id="35"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("33")
+shader_parameter/albedo_color = Color(0.0627, 0.0392, 0.0196, 1.0)
+shader_parameter/emission_color = Color(0.6902, 0.4784, 0.251, 1.0)
+shader_parameter/emission_energy = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(0.02, 0.05, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(0.02, 0.05, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(0.02, 0.05, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(0.02, 0.05, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(0.02, 0.05, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+size = Vector3(0.02, 0.05, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+size = Vector3(0.02, 0.05, 0.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_9"]
+size = Vector3(0.02, 0.05, 0.9)
 
 [node name="Dungeon" type="NavigationRegion3D"]
 script = ExtResource("1")
@@ -66,137 +101,145 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 18.5, 0.0, 
 [node name="StoneChamber" parent="Rooms" instance=ExtResource("8")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -18.0, 0.0, 0.0)
 
-[node name="FungusGrotto" parent="Rooms" instance=ExtResource("9")]
+[node name="BuriedStoreroom" parent="Rooms" instance=ExtResource("9")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -29.0, 0.0, -3.0)
+
+[node name="FungusGrotto" parent="Rooms" instance=ExtResource("10")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.0, -12.0, 22.0)
 
-[node name="UndergroundLake" parent="Rooms" instance=ExtResource("10")]
+[node name="UndergroundLake" parent="Rooms" instance=ExtResource("11")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -12.0, 0.0)
 
-[node name="HiddenGrotto" parent="Rooms" instance=ExtResource("11")]
+[node name="HiddenGrotto" parent="Rooms" instance=ExtResource("12")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -12.5, -12.0, 0.0)
 
-[node name="VisSpring" parent="Rooms" instance=ExtResource("12")]
+[node name="VisSpring" parent="Rooms" instance=ExtResource("13")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -12.0, -19.0)
 
-[node name="Chasm" parent="Rooms" instance=ExtResource("13")]
+[node name="Chasm" parent="Rooms" instance=ExtResource("14")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 23.0, -20.0, -3.0)
 
-[node name="InvertedHall" parent="Rooms" instance=ExtResource("14")]
+[node name="InvertedHall" parent="Rooms" instance=ExtResource("15")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 54.0, -18.0, -3.0)
 
-[node name="ArchiveVestibule" parent="Rooms" instance=ExtResource("15")]
+[node name="ArchiveVestibule" parent="Rooms" instance=ExtResource("16")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 54.0, -18.0, -20.0)
 
-[node name="GrandArchive" parent="Rooms" instance=ExtResource("16")]
+[node name="GrandArchive" parent="Rooms" instance=ExtResource("17")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 54.0, -18.0, -38.0)
 
 [node name="AtriumToLibrary" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(0.0, 0.0, -7.0, 0.0, 0.0, -14.0)
-zone = ExtResource("18")
+zone = ExtResource("19")
 
 [node name="LibraryToOssuary" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(6.0, 0.0, -20.0, 9.0, 0.0, -20.0)
-zone = ExtResource("18")
+zone = ExtResource("19")
 
 [node name="LibraryToCabinet" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(-6.0, 0.0, -17.0, -9.0, 0.0, -17.0)
-zone = ExtResource("18")
+zone = ExtResource("19")
 
 [node name="OssuaryToCrypt" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(27.0, 0.0, -20.0, 30.0, 0.0, -20.0)
-zone = ExtResource("18")
+zone = ExtResource("19")
 
 [node name="OssuaryToDormitory" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(18.5, 0.0, -17.0, 18.5, 0.0, -11.6)
-zone = ExtResource("18")
+zone = ExtResource("19")
 
 [node name="DormitoryToAtrium" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(14.0, 0.0, 0.0, 7.0, 0.0, 0.0)
-zone = ExtResource("18")
+zone = ExtResource("19")
 
 [node name="AtriumToChamber" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(-7.0, 0.0, 0.0, -13.0, 0.0, 0.0)
-zone = ExtResource("18")
+zone = ExtResource("19")
+
+[node name="ChamberToStoreroom" type="Node3D" parent="Corridors"]
+script = ExtResource("18")
+points = PackedVector3Array(-23.0, 0.0, -3.0, -26.0, 0.0, -3.0)
+zone = ExtResource("19")
 
 [node name="GreatStair" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(-18.0, 0.0, 6.0, -18.0, -6.0, 22.0, -4.0, -12.0, 22.0)
-zone = ExtResource("19")
+zone = ExtResource("20")
 
 [node name="FungusToLake" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(2.0, -12.0, 15.0, 2.0, -12.0, 8.0)
-zone = ExtResource("19")
+zone = ExtResource("20")
 
 [node name="LakeToSpring" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(0.0, -12.0, -8.0, 0.0, -12.0, -14.0)
-zone = ExtResource("19")
+zone = ExtResource("20")
 
 [node name="LakeToGrotto" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(-7.0, -12.0, 0.0, -9.0, -12.0, 0.0)
-zone = ExtResource("19")
+zone = ExtResource("20")
 
 [node name="LakeToChasm" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(7.0, -12.0, -3.0, 12.0, -12.0, -3.0)
-zone = ExtResource("19")
+zone = ExtResource("20")
 
 [node name="ChasmTunnel" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(23.0, -20.0, 2.0, 23.0, -12.0, 22.0, 8.0, -12.0, 22.0)
-zone = ExtResource("19")
+zone = ExtResource("20")
 
 [node name="SealedDescent" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(34.0, -12.0, -3.0, 48.0, -18.0, -3.0)
-zone = ExtResource("20")
+zone = ExtResource("21")
 
 [node name="InvertedToVestibule" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(54.0, -18.0, -11.0, 54.0, -18.0, -16.0)
-zone = ExtResource("20")
+zone = ExtResource("21")
 
 [node name="VestibuleToArchive" type="Node3D" parent="Corridors"]
-script = ExtResource("17")
+script = ExtResource("18")
 points = PackedVector3Array(54.0, -18.0, -24.0, 54.0, -18.0, -29.0)
-zone = ExtResource("20")
+zone = ExtResource("21")
 
 [node name="ShaftNorth" type="StaticBody3D" parent="Shaft"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -3.0, -1.7)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(3.8, 5.6, 0.4)
-material = ExtResource("22")
-scannable = ExtResource("23")
+material = ExtResource("23")
+scannable = ExtResource("24")
 
 [node name="ShaftSouth" type="StaticBody3D" parent="Shaft"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -3.0, 1.7)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(3.8, 5.6, 0.4)
-material = ExtResource("22")
-scannable = ExtResource("23")
+material = ExtResource("23")
+scannable = ExtResource("24")
 
 [node name="ShaftWest" type="StaticBody3D" parent="Shaft"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.7, -3.0, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.4, 5.6, 3.0)
-material = ExtResource("22")
-scannable = ExtResource("23")
+material = ExtResource("23")
+scannable = ExtResource("24")
 
 [node name="ShaftEast" type="StaticBody3D" parent="Shaft"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.7, -3.0, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.4, 5.6, 3.0)
-material = ExtResource("22")
-scannable = ExtResource("23")
+material = ExtResource("23")
+scannable = ExtResource("24")
 
 [node name="ShaftGlow" type="OmniLight3D" parent="Shaft"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, 0.0)
@@ -214,159 +257,211 @@ omni_attenuation = 1.2
 
 [node name="DormitoryGate" type="Node3D" parent="Passages" node_paths=PackedStringArray("bars")]
 transform = Transform3D(0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 8.4, 0.0, 0.0)
-script = ExtResource("24")
+script = ExtResource("25")
 passage_id = &"dormitory_gate"
 one_way = true
-scannable = ExtResource("25")
+scannable = ExtResource("26")
 bars = NodePath("Bars")
 
 [node name="Bars" type="Node3D" parent="Passages/DormitoryGate"]
 
 [node name="Bar1" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="Bar2" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="Bar3" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="Bar4" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="Bar5" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="Cross1" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.9, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(2.4, 0.08, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="Cross2" type="StaticBody3D" parent="Passages/DormitoryGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.9, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(2.4, 0.08, 0.08)
-material = ExtResource("26")
-scannable = ExtResource("25")
+material = ExtResource("27")
+scannable = ExtResource("26")
 
 [node name="SealedGate" type="Node3D" parent="Passages" node_paths=PackedStringArray("bars")]
 transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 34.6, -12.0, -3.0)
-script = ExtResource("24")
+script = ExtResource("25")
 passage_id = &"sealed_gate"
 needs_key = &"crypt_key"
-scannable = ExtResource("25")
+scannable = ExtResource("26")
 bars = NodePath("Bars")
 
 [node name="Bars" type="Node3D" parent="Passages/SealedGate"]
 
 [node name="Bar1" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
 [node name="Bar2" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.5, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
 [node name="Bar3" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
 [node name="Bar4" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
 [node name="Bar5" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.08, 2.8, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
 [node name="Cross1" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.9, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(2.4, 0.08, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
 [node name="Cross2" type="StaticBody3D" parent="Passages/SealedGate/Bars"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.9, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(2.4, 0.08, 0.08)
-material = ExtResource("27")
-scannable = ExtResource("25")
+material = ExtResource("28")
+scannable = ExtResource("26")
 
-[node name="CryptKey" parent="Passages" instance=ExtResource("28")]
+[node name="CryptKey" parent="Passages" instance=ExtResource("29")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 36.4, 0.98, -20.0)
 key_id = &"crypt_key"
 name_key = "KEY_CRYPT"
 
 [node name="LibrarySecret" type="Node3D" parent="Passages"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 0.0, -17.0)
-script = ExtResource("29")
+script = ExtResource("30")
 passage_id = &"collapsed_library_secret"
-scannable = ExtResource("30")
+scannable = ExtResource("31")
 
 [node name="Wall" type="StaticBody3D" parent="Passages/LibrarySecret"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.4, 2.8, 2.4)
-material = ExtResource("26")
+material = ExtResource("27")
 
 [node name="LakeSecret" type="Node3D" parent="Passages"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -7.2, -12.0, 0.0)
-script = ExtResource("29")
+script = ExtResource("30")
 passage_id = &"underground_lake_secret"
-scannable = ExtResource("30")
+scannable = ExtResource("31")
 
 [node name="Wall" type="StaticBody3D" parent="Passages/LakeSecret"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
-script = ExtResource("21")
+script = ExtResource("22")
 size = Vector3(0.4, 2.8, 2.4)
-material = ExtResource("22")
+material = ExtResource("23")
 
-[node name="AtriumAnchor" parent="Anchors" instance=ExtResource("31")]
+[node name="ChamberCrack" type="Node3D" parent="Passages"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -23.2, 0.0, -3.0)
+script = ExtResource("32")
+passage_id = &"stone_chamber_crack"
+scannable = ExtResource("34")
+
+[node name="Wall" type="StaticBody3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.4, 0.0)
+script = ExtResource("22")
+size = Vector3(0.4, 2.8, 2.4)
+material = ExtResource("27")
+
+[node name="Crack0W" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.8192, -0.5736, 0.0, 0.5736, 0.8192, -0.21, 1.6, 0.2)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="Crack0E" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.8192, -0.5736, 0.0, 0.5736, 0.8192, 0.21, 1.6, 0.2)
+mesh = SubResource("BoxMesh_3")
+material_override = SubResource("Mat_1")
+
+[node name="Crack1W" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.6428, 0.766, 0.0, -0.766, 0.6428, -0.21, 1.1, -0.4)
+mesh = SubResource("BoxMesh_4")
+material_override = SubResource("Mat_1")
+
+[node name="Crack1E" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.6428, 0.766, 0.0, -0.766, 0.6428, 0.21, 1.1, -0.4)
+mesh = SubResource("BoxMesh_5")
+material_override = SubResource("Mat_1")
+
+[node name="Crack2W" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.342, -0.9397, 0.0, 0.9397, 0.342, -0.21, 2.1, 0.6)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_1")
+
+[node name="Crack2E" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.342, -0.9397, 0.0, 0.9397, 0.342, 0.21, 2.1, 0.6)
+mesh = SubResource("BoxMesh_7")
+material_override = SubResource("Mat_1")
+
+[node name="Crack3W" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9397, -0.342, 0.0, 0.342, 0.9397, -0.21, 0.7, 0.3)
+mesh = SubResource("BoxMesh_8")
+material_override = SubResource("Mat_1")
+
+[node name="Crack3E" type="MeshInstance3D" parent="Passages/ChamberCrack"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9397, -0.342, 0.0, 0.342, 0.9397, 0.21, 0.7, 0.3)
+mesh = SubResource("BoxMesh_9")
+material_override = SubResource("Mat_1")
+
+[node name="AtriumAnchor" parent="Anchors" instance=ExtResource("35")]
 transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 5.2)
 anchor_id = &"atrium"
 
-[node name="SpringAnchor" parent="Anchors" instance=ExtResource("31")]
+[node name="SpringAnchor" parent="Anchors" instance=ExtResource("35")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -12.0, -22.9)
 anchor_id = &"spring"
 
-[node name="VestibuleAnchor" parent="Anchors" instance=ExtResource("31")]
+[node name="VestibuleAnchor" parent="Anchors" instance=ExtResource("35")]
 transform = Transform3D(0.0, 0.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 51.4, -18.0, -20.0)
 anchor_id = &"vestibule"

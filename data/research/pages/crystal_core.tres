@@ -12,7 +12,7 @@ wand_part = ExtResource("3")
 [resource]
 script = ExtResource("2")
 id = &"crystal_core"
-order = 5
+order = 7
 name_key = "PAGE_CRYSTAL_CORE"
 description_key = "PAGE_CRYSTAL_CORE_DESC"
 note_aspects = Array[StringName]([&"crystal", &"magic", &"earth"])

@@ -674,6 +674,25 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Segundo andar da Dungeon agora:** era a outra opção do M9; fica para depois.
 - **Motivo:** a alquimia é o centro do Thaumcraft 4. Dá uso a tudo o que é achado na Dungeon e traz a primeira cura fora da escola.
 
+## M10 a M12 (aprovados pelo usuário: "já faça todos")
+
+### D073 · 2026-11-06 · M10: Focus de Choque e Focus de Escavação
+
+- **Escolha:** o usuário pediu os três marcos propostos de uma vez ("já faça todos"): Focus novos (M10), o segundo andar da Dungeon (M11) e o acabamento (M12).
+  - **Focus de Choque** (tipo novo, `chain`): um raio instantâneo até a mira (16 m), com 10 de dano, por 1 de Aer.
+    - **Corrente:** se acertar um inimigo, salta para o mais próximo a até 5 m, até 2 saltos, com 70% do dano do anterior.
+    - **Onde fica a conta:** quem escolhe os alvos e o dano é `ChainLightning`, em `scripts/core` (testado). O raio aparece como segmentos em zigue-zague com um clarão.
+    - **Fraqueza:** o Lodo de Tinta leva 50% a mais.
+  - **Focus de Escavação** (projétil com `digs`): 8 de dano, por 1 de Terra; o Bedel leva 50% a mais.
+    - **Paredes rachadas** (`CrackedWall`): só a Escavação derruba. As rachaduras brilham fraco, e a Lente mostra a parede. Uma delas, na câmara de pedra, esconde o **Depósito Soterrado**, um tesouro. Derrubada, fica aberta para sempre (`passage_id`, no save).
+    - **Veios de cristal** (`CrystalVein`): em quatro salas das grutas. A Escavação arranca as lascas, que caem no chão para pegar. Os veios voltam a cada incursão.
+  - **Pesquisa:** *Focus de Aer* (Aer, Motus, Potentia) e *Focus de Escavação* (Terra, Vitreus, Perditio), com o efeito `unlock_focus`. As abas foram reordenadas: os Focus vêm antes das peças de varinha.
+  - **Vis:** Nódulo de Aer (com Perditio) na Sala do Portal e Nódulo de Terra no laboratório. Como a varinha tem limite total, o Vis que você leva decide os Focus que vai usar.
+- **Descartado:**
+  - **Escavação contínua (segurar para cavar), como no Thaumcraft:** um projétil reaproveita a magia que já existe e basta para paredes e veios.
+  - **Choque que atravessa paredes:** o raio para no primeiro obstáculo, como os projéteis.
+- **Motivo:** os Focus que faltavam do Thaumcraft 4 deixam o Vis de Aer e Terra úteis, e a Escavação dá um uso novo ao mapa (passagens e cristal).
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

@@ -140,3 +140,4 @@ UI_MSG_BREWED,Pronto: %s
 UI_MSG_NO_ELIXIR,"Nenhum elixir (prepare no cadinho, na escola)"
 UI_MSG_HEALTH_FULL,A vida já está cheia
 UI_MSG_ELIXIR_DRUNK,%s: +%d de vida
+UI_MSG_WALL_DUG,A parede rachada desaba
