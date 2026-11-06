@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DungeonZone" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/dungeon_zone.gd" id="1"]
+[ext_resource type="Material" path="res://assets/materials/observatory_wall.tres" id="2"]
+[ext_resource type="Material" path="res://assets/materials/observatory_floor.tres" id="3"]
+[ext_resource type="Material" path="res://assets/materials/observatory_ceiling.tres" id="4"]
+[ext_resource type="Resource" path="res://data/scannables/observatory_stone.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = &"observatory"
+name_key = "ZONE_OBSERVATORY"
+wall_material = ExtResource("2")
+floor_material = ExtResource("3")
+ceiling_material = ExtResource("4")
+wall_scannable = ExtResource("5")
+floor_scannable = ExtResource("5")
+light_color = Color(0.7, 0.8, 1, 1)
+light_energy = 0.8
+light_spacing = 6.0
+torches = false

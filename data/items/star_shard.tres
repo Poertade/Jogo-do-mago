@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"star_shard"
+name_key = "ITEM_STAR_SHARD"
+color = Color(1, 0.88, 0.5, 1)
+aspects = Dictionary[StringName, int]({
+&"light": 2,
+&"magic": 1
+})
+pickup_scene = "res://scenes/props/star_shard.tscn"

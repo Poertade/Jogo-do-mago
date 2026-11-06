@@ -1,7 +1,8 @@
 class_name EnemyBrain
 extends RefCounted
-## O "cérebro" de um inimigo corpo a corpo: decide o que fazer a partir da distância até o
-## jogador e de se ele está à vista. Não move nada: quem move é o nó Enemy (scripts/game).
+## O "cérebro" de um inimigo: decide o que fazer a partir da distância até o jogador e de se ele
+## está à vista. Não move nada: quem move é o nó Enemy (scripts/game). Inimigos à distância
+## (`ranged`) só atacam enxergando o jogador; o "golpe" deles é um tiro.
 ##
 ## Estados: IDLE (parado) → CHASE (perseguindo) → ATTACK (golpe com preparação).
 ## HURT é a reação ao dano (fica parado um instante); DEAD é o fim.
@@ -36,7 +37,7 @@ func update(delta: float, distance_to_player: float, can_see_player: bool) -> St
 			if can_see_player and distance_to_player <= data.sight_range:
 				state = State.CHASE
 		State.CHASE:
-			if distance_to_player <= data.attack_range and _cooldown_left <= 0.0:
+			if distance_to_player <= data.attack_range and _cooldown_left <= 0.0 and (can_see_player or not data.ranged):
 				state = State.ATTACK
 				_timer = _windup()
 			elif not can_see_player and distance_to_player > data.sight_range * LOSE_INTEREST_FACTOR:

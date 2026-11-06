@@ -14,6 +14,15 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
+**M11: o segundo andar da Dungeon.** Depois que o Arquivista cai, uma grade no Grande Arquivo abre a escada para **O Observatório Afogado**: quatro salas com lunetas quebradas, mapas celestes e estrelas pintadas no teto.
+- **Olho Vigia:** o primeiro inimigo que ataca de longe. Mantém distância e atira bolas de luz que dá para desviar.
+- **O Olho do Fundo:** o chefe do andar. Atira em leque, se enfurece e chama dois olhos.
+- **Mais coisas:** uma âncora do portal na Cisterna Estelar, fragmentos de estrela e o **Núcleo Estelar**, o maior núcleo de varinha.
+
+| A Galeria das Lentes, com Olhos Vigias | O Olho do Fundo enfurecido |
+| --- | --- |
+| ![Observatório](docs/images/observatorio.png) | ![Olho do Fundo](docs/images/olho-do-fundo.png) |
+
 **M10: dois Focus novos**, liberados por páginas de pesquisa, como no Thaumcraft.
 - **Focus de Choque:** gasta Aer; um raio na hora, que salta para até dois inimigos próximos.
 - **Focus de Escavação:** gasta Terra; derruba **paredes rachadas** e arranca lascas dos **veios de cristal** das grutas.
@@ -171,6 +180,10 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    - **As Grutas:** a gruta dos fungos, no pé da escadaria; o **lago subterrâneo**, embaixo do poço do átrio; a **Fonte de Vis**; e **A Fenda**.
      - A Fenda é uma ponte estreita sobre um abismo. Quem cai acha um túnel no fundo, que volta à gruta dos fungos.
    - **O Avesso:** depois do **portão selado**, na outra borda da Fenda: o salão invertido, o Vestíbulo do Arquivo e o **Grande Arquivo**, onde o chefe espera.
+   - **O Observatório Afogado** (segundo andar): a grade a leste do Grande Arquivo só cede depois que o Arquivista cai.
+     - A escada desce à **Galeria das Lentes**. Dali se vai à **Sala dos Mapas Celestes**, à **Cisterna Estelar** (descanso: Nódulos pequenos e uma âncora do portal) e à **Cúpula Quebrada**, onde espera o **Olho do Fundo**.
+     - Vencê-lo abre a passagem de volta à escola, ao sul da cúpula.
+     - Uma parede rachada liga a galeria direto à cúpula, um atalho para quem tem a Escavação.
    - **Peças do mapa** (abertas uma vez, ficam assim para sempre):
      - **Atalho:** a grade entre o dormitório e o átrio só abre do lado do dormitório. Dê a volta pela biblioteca e pelo ossuário para abri-la.
      - **Portão selado:** abre com a **Chave da Cripta**.
@@ -209,6 +222,8 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    | **Aprendiz Esquecido** | rápido e frágil; golpeia com a pena quase sem aviso | fraco: 2 disparos | Mortuus, Exanimis e Cognitio |
    | **Lodo de Tinta** | lento, golpe forte com o braço de tinta | resiste: 4 disparos (gelo: 2) | Cognitio |
    | **O Arquivista** (chefe) | ver acima | normal: 9 disparos | Cognitio, Exanimis, Spiritus e Mortuus |
+   | **Olho Vigia** | flutua, mantém uns 4,5 m e atira de até 10 m uma bola de luz lenta (10 de dano); só atira enxergando você | fraco: 2 disparos (o Choque também) | Lux, Cognitio e Alienis |
+   | **O Olho do Fundo** (chefe do segundo andar) | atira três bolas em leque; na metade da vida, fica vermelho, mais rápido e chama dois Olhos Vigias | normal: 16 disparos | Lux, Cognitio, Alienis e Praecantatio |
 
    - **Movimento:** os inimigos andam por uma malha de navegação gerada junto com o mapa, contornando pilares, móveis e pedras.
    - **Alerta:** quando um nota você, acorda os que estão a até 9 m, e cada magia lançada acorda os que estão a até 10 m.
@@ -228,6 +243,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    | Núcleo de Madeira | 10 por recipiente, 30 no total | já vem com você | — |
    | Núcleo de Osso | 12 por recipiente, 36 no total | 5 ossos antigos, 15 de prata, 5 de Ordo | *Núcleo de Osso* (Mortuus, Terra, Perditio) |
    | Núcleo de Cristal | 15 por recipiente, 45 no total | 5 lascas de cristal, 2 ossos, 30 de prata, 5 de Ordo e 5 de Aqua | *Núcleo de Cristal* (Vitreus, Praecantatio, Terra), depois da de osso |
+   | Núcleo Estelar | 18 por recipiente, 54 no total | 5 fragmentos de estrela, 3 lascas de cristal, 40 de prata, 5 de Ignis e 5 de Ordo | *Núcleo Estelar* (Lux, Praecantatio, Vitreus), depois da de cristal |
    | Ponteiras de Ferro | as magias custam o normal | já vêm com você | — |
    | Ponteiras de Latão | 80% do Vis, em média: a cada cinco disparos de 1, um sai de graça | 3 fios de latão, 10 de prata, 5 de Ignis | *Ponteiras de Latão* (Ordo, Ignis, Potentia) |
    | Ponteiras de Prata | dois terços do Vis, em média | 40 de prata e o Selo do Arquivista, 5 de Ignis e 5 de Ordo | *Ponteiras de Prata* (Metallum, Lux, Praecantatio), depois da de latão |
@@ -300,6 +316,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala. Corrente do Choque (salta para o mais perto, sem repetir alvo, com o dano caindo a cada salto); Choque e Escavação liberados por páginas cujas notas têm solução.
 - **Scripts:** todo script do jogo e das ferramentas compila.
+- **Segundo andar (M11):** inimigo à distância só atira enxergando o jogador (o de corpo a corpo não depende disso); o conteúdo do Observatório (Olho Vigia, chefe com leque e fúria, grade do Arquivista, âncora, livros, Núcleo Estelar).
 - **Alquimia (M9):** dissolver um material vira essência dos aspectos dele (e sai do que está guardado); materiais sem aspectos não se dissolvem; gastar essência é tudo ou nada; anotar só vale para aspectos descobertos; elixires respeitam o limite e curam sem passar do máximo; cadinho e elixires no save 8; toda receita usa aspectos que algum material dá.
 - **Varinha (M8):** núcleo e ponteira montam a varinha; a economia da eficiência se acumula (com 1,25, cinco disparos de 1 custam 4); trocar de peça mantém o Vis que couber; peças guardadas no save 7; páginas que liberam peças; cada núcleo guarda mais e cada ponteira gasta menos que a anterior; todo material das peças aparece no mapa, nos inimigos ou no baú; as notas das quatro páginas novas têm solução.
 - **Mapa da Dungeon:** o que fica para sempre (passagens, chaves, âncoras, chefes); o mapa tem toda âncora e toda sala, uma chave para cada porta trancada e passagens sem identificador repetido; toda sala sabe o próprio `room_id`.

@@ -21,8 +21,11 @@ var _frost := 0.0
 func _ready() -> void:
 	for node in find_children("*", "MeshInstance3D", true, false):
 		var material := (node as MeshInstance3D).material_override as ShaderMaterial
-		if material != null and not material in _flash_materials \
-				and float(material.get_shader_parameter(&"emission_energy")) == 0.0:
+		if material == null or material in _flash_materials:
+			continue
+		# Sem emissão definida (null) conta como zero: o material não brilha sozinho.
+		var energy = material.get_shader_parameter(&"emission_energy")
+		if energy == null or float(energy) == 0.0:
 			_flash_materials.append(material)
 
 

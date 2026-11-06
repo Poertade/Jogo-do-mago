@@ -1,10 +1,11 @@
 class_name Gate
 extends Interactable
 ## Grade de ferro numa passagem do mapa. Aberta uma vez, fica aberta para sempre (vai para o
-## save, em DungeonProgress). Dois usos, como nos mapas do Lunacid e dos King's Field:
+## save, em DungeonProgress). Três usos, como nos mapas do Lunacid e dos King's Field:
 ## - atalho (`one_way`): o ferrolho fica de um lado só, o da frente (a seta azul, -Z). Quem chega
 ##   pelo outro lado vê a grade fechada e precisa dar a volta; ao abrir, o caminho fica mais curto;
-## - porta trancada (`needs_key`): só abre com a chave, achada em outro lugar do mapa.
+## - porta trancada (`needs_key`): só abre com a chave, achada em outro lugar do mapa;
+## - grade do chefe (`requires_defeat`): só abre depois que o chefe cai (o caminho ao segundo andar).
 
 ## Identificador único da passagem no mapa (é o que vai para o save).
 @export var passage_id: StringName
@@ -12,6 +13,8 @@ extends Interactable
 @export var needs_key: StringName
 ## Ligado: só abre de quem está na frente (lado -Z).
 @export var one_way := false
+## Chefe que precisa ter caído antes (identificador do EnemySpawn, `unique_id`). Vazio: nenhum.
+@export var requires_defeat: StringName
 ## As barras que bloqueiam a passagem (afundam no chão ao abrir).
 @export var bars: Node3D
 
@@ -27,12 +30,14 @@ func _ready() -> void:
 
 
 func is_available() -> bool:
-	return bars != null and not _opening and _has_key() and _on_lever_side()
+	return bars != null and not _opening and _has_key() and _on_lever_side() and _boss_down()
 
 
 func current_prompt_key() -> String:
 	if bars == null or _opening:
 		return ""
+	if not _boss_down():
+		return "PROMPT_GATE_BOSS"
 	if not _has_key():
 		return "PROMPT_GATE_NEEDS_KEY"
 	if not _on_lever_side():
@@ -52,6 +57,10 @@ func interact(_player: Node3D) -> void:
 	tween.tween_property(bars, "position:y", bars.position.y - 3.2, 1.6).set_trans(Tween.TRANS_QUAD)
 	tween.tween_callback(bars.queue_free)
 	tween.tween_callback(func(): bars = null)
+
+
+func _boss_down() -> bool:
+	return requires_defeat == &"" or Game.world.is_defeated(requires_defeat)
 
 
 func _has_key() -> bool:

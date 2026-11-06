@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/enemy_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/watcher_eye.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+scene_path = "res://scenes/enemies/deep_eye.tscn"
+max_health = 240.0
+damage = 16.0
+weaknesses = Dictionary[StringName, float]({
+&"air": 1.2
+})
+move_speed = 1.2
+sight_range = 18.0
+attack_range = 14.0
+attack_windup = 1.1
+attack_cooldown = 1.4
+hurt_stun = 0.0
+ranged = true
+keep_distance = 6.0
+shot_speed = 6.5
+shot_count = 3
+shot_color = Color(1, 0.82, 0.38, 1)
+show_health_bar = true
+enrage_at = 0.5
+enrage_speed = 1.35
+enrage_summons = Array[ExtResource("2")]([ExtResource("2"), ExtResource("2")])
+enrage_message_key = "MSG_DEEP_EYE_ENRAGED"
+silver_min = 30
+silver_max = 40
+material = &"star_shard"
+material_chance = 1.0
+material_amount = 3
+material_safe = true
+id = &"deep_eye"
+name_key = "ENEMY_DEEP_EYE"
+aspects = Dictionary[StringName, int]({
+&"light": 3,
+&"mind": 3,
+&"eldritch": 3,
+&"magic": 2
+})

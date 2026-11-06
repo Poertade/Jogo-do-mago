@@ -249,10 +249,24 @@ size = Vector3(6.2, 6.0, 0.4)
 material = ExtResource("5")
 scannable = ExtResource("6")
 
-[node name="WallEastEnd" type="StaticBody3D" parent="Blocks"]
-transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 3.0, 0.0)
+[node name="WallEast0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 3.0, -1.5)
 script = ExtResource("2")
-size = Vector3(0.4, 6.0, 18.0)
+size = Vector3(0.4, 6.0, 15.0)
+material = ExtResource("5")
+scannable = ExtResource("6")
+
+[node name="WallEastLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 4.4, 7.2)
+script = ExtResource("2")
+size = Vector3(0.4, 3.2, 2.4)
+material = ExtResource("5")
+scannable = ExtResource("6")
+
+[node name="WallEastEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 7.2, 3.0, 8.7)
+script = ExtResource("2")
+size = Vector3(0.4, 6.0, 0.6)
 material = ExtResource("5")
 scannable = ExtResource("6")
 

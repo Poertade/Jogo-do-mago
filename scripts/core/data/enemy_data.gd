@@ -40,6 +40,17 @@ extends ScannableData
 ## que não voltam).
 @export var material_safe := false
 
+@export_group("À distância")
+## Ligado: em vez de golpear de perto, atira de longe (até `attack_range`), se enxergar o
+## jogador. O tiro voa devagar e dá para desviar.
+@export var ranged := false
+## Recua quando o jogador chega mais perto que isto (metros).
+@export var keep_distance: float = 0.0
+## Velocidade do tiro (m/s), quantos tiros saem de uma vez (em leque) e a cor dele.
+@export var shot_speed: float = 0.0
+@export var shot_count: int = 1
+@export var shot_color: Color = Color.WHITE
+
 @export_group("Chefe")
 ## Mostra a barra de vida no alto da tela quando o inimigo nota o jogador.
 @export var show_health_bar := false

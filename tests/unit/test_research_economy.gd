@@ -131,7 +131,7 @@ func test_later_pages_can_be_studied() -> void:
 					break
 			if not discovered:
 				break
-	for page_id in [&"shock_focus", &"excavation_focus", &"brass_caps", &"bone_core", &"crystal_core", &"silver_caps"]:
+	for page_id in [&"shock_focus", &"excavation_focus", &"brass_caps", &"bone_core", &"crystal_core", &"silver_caps", &"star_core"]:
 		var page: ResearchPageData = db.pages[page_id]
 		_solve_note(page)
 		assert_true(knowledge.study(page, db.aspects), "Estudar %s" % page_id)

@@ -1,8 +1,9 @@
 class_name Enemy
 extends CharacterBody3D
-## Inimigo corpo a corpo. A decisão (parado, perseguindo, atacando, reação ao dano, morte)
-## fica em EnemyBrain (scripts/core); o corpo e as animações ficam no nó "Rig" (um EnemyBody:
-## EnemyRig para humanoides, BlobRig para a gosma);
+## Inimigo. A decisão (parado, perseguindo, atacando, reação ao dano, morte) fica em EnemyBrain
+## (scripts/core); o corpo e as animações ficam no nó "Rig" (um EnemyBody: EnemyRig para
+## humanoides, BlobRig para a gosma, EyeRig para os olhos que flutuam). Os de corpo a corpo
+## golpeiam de perto; os à distância (`ranged`) mantêm distância e atiram (EnemyShot);
 ## aqui ficam o movimento, a visão, o dano e os sons.
 ## Pode ser escaneado pela Lente (get_scannable) e recebe dano (take_damage).
 ## Na Dungeon, anda pela malha de navegação (NavigationAgent3D), contornando pilares e móveis;
@@ -99,7 +100,9 @@ func _physics_process(real_delta: float) -> void:
 
 	var move := Vector3.ZERO
 	var facing := to_player
-	if brain.wants_to_move() and distance > data.attack_range * 0.8:
+	if data.ranged:
+		move = _ranged_move(to_player, distance)
+	elif brain.wants_to_move() and distance > data.attack_range * 0.8:
 		var direction := _chase_direction(to_player)
 		move = direction * data.move_speed * brain.speed_multiplier() * (_slow_factor if _slow_left > 0.0 else 1.0)
 		# Longe, olha para onde anda (contornando); perto, encara o jogador.
@@ -114,6 +117,19 @@ func _physics_process(real_delta: float) -> void:
 	move_and_slide()
 	var alert := brain.state != EnemyBrain.State.IDLE
 	rig.update_pose(delta, Vector2(velocity.x, velocity.z).length(), data.move_speed, brain.windup_ratio(), alert)
+
+
+## Inimigos à distância: chegam até ter o jogador ao alcance e à vista, recuam se ele chega
+## perto demais e, no meio-termo, ficam parados mirando.
+func _ranged_move(to_player: Vector3, distance: float) -> Vector3:
+	if not brain.wants_to_move():
+		return Vector3.ZERO
+	var speed := data.move_speed * brain.speed_multiplier() * (_slow_factor if _slow_left > 0.0 else 1.0)
+	if distance < data.keep_distance:
+		return -to_player.normalized() * speed
+	if distance > data.attack_range * 0.85 or not _can_see_player():
+		return _chase_direction(to_player) * speed
+	return Vector3.ZERO
 
 
 ## Para onde andar para chegar ao jogador: pelo caminho da malha de navegação (em volta dos
@@ -156,7 +172,21 @@ func _can_see_player() -> bool:
 
 
 func _on_attack_landed() -> void:
-	Game.damage_player(data.damage)
+	if not data.ranged:
+		Game.damage_player(data.damage)
+		return
+	# Tiro (ou leque de tiros) dos olhos em direção ao peito do jogador.
+	var from: Vector3 = rig.shot_origin() if rig.has_method(&"shot_origin") else global_position + Vector3.UP * 1.4
+	var target := _player.global_position + Vector3.UP * 1.2
+	var count := maxi(data.shot_count, 1)
+	for i in count:
+		var spread := deg_to_rad(12.0) * (i - (count - 1) / 2.0)
+		var direction: Vector3 = (target - from).normalized().rotated(Vector3.UP, spread)
+		var shot := EnemyShot.new()
+		get_parent().add_child(shot)
+		shot.global_position = from
+		shot.setup(direction * data.shot_speed, data.damage, data.shot_color, get_rid())
+	Audio.play_at(&"spell_cast", from, get_parent())
 
 
 func _on_died() -> void:

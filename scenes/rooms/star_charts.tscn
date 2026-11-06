@@ -1,0 +1,1161 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/game/greybox_block.gd" id="2"]
+[ext_resource type="Material" path="res://assets/materials/observatory_floor.tres" id="3"]
+[ext_resource type="Resource" path="res://data/scannables/observatory_stone.tres" id="4"]
+[ext_resource type="Material" path="res://assets/materials/observatory_ceiling.tres" id="5"]
+[ext_resource type="Material" path="res://assets/materials/observatory_wall.tres" id="6"]
+[ext_resource type="Script" path="res://scripts/game/entrance_point.gd" id="7"]
+[ext_resource type="Material" path="res://assets/materials/dark_wood.tres" id="8"]
+[ext_resource type="Resource" path="res://data/scannables/star_chart.tres" id="9"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="10"]
+[ext_resource type="Script" path="res://scripts/game/flicker_light.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/game/enemy_spawn.gd" id="12"]
+[ext_resource type="Resource" path="res://data/enemies/watcher_eye.tres" id="13"]
+[ext_resource type="Resource" path="res://data/enemies/forgotten_apprentice.tres" id="14"]
+[ext_resource type="Resource" path="res://data/enemies/bone_beadle.tres" id="15"]
+[ext_resource type="Script" path="res://scripts/game/loot_spot.gd" id="16"]
+
+[sub_resource type="ShaderMaterial" id="Mat_1"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0392, 0.0627, 0.1255, 1.0)
+shader_parameter/emission_color = Color(0.3765, 0.502, 0.7529, 1.0)
+shader_parameter/emission_energy = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+size = Vector3(1.8, 0.01, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0392, 0.0627, 0.1255, 1.0)
+shader_parameter/emission_color = Color(0.3765, 0.502, 0.7529, 1.0)
+shader_parameter/emission_energy = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+size = Vector3(1.8, 0.01, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_5"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0392, 0.0627, 0.1255, 1.0)
+shader_parameter/emission_color = Color(0.3765, 0.502, 0.7529, 1.0)
+shader_parameter/emission_energy = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+size = Vector3(1.8, 0.01, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_7"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.6275, 0.4784, 0.1882, 1.0)
+
+[sub_resource type="TorusMesh" id="TorusMesh_8"]
+inner_radius = 1.0
+outer_radius = 1.08
+rings = 16
+ring_segments = 4
+
+[sub_resource type="TorusMesh" id="TorusMesh_9"]
+inner_radius = 1.0
+outer_radius = 1.08
+rings = 16
+ring_segments = 4
+
+[sub_resource type="TorusMesh" id="TorusMesh_10"]
+inner_radius = 1.0
+outer_radius = 1.08
+rings = 16
+ring_segments = 4
+
+[sub_resource type="TorusMesh" id="TorusMesh_11"]
+inner_radius = 1.0
+outer_radius = 1.08
+rings = 16
+ring_segments = 4
+
+[sub_resource type="ShaderMaterial" id="Mat_12"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.1882, 0.1255, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.8157, 0.4392, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_13"]
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="ShaderMaterial" id="Mat_14"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0314, 0.0627, 0.1255, 1.0)
+shader_parameter/emission_color = Color(0.251, 0.3765, 0.6275, 1.0)
+shader_parameter/emission_energy = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_15"]
+size = Vector3(0.04, 1.6, 2.2)
+
+[sub_resource type="ShaderMaterial" id="Mat_16"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0314, 0.0627, 0.1255, 1.0)
+shader_parameter/emission_color = Color(0.251, 0.3765, 0.6275, 1.0)
+shader_parameter/emission_energy = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_17"]
+size = Vector3(0.04, 1.6, 2.2)
+
+[sub_resource type="ShaderMaterial" id="Mat_18"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0314, 0.0627, 0.1255, 1.0)
+shader_parameter/emission_color = Color(0.251, 0.3765, 0.6275, 1.0)
+shader_parameter/emission_energy = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_19"]
+size = Vector3(0.04, 1.6, 2.2)
+
+[sub_resource type="ShaderMaterial" id="Mat_20"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_21"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_22"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_23"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_24"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_25"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_26"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_27"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_28"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_29"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_30"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_31"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_32"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_33"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_34"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_35"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_36"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_37"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_38"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_39"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_40"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_41"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_42"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_43"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_44"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_45"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_46"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_47"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_48"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_49"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_50"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_51"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_52"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_53"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_54"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_55"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_56"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_57"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_58"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_59"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_60"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_61"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_62"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_63"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_64"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_65"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_66"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_67"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_68"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_69"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_70"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_71"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_72"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_73"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_74"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_75"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_76"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_77"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_78"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_79"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_80"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_81"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_82"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_83"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_84"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_85"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_86"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_87"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_88"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_89"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_90"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_91"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_92"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_93"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_94"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_95"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_96"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_97"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_98"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_99"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_100"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_101"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_102"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_103"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_104"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_105"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_106"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_107"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[sub_resource type="ShaderMaterial" id="Mat_108"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_109"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_110"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 0.9098, 0.6275, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_111"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_112"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_113"]
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ShaderMaterial" id="Mat_114"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_115"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_116"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.7529, 0.8471, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_117"]
+size = Vector3(0.07, 0.02, 0.07)
+
+[sub_resource type="ShaderMaterial" id="Mat_118"]
+render_priority = 0
+shader = ExtResource("10")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(1.0, 1.0, 1.0, 1.0)
+shader_parameter/emission_energy = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_119"]
+size = Vector3(0.1, 0.02, 0.1)
+
+[node name="StarCharts" type="Node3D"]
+script = ExtResource("1")
+room_id = &"star_charts"
+
+[node name="Blocks" type="Node3D" parent="."]
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Exit" type="Node3D" parent="."]
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="Markers" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.1, 0.0)
+script = ExtResource("2")
+size = Vector3(12.8, 0.2, 12.8)
+material = ExtResource("3")
+scannable = ExtResource("4")
+
+[node name="Ceiling" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 6.1, 0.0)
+script = ExtResource("2")
+size = Vector3(12.8, 0.2, 12.8)
+material = ExtResource("5")
+
+[node name="WallNorthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 3.0, -6.2)
+script = ExtResource("2")
+size = Vector3(12.8, 6.0, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallSouth0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.8, 3.0, 6.2)
+script = ExtResource("2")
+size = Vector3(5.2, 6.0, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallSouthLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 4.4, 6.2)
+script = ExtResource("2")
+size = Vector3(2.4, 3.2, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallSouthEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.8, 3.0, 6.2)
+script = ExtResource("2")
+size = Vector3(5.2, 6.0, 0.4)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallEast0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 3.0, -3.6)
+script = ExtResource("2")
+size = Vector3(0.4, 6.0, 4.8)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallEastLintel0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 4.4, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 3.2, 2.4)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallEastEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.2, 3.0, 3.6)
+script = ExtResource("2")
+size = Vector3(0.4, 6.0, 4.8)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallWestEnd" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -6.2, 3.0, 0.0)
+script = ExtResource("2")
+size = Vector3(0.4, 6.0, 12.0)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="Default" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 4.8)
+script = ExtResource("7")
+id = &"default"
+
+[node name="ChartTable0" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.9848, 0.0242, 0.172, 0.0, 0.9903, -0.1392, -0.1736, 0.1371, 0.9752, -3.4, 0.9, -3.0)
+script = ExtResource("2")
+size = Vector3(2.2, 0.1, 1.3)
+material = ExtResource("8")
+scannable = ExtResource("9")
+
+[node name="ChartLeg00" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.3, 0.42, -3.5)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg01" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.5, 0.42, -3.5)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg02" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.3, 0.42, -2.5)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg03" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.5, 0.42, -2.5)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartStars0" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.9848, 0.0242, 0.172, 0.0, 0.9903, -0.1392, -0.1736, 0.1371, 0.9752, -3.4, 0.96, -3.0)
+mesh = SubResource("BoxMesh_2")
+material_override = SubResource("Mat_1")
+
+[node name="ChartTable1" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(0.9659, -0.036, -0.2563, 0.0, 0.9903, -0.1392, 0.2588, 0.1344, 0.9565, -3.6, 0.9, 2.4)
+script = ExtResource("2")
+size = Vector3(2.2, 0.1, 1.3)
+material = ExtResource("8")
+scannable = ExtResource("9")
+
+[node name="ChartLeg10" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.5, 0.42, 1.9)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg11" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.7, 0.42, 1.9)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg12" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.5, 0.42, 2.9)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg13" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.7, 0.42, 2.9)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartStars1" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.9659, -0.036, -0.2563, 0.0, 0.9903, -0.1392, 0.2588, 0.1344, 0.9565, -3.6, 0.96, 2.4)
+mesh = SubResource("BoxMesh_4")
+material_override = SubResource("Mat_3")
+
+[node name="ChartTable2" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9903, -0.1392, 0.0, 0.1392, 0.9903, 3.4, 0.9, -3.6)
+script = ExtResource("2")
+size = Vector3(2.2, 0.1, 1.3)
+material = ExtResource("8")
+scannable = ExtResource("9")
+
+[node name="ChartLeg20" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.5, 0.42, -4.1)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg21" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.3, 0.42, -4.1)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg22" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.5, 0.42, -3.1)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartLeg23" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.3, 0.42, -3.1)
+script = ExtResource("2")
+size = Vector3(0.08, 0.85, 0.08)
+material = ExtResource("8")
+
+[node name="ChartStars2" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.9903, -0.1392, 0.0, 0.1392, 0.9903, 3.4, 0.96, -3.6)
+mesh = SubResource("BoxMesh_6")
+material_override = SubResource("Mat_5")
+
+[node name="Armillary0" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.6, 0.0)
+mesh = SubResource("TorusMesh_8")
+material_override = SubResource("Mat_7")
+
+[node name="Armillary1" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.5, -0.866, 0.0, 0.866, 0.5, 0.0, 2.6, 0.0)
+mesh = SubResource("TorusMesh_9")
+material_override = SubResource("Mat_7")
+
+[node name="Armillary2" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.5, -0.866, 0.0, 0.866, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 2.6, 0.0)
+mesh = SubResource("TorusMesh_10")
+material_override = SubResource("Mat_7")
+
+[node name="Armillary3" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.866, -0.5, 0.0, 0.0, 0.0, -1.0, 0.5, 0.866, 0.0, 0.0, 2.6, 0.0)
+mesh = SubResource("TorusMesh_11")
+material_override = SubResource("Mat_7")
+
+[node name="ArmillaryCore" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(0.7071, 0.5, 0.5, 0.0, 0.7071, -0.7071, -0.7071, 0.5, 0.5, 0.0, 2.6, 0.0)
+mesh = SubResource("BoxMesh_13")
+material_override = SubResource("Mat_12")
+
+[node name="ArmillaryPost" type="StaticBody3D" parent="Blocks"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.8, 0.0)
+script = ExtResource("2")
+size = Vector3(0.2, 1.6, 0.2)
+material = ExtResource("6")
+scannable = ExtResource("4")
+
+[node name="WallChart0" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -5.95, 2.4, -1.0)
+mesh = SubResource("BoxMesh_15")
+material_override = SubResource("Mat_14")
+
+[node name="WallChart1" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.95, 2.4, -3.5)
+mesh = SubResource("BoxMesh_17")
+material_override = SubResource("Mat_16")
+
+[node name="WallChart2" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -5.95, 2.4, 3.5)
+mesh = SubResource("BoxMesh_19")
+material_override = SubResource("Mat_18")
+
+[node name="Star0" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.837, 5.98, -0.1091)
+mesh = SubResource("BoxMesh_21")
+material_override = SubResource("Mat_20")
+
+[node name="Star1" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.0636, 5.98, 3.3695)
+mesh = SubResource("BoxMesh_23")
+material_override = SubResource("Mat_22")
+
+[node name="Star2" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.5851, 5.98, 2.841)
+mesh = SubResource("BoxMesh_25")
+material_override = SubResource("Mat_24")
+
+[node name="Star3" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.3071, 5.98, 3.6664)
+mesh = SubResource("BoxMesh_27")
+material_override = SubResource("Mat_26")
+
+[node name="Star4" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.6522, 5.98, -3.9413)
+mesh = SubResource("BoxMesh_29")
+material_override = SubResource("Mat_28")
+
+[node name="Star5" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.3811, 5.98, 3.3422)
+mesh = SubResource("BoxMesh_31")
+material_override = SubResource("Mat_30")
+
+[node name="Star6" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.1656, 5.98, -3.4384)
+mesh = SubResource("BoxMesh_33")
+material_override = SubResource("Mat_32")
+
+[node name="Star7" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.5422, 5.98, -2.1236)
+mesh = SubResource("BoxMesh_35")
+material_override = SubResource("Mat_34")
+
+[node name="Star8" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.6506, 5.98, 2.3269)
+mesh = SubResource("BoxMesh_37")
+material_override = SubResource("Mat_36")
+
+[node name="Star9" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.2499, 5.98, 1.581)
+mesh = SubResource("BoxMesh_39")
+material_override = SubResource("Mat_38")
+
+[node name="Star10" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -5.1126, 5.98, -2.1711)
+mesh = SubResource("BoxMesh_41")
+material_override = SubResource("Mat_40")
+
+[node name="Star11" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -2.1763, 5.98, -3.1004)
+mesh = SubResource("BoxMesh_43")
+material_override = SubResource("Mat_42")
+
+[node name="Star12" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.0652, 5.98, -4.6212)
+mesh = SubResource("BoxMesh_45")
+material_override = SubResource("Mat_44")
+
+[node name="Star13" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.3757, 5.98, -1.0417)
+mesh = SubResource("BoxMesh_47")
+material_override = SubResource("Mat_46")
+
+[node name="Star14" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.9383, 5.98, -5.3728)
+mesh = SubResource("BoxMesh_49")
+material_override = SubResource("Mat_48")
+
+[node name="Star15" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.287, 5.98, 1.8554)
+mesh = SubResource("BoxMesh_51")
+material_override = SubResource("Mat_50")
+
+[node name="Star16" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.1782, 5.98, -0.4249)
+mesh = SubResource("BoxMesh_53")
+material_override = SubResource("Mat_52")
+
+[node name="Star17" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.2204, 5.98, 2.4847)
+mesh = SubResource("BoxMesh_55")
+material_override = SubResource("Mat_54")
+
+[node name="Star18" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.566, 5.98, -1.7182)
+mesh = SubResource("BoxMesh_57")
+material_override = SubResource("Mat_56")
+
+[node name="Star19" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.4376, 5.98, -1.1531)
+mesh = SubResource("BoxMesh_59")
+material_override = SubResource("Mat_58")
+
+[node name="Star20" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.9139, 5.98, 1.4711)
+mesh = SubResource("BoxMesh_61")
+material_override = SubResource("Mat_60")
+
+[node name="Star21" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.1837, 5.98, 4.9405)
+mesh = SubResource("BoxMesh_63")
+material_override = SubResource("Mat_62")
+
+[node name="Star22" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0439, 5.98, -4.8943)
+mesh = SubResource("BoxMesh_65")
+material_override = SubResource("Mat_64")
+
+[node name="Star23" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.7279, 5.98, -3.5058)
+mesh = SubResource("BoxMesh_67")
+material_override = SubResource("Mat_66")
+
+[node name="Star24" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0196, 5.98, 1.4401)
+mesh = SubResource("BoxMesh_69")
+material_override = SubResource("Mat_68")
+
+[node name="Star25" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.9687, 5.98, -3.2795)
+mesh = SubResource("BoxMesh_71")
+material_override = SubResource("Mat_70")
+
+[node name="Star26" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.7081, 5.98, 3.6937)
+mesh = SubResource("BoxMesh_73")
+material_override = SubResource("Mat_72")
+
+[node name="Star27" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.4213, 5.98, 2.0895)
+mesh = SubResource("BoxMesh_75")
+material_override = SubResource("Mat_74")
+
+[node name="Star28" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.81, 5.98, -0.1318)
+mesh = SubResource("BoxMesh_77")
+material_override = SubResource("Mat_76")
+
+[node name="Star29" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5658, 5.98, -1.824)
+mesh = SubResource("BoxMesh_79")
+material_override = SubResource("Mat_78")
+
+[node name="Star30" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.9678, 5.98, 4.7592)
+mesh = SubResource("BoxMesh_81")
+material_override = SubResource("Mat_80")
+
+[node name="Star31" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.3202, 5.98, -4.5751)
+mesh = SubResource("BoxMesh_83")
+material_override = SubResource("Mat_82")
+
+[node name="Star32" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 5.1085, 5.98, -1.5523)
+mesh = SubResource("BoxMesh_85")
+material_override = SubResource("Mat_84")
+
+[node name="Star33" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.2794, 5.98, 2.0212)
+mesh = SubResource("BoxMesh_87")
+material_override = SubResource("Mat_86")
+
+[node name="Star34" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.9679, 5.98, 2.1697)
+mesh = SubResource("BoxMesh_89")
+material_override = SubResource("Mat_88")
+
+[node name="Star35" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.7256, 5.98, 2.0973)
+mesh = SubResource("BoxMesh_91")
+material_override = SubResource("Mat_90")
+
+[node name="Star36" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.1631, 5.98, -5.1357)
+mesh = SubResource("BoxMesh_93")
+material_override = SubResource("Mat_92")
+
+[node name="Star37" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.1707, 5.98, -3.7795)
+mesh = SubResource("BoxMesh_95")
+material_override = SubResource("Mat_94")
+
+[node name="Star38" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.5566, 5.98, 4.1918)
+mesh = SubResource("BoxMesh_97")
+material_override = SubResource("Mat_96")
+
+[node name="Star39" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.5676, 5.98, 4.8721)
+mesh = SubResource("BoxMesh_99")
+material_override = SubResource("Mat_98")
+
+[node name="Star40" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.0656, 5.98, -4.6936)
+mesh = SubResource("BoxMesh_101")
+material_override = SubResource("Mat_100")
+
+[node name="Star41" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.7641, 5.98, -0.7906)
+mesh = SubResource("BoxMesh_103")
+material_override = SubResource("Mat_102")
+
+[node name="Star42" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.0892, 5.98, -1.1631)
+mesh = SubResource("BoxMesh_105")
+material_override = SubResource("Mat_104")
+
+[node name="Star43" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.6065, 5.98, -3.1195)
+mesh = SubResource("BoxMesh_107")
+material_override = SubResource("Mat_106")
+
+[node name="Star44" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.2902, 5.98, 5.2643)
+mesh = SubResource("BoxMesh_109")
+material_override = SubResource("Mat_108")
+
+[node name="Star45" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 2.8656, 5.98, -3.0694)
+mesh = SubResource("BoxMesh_111")
+material_override = SubResource("Mat_110")
+
+[node name="Star46" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.6901, 5.98, 3.9052)
+mesh = SubResource("BoxMesh_113")
+material_override = SubResource("Mat_112")
+
+[node name="Star47" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -1.7544, 5.98, 5.2133)
+mesh = SubResource("BoxMesh_115")
+material_override = SubResource("Mat_114")
+
+[node name="Star48" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 3.3273, 5.98, 1.5092)
+mesh = SubResource("BoxMesh_117")
+material_override = SubResource("Mat_116")
+
+[node name="Star49" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.5329, 5.98, 4.4911)
+mesh = SubResource("BoxMesh_119")
+material_override = SubResource("Mat_118")
+
+[node name="ArmillaryLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.6, 0.0)
+light_color = Color(1.0, 0.8157, 0.4392, 1.0)
+light_energy = 1.0
+omni_range = 8.0
+omni_attenuation = 1.2
+script = ExtResource("11")
+flicker_amount = 0.2
+
+[node name="ChartGlow" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.4, 1.8, 0.0)
+light_color = Color(0.3765, 0.502, 0.7529, 1.0)
+light_energy = 0.6
+omni_range = 6.0
+omni_attenuation = 1.2
+
+[node name="EyeA" type="Marker3D" parent="Markers"]
+transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, -4.4)
+script = ExtResource("12")
+enemy_pool = [ExtResource("13")]
+
+[node name="EyeB" type="Marker3D" parent="Markers"]
+transform = Transform3D(-0.866, 0.0, 0.5, 0.0, 1.0, 0.0, -0.5, 0.0, -0.866, 3.6, 0.0, 0.6)
+script = ExtResource("12")
+enemy_pool = [ExtResource("13")]
+chance = 0.7
+
+[node name="Apprentice" type="Marker3D" parent="Markers"]
+transform = Transform3D(-0.9397, 0.0, -0.342, 0.0, 1.0, 0.0, 0.342, 0.0, -0.9397, -2.0, 0.0, -1.0)
+script = ExtResource("12")
+enemy_pool = [ExtResource("14"), ExtResource("15")]
+chance = 0.6
+
+[node name="BookSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -3.4, 1.0, -3.0)
+script = ExtResource("16")
+kind = &"book"
+chance = 0.5
+
+[node name="StarSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 4.6, 0.0, 4.6)
+script = ExtResource("16")
+kind = &"star_shard"
+chance = 0.6
+
+[node name="ChestSpot" type="Marker3D" parent="Markers"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -4.6, 0.0, 4.8)
+script = ExtResource("16")
+kind = &"chest"
+chance = 0.5

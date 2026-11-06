@@ -1,0 +1,196 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game/enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/watcher_eye.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/game/eye_rig.gd" id="3"]
+[ext_resource type="Shader" path="res://scripts/render/ps1.gdshader" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/bone.png" id="5"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_1"]
+radius = 0.4
+height = 2.1
+
+[sub_resource type="ShaderMaterial" id="Mat_2"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_texture = ExtResource("5")
+shader_parameter/albedo_color = Color(0.8471, 0.8118, 0.7529, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_3"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.4784, 0.102, 0.102, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Mat_4"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/emission_color = Color(0.502, 0.8784, 1.0, 1.0)
+shader_parameter/emission_energy = 1.2
+
+[sub_resource type="ShaderMaterial" id="Mat_5"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6"]
+radius = 0.38
+height = 0.76
+radial_segments = 10
+rings = 6
+
+[sub_resource type="TorusMesh" id="TorusMesh_7"]
+inner_radius = 0.375
+outer_radius = 0.39
+rings = 10
+ring_segments = 3
+
+[sub_resource type="TorusMesh" id="TorusMesh_8"]
+inner_radius = 0.375
+outer_radius = 0.39
+rings = 10
+ring_segments = 3
+
+[sub_resource type="TorusMesh" id="TorusMesh_9"]
+inner_radius = 0.375
+outer_radius = 0.39
+rings = 10
+ring_segments = 3
+
+[sub_resource type="TorusMesh" id="TorusMesh_10"]
+inner_radius = 0.375
+outer_radius = 0.39
+rings = 10
+ring_segments = 3
+
+[sub_resource type="TorusMesh" id="TorusMesh_11"]
+inner_radius = 0.375
+outer_radius = 0.39
+rings = 10
+ring_segments = 3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_12"]
+top_radius = 0.17
+bottom_radius = 0.17
+height = 0.08
+radial_segments = 10
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_13"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.03
+radial_segments = 8
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="Mat_14"]
+render_priority = 0
+shader = ExtResource("4")
+shader_parameter/albedo_color = Color(0.3529, 0.1255, 0.1882, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_15"]
+size = Vector3(0.035, 0.55, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_16"]
+size = Vector3(0.035, 0.7, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_17"]
+size = Vector3(0.035, 0.45, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_18"]
+size = Vector3(0.035, 0.6, 0.035)
+
+[node name="WatcherEye" type="CharacterBody3D"]
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.05, 0.0)
+shape = SubResource("Capsule_1")
+
+[node name="Rig" type="Node3D" parent="."]
+script = ExtResource("3")
+hover_height = 1.5
+
+[node name="Body" type="Node3D" parent="Rig"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.5, 0.0)
+
+[node name="Ball" type="MeshInstance3D" parent="Rig/Body"]
+mesh = SubResource("SphereMesh_6")
+material_override = SubResource("Mat_2")
+
+[node name="Vein1" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(0.866, 0.171, 0.4698, 0.0, 0.9397, -0.342, -0.5, 0.2962, 0.8138, 0.0, 0.0, 0.0)
+mesh = SubResource("TorusMesh_7")
+material_override = SubResource("Mat_3")
+
+[node name="Vein2" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(0.1736, -0.4924, 0.8529, 0.0, 0.866, 0.5, -0.9848, -0.0868, 0.1504, 0.0, 0.0, 0.0)
+mesh = SubResource("TorusMesh_8")
+material_override = SubResource("Mat_3")
+
+[node name="Vein3" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(-0.866, 0.3214, 0.383, 0.0, 0.766, -0.6428, -0.5, -0.5567, -0.6634, 0.0, 0.0, 0.0)
+mesh = SubResource("TorusMesh_9")
+material_override = SubResource("Mat_3")
+
+[node name="Vein4" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(-0.766, 0.1664, -0.6209, 0.0, 0.9659, 0.2588, 0.6428, 0.1983, -0.7399, 0.0, 0.0, 0.0)
+mesh = SubResource("TorusMesh_10")
+material_override = SubResource("Mat_3")
+
+[node name="Vein5" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(0.5, -0.366, -0.7849, 0.0, 0.9063, -0.4226, 0.866, 0.2113, 0.4532, 0.0, 0.0, 0.0)
+mesh = SubResource("TorusMesh_11")
+material_override = SubResource("Mat_3")
+
+[node name="Iris" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.34)
+mesh = SubResource("CylinderMesh_12")
+material_override = SubResource("Mat_4")
+
+[node name="Pupil" type="MeshInstance3D" parent="Rig/Body"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.39)
+mesh = SubResource("CylinderMesh_13")
+material_override = SubResource("Mat_5")
+
+[node name="Nerves" type="Node3D" parent="Rig/Body"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.3, 0.05)
+
+[node name="Nerve1" type="Node3D" parent="Rig/Body/Nerves"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.12, 0.0, 0.05)
+
+[node name="Strand" type="MeshInstance3D" parent="Rig/Body/Nerves/Nerve1"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.275, 0.0)
+mesh = SubResource("BoxMesh_15")
+material_override = SubResource("Mat_14")
+
+[node name="Nerve2" type="Node3D" parent="Rig/Body/Nerves"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.1, 0.0, 0.0)
+
+[node name="Strand" type="MeshInstance3D" parent="Rig/Body/Nerves/Nerve2"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.35, 0.0)
+mesh = SubResource("BoxMesh_16")
+material_override = SubResource("Mat_14")
+
+[node name="Nerve3" type="Node3D" parent="Rig/Body/Nerves"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.02, 0.0, 0.12)
+
+[node name="Strand" type="MeshInstance3D" parent="Rig/Body/Nerves/Nerve3"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.225, 0.0)
+mesh = SubResource("BoxMesh_17")
+material_override = SubResource("Mat_14")
+
+[node name="Nerve4" type="Node3D" parent="Rig/Body/Nerves"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.05, 0.0, -0.1)
+
+[node name="Strand" type="MeshInstance3D" parent="Rig/Body/Nerves/Nerve4"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.3, 0.0)
+mesh = SubResource("BoxMesh_18")
+material_override = SubResource("Mat_14")
+
+[node name="Glow" type="OmniLight3D" parent="Rig/Body"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.7)
+light_color = Color(0.502, 0.8784, 1.0, 1.0)
+light_energy = 0.4
+omni_range = 3.0

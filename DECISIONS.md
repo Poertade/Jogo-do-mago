@@ -693,6 +693,31 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Choque que atravessa paredes:** o raio para no primeiro obstáculo, como os projéteis.
 - **Motivo:** os Focus que faltavam do Thaumcraft 4 deixam o Vis de Aer e Terra úteis, e a Escavação dá um uso novo ao mapa (passagens e cristal).
 
+### D074 · 2026-11-06 · M11: o segundo andar (O Observatório Afogado) e o inimigo à distância
+
+- **Escolha:**
+  - **Região nova:** `observatory`, "O Observatório Afogado". A narrativa continua descendo: a Primeira Escola baixou o observatório para baixo da terra, e lá as estrelas também olham. Quatro salas, do original:
+    - **Galeria das Lentes:** lunetas quebradas e lentes que brilham.
+    - **Sala dos Mapas Celestes:** mesas de mapas e uma esfera armilar.
+    - **Cisterna Estelar:** água que reflete estrelas, Nódulos pequenos e a quarta âncora do portal.
+    - **Cúpula Quebrada:** a grande luneta e o chefe.
+    - Os materiais e luzes são novos (pedra azulada), e há estrelas pintadas no teto.
+  - **Acesso:** uma grade a leste do Grande Arquivo, com `requires_defeat` = `archivist`: só abre depois que o Arquivista cai. Uma parede rachada liga a galeria direto à cúpula, um atalho para quem tem a Escavação.
+  - **Inimigo à distância:** o **Olho Vigia** (`ranged` em EnemyData):
+    - **Movimento:** mantém `keep_distance` (4,5 m) e atira de até 10 m, só enxergando o jogador. A regra fica em `EnemyBrain`, testada.
+    - **Tiro (`EnemyShot`):** uma bola de luz lenta (7 m/s), com 10 de dano, que dá para desviar.
+    - **Corpo:** `EyeRig`, um olho que flutua com nervos pendurados e cuja íris acende ao preparar o tiro.
+  - **Chefe:** **O Olho do Fundo**, um olho grande:
+    - **Ataque:** atira três bolas em leque e não se abala com os disparos.
+    - **Fúria:** na metade da vida, fica vermelho, mais rápido e chama dois Olhos Vigias.
+    - **Relíquia:** ao cair, deixa 3 fragmentos de estrela guardados direto na escola, uma vez só.
+  - **Progresso:** fragmentos de estrela (material novo, também dissolvível) e o **Núcleo Estelar** (18/54), com página própria depois da de cristal. Os Olhos Vigias às vezes deixam fragmentos.
+  - **Livros:** dois livros da região (o Diário do Astrônomo e o Mapa Celeste Afogado), para a região também esconder receitas.
+- **Descartado:**
+  - **Sortear um segundo andar:** o mapa é fixo (D068); o andar novo é feito à mão como o resto.
+  - **Olho que voa de verdade (física de voo):** o corpo anda no chão e o olho flutua só no desenho. A malha de navegação continua servindo.
+- **Motivo:** pedido do usuário. O andar novo dá um lugar para o Núcleo Estelar e põe à prova o Focus de Choque, contra grupos, e a Escavação, no atalho.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

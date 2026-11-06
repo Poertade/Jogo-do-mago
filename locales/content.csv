@@ -217,3 +217,28 @@ PROMPT_CRYSTAL_VEIN,Veio de cristal: a Escavação arranca as lascas
 OBJ_CRACKED_WALL,Parede rachada
 OBJ_CRYSTAL_VEIN,Veio de cristal
 ROOM_BURIED_STOREROOM,Depósito Soterrado
+ZONE_OBSERVATORY,O Observatório Afogado
+ROOM_LENS_GALLERY,Galeria das Lentes
+ROOM_STAR_CHARTS,Sala dos Mapas Celestes
+ROOM_STAR_CISTERN,Cisterna Estelar
+ROOM_BROKEN_DOME,A Cúpula Quebrada
+ANCHOR_CISTERN,Cisterna Estelar
+ENEMY_WATCHER_EYE,Olho Vigia
+ENEMY_DEEP_EYE,O Olho do Fundo
+MSG_DEEP_EYE_ENRAGED,"O Olho do Fundo se abre inteiro, e outros olhos acordam com ele."
+ITEM_STAR_SHARD,Fragmento de estrela
+OBJ_STAR_SHARD,Fragmento de estrela
+OBJ_OBSERVATORY_STONE,Pedra do observatório
+OBJ_BROKEN_TELESCOPE,Luneta quebrada
+OBJ_STAR_CHART,Mapa celeste
+OBJ_STAR_WATER,Água estrelada
+PROMPT_TAKE_STAR,Pegar o fragmento de estrela
+PROMPT_GATE_BOSS,A grade não cede enquanto o Arquivista vive
+CORE_STAR,Núcleo Estelar
+CORE_STAR_DESC,"Fragmentos de estrela do observatório, presos em cristal. Guarda 18 de cada aspecto e 54 no total."
+PAGE_STAR_CORE,Núcleo Estelar
+PAGE_STAR_CORE_DESC,"A {light} das estrelas caídas, guardada em {crystal} com {magic}: libera o Núcleo Estelar na Bancada Arcana (pede fragmentos de estrela)."
+BOOK_ASTRONOMER_DIARY,Diário do Astrônomo
+BOOK_ASTRONOMER_DIARY_TEXT,"Descemos o observatório inteiro para debaixo da escola, para ver as estrelas sem as nuvens. Não esperávamos que, lá embaixo, as estrelas também nos vissem.\n\nO olho maior já não pisca. Os pequenos o seguem por onde ele olha."
+BOOK_DROWNED_STARCHART,Mapa Celeste Afogado
+BOOK_DROWNED_STARCHART_TEXT,"A água subiu pela cisterna e tomou os mapas. O que restou das constelações ainda brilha na tinta molhada, e entre elas alguém anotou fórmulas que não são de astronomia."

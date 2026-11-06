@@ -5,11 +5,12 @@
 [resource]
 script = ExtResource("1")
 map_scene = "res://scenes/dungeon/dungeon.tscn"
-anchors = Array[StringName]([&"atrium", &"spring", &"vestibule"])
+anchors = Array[StringName]([&"atrium", &"spring", &"vestibule", &"cistern"])
 anchor_names = Dictionary[StringName, String]({
 &"atrium": "ANCHOR_ATRIUM",
 &"spring": "ANCHOR_SPRING",
-&"vestibule": "ANCHOR_VESTIBULE"
+&"vestibule": "ANCHOR_VESTIBULE",
+&"cistern": "ANCHOR_CISTERN"
 })
 return_room = &"school"
 return_entrance = &"from_dungeon"

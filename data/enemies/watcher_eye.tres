@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/data/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+scene_path = "res://scenes/enemies/watcher_eye.tscn"
+max_health = 30.0
+damage = 10.0
+weaknesses = Dictionary[StringName, float]({
+&"air": 1.3,
+&"fire": 1.3
+})
+move_speed = 1.6
+sight_range = 13.0
+attack_range = 10.0
+attack_windup = 0.9
+attack_cooldown = 2.4
+hurt_stun = 0.25
+ranged = true
+keep_distance = 4.5
+shot_speed = 7.0
+shot_count = 1
+shot_color = Color(0.5, 0.88, 1, 1)
+silver_min = 1
+silver_max = 3
+material = &"star_shard"
+material_chance = 0.35
+material_amount = 1
+id = &"watcher_eye"
+name_key = "ENEMY_WATCHER_EYE"
+aspects = Dictionary[StringName, int]({
+&"light": 1,
+&"mind": 2,
+&"eldritch": 1
+})
