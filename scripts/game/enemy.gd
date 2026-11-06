@@ -61,7 +61,7 @@ func take_damage(amount: float, element: StringName) -> void:
 		rig.play_hurt()
 		if brain.check_enrage(health.current / health.max_health):
 			_enrage()
-		Audio.play_at(&"enemy_hurt", global_position + Vector3.UP, get_parent())
+		Audio.play_at(_sound(&"hurt"), global_position + Vector3.UP, get_parent())
 
 
 ## Fica lento por `seconds` segundos: anda, prepara o golpe e se anima a `factor` da velocidade.
@@ -186,14 +186,14 @@ func _on_attack_landed() -> void:
 		get_parent().add_child(shot)
 		shot.global_position = from
 		shot.setup(direction * data.shot_speed, data.damage, data.shot_color, get_rid())
-	Audio.play_at(&"spell_cast", from, get_parent())
+	Audio.play_at(_sound(&"swing"), from, get_parent())
 
 
 func _on_died() -> void:
 	brain.on_died()
 	$CollisionShape3D.set_deferred("disabled", true)
 	rig.play_death()
-	Audio.play_at(&"enemy_death", global_position + Vector3.UP, get_parent())
+	Audio.play_at(_sound(&"death"), global_position + Vector3.UP, get_parent())
 	# Espólio: a prata vai direto para o que foi achado na incursão.
 	if data.silver_max > 0:
 		Game.find_item(&"silver", Game.rng.range_int(data.silver_min, data.silver_max))
@@ -210,7 +210,7 @@ func _enrage() -> void:
 	if data.enrage_message_key != "":
 		Game.message(Text.expand(data.enrage_message_key), Color(0.9, 0.5, 0.45))
 	rig.play_enrage()
-	Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
+	Audio.play_at(_sound(&"alert"), global_position + Vector3.UP * 1.5, get_parent())
 	var room := get_parent() as Room
 	if room == null:
 		return
@@ -231,6 +231,13 @@ func _play_state_sounds(previous: EnemyBrain.State, current: EnemyBrain.State) -
 		if data.show_health_bar:
 			Game.boss_engaged.emit(self)
 	if previous == EnemyBrain.State.IDLE and current == EnemyBrain.State.CHASE:
-		Audio.play_at(&"enemy_alert", global_position + Vector3.UP * 1.5, get_parent())
+		Audio.play_at(_sound(&"alert"), global_position + Vector3.UP * 1.5, get_parent())
 	elif current == EnemyBrain.State.ATTACK:
-		Audio.play_at(&"enemy_swing", global_position + Vector3.UP, get_parent())
+		Audio.play_at(_sound(&"swing"), global_position + Vector3.UP, get_parent())
+
+
+## Nome do som deste inimigo para o evento (alert, swing, hurt, death): o do conjunto próprio
+## (`sound_set`), se existir no banco; senão, o genérico.
+func _sound(kind: StringName) -> StringName:
+	var own := StringName("%s_%s" % [data.sound_set, kind])
+	return own if data.sound_set != &"" and Audio.has_sound(own) else StringName("enemy_" + String(kind))

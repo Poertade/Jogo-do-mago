@@ -93,8 +93,8 @@ func _draw() -> void:
 			continue
 		var aspect: AspectData = aspects.get(aspect_id)
 		if note.is_target(cell) and not known.call(aspect_id):
-			var width := font.get_string_size("?", HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
-			draw_string(font, center + Vector2(-floorf(width / 2.0), 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, TARGET_INK)
+			var width := font.get_string_size("?", HORIZONTAL_ALIGNMENT_LEFT, -1, 22).x
+			draw_string(font, center + Vector2(-floorf(width / 2.0), 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, TARGET_INK)
 		elif aspect != null and aspect.icon != null:
 			# Ícone no tamanho original (16x16), em posição inteira.
 			draw_texture_rect(aspect.icon, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)

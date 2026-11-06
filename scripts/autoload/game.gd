@@ -42,6 +42,8 @@ signal wand_changed
 signal text_requested(title: String, body: String)
 ## Um texto para ler (placa, anotação), com título e corpo (chaves de tradução).
 signal note_requested(title_key: String, body_key: String)
+## O progresso foi apagado (Novo jogo): quem guardou knowledge, stash etc. pega os novos.
+signal progress_reset
 
 const SAVE_PATH := "user://save.json"
 
@@ -464,6 +466,32 @@ func _on_knowledge_changed() -> void:
 
 func _update_modifiers() -> void:
 	modifiers = Modifiers.from_pages(Content.db.pages_by_id(knowledge.studied_pages))
+
+
+## Existe um save gravado?
+func has_save() -> bool:
+	return FileAccess.file_exists(SAVE_PATH)
+
+
+## Novo jogo: apaga o save e começa do zero (conhecimento, mapa, o que fica na escola, a
+## incursão). Quem chama recarrega a sala (a cena principal), para os objetos verem o estado novo.
+func reset_progress() -> void:
+	if has_save():
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
+	knowledge = Knowledge.new()
+	world = DungeonProgress.new()
+	stash = Stash.new()
+	crucible = Crucible.new()
+	knowledge.free_recipes = Content.db.free_recipes()
+	knowledge.changed.connect(_on_knowledge_changed)
+	world.changed.connect(save)
+	stash.changed.connect(save)
+	crucible.changed.connect(save)
+	analyzed_targets.clear()
+	_update_modifiers()
+	run = RunState.new(Content.db.player, stash.jars)
+	_apply_wand()
+	progress_reset.emit()
 
 
 func save() -> void:

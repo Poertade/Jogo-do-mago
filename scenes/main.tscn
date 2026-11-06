@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/portal_screen.tscn" id="portal_screen"]
 [ext_resource type="PackedScene" path="res://scenes/ui/wand_screen.tscn" id="wand_screen"]
 [ext_resource type="PackedScene" path="res://scenes/ui/alchemy_screen.tscn" id="alchemy_screen"]
+[ext_resource type="PackedScene" path="res://scenes/ui/title_screen.tscn" id="title_screen"]
+[ext_resource type="PackedScene" path="res://scenes/ui/intro_screen.tscn" id="intro_screen"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1"]
 [ext_resource type="Shader" path="res://scripts/render/ps1_post.gdshader" id="2"]
 [ext_resource type="Script" path="res://scripts/game/world.gd" id="3"]
@@ -81,4 +83,10 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="PauseMenu" parent="." instance=ExtResource("9")]
+unique_name_in_owner = true
+
+[node name="TitleScreen" parent="." instance=ExtResource("title_screen")]
+unique_name_in_owner = true
+
+[node name="IntroScreen" parent="." instance=ExtResource("intro_screen")]
 unique_name_in_owner = true

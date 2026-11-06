@@ -18,6 +18,8 @@ var slow_factor := 1.0
 var slow_seconds := 0.0
 ## Escava (Focus de Escavação): quebra paredes rachadas e extrai veios de cristal.
 var digs := false
+## Som do impacto (do Focus).
+var impact_sound: StringName = &"fire_impact"
 
 @onready var light: OmniLight3D = $Light
 
@@ -36,6 +38,7 @@ func setup(focus: FocusData, direction: Vector3, damage_amount: float, ignore: A
 	slow_factor = focus.slow_factor
 	slow_seconds = focus.slow_seconds
 	digs = focus.digs
+	impact_sound = focus.impact_sound
 	# O brilho do projétil tem a cor do Focus (laranja no fogo, azul-claro no gelo).
 	_tint($Core, focus.light_color.lightened(0.6))
 	_tint($Shell, focus.light_color)
@@ -89,7 +92,7 @@ static func _find_with(node: Node, method: StringName) -> Node:
 
 
 func _explode() -> void:
-	Audio.play_at(&"fire_impact", global_position, get_parent())
+	Audio.play_at(impact_sound, global_position, get_parent())
 	if impact_scene != null:
 		var impact: Node3D = impact_scene.instantiate()
 		impact.set(&"color", color)

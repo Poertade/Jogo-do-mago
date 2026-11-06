@@ -16,6 +16,7 @@ attack_range = 1.3
 attack_windup = 0.45
 attack_cooldown = 1.1
 hurt_stun = 0.45
+sound_set = &"apprentice"
 silver_min = 1
 silver_max = 3
 material = &"brass"

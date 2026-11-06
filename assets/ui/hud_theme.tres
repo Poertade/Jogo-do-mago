@@ -15,7 +15,7 @@ bg_color = Color(0.55, 0.62, 0.6, 1)
 
 [resource]
 default_font = ExtResource("1_0uen2")
-default_font_size = 10
+default_font_size = 11
 Label/colors/font_color = Color(0.86, 0.8, 0.68, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 2
@@ -24,4 +24,4 @@ ProgressBar/styles/fill = SubResource("StyleBoxFlat_vik1w")
 RichTextLabel/colors/default_color = Color(0.86, 0.8, 0.68, 1)
 RichTextLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 RichTextLabel/constants/outline_size = 2
-RichTextLabel/font_sizes/normal_font_size = 10
+RichTextLabel/font_sizes/normal_font_size = 11

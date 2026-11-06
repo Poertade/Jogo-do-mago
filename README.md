@@ -14,6 +14,17 @@ Roguelike dungeon crawler em 3D e primeira pessoa, com visual de PS1 e fantasia 
 
 ## Estado
 
+**M12: acabamento.**
+- **Menu inicial:** Continuar (ou Começar, sem save), **Novo jogo** (apaga o progresso, depois de confirmar), Opções e Sair.
+- **Introdução:** no começo de um jogo novo, algumas linhas sobre a escola, as ruínas e o portal. Clique, E ou Esc pulam.
+- **Música:** cada região tem a sua (escola, ruínas, abismo, observatório), com um controle de volume próprio nas opções.
+- **Sons próprios:** cada inimigo geme, golpeia, sofre e morre do seu jeito; o gelo, o choque e a escavação também têm os seus.
+- **Letras mais legíveis:** a interface passou de 10 para 11 px, tamanho em que a fonte fica nítida (em 10, o C virava O). Os algarismos agora são desenhados à mão, pixel a pixel, para o 2, o 5 e o 8 não se confundirem.
+
+| O menu inicial | A introdução |
+| --- | --- |
+| ![Menu inicial](docs/images/menu-inicial.png) | ![Introdução](docs/images/introducao.png) |
+
 **M11: o segundo andar da Dungeon.** Depois que o Arquivista cai, uma grade no Grande Arquivo abre a escada para **O Observatório Afogado**: quatro salas com lunetas quebradas, mapas celestes e estrelas pintadas no teto.
 - **Olho Vigia:** o primeiro inimigo que ataca de longe. Mantém distância e atira bolas de luz que dá para desviar.
 - **O Olho do Fundo:** o chefe do andar. Atira em leque, se enfurece e chama dois olhos.
@@ -120,7 +131,7 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
 
 | Tecla | Ação |
 | --- | --- |
-| Clique | prende o mouse na janela e começa a jogar |
+| Clique | prende o mouse na janela e começa a jogar (o jogo abre no menu inicial) |
 | W A S D ou setas | andar |
 | Mouse | olhar |
 | Shift (segurar) | correr |
@@ -279,18 +290,18 @@ Depois do M5, a pesquisa passou a seguir o Thaumcraft 4. Agora:
    - Para preparar, você precisa ter descoberto os aspectos da receita.
    - Os elixires ficam com você mesmo se você morrer, como os potes. O HUD mostra um frasco vermelho com a quantidade ao lado dos potes.
 
-O progresso é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, apague esse arquivo. A pasta `user://` fica em:
+O progresso é gravado em `user://save.json`, um JSON legível, a cada descoberta. Para começar do zero, use **Novo jogo** no menu inicial (ou apague esse arquivo). A pasta `user://` fica em:
 - **Windows:** `%APPDATA%\Godot\app_userdata\Jogo do Mago`
 - **Linux:** `~/.local/share/godot/app_userdata/Jogo do Mago`
 
 ## Opções
 
-No menu de pausa, **Opções**:
+No menu inicial ou no de pausa, **Opções**:
 
 - **Filtro visual:** *Crocante* (todos os efeitos, 240 linhas) ou *Limpo* (sem tremor, sem deformação, sem cor limitada, 480 linhas). Mexer num efeito sozinho muda o filtro para *Personalizado*.
 - **Resolução interna:** altura da imagem em que o mundo é desenhado antes de ser ampliado (180, 240, 360 ou 480 linhas).
 - **Efeitos**, cada um com liga/desliga: vértices trêmulos (vertex snapping), texturas deformadas (mapeamento afim), névoa, cor limitada e dithering.
-- **Sensibilidade do mouse** e **volume**.
+- **Sensibilidade do mouse**, **volume** (geral) e **música**.
 
 As opções ficam em `user://settings.cfg`.
 
@@ -316,6 +327,7 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 - **Inimigo:** IA (estados, esquiva, intervalo, reação ao dano, morte).
 - **Magia nova:** troca de Focus, Focus de Gelo liberado pela página, custo em Aqua e Ordo; inimigo enfurecido e inimigo que não se abala. Corrente do Choque (salta para o mais perto, sem repetir alvo, com o dano caindo a cada salto); Choque e Escavação liberados por páginas cujas notas têm solução.
 - **Scripts:** todo script do jogo e das ferramentas compila.
+- **Acabamento (M12):** volume da música gravado e limitado; todo inimigo tem os quatro sons próprios no banco; os sons de todo Focus existem; toda sala tem música que repete; a fonte dos algarismos tem os dez e cai na Pixelify para o resto; os textos do menu inicial e da introdução existem.
 - **Segundo andar (M11):** inimigo à distância só atira enxergando o jogador (o de corpo a corpo não depende disso); o conteúdo do Observatório (Olho Vigia, chefe com leque e fúria, grade do Arquivista, âncora, livros, Núcleo Estelar).
 - **Alquimia (M9):** dissolver um material vira essência dos aspectos dele (e sai do que está guardado); materiais sem aspectos não se dissolvem; gastar essência é tudo ou nada; anotar só vale para aspectos descobertos; elixires respeitam o limite e curam sem passar do máximo; cadinho e elixires no save 8; toda receita usa aspectos que algum material dá.
 - **Varinha (M8):** núcleo e ponteira montam a varinha; a economia da eficiência se acumula (com 1,25, cinco disparos de 1 custam 4); trocar de peça mantém o Vis que couber; peças guardadas no save 7; páginas que liberam peças; cada núcleo guarda mais e cada ponteira gasta menos que a anterior; todo material das peças aparece no mapa, nos inimigos ou no baú; as notas das quatro páginas novas têm solução.
@@ -331,12 +343,14 @@ A lógica do jogo (`scripts/core`) é testada com o [GUT](https://github.com/bit
 | --- | --- |
 | `godot --headless --path . -s tools/balance_report.gd` | relatório de balanceamento: disparos por recipiente, acertos para derrubar cada inimigo (com e sem páginas), golpes para derrubar o jogador, pontos de pesquisa, quantos disparos cada sala e região do mapa pedem em média e quanta prata e quantos cacos uma incursão rende |
 | `godot --headless --path . -s tools/generate_textures.gd` | gera de novo as texturas provisórias |
-| `godot --headless --path . -s tools/generate_sounds.gd` | gera de novo os sons provisórios |
+| `godot --headless --path . -s tools/generate_sounds.gd` | gera de novo os sons provisórios e as músicas |
+| `godot --headless --path . -s tools/generate_digit_font.gd` | gera de novo os algarismos da interface (`assets/ui/digits_font.tres`), desenhados à mão em 5 × 7 pixels |
 | `godot --headless --path . -s tools/generate_icons.gd` | gera de novo os ícones dos aspectos (`assets/icons/aspects/`) |
 | `godot --headless --path . -s tools/generate_ui_theme.gd` | gera de novo o pergaminho, a moldura de madeira, os ícones dos controles, a fonte e os temas dos menus e do HUD (`assets/ui/`); rode duas vezes, com `--import` no meio, para os temas usarem as texturas novas |
 | `godot --path . -- --seed=123` | escolhe a semente do gerador aleatório (impressa ao abrir o jogo) |
 | `godot --path . -- --room=stone_chamber` | começa direto numa sala (`school` é o padrão; `test_room` é a sala do M1) |
 | `godot --path . -- --screenshot=captura.png` | tira uma captura depois de 30 quadros e fecha |
+| `godot --path . -- --no-title` | pula o menu inicial (vai direto para a sala) |
 
 ## Como o projeto está organizado
 
@@ -423,6 +437,7 @@ Tudo abaixo é feito no editor do Godot (ou editando os arquivos de texto) e nã
    | Comportamento | `move_speed`, `sight_range`, `attack_range`, `attack_windup`, `attack_cooldown`, `hurt_stun` (0 = não se abala) |
    | Chefe (opcional) | `show_health_bar`, `enrage_at` (fração da vida em que se enfurece), `enrage_speed`, `enrage_summons` (quem ele chama) e `enrage_message_key` |
    | Aparência | `scene_path` (pode ser a mesma cena do Bedel) |
+   | Sons | `sound_set` (veja [Trocar textos, nomes, sons e texturas](#trocar-textos-nomes-sons-e-texturas)) |
 
 2. Em `locales/content.csv`: `ENEMY_ASH_WRAITH,Espectro de Cinzas`.
 3. Para colocá-lo numa sala, abra a cena da sala (ex.: `scenes/rooms/stone_chamber.tscn`):
@@ -521,7 +536,7 @@ O mapa fica em `scenes/dungeon/dungeon.tscn`. Abra-o no editor: as salas, os cor
    - `id`, `name_key` (o nome no canto da tela, em `locales/content.csv`) e `scene_path`;
    - `zone` (`school`, `caves` ou `abyss`);
    - as medidas internas (`width`, `depth`, `height`): o mapa usa isso para saber em que sala o jogador está;
-   - a atmosfera (cor e distâncias da névoa, luz ambiente) e o som de `ambience`.
+   - a atmosfera (cor e distâncias da névoa, luz ambiente), o som de `ambience` e a `music`.
 3. Instancie a sala em `Rooms/` no mapa e ligue as portas com um corredor (`Corridors/`, duplique um e edite `points`).
 4. **Região nova:** duplique `data/dungeon/zones/caves.tres` (nome, materiais e luzes dos corredores) e use o `id` dela nas salas.
 5. **Teste direto:** `godot --path . -- --room=<id da sala>`.
@@ -550,9 +565,12 @@ O mapa fica em `scenes/dungeon/dungeon.tscn`. Abra-o no editor: as salas, os cor
 - **Textos:** `locales/ui.csv` (interface) e `locales/content.csv` (conteúdo).
 - **Nomes que remetem a outras obras:** só em `locales/names.csv`. Para uma versão distribuída, troque pelos nomes próprios da decisão 7 (Lume, Maré, Barro, Sopro, Prumo, Ruína; "Foco" no lugar de "Focus").
 - **Sons:** substitua o arquivo em `assets/sounds/` mantendo o nome, ou aponte o evento para outro arquivo em `data/audio/sound_bank.tres`, onde também fica o volume de cada som. Sons que repetem precisam de **Loop Mode: Forward** na aba Importar.
+  - **Inimigos:** `sound_set` em `data/enemies/` escolhe o conjunto (ex.: `beadle` usa `beadle_alert`, `beadle_swing`, `beadle_hurt` e `beadle_death`). Sem o conjunto no banco, o inimigo usa os sons genéricos (`enemy_alert`…).
+  - **Focus:** `cast_sound` e `impact_sound` em `data/foci/`.
+  - **Música:** `music` em cada sala (`data/rooms/`); a troca entre salas é suave e a mesma música continua de onde estava.
 - **Menus e HUD:** cada tela (`scenes/ui/`) desenha o conteúdo num `SubViewport` de 640×360 (nó `Pixels/Viewport`), que o `SubViewportContainer` amplia 2× sem filtro. Edite o conteúdo dentro de `Pixels/Viewport`, em pixels dessa imagem pequena.
   - **Aparência:** `assets/ui/parchment_theme.tres` (menus) e `assets/ui/hud_theme.tres` (HUD); abrir um tema no editor mostra o editor de temas. Variações do tema dos menus: `WoodPanel` (moldura de madeira), `WoodLabel` e `WoodTitleLabel` (texto claro sobre madeira), `TitleLabel` e `HeaderLabel` (tinta vermelha).
-  - **Letras:** a fonte Pixelify Sans (`assets/fonts/`, usada por `assets/ui/ui_font.tres`) fica nítida em **10 px** e **20 px**; outros tamanhos entortam os pixels e somem com acentos e dois-pontos.
+  - **Letras:** a fonte Pixelify Sans (`assets/fonts/`, usada por `assets/ui/ui_font.tres`) fica nítida em **11 px** e **22 px**, tamanhos em que cada ponto do desenho cai num pixel; em outros, as letras entortam (em 10, o C vira O). Os algarismos vêm de `assets/ui/digits_font.tres` (feito por `tools/generate_digit_font.gd`); para redesenhar um, edite a grade dele no script e rode de novo.
   - **Texturas:** `parchment.png`, `wood_frame.png` e os ícones de `assets/ui/icons/` (chave liga/desliga, seta, marcador).
 - **Ícones dos aspectos:** substitua o PNG em `assets/icons/aspects/` mantendo o nome (16×16).
 - **Texturas:** substitua o PNG em `assets/textures/` mantendo o nome. Texturas novas já entram sem mipmaps e sem compressão (padrão do projeto). Mantenha-as pequenas (32×32 ou 64×64) para o visual PS1.

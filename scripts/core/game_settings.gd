@@ -23,6 +23,7 @@ var internal_height := 240
 var mouse_sensitivity := 0.15
 ## Volume geral, de 0 a 1.
 var master_volume := 1.0
+var music_volume := 0.6
 
 var _defaults: SettingsDefaults
 var _presets: Array[GraphicsPreset] = []
@@ -34,6 +35,7 @@ func _init(defaults: SettingsDefaults, presets: Array[GraphicsPreset]) -> void:
 	_presets = presets
 	mouse_sensitivity = defaults.mouse_sensitivity
 	master_volume = defaults.master_volume
+	music_volume = defaults.music_volume
 	var preset := find_preset(defaults.default_preset_id)
 	if preset != null:
 		apply_preset(preset)
@@ -80,6 +82,11 @@ func set_master_volume(value: float) -> void:
 
 
 ## Quantos níveis de cor por canal o pós-processamento usa (2 elevado aos bits).
+## Muda o volume da música (de 0 a 1).
+func set_music_volume(value: float) -> void:
+	music_volume = clampf(value, 0.0, 1.0)
+
+
 func color_levels() -> int:
 	return 1 << _defaults.color_depth_bits
 
@@ -92,6 +99,7 @@ func save_to(config: ConfigFile) -> void:
 	config.set_value("graphics", "internal_height", internal_height)
 	config.set_value("controls", "mouse_sensitivity", mouse_sensitivity)
 	config.set_value("audio", "master_volume", master_volume)
+	config.set_value("audio", "music_volume", music_volume)
 
 
 ## Lê as opções de um ConfigFile. Valores ausentes ou inválidos mantêm o valor atual.
@@ -109,6 +117,9 @@ func load_from(config: ConfigFile) -> void:
 	var volume = config.get_value("audio", "master_volume", master_volume)
 	if volume is float or volume is int:
 		set_master_volume(float(volume))
+	var music = config.get_value("audio", "music_volume", music_volume)
+	if music is float or music is int:
+		set_music_volume(float(music))
 	preset_id = _matching_preset_id()
 
 

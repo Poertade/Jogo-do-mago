@@ -38,6 +38,7 @@ func load_room(room_id: StringName, entrance_id: StringName = &"default", room_s
 	add_child(current_room)
 	_apply_atmosphere(data)
 	Audio.set_ambience(data.ambience)
+	Audio.set_music(data.music)
 	var entrance := current_room.get_entrance(entrance_id)
 	if entrance != null:
 		player.place_at(entrance)
@@ -86,6 +87,7 @@ func _enter_dungeon_room(index: int, blend: bool) -> void:
 	else:
 		_apply_atmosphere(current_room_data)
 	Audio.set_ambience(current_room_data.ambience)
+	Audio.set_music(current_room_data.music)
 	if current_room_data.zone != previous_zone:
 		Game.zone_entered.emit(current_room_data.zone)
 

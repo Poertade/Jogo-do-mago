@@ -33,3 +33,5 @@ extends Resource
 @export_group("Som")
 ## Som de ambiente que toca em repetição na sala (vazio: silêncio).
 @export var ambience: AudioStream
+## Música da sala (vazio: nenhuma). Salas seguidas com a mesma música não a reiniciam.
+@export var music: AudioStream

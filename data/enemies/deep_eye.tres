@@ -17,6 +17,7 @@ attack_range = 14.0
 attack_windup = 1.1
 attack_cooldown = 1.4
 hurt_stun = 0.0
+sound_set = &"eye"
 ranged = true
 keep_distance = 6.0
 shot_speed = 6.5

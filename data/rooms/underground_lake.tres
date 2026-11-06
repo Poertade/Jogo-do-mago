@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="RoomData" format=3]
 
 [ext_resource type="Script" path="res://scripts/core/data/room_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/music_ruins.wav" id="music"]
 [ext_resource type="AudioStream" path="res://assets/sounds/ambience_caves.wav" id="2"]
 
 [resource]
@@ -18,3 +19,4 @@ fog_far = 16.0
 ambient_color = Color(0.18, 0.26, 0.34, 1)
 ambient_energy = 0.42
 ambience = ExtResource("2")
+music = ExtResource("music")

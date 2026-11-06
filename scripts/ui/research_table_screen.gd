@@ -34,6 +34,7 @@ func _ready() -> void:
 	result_cell.disabled = true
 	note_view.cell_clicked.connect(_on_cell_clicked)
 	Game.knowledge.changed.connect(_on_knowledge_changed)
+	Game.progress_reset.connect(_on_progress_reset)
 
 
 func _on_opened() -> void:
@@ -41,6 +42,12 @@ func _on_opened() -> void:
 		_page = Content.db.sorted_pages()[0]
 	_refresh()
 	close_button.grab_focus()
+
+
+## Novo jogo: o conhecimento é outro objeto.
+func _on_progress_reset() -> void:
+	_page = null
+	Game.knowledge.changed.connect(_on_knowledge_changed)
 
 
 func _on_knowledge_changed() -> void:

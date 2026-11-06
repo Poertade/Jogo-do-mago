@@ -52,6 +52,9 @@ const SPELL_TYPES: Array[StringName] = [SPELL_PROJECTILE, SPELL_CHAIN]
 @export var projectile_speed: float = 0.0
 ## Segundos até o projétil se apagar sozinho.
 @export var projectile_lifetime: float = 0.0
+## Sons do disparo e do impacto (nomes do banco de sons).
+@export var cast_sound: StringName = &"spell_cast"
+@export var impact_sound: StringName = &"fire_impact"
 ## Cor e força da luz que o projétil (ou o raio) leva.
 @export var light_color: Color = Color.BLACK
 @export var light_energy: float = 0.0

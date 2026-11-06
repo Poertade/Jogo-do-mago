@@ -18,6 +18,7 @@ attack_range = 1.5
 attack_windup = 0.9
 attack_cooldown = 1.6
 hurt_stun = 0.2
+sound_set = &"ooze"
 silver_min = 1
 silver_max = 2
 material = &"ink_clot"

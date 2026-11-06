@@ -21,10 +21,11 @@ const LIGHT_ON_WOOD := Color(0.82, 0.72, 0.53)
 const HUD_TEXT := Color(0.86, 0.8, 0.68)
 const BRASS := Color(0.69, 0.54, 0.24)
 
-## Tamanho das letras: a fonte Pixelify Sans é desenhada numa grade em que 10 px dá um pixel da
-## tela por ponto do desenho; 20 px dobra. Em tamanhos menores, dois-pontos e acentos somem.
-const FONT_SMALL := 10
-const FONT_BIG := 20
+## Tamanho das letras: a fonte Pixelify Sans é desenhada numa grade de cerca de 92 unidades (de
+## 1000) por ponto, e 11 px dá um pixel da tela por ponto do desenho; 22 px dobra. Em 10 px os
+## pontos ficam menores que um pixel, e detalhes somem (o C vira O, o 2 parece um 8).
+const FONT_SMALL := 11
+const FONT_BIG := 22
 
 const PARCHMENT_SIZE := 176
 const PARCHMENT_MARGIN := 12
@@ -188,12 +189,15 @@ func _grabber() -> Image:
 
 # --- Temas --------------------------------------------------------------------------
 
-## A fonte da interface: Pixelify Sans com um pixel a mais nos espaços entre palavras (no tamanho
-## pequeno, o espaço original fica estreito demais). Também é a fonte padrão do projeto.
+## A fonte da interface: Pixelify Sans com um pixel a mais nos espaços entre palavras e os
+## algarismos desenhados à mão. Também é a fonte padrão do projeto.
 func _font() -> FontVariation:
 	var font := FontVariation.new()
-	font.base_font = load("res://assets/fonts/PixelifySans.ttf")
+	# Os algarismos vêm de tools/generate_digit_font.gd; o resto, da Pixelify Sans (fallback).
+	font.base_font = load("res://assets/ui/digits_font.tres")
 	font.spacing_space = 1
+	# Sem ligaduras: o "fi" da Pixelify vira um desenho só, difícil de ler em tamanho pequeno.
+	font.opentype_features = {TextServerManager.get_primary_interface().name_to_tag("liga"): 0}
 	return font
 
 

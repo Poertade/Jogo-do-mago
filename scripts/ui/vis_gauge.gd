@@ -16,7 +16,7 @@ const VIAL_WIDTH := 7.0
 ## Ângulos do primeiro e do último frasco, em graus (0 = direita, 90 = para baixo).
 const FAN_FROM := -8.0
 const FAN_TO := 98.0
-const FONT_SIZE := 10
+const FONT_SIZE := 11
 
 const GLASS := Color(0.06, 0.05, 0.07, 0.9)
 const GLASS_EDGE := Color(0.0, 0.0, 0.0)

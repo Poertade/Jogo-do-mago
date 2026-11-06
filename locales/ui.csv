@@ -141,3 +141,13 @@ UI_MSG_NO_ELIXIR,"Nenhum elixir (prepare no cadinho, na escola)"
 UI_MSG_HEALTH_FULL,A vida já está cheia
 UI_MSG_ELIXIR_DRUNK,%s: +%d de vida
 UI_MSG_WALL_DUG,A parede rachada desaba
+UI_TITLE_GAME,Jogo do Mago
+UI_TITLE_SUBTITLE,As ruínas sob o colégio
+UI_TITLE_CONTINUE,Continuar
+UI_TITLE_START,Começar
+UI_TITLE_NEW,Novo jogo
+UI_TITLE_CONFIRM,"Apagar todo o progresso (conhecimento, varinha, potes, mapa) e começar do zero?"
+UI_TITLE_CONFIRM_YES,"Sim, apagar"
+UI_TITLE_CONFIRM_NO,Não
+UI_INTRO_SKIP,"Clique, E ou Esc para pular"
+UI_OPT_MUSIC,Música

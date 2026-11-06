@@ -19,6 +19,30 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/gate.wav" id="s15"]
 [ext_resource type="AudioStream" path="res://assets/sounds/coin.wav" id="s16"]
 [ext_resource type="AudioStream" path="res://assets/sounds/glass.wav" id="s17"]
+[ext_resource type="AudioStream" path="res://assets/sounds/beadle_alert.wav" id="n0"]
+[ext_resource type="AudioStream" path="res://assets/sounds/beadle_swing.wav" id="n1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/beadle_hurt.wav" id="n2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/beadle_death.wav" id="n3"]
+[ext_resource type="AudioStream" path="res://assets/sounds/apprentice_alert.wav" id="n4"]
+[ext_resource type="AudioStream" path="res://assets/sounds/apprentice_swing.wav" id="n5"]
+[ext_resource type="AudioStream" path="res://assets/sounds/apprentice_hurt.wav" id="n6"]
+[ext_resource type="AudioStream" path="res://assets/sounds/apprentice_death.wav" id="n7"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ooze_alert.wav" id="n8"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ooze_swing.wav" id="n9"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ooze_hurt.wav" id="n10"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ooze_death.wav" id="n11"]
+[ext_resource type="AudioStream" path="res://assets/sounds/archivist_alert.wav" id="n12"]
+[ext_resource type="AudioStream" path="res://assets/sounds/archivist_swing.wav" id="n13"]
+[ext_resource type="AudioStream" path="res://assets/sounds/archivist_hurt.wav" id="n14"]
+[ext_resource type="AudioStream" path="res://assets/sounds/archivist_death.wav" id="n15"]
+[ext_resource type="AudioStream" path="res://assets/sounds/eye_alert.wav" id="n16"]
+[ext_resource type="AudioStream" path="res://assets/sounds/eye_swing.wav" id="n17"]
+[ext_resource type="AudioStream" path="res://assets/sounds/eye_hurt.wav" id="n18"]
+[ext_resource type="AudioStream" path="res://assets/sounds/eye_death.wav" id="n19"]
+[ext_resource type="AudioStream" path="res://assets/sounds/frost_cast.wav" id="n20"]
+[ext_resource type="AudioStream" path="res://assets/sounds/frost_impact.wav" id="n21"]
+[ext_resource type="AudioStream" path="res://assets/sounds/shock_cast.wav" id="n22"]
+[ext_resource type="AudioStream" path="res://assets/sounds/dig_impact.wav" id="n23"]
 
 [resource]
 script = ExtResource("1")
@@ -40,7 +64,31 @@ sounds = Dictionary[StringName, AudioStream]({
 &"enemy_death": ExtResource("s14"),
 &"gate": ExtResource("s15"),
 &"coin": ExtResource("s16"),
-&"glass": ExtResource("s17")
+&"glass": ExtResource("s17"),
+&"beadle_alert": ExtResource("n0"),
+&"beadle_swing": ExtResource("n1"),
+&"beadle_hurt": ExtResource("n2"),
+&"beadle_death": ExtResource("n3"),
+&"apprentice_alert": ExtResource("n4"),
+&"apprentice_swing": ExtResource("n5"),
+&"apprentice_hurt": ExtResource("n6"),
+&"apprentice_death": ExtResource("n7"),
+&"ooze_alert": ExtResource("n8"),
+&"ooze_swing": ExtResource("n9"),
+&"ooze_hurt": ExtResource("n10"),
+&"ooze_death": ExtResource("n11"),
+&"archivist_alert": ExtResource("n12"),
+&"archivist_swing": ExtResource("n13"),
+&"archivist_hurt": ExtResource("n14"),
+&"archivist_death": ExtResource("n15"),
+&"eye_alert": ExtResource("n16"),
+&"eye_swing": ExtResource("n17"),
+&"eye_hurt": ExtResource("n18"),
+&"eye_death": ExtResource("n19"),
+&"frost_cast": ExtResource("n20"),
+&"frost_impact": ExtResource("n21"),
+&"shock_cast": ExtResource("n22"),
+&"dig_impact": ExtResource("n23")
 })
 volumes_db = Dictionary[StringName, float]({
 &"spell_charge": -6.0,
@@ -60,5 +108,29 @@ volumes_db = Dictionary[StringName, float]({
 &"enemy_death": -2.0,
 &"gate": -3.0,
 &"coin": -4.0,
-&"glass": -4.0
+&"glass": -4.0,
+&"beadle_alert": 0.0,
+&"beadle_swing": -4.0,
+&"beadle_hurt": -2.0,
+&"beadle_death": -2.0,
+&"apprentice_alert": 0.0,
+&"apprentice_swing": -4.0,
+&"apprentice_hurt": -2.0,
+&"apprentice_death": -2.0,
+&"ooze_alert": 0.0,
+&"ooze_swing": -4.0,
+&"ooze_hurt": -2.0,
+&"ooze_death": -2.0,
+&"archivist_alert": 0.0,
+&"archivist_swing": -4.0,
+&"archivist_hurt": -2.0,
+&"archivist_death": -2.0,
+&"eye_alert": 0.0,
+&"eye_swing": -4.0,
+&"eye_hurt": -2.0,
+&"eye_death": -2.0,
+&"frost_cast": -3.0,
+&"frost_impact": -3.0,
+&"shock_cast": -3.0,
+&"dig_impact": -3.0
 })

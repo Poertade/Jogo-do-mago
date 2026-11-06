@@ -40,6 +40,17 @@ func _initialize() -> void:
 	_save("gate", _gate())
 	_save("coin", _coin())
 	_save("glass", _glass())
+	# M12: sons próprios de cada inimigo, dos Focus novos, ambiente do Observatório e músicas.
+	_enemy_sounds()
+	_save("frost_cast", _frost_cast())
+	_save("frost_impact", _frost_impact())
+	_save("shock_cast", _shock_cast())
+	_save("dig_impact", _dig_impact())
+	_save("ambience_stars", _ambience_stars(), true)
+	_save("music_school", _music(24.0, 146.83, [[0, 3, 7], [-4, 0, 3], [3, 7, 10], [-2, 2, 5]], 0.5, 0.11, 0.16, 0.0, false), true)
+	_save("music_ruins", _music(32.0, 110.0, [[0, 3, 7], [-4, 0, 3], [0, 3, 7], [-5, -1, 2]], 2.0, 0.08, 0.2, 0.1, true), true)
+	_save("music_abyss", _music(32.0, 65.41, [[0, 6, 11], [1, 5, 10], [0, 6, 9], [-1, 5, 10]], 2.67, 0.1, 0.14, 0.12, true), true)
+	_save("music_stars", _music(32.0, 164.81, [[0, 4, 7, 11], [2, 6, 9, 14], [-3, 0, 4, 7], [-5, 0, 2, 7]], 0.4, 0.07, 0.12, 0.0, false), true)
 	quit()
 
 
@@ -336,6 +347,242 @@ func _glass() -> PackedFloat32Array:
 		out[i] = shimmer * 0.16 * exp(-t * 9.0)
 	_add_click(out, 0.0, 0.04, 0.5)
 	_add_click(out, 0.11, 0.03, 0.25)
+	return out
+
+
+# --- M12: blocos para compor os sons novos ----------------------------------------------
+
+## Soma um tom que desliza de `f0` a `f1` Hz, com ataque e queda (onda: "sine", "saw",
+## "square" ou "tri") e um leve vibrato.
+func _tone(out: PackedFloat32Array, start: float, length: float, f0: float, f1: float, wave: String, gain: float,
+		attack := 0.02, vibrato := 0.0) -> void:
+	var phase := 0.0
+	var first := int(start * RATE)
+	for i in int(length * RATE):
+		if first + i >= out.size():
+			break
+		var t := float(i) / RATE
+		var f := lerpf(f0, f1, t / length) * (1.0 + vibrato * sin(TAU * 5.5 * t))
+		phase += TAU * f / RATE
+		var sample := sin(phase)
+		match wave:
+			"saw":
+				sample = _saw(phase)
+			"square":
+				sample = 1.0 if sin(phase) >= 0.0 else -1.0
+			"tri":
+				sample = _tri(phase)
+		out[first + i] += sample * gain * _env(t, attack, length)
+
+
+## Soma ruído filtrado: `bright` de 0 (abafado) a 1 (chiado), deslizando de `b0` a `b1`.
+func _noise(out: PackedFloat32Array, start: float, length: float, b0: float, b1: float, gain: float, attack := 0.02) -> void:
+	var lp := 0.0
+	var first := int(start * RATE)
+	for i in int(length * RATE):
+		if first + i >= out.size():
+			break
+		var t := float(i) / RATE
+		lp = lerpf(lp, rng.randf_range(-1.0, 1.0), clampf(lerpf(b0, b1, t / length), 0.005, 1.0))
+		out[first + i] += lp * gain * _env(t, attack, length)
+
+
+## Vários estalos espalhados (ossos batendo, cascalho).
+func _clicks(out: PackedFloat32Array, start: float, length: float, count: int, gain: float) -> void:
+	for i in count:
+		_add_click(out, start + rng.randf() * length, rng.randf_range(0.004, 0.015), gain * rng.randf_range(0.5, 1.0))
+
+
+## Os quatro sons (alerta, golpe, dano e morte) de cada tipo de inimigo: "<tipo>_alert" etc.
+func _enemy_sounds() -> void:
+	# Bedel: gemido rouco e ossos batendo.
+	var out := _silence(0.9)
+	_tone(out, 0.0, 0.9, 95.0, 80.0, "saw", 0.22, 0.15, 0.02)
+	_noise(out, 0.0, 0.9, 0.05, 0.02, 0.3, 0.1)
+	_clicks(out, 0.1, 0.7, 8, 0.4)
+	_save("beadle_alert", out)
+	out = _silence(0.4)
+	_noise(out, 0.0, 0.35, 0.05, 0.4, 0.5, 0.15)
+	_add_click(out, 0.33, 0.02, 0.7)
+	_save("beadle_swing", out)
+	out = _silence(0.3)
+	_tone(out, 0.0, 0.25, 820.0, 760.0, "tri", 0.2, 0.002)
+	_tone(out, 0.0, 0.2, 1230.0, 1150.0, "sine", 0.12, 0.002)
+	_add_click(out, 0.0, 0.01, 0.6)
+	_save("beadle_hurt", out)
+	out = _silence(1.3)
+	_clicks(out, 0.0, 1.1, 26, 0.45)
+	_tone(out, 0.0, 0.5, 70.0, 45.0, "sine", 0.4, 0.005)
+	_save("beadle_death", out)
+	# Aprendiz: sussurros e chiados.
+	out = _silence(0.8)
+	_noise(out, 0.0, 0.8, 0.5, 0.8, 0.22, 0.2)
+	_tone(out, 0.0, 0.8, 300.0, 340.0, "saw", 0.04, 0.2, 0.05)
+	_save("apprentice_alert", out)
+	out = _silence(0.3)
+	_noise(out, 0.0, 0.3, 0.3, 0.9, 0.4, 0.05)
+	_save("apprentice_swing", out)
+	out = _silence(0.3)
+	_noise(out, 0.0, 0.25, 0.7, 0.4, 0.35, 0.005)
+	_tone(out, 0.0, 0.2, 520.0, 380.0, "saw", 0.06, 0.005)
+	_save("apprentice_hurt", out)
+	out = _silence(1.3)
+	_noise(out, 0.0, 1.3, 0.6, 0.1, 0.3, 0.1)
+	_tone(out, 0.0, 1.2, 260.0, 160.0, "saw", 0.05, 0.1, 0.03)
+	_save("apprentice_death", out)
+	# Lodo: borbulhas e estalos molhados.
+	for name in ["ooze_alert", "ooze_hurt", "ooze_death"]:
+		var length := 0.9 if name == "ooze_alert" else (0.35 if name == "ooze_hurt" else 1.4)
+		out = _silence(length)
+		_noise(out, 0.0, length, 0.03, 0.01, 0.4, 0.05)
+		for b in int(length * 14):
+			var at := rng.randf() * (length - 0.08)
+			_tone(out, at, 0.07, rng.randf_range(150.0, 260.0), rng.randf_range(300.0, 520.0), "sine", 0.18, 0.005)
+		_save(name, out)
+	out = _silence(0.4)
+	_noise(out, 0.0, 0.3, 0.08, 0.02, 0.6, 0.01)
+	_tone(out, 0.05, 0.3, 300.0, 90.0, "sine", 0.25, 0.005)
+	_save("ooze_swing", out)
+	# Arquivista: gemido grave e páginas.
+	out = _silence(1.5)
+	_tone(out, 0.0, 1.5, 58.0, 52.0, "saw", 0.25, 0.2, 0.03)
+	_tone(out, 0.0, 1.5, 87.0, 78.0, "saw", 0.12, 0.2, 0.03)
+	_noise(out, 0.2, 0.8, 0.4, 0.6, 0.15, 0.05)
+	_save("archivist_alert", out)
+	out = _silence(0.6)
+	_noise(out, 0.0, 0.55, 0.03, 0.25, 0.6, 0.25)
+	_save("archivist_swing", out)
+	out = _silence(0.45)
+	_tone(out, 0.0, 0.4, 75.0, 60.0, "saw", 0.3, 0.01)
+	_save("archivist_hurt", out)
+	out = _silence(2.2)
+	_tone(out, 0.0, 2.1, 70.0, 32.0, "saw", 0.3, 0.1, 0.04)
+	_noise(out, 0.0, 2.2, 0.3, 0.05, 0.2, 0.3)
+	_save("archivist_death", out)
+	# Olhos: zumbidos de vidro.
+	out = _silence(0.8)
+	_tone(out, 0.0, 0.8, 600.0, 900.0, "sine", 0.18, 0.1, 0.04)
+	_tone(out, 0.0, 0.8, 905.0, 1350.0, "sine", 0.08, 0.1, 0.04)
+	_save("eye_alert", out)
+	out = _silence(0.5)
+	_tone(out, 0.0, 0.5, 400.0, 1400.0, "sine", 0.18, 0.4)
+	_save("eye_swing", out)
+	out = _silence(0.3)
+	_tone(out, 0.0, 0.3, 1800.0, 1400.0, "tri", 0.15, 0.005)
+	_save("eye_hurt", out)
+	out = _silence(1.3)
+	_tone(out, 0.0, 1.3, 1200.0, 200.0, "sine", 0.2, 0.02, 0.06)
+	_tone(out, 0.0, 1.0, 1810.0, 300.0, "sine", 0.08, 0.02)
+	_save("eye_death", out)
+
+
+## Gelo: sinos de cristal subindo.
+func _frost_cast() -> PackedFloat32Array:
+	var out := _silence(0.6)
+	for i in 4:
+		_tone(out, i * 0.07, 0.4, 1400.0 + i * 300.0, 1450.0 + i * 300.0, "sine", 0.12, 0.003)
+	_noise(out, 0.0, 0.5, 0.8, 0.9, 0.06, 0.1)
+	return out
+
+
+## Gelo se partindo: estalo e tinidos agudos.
+func _frost_impact() -> PackedFloat32Array:
+	var out := _silence(0.7)
+	_add_click(out, 0.0, 0.03, 0.6)
+	for i in 6:
+		_tone(out, rng.randf() * 0.1, 0.5, rng.randf_range(2200.0, 3800.0), rng.randf_range(2000.0, 3600.0), "sine", 0.07, 0.002)
+	_noise(out, 0.0, 0.4, 0.9, 0.6, 0.15, 0.003)
+	return out
+
+
+## Choque: zumbido elétrico e estalos.
+func _shock_cast() -> PackedFloat32Array:
+	var out := _silence(0.45)
+	_tone(out, 0.0, 0.4, 70.0, 55.0, "square", 0.12, 0.003)
+	_noise(out, 0.0, 0.4, 1.0, 0.7, 0.3, 0.003)
+	_clicks(out, 0.0, 0.35, 14, 0.5)
+	return out
+
+
+## Escavação: baque grave e cascalho.
+func _dig_impact() -> PackedFloat32Array:
+	var out := _silence(0.7)
+	_tone(out, 0.0, 0.35, 75.0, 40.0, "sine", 0.6, 0.003)
+	_noise(out, 0.0, 0.5, 0.06, 0.02, 0.4, 0.005)
+	_clicks(out, 0.05, 0.5, 18, 0.35)
+	return out
+
+
+## O Observatório: um zumbido baixo e brilhos agudos que vêm e vão (8 s, em repetição).
+func _ambience_stars() -> PackedFloat32Array:
+	var seconds := 8.0
+	var out := _silence(seconds)
+	for i in out.size():
+		var t := float(i) / RATE
+		out[i] = sin(TAU * 55.0 * t) * 0.05 * (0.7 + 0.3 * sin(TAU * t / seconds))
+	for k in 10:
+		var at := k * seconds / 10.0
+		var f: float = [1760.0, 2093.0, 2349.0, 2637.0][k % 4]
+		_wrap_tone(out, at, 2.0, f, 0.03)
+	return out
+
+
+## Um tom de sino que começa em `start` e, se passar do fim, continua no começo (o som repete
+## sem emenda).
+func _wrap_tone(out: PackedFloat32Array, start: float, length: float, freq: float, gain: float, bell := false) -> void:
+	var first := int(start * RATE)
+	for i in int(length * RATE):
+		var t := float(i) / RATE
+		var decay := exp(-t * 3.0 / length)
+		var sample := sin(TAU * freq * t)
+		if bell:
+			sample += 0.4 * sin(TAU * freq * 2.76 * t) * exp(-t * 6.0 / length) + 0.2 * sin(TAU * freq * 5.4 * t) * exp(-t * 9.0 / length)
+		out[(first + i) % out.size()] += sample * gain * decay * minf(t * 200.0, 1.0)
+
+
+## Música ambiente em repetição: acordes longos (pad) que se misturam, um arpejo por cima e,
+## se `drone`, uma nota grave contínua. As frequências são arredondadas para fechar o ciclo
+## sem emenda. `chords`: semitons em relação a `root_hz`, um acorde a cada quarto do tempo.
+func _music(seconds: float, root_hz: float, chords: Array, arp_every: float, pad_gain: float, arp_gain: float,
+		drone_gain: float, bells: bool) -> PackedFloat32Array:
+	var out := _silence(seconds)
+	var chord_length := seconds / chords.size()
+	var fade := minf(1.5, chord_length / 2.0)
+	var period := func(f: float) -> float: return roundf(f * seconds) / seconds
+	for i in out.size():
+		var t := float(i) / RATE
+		var sample := 0.0
+		for c in chords.size():
+			# Peso do acorde: 1 dentro do trecho dele, misturando nas bordas (com a volta do ciclo).
+			var center := (c + 0.5) * chord_length
+			var distance := absf(fposmod(t - center + seconds / 2.0, seconds) - seconds / 2.0)
+			var weight := clampf((chord_length / 2.0 + fade / 2.0 - distance) / fade, 0.0, 1.0)
+			if weight <= 0.0:
+				continue
+			for semitone in chords[c]:
+				var f: float = period.call(root_hz * pow(2.0, semitone / 12.0))
+				var f2: float = period.call(f * 1.003)
+				sample += (sin(TAU * f * t) + 0.6 * sin(TAU * f2 * t) + 0.25 * sin(TAU * 2.0 * f * t)) * weight
+		sample *= pad_gain / 2.0
+		if drone_gain > 0.0:
+			var low: float = period.call(root_hz / 2.0)
+			sample += sin(TAU * low * t) * drone_gain * (0.8 + 0.2 * sin(TAU * 2.0 * t / seconds))
+		out[i] = sample
+	# Arpejo: notas do acorde da vez, subindo e descendo, uma oitava acima.
+	var pattern := [0, 1, 2, 1, 0, 2, 1, 2]
+	var steps := int(roundf(seconds / arp_every))
+	for k in steps:
+		var at := k * arp_every
+		var chord: Array = chords[mini(int(at / chord_length), chords.size() - 1)]
+		var semitone: int = chord[pattern[k % pattern.size()] % chord.size()] + 12
+		var f: float = period.call(root_hz * pow(2.0, semitone / 12.0))
+		_wrap_tone(out, at, 2.4 if bells else 1.4, f, arp_gain, bells)
+	# Normaliza o volume (pico em 0,8).
+	var peak := 0.0001
+	for sample in out:
+		peak = maxf(peak, absf(sample))
+	for i in out.size():
+		out[i] = out[i] / peak * 0.8
 	return out
 
 

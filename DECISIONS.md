@@ -718,6 +718,31 @@ O usuário aprovou todas as recomendações da proposta ([`docs/PROPOSTA-M0.md`]
   - **Olho que voa de verdade (física de voo):** o corpo anda no chão e o olho flutua só no desenho. A malha de navegação continua servindo.
 - **Motivo:** pedido do usuário. O andar novo dá um lugar para o Núcleo Estelar e põe à prova o Focus de Choque, contra grupos, e a Escavação, no atalho.
 
+### D075 · 2026-11-06 · M12: acabamento (menu inicial, introdução, música, sons próprios, letras)
+
+- **Escolha:**
+  - **Menu inicial (`TitleScreen`):** abre sobre a escola pausada, sem o HUD. Continuar (ou Começar, sem save), Novo jogo, Opções e Sair.
+    - **Novo jogo:** pede confirmação, apaga o save e recria conhecimento, mapa, posses e cadinho (`Game.reset_progress`). O sinal `Game.progress_reset` avisa quem guardou referência aos objetos antigos (a Mesa de Pesquisa).
+    - **Testes e capturas:** `show_title` em main.gd e o argumento `--no-title` pulam o menu.
+  - **Introdução (`IntroScreen`):** linhas `INTRO_1`, `INTRO_2`… de `locales/content.csv`, uma por vez, sobre fundo preto; para mudar o texto ou o número de linhas, basta mexer no CSV. Clique, E ou Esc pulam.
+  - **Música:** `RoomData.music`, uma faixa por região (escola, ruínas e grutas, abismo, observatório). São geradas por `tools/generate_sounds.gd` (acordes lentos, arpejo, bordão e, em algumas, sinos; de 24 a 32 s, em laço), como os outros sons provisórios.
+    - **Troca:** suave entre regiões; a mesma faixa continua de onde estava.
+    - **Volume:** controle próprio nas opções, gravado em `settings.cfg`.
+  - **Sons próprios:**
+    - **Inimigos:** `EnemyData.sound_set` escolhe quatro sons (alerta, golpe ou tiro, dor e morte) para cada inimigo; sem o conjunto no banco, valem os genéricos.
+    - **Focus:** `FocusData.cast_sound` e `impact_sound`. O gelo tem disparo e estilhaço próprios, o choque tem estalo elétrico e a escavação tem impacto de pedra.
+    - **Observatório:** ambiente próprio, com um zumbido baixo e brilhos agudos que vêm e vão.
+  - **Letras:** a interface passa de 10 para **11 px** (títulos de 20 para 22).
+    - **Por quê:** a Pixelify Sans é desenhada numa grade de cerca de 92 unidades por ponto (em 1000). Em 11 px, cada ponto cai num pixel; em 10, os pontos ficam menores que um pixel e detalhes somem (o C virava O, o E ficava torto, o 2 parecia um 8).
+    - **Ligaduras desligadas** (o "fi" virava um desenho só).
+    - **Algarismos:** desenhados à mão em 5 × 7 pixels (`tools/generate_digit_font.gd` gera `assets/ui/digits_font.tres`), com a Pixelify como fonte reserva para o resto. A fonte dos algarismos também tem o espaço, porque um espaço antes de um número cai no trecho dela.
+- **Descartado:**
+  - **Fonte de bitmap completa (letras também):** muito trabalho para um ganho pequeno, já que em 11 px a Pixelify fica nítida.
+  - **Manter 10 px e só trocar os algarismos:** o C e o E continuavam ilegíveis.
+  - **Músicas de terceiros:** dependência e licença novas; as faixas geradas podem ser trocadas depois, pelo mesmo campo.
+  - **Introdução em cena 3D:** é mais cara; o texto sobre fundo preto basta e é fácil de editar.
+- **Motivo:** pedido do usuário ("já faça todos"). O jogo precisava de uma porta de entrada (menu, novo jogo, introdução), de som que distinga inimigos e regiões e de letras que não se confundam.
+
 ## Pendentes (aguardando o usuário)
 
 | Nº | Decisão | Estado |

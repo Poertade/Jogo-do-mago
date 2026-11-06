@@ -106,6 +106,16 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 0)
 size_flags_vertical = 4
 
+[node name="MusicLabel" type="Label" parent="VBox/Grid"]
+layout_mode = 2
+text = "UI_OPT_MUSIC"
+
+[node name="MusicSlider" type="HSlider" parent="VBox/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+size_flags_vertical = 4
+
 [node name="BackButton" type="Button" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2

@@ -28,6 +28,11 @@ extends ScannableData
 ## Segundos parado depois de tomar dano (a "reação ao dano"). 0: não se abala (chefes).
 @export var hurt_stun: float = 0.0
 
+@export_group("Sons")
+## Conjunto de sons próprio (ex.: "beadle" toca beadle_alert, beadle_swing, beadle_hurt e
+## beadle_death, do banco de sons). Vazio ou sem o som: os genéricos (enemy_alert…).
+@export var sound_set: StringName
+
 @export_group("Espólio")
 ## Prata que o inimigo deixa ao ser derrotado (sorteada entre os dois valores).
 @export var silver_min: int = 0

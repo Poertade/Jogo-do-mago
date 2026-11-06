@@ -8,8 +8,16 @@ const MAX_DISTANCE_3D := 22.0
 ## Grupo de todos os sons tocando (2D e 3D), para pará-los ao fechar o jogo.
 const PLAYING_GROUP := &"playing_sounds"
 
+## Volume da música no máximo (dB), antes do volume escolhido nas opções.
+const MUSIC_DB := -10.0
+## Segundos para uma música dar lugar a outra.
+const MUSIC_FADE := 2.0
+
 var _bank: SoundBank
 var _ambience: AudioStreamPlayer
+var _music: AudioStreamPlayer
+var _music_volume := 0.6
+var _music_tween: Tween
 
 
 func _ready() -> void:
@@ -19,6 +27,9 @@ func _ready() -> void:
 	_ambience = AudioStreamPlayer.new()
 	_ambience.volume_db = -8.0
 	add_child(_ambience)
+	_music = AudioStreamPlayer.new()
+	_music.volume_db = -60.0
+	add_child(_music)
 	Game.scan_completed.connect(_on_scan_completed)
 	Game.page_studied.connect(func(_page): play(&"page_studied"))
 	Game.player_damaged.connect(func(_amount): play(&"player_hurt"))
@@ -78,10 +89,48 @@ func set_ambience(stream: AudioStream) -> void:
 		_ambience.stop()
 
 
+## Existe um som com este nome no banco? (Ex.: os sons próprios de cada inimigo.)
+func has_sound(event: StringName) -> bool:
+	return _bank != null and event in _bank.sounds
+
+
+## Troca a música (de cada sala, em RoomData.music) com a música antiga sumindo devagar.
+## A mesma música continua de onde estava.
+func set_music(stream: AudioStream) -> void:
+	if _music.stream == stream and _music.playing:
+		return
+	if _music_tween != null:
+		_music_tween.kill()
+	_music_tween = create_tween()
+	if _music.playing:
+		_music_tween.tween_property(_music, "volume_db", -60.0, MUSIC_FADE / 2.0)
+	_music_tween.tween_callback(func():
+		_music.stream = stream
+		if stream != null:
+			_music.play()
+		else:
+			_music.stop())
+	if stream != null:
+		_music_tween.tween_property(_music, "volume_db", _music_db(), MUSIC_FADE / 2.0)
+
+
+## Volume da música, de 0 a 1 (opções).
+func set_music_volume(linear: float) -> void:
+	_music_volume = linear
+	if _music_tween == null or not _music_tween.is_running():
+		_music.volume_db = _music_db() if _music.playing else -60.0
+
+
+func _music_db() -> float:
+	return MUSIC_DB + linear_to_db(maxf(_music_volume, 0.0001))
+
+
 ## Para todos os sons (usado ao fechar o jogo, para nada ficar tocando na saída).
 func stop_all() -> void:
 	_ambience.stop()
 	_ambience.stream = null
+	_music.stop()
+	_music.stream = null
 	for player in get_tree().get_nodes_in_group(PLAYING_GROUP):
 		player.stop()
 		player.queue_free()

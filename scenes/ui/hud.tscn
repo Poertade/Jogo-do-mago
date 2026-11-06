@@ -89,7 +89,7 @@ offset_left = -150.0
 offset_top = 16.0
 offset_right = 150.0
 offset_bottom = 40.0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 text = "UI_CLICK_TO_PLAY"
 horizontal_alignment = 1
 
@@ -186,7 +186,7 @@ offset_right = 200.0
 offset_bottom = 68.0
 grow_horizontal = 2
 mouse_filter = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 auto_translate_mode = 2
 

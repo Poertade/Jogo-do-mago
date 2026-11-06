@@ -18,6 +18,8 @@ extends Resource
 @export_group("Som")
 ## Volume geral inicial, de 0 (mudo) a 1 (máximo).
 @export var master_volume: float = 0.0
+## Volume da música (de 0 a 1), à parte dos sons.
+@export var music_volume: float = 0.0
 
 @export_group("Ajustes finos do visual")
 ## Bits por canal de cor quando a cor limitada está ligada (o PS1 usava 5).

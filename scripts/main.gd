@@ -8,6 +8,7 @@ extends Node
 ##   --room=school          sala inicial (padrão: start_room)
 ##   --entrance=default     entrada da sala inicial
 ##   --screenshot=foto.png  salva uma captura da janela depois de alguns quadros e fecha o jogo
+##   --no-title             pula o menu inicial (vai direto para a sala)
 
 ## Sala onde o jogo começa e onde o jogador renasce (identificador de data/rooms/).
 @export var start_room: StringName = &"school"
@@ -18,6 +19,8 @@ extends Node
 @export var travel_color := Color(0.1, 0.06, 0.18)
 @export var death_color := Color(0.25, 0.02, 0.02)
 @export var fade_seconds := 0.6
+## Mostra o menu inicial ao abrir (desligado nos testes e com --no-title).
+@export var show_title := true
 
 var rng: GameRng
 var _transitioning := false
@@ -33,6 +36,9 @@ var _transitioning := false
 @onready var portal_screen: PortalScreen = %PortalScreen
 @onready var wand_screen: WandScreen = %WandScreen
 @onready var alchemy_screen: AlchemyScreen = %AlchemyScreen
+@onready var title_screen: TitleScreen = %TitleScreen
+@onready var intro_screen: IntroScreen = %IntroScreen
+@onready var hud: Hud = $Hud
 
 
 func _ready() -> void:
@@ -53,24 +59,43 @@ func _ready() -> void:
 	Game.dungeon_requested.connect(_on_dungeon_requested)
 	Game.player_died.connect(_on_player_died)
 	pause_menu.quit_requested.connect(quit_game)
+	title_screen.start_requested.connect(_on_start_requested)
+	title_screen.quit_requested.connect(quit_game)
+	intro_screen.finished.connect(_capture_mouse)
 	# Fechar a janela passa por quit_game(), para parar os sons antes de sair.
 	get_tree().auto_accept_quit = false
 
 	world.load_room(_arg_value(args, "--room=", start_room), _arg_value(args, "--entrance=", start_entrance))
 
 	var screenshot_path := _arg_value(args, "--screenshot=", "")
+	if show_title and not args.has("--no-title"):
+		# O menu inicial abre sobre a escola (que fica ao fundo, pausada), sem o HUD.
+		hud.visible = false
+		title_screen.open()
 	if screenshot_path != "":
 		_take_screenshot_and_quit(screenshot_path)
+
+
+## Saída do menu inicial. Jogo novo: a escola é recarregada (com o progresso apagado) e a
+## introdução toca; continuar: o jogo segue de onde está.
+func _on_start_requested(new_game: bool) -> void:
+	hud.visible = true
+	if not new_game:
+		_capture_mouse()
+		return
+	world.load_room(start_room, start_entrance)
+	intro_screen.play()
 
 
 func _apply_settings() -> void:
 	game_screen.apply_settings(Settings.current, Content.db.settings_defaults)
 	player.mouse_sensitivity = Settings.current.mouse_sensitivity
 	Audio.set_master_volume(Settings.current.master_volume)
+	Audio.set_music_volume(Settings.current.music_volume)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _transitioning:
+	if _transitioning or title_screen.visible or intro_screen.visible:
 		return
 	if event.is_action_pressed("pause"):
 		pause_menu.open()

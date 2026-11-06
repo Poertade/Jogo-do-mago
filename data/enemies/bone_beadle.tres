@@ -17,6 +17,7 @@ attack_range = 1.6
 attack_windup = 0.7
 attack_cooldown = 1.5
 hurt_stun = 0.35
+sound_set = &"beadle"
 silver_min = 2
 silver_max = 4
 material = &"bone"

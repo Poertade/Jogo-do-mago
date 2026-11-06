@@ -88,7 +88,7 @@ func _fire(caster: SpellCaster) -> void:
 	var ignore: Array[RID] = [player.get_rid()]
 	projectile.setup(caster.focus, direction, caster.damage(Game.modifiers), ignore)
 	position = rest_position + recoil
-	Audio.play(&"spell_cast")
+	Audio.play(caster.focus.cast_sound)
 	# O barulho da magia acorda os inimigos por perto.
 	Game.noise_made.emit(player.global_position, noise_radius)
 
@@ -125,7 +125,7 @@ func _fire_chain(caster: SpellCaster) -> void:
 	world.spawn(bolt)
 	bolt.setup(points, focus.light_color)
 	position = rest_position + recoil
-	Audio.play(&"spell_cast")
+	Audio.play(focus.cast_sound)
 	Game.noise_made.emit(player.global_position, noise_radius)
 
 
